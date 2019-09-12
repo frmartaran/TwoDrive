@@ -10,5 +10,6 @@ namespace TwoDrive.Domain
         public string UserName { get; set; }
         public string Password { get; set; }
         public ICollection<Writer> Friends { get; set; }
+        public ICollection<Claim> Claims { get; set; }
     }
 }
