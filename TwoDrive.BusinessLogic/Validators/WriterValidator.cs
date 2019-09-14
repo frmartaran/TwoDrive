@@ -35,8 +35,12 @@ namespace TwoDrive.BusinessLogic.Validators
             .Where(c => c.Type == ClaimType.Write)
             .Any();
 
-            if(!canReadRoot || !canwriteRoot)
-                throw new ArgumentException("A writer must be able to read their root");
+            var canShareRoot = rootClaims
+            .Where(c => c.Type == ClaimType.Share)
+            .Any();
+
+            if(!canReadRoot || !canwriteRoot || !canShareRoot)
+                throw new ArgumentException("A writer must be able to read/write/share their root");
         }
 
         private static void ValidateDeleteClaimOverRoot(Writer writer)
