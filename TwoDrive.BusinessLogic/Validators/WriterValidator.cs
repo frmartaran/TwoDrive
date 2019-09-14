@@ -6,9 +6,9 @@ namespace TwoDrive.BusinessLogic.Validators
 {
     public class WriterValidator : IValidator<Writer>
     {
-        public bool isValid(Writer objectToValidate)
+        public bool isValid(Writer writer)
         {
-            throw new NotImplementedException();
+            return writer.Token == null;
         }
     }
 }

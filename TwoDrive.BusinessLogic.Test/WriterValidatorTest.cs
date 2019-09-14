@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.Domain;
 
 namespace TwoDrive.BusinessLogic.Test
@@ -19,7 +20,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             var validator = new WriterValidator();
-            bool isValid = validator.isValid();
+            bool isValid = validator.isValid(writer);
 
             Assert.AreEqual(false, isValid);
         }
