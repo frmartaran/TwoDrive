@@ -12,6 +12,10 @@ namespace TwoDrive.BusinessLogic.Validators
             if(!hasUserName)
                 throw new ArgumentException("Writer has no username set");
 
+            var hasPassword = !string.IsNullOrWhiteSpace(writer.Password);
+            if(!hasPassword)
+                throw new ArgumentException("Writer has no password");
+                
             var hasToken = writer.Token != Guid.Empty;
             if(!hasToken)
                 throw new ArgumentException("Writer has no token");
