@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.Domain;
@@ -217,6 +218,27 @@ namespace TwoDrive.BusinessLogic.Test
             };
             
             writer.Claims.Add(delete);
+
+            var validator = new WriterValidator();
+            bool isValid = validator.isValid(writer);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InvalidWriterMissingReadClaim()
+        {
+            var writer = new Writer
+            {
+                Token = Guid.NewGuid(),
+                UserName = "Writer",
+                Password = "A password",
+                Friends = new List<Writer>(),
+                Claims = defaultClaims,
+            };
+
+            root.Owner = writer;
+            var read = writer.Claims.FirstOrDefault(c => c.Type == ClaimType.Read);
+            writer.Claims.Remove(read);
 
             var validator = new WriterValidator();
             bool isValid = validator.isValid(writer);
