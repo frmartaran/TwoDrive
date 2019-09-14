@@ -217,11 +217,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\Usuario\\Desktop\\233126-203942\\TwoDrive.DataAccess\\TwoDrive.DataAccess.csproj",
+      "projectUniqueName": "C:\\Users\\Usuario\\Desktop\\233126-203942\\TwoDrive.DataAccess\\TwoDrive.DataAccess.csproj",
       "projectName": "TwoDrive.DataAccess",
-      "projectPath": "c:\\Users\\Usuario\\Desktop\\233126-203942\\TwoDrive.DataAccess\\TwoDrive.DataAccess.csproj",
+      "projectPath": "C:\\Users\\Usuario\\Desktop\\233126-203942\\TwoDrive.DataAccess\\TwoDrive.DataAccess.csproj",
       "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\Usuario\\Desktop\\233126-203942\\TwoDrive.DataAccess\\obj\\",
+      "outputPath": "C:\\Users\\Usuario\\Desktop\\233126-203942\\TwoDrive.DataAccess\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -240,11 +240,11 @@
       "frameworks": {
         "netstandard2.0": {
           "projectReferences": {
-            "c:\\Users\\Usuario\\Desktop\\233126-203942\\TwoDrive.DataAccess.Interface\\TwoDrive.DataAccess.Interface.csproj": {
-              "projectPath": "c:\\Users\\Usuario\\Desktop\\233126-203942\\TwoDrive.DataAccess.Interface\\TwoDrive.DataAccess.Interface.csproj"
+            "C:\\Users\\Usuario\\Desktop\\233126-203942\\TwoDrive.DataAccess.Interface\\TwoDrive.DataAccess.Interface.csproj": {
+              "projectPath": "C:\\Users\\Usuario\\Desktop\\233126-203942\\TwoDrive.DataAccess.Interface\\TwoDrive.DataAccess.Interface.csproj"
             },
-            "c:\\Users\\Usuario\\Desktop\\233126-203942\\TwoDrive.Domain\\TwoDrive.Domain.csproj": {
-              "projectPath": "c:\\Users\\Usuario\\Desktop\\233126-203942\\TwoDrive.Domain\\TwoDrive.Domain.csproj"
+            "C:\\Users\\Usuario\\Desktop\\233126-203942\\TwoDrive.Domain\\TwoDrive.Domain.csproj": {
+              "projectPath": "C:\\Users\\Usuario\\Desktop\\233126-203942\\TwoDrive.Domain\\TwoDrive.Domain.csproj"
             }
           }
         }
