@@ -29,7 +29,7 @@ namespace TwoDrive.BusinessLogic.Test
         public void ValidWriterWithToken()
         {
             var writer = new Writer{
-                Token = new Guid(),
+                Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
                 Friends = new List<Writer>(),
