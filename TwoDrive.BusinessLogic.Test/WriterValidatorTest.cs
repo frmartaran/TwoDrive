@@ -79,5 +79,51 @@ namespace TwoDrive.BusinessLogic.Test
             bool isValid = validator.isValid(writer);
         }
 
+        [TestMethod]
+        public void WriterHasFriend()
+        {
+            var writer = new Writer
+            {
+                Token = Guid.NewGuid(),
+                UserName = "Writer",
+                Password = "A password",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>(),
+            };
+
+            var friend = new Writer
+            {
+                Token = Guid.NewGuid(),
+                UserName = "Frined",
+                Password = "A password",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>(),
+            };
+
+            writer.Friends.Add(friend);
+            var validator = new WriterValidator();
+            bool isValid = validator.isValid(writer);
+
+            Assert.IsTrue(isValid);
+
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InvalidWriterHasNoClaims()
+        {
+            var writer = new Writer
+            {
+                Token = Guid.NewGuid(),
+                UserName = "Writer",
+                Password = "A password",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>(),
+            };
+
+            var validator = new WriterValidator();
+            bool isValid = validator.isValid(writer);
+        }
+
     }
 }
