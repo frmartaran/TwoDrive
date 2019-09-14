@@ -12,7 +12,8 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void InvalidWriterNoToken()
         {
-            var writer = new Writer{
+            var writer = new Writer
+            {
                 UserName = "Writer",
                 Password = "A password",
                 Friends = new List<Writer>(),
@@ -25,10 +26,11 @@ namespace TwoDrive.BusinessLogic.Test
             Assert.AreEqual(false, isValid);
         }
 
-         [TestMethod]
+        [TestMethod]
         public void ValidWriterWithToken()
         {
-            var writer = new Writer{
+            var writer = new Writer
+            {
                 Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
@@ -40,6 +42,24 @@ namespace TwoDrive.BusinessLogic.Test
             bool isValid = validator.isValid(writer);
 
             Assert.AreEqual(true, isValid);
+        }
+
+        [TestMethod]
+        public void InvalidWriterNoUserName()
+        {
+            var writer = new Writer
+            {
+                Token = Guid.NewGuid(),
+                UserName = "",
+                Password = "A password",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>(),
+            };
+
+            var validator = new WriterValidator();
+            bool isValid = validator.isValid(writer);
+
+            Assert.AreEqual(false, isValid);
         }
     }
 }
