@@ -20,6 +20,13 @@ namespace TwoDrive.BusinessLogic.Validators
         private static void ValidateClaims(Writer writer)
         {
             ValidateClaimsListNotEmpty(writer);
+            var canDeleteRoot = writer.Claims
+            .Where(c => c.Type == ClaimType.Delete)
+            .Where(c => c.Element.Name == "Root")
+            .Where(c => c.Element.Owner.Id == writer.Id).
+            Any();
+            if(canDeleteRoot)
+                throw new ArgumentException("A writer can't delete their root folder");
         }
         private static void ValidateClaimsListNotEmpty(Writer writer)
         {

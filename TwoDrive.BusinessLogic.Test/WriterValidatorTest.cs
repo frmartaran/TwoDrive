@@ -209,6 +209,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Claims = defaultClaims,
             };
 
+            root.Owner = writer;
             var delete = new Claim
             {
                 Element = root,
