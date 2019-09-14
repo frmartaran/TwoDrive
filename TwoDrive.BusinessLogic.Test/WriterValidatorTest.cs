@@ -55,6 +55,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Claims = defaultClaims,
             };
 
+            root.Owner = writer;
             var validator = new WriterValidator();
             bool isValid = validator.isValid(writer);
 
@@ -65,6 +66,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
+                Id = Guid.NewGuid(),
                 Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
@@ -72,6 +74,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Claims = defaultClaims,
             };
 
+            root.Owner = writer;
             var validator = new WriterValidator();
             bool isValid = validator.isValid(writer);
 
@@ -91,27 +94,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Claims = defaultClaims,
             };
 
-            var folder = new Folder();
-            var read = new Claim
-            {
-                Element = folder,
-                Type = ClaimType.Read
-            };
-            var write = new Claim
-            {
-                Element = folder,
-                Type = ClaimType.Write
-            };
-            var share = new Claim
-            {
-                Element = folder,
-                Type = ClaimType.Share
-            };
-
-            writer.Claims.Add(read);
-            writer.Claims.Add(write);
-            writer.Claims.Add(share);
-
+            root.Owner = writer;
             var validator = new WriterValidator();
             bool isValid = validator.isValid(writer);
 
@@ -130,6 +113,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Claims = defaultClaims,
             };
 
+            root.Owner = writer;
             var validator = new WriterValidator();
             bool isValid = validator.isValid(writer);
         }
@@ -139,6 +123,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
+                Id = Guid.NewGuid(),
                 Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
@@ -155,6 +140,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Claims = new List<Claim>(),
             };
 
+            root.Owner = writer;
             writer.Friends.Add(friend);
             var validator = new WriterValidator();
             bool isValid = validator.isValid(writer);
@@ -169,6 +155,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
+                Id = Guid.NewGuid(),
                 Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
@@ -176,6 +163,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Claims = new List<Claim>(),
             };
 
+            root.Owner = writer;
             var validator = new WriterValidator();
             bool isValid = validator.isValid(writer);
         }
@@ -193,6 +181,8 @@ namespace TwoDrive.BusinessLogic.Test
                 Claims = null,
             };
 
+            
+            root.Owner = writer;
             var validator = new WriterValidator();
             bool isValid = validator.isValid(writer);
         }
@@ -216,7 +206,8 @@ namespace TwoDrive.BusinessLogic.Test
                 Element = root,
                 Type = ClaimType.Delete
             };
-            
+
+            root.Owner = writer;
             writer.Claims.Add(delete);
 
             var validator = new WriterValidator();
