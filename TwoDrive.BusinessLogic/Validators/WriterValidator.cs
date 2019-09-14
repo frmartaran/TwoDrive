@@ -9,27 +9,43 @@ namespace TwoDrive.BusinessLogic.Validators
     {
         public bool isValid(Writer writer)
         {
-            var hasUserName = !string.IsNullOrWhiteSpace(writer.UserName);
-            if(!hasUserName)
-                throw new ArgumentException("Writer has no username set");
-
-            var hasPassword = !string.IsNullOrWhiteSpace(writer.Password);
-            if(!hasPassword)
-                throw new ArgumentException("Writer has no password");
-
-            var hasToken = writer.Token != Guid.Empty;
-            if(!hasToken)
-                throw new ArgumentException("Writer has no token");
-
-            var isListNull = writer.Claims == null;
-            if(isListNull)
-                throw new ArgumentException("The list of claims is empty");
-                
-            var hasClaims = writer.Claims.Count() != 0;
-            if(!hasClaims)
-                throw new ArgumentException("The writer should have claims for their root folder");
+            ValidateUserName(writer);
+            ValidatePassword(writer);
+            ValidateToken(writer);
+            ValidateClaims(writer);
 
             return true;
+        }
+
+        private static void ValidateClaims(Writer writer)
+        {
+            ValidateClaimsListNotEmpty(writer);
+        }
+        private static void ValidateClaimsListNotEmpty(Writer writer)
+        {
+            var isListNull = writer.Claims == null;
+            if (isListNull || writer.Claims.Count() == 0)
+                throw new ArgumentException("The list of claims is empty");
+        }
+        private static void ValidateToken(Writer writer)
+        {
+            var hasToken = writer.Token != Guid.Empty;
+            if (!hasToken)
+                throw new ArgumentException("Writer has no token");
+        }
+
+        private static void ValidatePassword(Writer writer)
+        {
+            var hasPassword = !string.IsNullOrWhiteSpace(writer.Password);
+            if (!hasPassword)
+                throw new ArgumentException("Writer has no password");
+        }
+
+        private static void ValidateUserName(Writer writer)
+        {
+            var hasUserName = !string.IsNullOrWhiteSpace(writer.UserName);
+            if (!hasUserName)
+                throw new ArgumentException("Writer has no username set");
         }
     }
 }
