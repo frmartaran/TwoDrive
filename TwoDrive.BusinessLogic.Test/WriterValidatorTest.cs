@@ -264,6 +264,27 @@ namespace TwoDrive.BusinessLogic.Test
             bool isValid = validator.isValid(writer);
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InvalidWriterMissingShareClaim()
+        {
+            var writer = new Writer
+            {
+                Id = Guid.NewGuid(),
+                Token = Guid.NewGuid(),
+                UserName = "Writer",
+                Password = "A password",
+                Friends = new List<Writer>(),
+                Claims = defaultClaims,
+            };
+
+            root.Owner = writer;
+            var share = writer.Claims.FirstOrDefault(c => c.Type == ClaimType.Share);
+            writer.Claims.Remove(share);
+
+            var validator = new WriterValidator();
+            bool isValid = validator.isValid(writer);
+        }
 
     }
 }
