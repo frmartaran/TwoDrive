@@ -170,5 +170,22 @@ namespace TwoDrive.BusinessLogic.Test
             bool isValid = validator.isValid(writer);
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InvalidWriterClaimsListIsNull()
+        {
+            var writer = new Writer
+            {
+                Token = Guid.NewGuid(),
+                UserName = "Writer",
+                Password = "A password",
+                Friends = new List<Writer>(),
+                Claims = null,
+            };
+
+            var validator = new WriterValidator();
+            bool isValid = validator.isValid(writer);
+        }
+
     }
 }
