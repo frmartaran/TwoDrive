@@ -10,6 +10,7 @@ namespace TwoDrive.BusinessLogic.Test
     public class WriterValidatorTest
     {
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void InvalidWriterNoToken()
         {
             var writer = new Writer
@@ -45,6 +46,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void InvalidWriterNoUserName()
         {
             var writer = new Writer

@@ -8,8 +8,15 @@ namespace TwoDrive.BusinessLogic.Validators
     {
         public bool isValid(Writer writer)
         {
+            var hasUserName = !string.IsNullOrWhiteSpace(writer.UserName);
+            if(!hasUserName)
+                throw new ArgumentException("Writer has no username set");
 
-            return writer.Token != Guid.Empty && !string.IsNullOrWhiteSpace(writer.UserName);
+            var hasToken = writer.Token != Guid.Empty;
+            if(!hasToken)
+                throw new ArgumentException("Writer has no token");
+
+            return true;
         }
     }
 }
