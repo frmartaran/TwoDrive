@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
 
@@ -15,11 +16,15 @@ namespace TwoDrive.BusinessLogic.Validators
             var hasPassword = !string.IsNullOrWhiteSpace(writer.Password);
             if(!hasPassword)
                 throw new ArgumentException("Writer has no password");
-                
+
             var hasToken = writer.Token != Guid.Empty;
             if(!hasToken)
                 throw new ArgumentException("Writer has no token");
 
+            var hasClaims = writer.Claims.Count() != 0;
+            if(!hasClaims)
+                throw new ArgumentException("The writer should have claims for their root folder");
+                
             return true;
         }
     }

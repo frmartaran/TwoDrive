@@ -3,12 +3,39 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.Domain;
+using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic.Test
 {
     [TestClass]
     public class WriterValidatorTest
     {
+        private List<Claim> defaultClaims;
+        [TestInitialize]
+        public void SetUp(){
+
+            var root = new Folder{
+                Name = "Root"
+            };
+            var read = new Claim{
+                Element = root,
+                Type = ClaimType.Read                
+            };
+            var write = new Claim{
+                Element = root,
+                Type = ClaimType.Write               
+            };
+            var share = new Claim{
+                Element = root,
+                Type = ClaimType.Share                
+            };
+            defaultClaims = new List<Claim>{
+                write,
+                read,
+                share                
+            };
+        }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void InvalidWriterNoToken()
@@ -18,7 +45,7 @@ namespace TwoDrive.BusinessLogic.Test
                 UserName = "Writer",
                 Password = "A password",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>(),
+                Claims = defaultClaims,
             };
 
             var validator = new WriterValidator();
@@ -35,7 +62,7 @@ namespace TwoDrive.BusinessLogic.Test
                 UserName = "Writer",
                 Password = "A password",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>(),
+                Claims = defaultClaims,
             };
 
             var validator = new WriterValidator();
@@ -54,8 +81,26 @@ namespace TwoDrive.BusinessLogic.Test
                 UserName = "",
                 Password = "A password",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>(),
+                Claims = defaultClaims,
             };
+
+            var folder = new Folder();
+            var read = new Claim{
+                Element = folder,
+                Type = ClaimType.Read                
+            };
+            var write = new Claim{
+                Element = folder,
+                Type = ClaimType.Write               
+            };
+            var share = new Claim{
+                Element = folder,
+                Type = ClaimType.Share                
+            };
+
+            writer.Claims.Add(read);
+            writer.Claims.Add(write);
+            writer.Claims.Add(share);
 
             var validator = new WriterValidator();
             bool isValid = validator.isValid(writer);
@@ -72,7 +117,7 @@ namespace TwoDrive.BusinessLogic.Test
                 UserName = "Writer",
                 Password = "",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>(),
+                Claims = defaultClaims,
             };
 
             var validator = new WriterValidator();
@@ -88,7 +133,7 @@ namespace TwoDrive.BusinessLogic.Test
                 UserName = "Writer",
                 Password = "A password",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>(),
+                Claims = defaultClaims,
             };
 
             var friend = new Writer
