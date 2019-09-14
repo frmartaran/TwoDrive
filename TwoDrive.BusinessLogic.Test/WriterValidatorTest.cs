@@ -24,5 +24,22 @@ namespace TwoDrive.BusinessLogic.Test
 
             Assert.AreEqual(false, isValid);
         }
+
+         [TestMethod]
+        public void ValidWriterWithToken()
+        {
+            var writer = new Writer{
+                Token = new Guid(),
+                UserName = "Writer",
+                Password = "A password",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>(),
+            };
+
+            var validator = new WriterValidator();
+            bool isValid = validator.isValid(writer);
+
+            Assert.AreEqual(true, isValid);
+        }
     }
 }

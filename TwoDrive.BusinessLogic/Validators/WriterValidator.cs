@@ -8,7 +8,7 @@ namespace TwoDrive.BusinessLogic.Validators
     {
         public bool isValid(Writer writer)
         {
-            return writer.Token == null;
+            return writer.Token != Guid.Empty;
         }
     }
 }
