@@ -21,10 +21,14 @@ namespace TwoDrive.BusinessLogic.Validators
             if(!hasToken)
                 throw new ArgumentException("Writer has no token");
 
+            var isListNull = writer.Claims == null;
+            if(isListNull)
+                throw new ArgumentException("The list of claims is empty");
+                
             var hasClaims = writer.Claims.Count() != 0;
             if(!hasClaims)
                 throw new ArgumentException("The writer should have claims for their root folder");
-                
+
             return true;
         }
     }
