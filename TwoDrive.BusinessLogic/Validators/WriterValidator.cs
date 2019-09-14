@@ -21,12 +21,21 @@ namespace TwoDrive.BusinessLogic.Validators
         {
             ValidateClaimsListNotEmpty(writer);
             ValidateDeleteClaimOverRoot(writer);
-            var canReadRoot = writer.Claims
-            .Where(c => c.Type == ClaimType.Read)
+
+            var rootClaims = writer.Claims
             .Where(c => c.Element.Name == "Root")
             .Where(c => c.Element.Owner.Id == writer.Id)
+            .ToList();
+
+            var canReadRoot = rootClaims
+            .Where(c => c.Type == ClaimType.Read)
             .Any();
-            if(!canReadRoot)
+
+            var canwriteRoot = rootClaims
+            .Where(c => c.Type == ClaimType.Write)
+            .Any();
+
+            if(!canReadRoot || !canwriteRoot)
                 throw new ArgumentException("A writer must be able to read their root");
         }
 

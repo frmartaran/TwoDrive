@@ -49,6 +49,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
+                Id = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
                 Friends = new List<Writer>(),
@@ -87,6 +88,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
+                Id = Guid.NewGuid(),
                 Token = Guid.NewGuid(),
                 UserName = "",
                 Password = "A password",
@@ -106,6 +108,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
+                Id = Guid.NewGuid(),
                 Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "",
@@ -133,6 +136,7 @@ namespace TwoDrive.BusinessLogic.Test
 
             var friend = new Writer
             {
+                Id = Guid.NewGuid(),
                 Token = Guid.NewGuid(),
                 UserName = "Frined",
                 Password = "A password",
@@ -174,6 +178,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
+                Id = Guid.NewGuid(),
                 Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
@@ -193,6 +198,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
+                Id = Guid.NewGuid(),
                 Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
@@ -220,6 +226,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
+                Id = Guid.NewGuid(),
                 Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
@@ -230,6 +237,28 @@ namespace TwoDrive.BusinessLogic.Test
             root.Owner = writer;
             var read = writer.Claims.FirstOrDefault(c => c.Type == ClaimType.Read);
             writer.Claims.Remove(read);
+
+            var validator = new WriterValidator();
+            bool isValid = validator.isValid(writer);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InvalidWriterMissingWriteClaim()
+        {
+            var writer = new Writer
+            {
+                Id = Guid.NewGuid(),
+                Token = Guid.NewGuid(),
+                UserName = "Writer",
+                Password = "A password",
+                Friends = new List<Writer>(),
+                Claims = defaultClaims,
+            };
+
+            root.Owner = writer;
+            var write = writer.Claims.FirstOrDefault(c => c.Type == ClaimType.Write);
+            writer.Claims.Remove(write);
 
             var validator = new WriterValidator();
             bool isValid = validator.isValid(writer);
