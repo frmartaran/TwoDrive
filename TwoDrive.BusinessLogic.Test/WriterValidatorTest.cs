@@ -11,28 +11,34 @@ namespace TwoDrive.BusinessLogic.Test
     public class WriterValidatorTest
     {
         private List<Claim> defaultClaims;
+        private Folder root;
         [TestInitialize]
-        public void SetUp(){
+        public void SetUp()
+        {
 
-            var root = new Folder{
+            root = new Folder
+            {
                 Name = "Root"
             };
-            var read = new Claim{
+            var read = new Claim
+            {
                 Element = root,
-                Type = ClaimType.Read                
+                Type = ClaimType.Read
             };
-            var write = new Claim{
+            var write = new Claim
+            {
                 Element = root,
-                Type = ClaimType.Write               
+                Type = ClaimType.Write
             };
-            var share = new Claim{
+            var share = new Claim
+            {
                 Element = root,
-                Type = ClaimType.Share                
+                Type = ClaimType.Share
             };
             defaultClaims = new List<Claim>{
                 write,
                 read,
-                share                
+                share
             };
         }
 
@@ -85,17 +91,20 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             var folder = new Folder();
-            var read = new Claim{
+            var read = new Claim
+            {
                 Element = folder,
-                Type = ClaimType.Read                
+                Type = ClaimType.Read
             };
-            var write = new Claim{
+            var write = new Claim
+            {
                 Element = folder,
-                Type = ClaimType.Write               
+                Type = ClaimType.Write
             };
-            var share = new Claim{
+            var share = new Claim
+            {
                 Element = folder,
-                Type = ClaimType.Share                
+                Type = ClaimType.Share
             };
 
             writer.Claims.Add(read);
@@ -186,6 +195,32 @@ namespace TwoDrive.BusinessLogic.Test
             var validator = new WriterValidator();
             bool isValid = validator.isValid(writer);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InvalidWriterHasDeleteClaim()
+        {
+            var writer = new Writer
+            {
+                Token = Guid.NewGuid(),
+                UserName = "Writer",
+                Password = "A password",
+                Friends = new List<Writer>(),
+                Claims = defaultClaims,
+            };
+
+            var delete = new Claim
+            {
+                Element = root,
+                Type = ClaimType.Delete
+            };
+            
+            writer.Claims.Add(delete);
+
+            var validator = new WriterValidator();
+            bool isValid = validator.isValid(writer);
+        }
+
 
     }
 }
