@@ -102,5 +102,69 @@ namespace TwoDrive.BusinessLogic.Test
             var isValid = validator.isValid(folder);
 
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InvalidFileWithoutName()
+        {
+            var root = new Folder{
+                Name = "Root",
+                ParentFolder = null,
+                Owner = owner
+            };
+
+            var file = new TxtFile
+            {
+                Name = "",
+                Owner = owner,
+                ParentFolder = root,
+                CreationDate = new DateTime(2019, 9, 15),
+                DateModified = new DateTime(2019, 9, 6)
+            };
+
+            var validator = new ElementValidator();
+            var isValid = validator.isValid(file);
+
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InvalidFolderWithoutOwner()
+        {
+            var folder = new Folder{
+                Name = "Root",
+                ParentFolder = null,
+                Owner = null
+            };
+
+            var validator = new ElementValidator();
+            var isValid = validator.isValid(folder);
+
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InvalidFileWithoutOwner()
+        {
+            var root = new Folder{
+                Name = "Root",
+                ParentFolder = null,
+                Owner = owner
+            };
+
+            var file = new TxtFile
+            {
+                Name = "A file",
+                Owner = null,
+                ParentFolder = root,
+                CreationDate = new DateTime(2019, 9, 15),
+                DateModified = new DateTime(2019, 9, 6)
+            };
+
+            var validator = new ElementValidator();
+            var isValid = validator.isValid(file);
+
+        }
+
     }
 }
