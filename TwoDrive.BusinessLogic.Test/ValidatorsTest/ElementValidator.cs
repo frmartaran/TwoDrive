@@ -6,6 +6,7 @@ using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic.Test
 {
+    [TestClass]
     public class ElementValidatorTest
     {
         private Writer owner;
@@ -85,6 +86,21 @@ namespace TwoDrive.BusinessLogic.Test
             var isValid = validator.isValid(file);
 
             Assert.IsTrue(isValid);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InvalidFolderWithoutName()
+        {
+            var folder = new Folder{
+                Name = "",
+                ParentFolder = null,
+                Owner = owner
+            };
+
+            var validator = new ElementValidator();
+            var isValid = validator.isValid(folder);
+
         }
     }
 }
