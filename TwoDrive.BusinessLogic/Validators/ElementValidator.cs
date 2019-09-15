@@ -8,13 +8,8 @@ namespace TwoDrive.BusinessLogic.Validators
     {
         public bool isValid(Element element)
         {
-            var hasName = !string.IsNullOrWhiteSpace(element.Name);
-            if (!hasName)
-                throw new ArgumentException("The folder or file should have a name");
-
-            var hasOwner = element.Owner != null;
-            if (!hasOwner)
-                throw new ArgumentException("The folder or file must have an owner");
+            ValidateName(element);
+            ValidateOwner(element);
 
             var hasParentFolder = element.ParentFolder != null;
             var isElementAFolder = element.GetType().Name == "Folder";
@@ -31,6 +26,20 @@ namespace TwoDrive.BusinessLogic.Validators
             }
 
             return true;
+        }
+
+        private void ValidateOwner(Element element)
+        {
+            var hasOwner = element.Owner != null;
+            if (!hasOwner)
+                throw new ArgumentException("The folder or file must have an owner");
+        }
+
+        private void ValidateName(Element element)
+        {
+            var hasName = !string.IsNullOrWhiteSpace(element.Name);
+            if (!hasName)
+                throw new ArgumentException("The folder or file should have a name");
         }
     }
 
