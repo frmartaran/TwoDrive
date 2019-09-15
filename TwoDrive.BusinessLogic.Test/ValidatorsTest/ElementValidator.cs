@@ -60,5 +60,30 @@ namespace TwoDrive.BusinessLogic.Test
 
             Assert.IsTrue(isValid);
         }
+
+        [TestMethod]
+        public void ValidFile()
+        {
+            var root = new Folder
+            {
+                Name = "Root",
+                Owner = owner,
+                ParentFolder = null
+            };
+
+            var file = new TxtFile
+            {
+                Name = "A file",
+                Owner = owner,
+                ParentFolder = root,
+                CreationDate = new DateTime(2019, 9, 15),
+                DateModified = new DateTime(2019, 9, 6)
+            };
+
+            var validator = new ElementValidator();
+            var isValid = validator.IsValid(file);
+
+            Assert.IsTrue(isValid);
+        }
     }
 }
