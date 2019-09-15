@@ -13,10 +13,12 @@ namespace TwoDrive.BusinessLogic.Validators
             ValidateOwner(element);
             ValidateParentFolder(element);
             ValidateNamesAtSameLevel(element);
-
+            Hook(element);
 
             return true;
         }
+
+        protected virtual void Hook(Element element){}
 
         protected abstract void ValidateNamesAtSameLevel(Element element);
 

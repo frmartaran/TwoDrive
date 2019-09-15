@@ -84,7 +84,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Owner = owner,
                 ParentFolder = root,
                 CreationDate = new DateTime(2019, 9, 15),
-                DateModified = new DateTime(2019, 9, 6)
+                DateModified = new DateTime(2019, 9, 16)
             };
 
             var validator = new FileValidator();
@@ -280,5 +280,33 @@ namespace TwoDrive.BusinessLogic.Test
             var isValid = validator.isValid(secondChild);
 
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InvalidFileDateModifiedBeforeCreationDate()
+        {
+            var root = new Folder
+            {
+                Name = "Root",
+                ParentFolder = null,
+                Owner = owner,
+                FolderChilden = new List<Element>()
+            };
+
+            var file = new TxtFile
+            {
+                Name = "A file",
+                Owner = owner,
+                ParentFolder = root,
+                CreationDate = new DateTime(2019, 9, 15),
+                DateModified = new DateTime(2019, 9, 6)
+            };
+
+            var validator = new FileValidator();
+            var isValid = validator.isValid(file);
+
+        }
+
+
     }
 }
