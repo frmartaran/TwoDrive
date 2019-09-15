@@ -11,7 +11,12 @@ namespace TwoDrive.BusinessLogic.Validators
             var hasName = !string.IsNullOrWhiteSpace(element.Name);
             if (!hasName)
                 throw new ArgumentException("The folder or file should have a name");
-                
+
+            var hasOwner = element.Owner != null;
+
+            if (!hasOwner)
+                throw new ArgumentException("The folder or file must have an owner");
+
             return true;
         }
     }
