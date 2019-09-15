@@ -1,5 +1,6 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 
@@ -32,7 +33,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             var validator = new ElementValidator();
-            var isValid = validator.IsValid(folder);
+            var isValid = validator.isValid(folder);
 
             Assert.IsTrue(isValid);
         }
@@ -56,7 +57,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             var validator = new ElementValidator();
-            var isValid = validator.IsValid(child);
+            var isValid = validator.isValid(child);
 
             Assert.IsTrue(isValid);
         }
@@ -81,7 +82,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             var validator = new ElementValidator();
-            var isValid = validator.IsValid(file);
+            var isValid = validator.isValid(file);
 
             Assert.IsTrue(isValid);
         }
