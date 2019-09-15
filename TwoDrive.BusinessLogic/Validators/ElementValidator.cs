@@ -5,43 +5,22 @@ using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic.Validators
 {
-    public class ElementValidator : IValidator<Element>
+    public abstract class ElementValidator : IValidator<Element>
     {
         public bool isValid(Element element)
         {
             ValidateName(element);
             ValidateOwner(element);
-
-            var hasParentFolder = element.ParentFolder != null;
-            var isElementAFolder = element.GetType().Name == "Folder";
-
-            if (!isElementAFolder)
-            {
-                if (!hasParentFolder)
-                    throw new ArgumentException("A file should have a parent folder");
-            }
-            else
-            {
-                if (element.Name != "Root" && !hasParentFolder)
-                    throw new ArgumentException("A child folder should have a parent folder");
-            }
-
-            if (hasParentFolder)
-            {
-                var parentFolder = element.ParentFolder;
-                var hasSameName = parentFolder.FolderChilden
-                .Where(e => e.Name == element.Name)
-                .Where(e => e.GetType() == element.GetType())
-                .Any();
-                if (hasSameName)
-                    throw new ArgumentException("Elements of the same type should have diferent names at the same level");
-
-            }
-
+            ValidateParentFolder(element);
+            ValidateNamesAtSameLevel(element);
 
 
             return true;
         }
+
+        protected abstract void ValidateNamesAtSameLevel(Element element);
+
+        protected abstract void ValidateParentFolder(Element element);
 
         private void ValidateOwner(Element element)
         {

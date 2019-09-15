@@ -36,7 +36,7 @@ namespace TwoDrive.BusinessLogic.Test
                 FolderChilden = new List<Element>()
             };
 
-            var validator = new ElementValidator();
+            var validator = new FolderValidator();
             var isValid = validator.isValid(folder);
 
             Assert.IsTrue(isValid);
@@ -61,7 +61,7 @@ namespace TwoDrive.BusinessLogic.Test
                 ParentFolder = root
             };
 
-            var validator = new ElementValidator();
+            var validator = new FolderValidator();
             var isValid = validator.isValid(child);
 
             Assert.IsTrue(isValid);
@@ -87,7 +87,7 @@ namespace TwoDrive.BusinessLogic.Test
                 DateModified = new DateTime(2019, 9, 6)
             };
 
-            var validator = new ElementValidator();
+            var validator = new FileValidator();
             var isValid = validator.isValid(file);
 
             Assert.IsTrue(isValid);
@@ -104,7 +104,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Owner = owner
             };
 
-            var validator = new ElementValidator();
+            var validator = new FolderValidator();
             var isValid = validator.isValid(folder);
 
         }
@@ -129,7 +129,7 @@ namespace TwoDrive.BusinessLogic.Test
                 DateModified = new DateTime(2019, 9, 6)
             };
 
-            var validator = new ElementValidator();
+            var validator = new FileValidator();
             var isValid = validator.isValid(file);
 
         }
@@ -145,7 +145,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Owner = null
             };
 
-            var validator = new ElementValidator();
+            var validator = new FolderValidator();
             var isValid = validator.isValid(folder);
 
         }
@@ -170,7 +170,7 @@ namespace TwoDrive.BusinessLogic.Test
                 DateModified = new DateTime(2019, 9, 6)
             };
 
-            var validator = new ElementValidator();
+            var validator = new FileValidator();
             var isValid = validator.isValid(file);
 
         }
@@ -186,7 +186,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Owner = owner
             };
 
-            var validator = new ElementValidator();
+            var validator = new FolderValidator();
             var isValid = validator.isValid(folder);
 
         }
@@ -204,7 +204,7 @@ namespace TwoDrive.BusinessLogic.Test
                 DateModified = new DateTime(2019, 9, 6)
             };
 
-            var validator = new ElementValidator();
+            var validator = new FileValidator();
             var isValid = validator.isValid(file);
 
         }
@@ -238,7 +238,7 @@ namespace TwoDrive.BusinessLogic.Test
             children.Add(firstChild);
             root.FolderChilden = children;
 
-            var validator = new ElementValidator();
+            var validator = new FolderValidator();
             var isValid = validator.isValid(secondChild);
 
         }
@@ -276,7 +276,7 @@ namespace TwoDrive.BusinessLogic.Test
             children.Add(firstChild);
             root.FolderChilden = children;
 
-            var validator = new ElementValidator();
+            var validator = new FileValidator();
             var isValid = validator.isValid(secondChild);
 
         }
