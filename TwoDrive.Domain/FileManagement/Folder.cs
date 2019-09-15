@@ -4,7 +4,7 @@ namespace TwoDrive.Domain.FileManagement
 {
     public class Folder : Element
     {
-        public IEnumerable<Element> FolderChilden { get; set; }
+        public ICollection<Element> FolderChilden { get; set; }
     }
     
 }

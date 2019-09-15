@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain.FileManagement;
 
@@ -24,6 +25,20 @@ namespace TwoDrive.BusinessLogic.Validators
                 if (element.Name != "Root" && !hasParentFolder)
                     throw new ArgumentException("A child folder should have a parent folder");
             }
+
+            if (hasParentFolder)
+            {
+                var parentFolder = element.ParentFolder;
+                var hasSameName = parentFolder.FolderChilden
+                .Where(e => e.Name == element.Name)
+                .Where(e => e.GetType() == element.GetType())
+                .Any();
+                if (hasSameName)
+                    throw new ArgumentException("Elements of the same type should have diferent names at the same level");
+
+            }
+
+
 
             return true;
         }

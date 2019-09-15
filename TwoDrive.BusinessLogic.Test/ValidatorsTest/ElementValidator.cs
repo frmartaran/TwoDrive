@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.Domain;
@@ -31,7 +32,8 @@ namespace TwoDrive.BusinessLogic.Test
             {
                 Name = "Root",
                 Owner = owner,
-                ParentFolder = null
+                ParentFolder = null,
+                FolderChilden = new List<Element>()
             };
 
             var validator = new ElementValidator();
@@ -48,7 +50,8 @@ namespace TwoDrive.BusinessLogic.Test
             {
                 Name = "Root",
                 Owner = owner,
-                ParentFolder = null
+                ParentFolder = null,
+                FolderChilden = new List<Element>()
             };
 
             var child = new Folder
@@ -71,7 +74,8 @@ namespace TwoDrive.BusinessLogic.Test
             {
                 Name = "Root",
                 Owner = owner,
-                ParentFolder = null
+                ParentFolder = null,
+                FolderChilden = new List<Element>()
             };
 
             var file = new TxtFile
