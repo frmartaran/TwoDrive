@@ -5,5 +5,7 @@ namespace TwoDrive.Domain.FileManagement
         public string Name { get; set; }
 
         public Folder ParentFolder { get; set; }
+
+        public Writer Owner { get; set; }
     }
 }
