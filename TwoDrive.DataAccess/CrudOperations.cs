@@ -38,7 +38,8 @@ namespace TwoDrive.DataAccess
 
         public void Delete(int Id)
         {
-            throw new System.NotImplementedException();
+            var existingObject = table.Find(Id);
+            table.Remove(existingObject);
         }
 
         public ICollection<T> ReadAll()
