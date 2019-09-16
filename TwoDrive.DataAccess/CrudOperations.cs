@@ -24,19 +24,19 @@ namespace TwoDrive.DataAccess
             table.Add(objectToCreate);
         }
 
-        public void Delete(int Id)
+        public T Read(int Id)
         {
-            throw new System.NotImplementedException();
+            return table.Find(Id);
         }
 
-        public T Read(int Id)
+        public void Delete(int Id)
         {
             throw new System.NotImplementedException();
         }
 
         public ICollection<T> ReadAll()
         {
-            throw new System.NotImplementedException();
+            return table.ToList();
         }
 
         public void Save()
