@@ -53,5 +53,18 @@ namespace TwoDrive.DataAccess.Tests
             Assert.AreEqual(3, mockData[2].Id);
             Assert.AreEqual("testCreation3", mockData[2].Content);
         }
+
+        [TestMethod]
+        public void TestReadObject()
+        {
+            var mockSet = new Mock<DbSet<TxtFile>>();
+            var mockContext = new Mock<TwoDriveDbContext>();
+            mockSet.Setup(m => m.Find(It.IsAny<int>()))
+                .Returns<object[]>(t => mockData.Find(d => d.Id == (int)t[0]));
+            var fileResult = crudOperations.Read(2);
+
+            Assert.AreEqual(2, fileResult.Id);
+            Assert.AreEqual("testCreation2", fileResult.Content);
+        }
     }
 }
