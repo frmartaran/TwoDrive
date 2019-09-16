@@ -29,6 +29,13 @@ namespace TwoDrive.DataAccess
             return table.Find(Id);
         }
 
+        public void Update(T objectToUpdate)
+        {
+            table.Attach(objectToUpdate);
+            var entry = context.Entry(objectToUpdate);
+            SetModified(entry);
+        }
+
         public void Delete(int Id)
         {
             throw new System.NotImplementedException();
@@ -41,12 +48,15 @@ namespace TwoDrive.DataAccess
 
         public void Save()
         {
-            throw new System.NotImplementedException();
+            context.SaveChanges();
         }
 
-        public void Update(T objectToUpdate)
+        private void SetModified(EntityEntry<T> entity)
         {
-            throw new System.NotImplementedException();
+            if(entity != null)
+            {
+                entity.State = EntityState.Modified;
+            }            
         }
     }
 }
