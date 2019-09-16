@@ -17,6 +17,8 @@ namespace TwoDrive.DataAccess.Tests
         [TestInitialize]
         public void Initialize()
         {
+            var mockSet = new Mock<DbSet<TxtFile>>();
+            var mockContext = new Mock<TwoDriveDbContext>();
             mockData = new List<TxtFile>
             {
                 new TxtFile
@@ -30,18 +32,31 @@ namespace TwoDrive.DataAccess.Tests
                     Content = "testCreation2"
                 }
             };
+            mockContext.Setup(m => m.Set<TxtFile>()).Returns(mockSet.Object);
+            mockSet.Setup(m => m.Add(It.IsAny<TxtFile>()))
+                .Returns((TxtFile t) => null)
+                .Callback<TxtFile>((t) => mockData.Add(t));
+            mockSet.Setup(m => m.Find(It.IsAny<int>()))
+                .Returns<object[]>(t => mockData.Find(d => d.Id == (int)t[0]));
+            mockSet.Setup(m => m.Attach(It.IsAny<TxtFile>()))
+                .Returns((TxtFile t) => null)
+                .Callback<TxtFile>((t) => 
+                {
+                    mockData.Where(txt => txt.Id != t.Id).ToList();
+                    mockData.Add(t);
+                });
+            mockSet.Setup(m => m.Remove(It.IsAny<TxtFile>()))
+                .Returns((TxtFile t) => null)
+                .Callback<TxtFile>((t) => 
+                {
+                    mockData = mockData.Where(txt => txt.Id != t.Id).ToList();
+                });
             crudOperations = new CrudOperations<TxtFile>(mockContext.Object);
         }
 
         [TestMethod]
         public void TestCreateObject()
         {
-            var mockSet = new Mock<DbSet<TxtFile>>();
-            var mockContext = new Mock<TwoDriveDbContext>();
-            mockContext.Setup(m => m.Set<TxtFile>()).Returns(mockSet.Object);
-            mockSet.Setup(m => m.Add(It.IsAny<TxtFile>()))
-                .Returns((TxtFile t) => null)
-                .Callback<TxtFile>((t) => mockData.Add(t));
             var txtFile = new TxtFile
             { 
                 Id = 3,
@@ -57,11 +72,6 @@ namespace TwoDrive.DataAccess.Tests
         [TestMethod]
         public void TestReadObject()
         {
-            var mockSet = new Mock<DbSet<TxtFile>>();
-            var mockContext = new Mock<TwoDriveDbContext>();
-            mockContext.Setup(m => m.Set<TxtFile>()).Returns(mockSet.Object);
-            mockSet.Setup(m => m.Find(It.IsAny<int>()))
-                .Returns<object[]>(t => mockData.Find(d => d.Id == (int)t[0]));
             var fileResult = crudOperations.Read(2);
 
             Assert.AreEqual(2, fileResult.Id);
@@ -71,16 +81,6 @@ namespace TwoDrive.DataAccess.Tests
         [TestMethod]
         public void TestUpdateObject()
         {
-            var mockSet = new Mock<DbSet<TxtFile>>();
-            var mockContext = new Mock<TwoDriveDbContext>();
-            mockContext.Setup(m => m.Set<TxtFile>()).Returns(mockSet.Object);
-            mockSet.Setup(m => m.Attach(It.IsAny<TxtFile>()))
-                .Returns((TxtFile t) => null)
-                .Callback<TxtFile>((t) => 
-                {
-                    mockData.Where(txt => txt.Id != t.Id).ToList();
-                    mockData.Add(t);
-                });
             var fileResult = crudOperations.Read(1);
             fileResult.Content = "testCreation1Updated";
             crudOperations.Update(fileResult);
@@ -94,18 +94,6 @@ namespace TwoDrive.DataAccess.Tests
         [TestMethod]
         public void TestDeleteObject()
         {
-            var mockSet = new Mock<DbSet<TxtFile>>();
-            var mockContext = new Mock<TwoDriveDbContext>();
-            mockContext.Setup(m => m.Set<TxtFile>()).Returns(mockSet.Object);
-            mockSet.Setup(m => m.Find(It.IsAny<int>()))
-                .Returns<object[]>(t => mockData.Find(d => d.Id == (int)t[0]));
-            mockSet.Setup(m => m.Remove(It.IsAny<TxtFile>()))
-                .Returns((TxtFile t) => null)
-                .Callback<TxtFile>((t) => 
-                {
-                    mockData = mockData.Where(txt => txt.Id != t.Id).ToList();
-                });
-
             crudOperations.Delete(1);
             crudOperations.Save();
             var fileResult = crudOperations.Read(1);
