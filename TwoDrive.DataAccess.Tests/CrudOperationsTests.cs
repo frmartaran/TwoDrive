@@ -59,12 +59,36 @@ namespace TwoDrive.DataAccess.Tests
         {
             var mockSet = new Mock<DbSet<TxtFile>>();
             var mockContext = new Mock<TwoDriveDbContext>();
+            mockContext.Setup(m => m.Set<TxtFile>()).Returns(mockSet.Object);
             mockSet.Setup(m => m.Find(It.IsAny<int>()))
                 .Returns<object[]>(t => mockData.Find(d => d.Id == (int)t[0]));
             var fileResult = crudOperations.Read(2);
 
             Assert.AreEqual(2, fileResult.Id);
             Assert.AreEqual("testCreation2", fileResult.Content);
+        }
+
+        [TestMethod]
+        public void TestUpdateObject()
+        {
+            var mockSet = new Mock<DbSet<TxtFile>>();
+            var mockContext = new Mock<TwoDriveDbContext>();
+            mockContext.Setup(m => m.Set<TxtFile>()).Returns(mockSet.Object);
+            mockSet.Setup(m => m.Attach(It.IsAny<TxtFile>()))
+                .Returns((TxtFile t) => null)
+                .Callback<TxtFile>((t) => 
+                {
+                    mockData.Where(txt => txt.Id != t.Id).ToList();
+                    mockData.Add(t);
+                });
+            var fileResult = crudOperations.Read(1);
+            fileResult.Content = "testCreation1Updated";
+            crudOperations.Update(fileResult);
+            crudOperations.Save();
+            fileResult = crudOperations.Read(1);
+
+            Assert.AreEqual(1, fileResult.Id);
+            Assert.AreEqual("testCreation1Updated", fileResult.Content);
         }
     }
 }
