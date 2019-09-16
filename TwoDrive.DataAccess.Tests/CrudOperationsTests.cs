@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TwoDrive.Domain.FileManagement;
+using TwoDrive.Domain;
+using System;
 
 namespace TwoDrive.DataAccess.Tests
 {
@@ -106,6 +108,30 @@ namespace TwoDrive.DataAccess.Tests
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext");
             Assert.IsNotNull(memoryDb);
+        }
+
+        [TestMethod]
+        public void AddAWriter()
+        {
+
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext");
+            var writer = new Writer
+            {
+                Id = Guid.NewGuid(),
+                Token = Guid.NewGuid(),
+                UserName = "WRiter",
+                Password = "Pass",
+                Claims = new List<Claim>(),
+                Friends = new List<Writer>()
+            };
+
+            var repository = new CrudOperations<Writer>(memoryDb);
+            repository.Create(writer);
+            repository.Save();
+
+            var writerInDb = memoryDb.Set<Writer>().FirstOrDefault();
+            Assert.AreEqual(writer.Id, writerInDb.Id);
+            
         }
     }
 }
