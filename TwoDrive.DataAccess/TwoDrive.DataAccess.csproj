@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.6" />
     <ProjectReference Include="..\TwoDrive.Domain\TwoDrive.Domain.csproj" />
     <ProjectReference Include="..\TwoDrive.DataAccess.Interface\TwoDrive.DataAccess.Interface.csproj" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
