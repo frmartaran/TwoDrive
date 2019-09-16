@@ -90,5 +90,27 @@ namespace TwoDrive.DataAccess.Tests
             Assert.AreEqual(1, fileResult.Id);
             Assert.AreEqual("testCreation1Updated", fileResult.Content);
         }
+
+        [TestMethod]
+        public void TestDeleteObject()
+        {
+            var mockSet = new Mock<DbSet<TxtFile>>();
+            var mockContext = new Mock<TwoDriveDbContext>();
+            mockContext.Setup(m => m.Set<TxtFile>()).Returns(mockSet.Object);
+            mockSet.Setup(m => m.Find(It.IsAny<int>()))
+                .Returns<object[]>(t => mockData.Find(d => d.Id == (int)t[0]));
+            mockSet.Setup(m => m.Remove(It.IsAny<TxtFile>()))
+                .Returns((TxtFile t) => null)
+                .Callback<TxtFile>((t) => 
+                {
+                    mockData = mockData.Where(txt => txt.Id != t.Id).ToList();
+                });
+
+            crudOperations.Delete(1);
+            crudOperations.Save();
+            var fileResult = crudOperations.Read(1);
+
+            Assert.AreSame(null, fileResult);
+        }
     }
 }
