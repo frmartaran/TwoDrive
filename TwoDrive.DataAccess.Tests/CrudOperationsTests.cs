@@ -40,14 +40,14 @@ namespace TwoDrive.DataAccess.Tests
                 .Returns<object[]>(t => mockData.Find(d => d.Id == (int)t[0]));
             mockSet.Setup(m => m.Attach(It.IsAny<TxtFile>()))
                 .Returns((TxtFile t) => null)
-                .Callback<TxtFile>((t) => 
+                .Callback<TxtFile>((t) =>
                 {
                     mockData.Where(txt => txt.Id != t.Id).ToList();
                     mockData.Add(t);
                 });
             mockSet.Setup(m => m.Remove(It.IsAny<TxtFile>()))
                 .Returns((TxtFile t) => null)
-                .Callback<TxtFile>((t) => 
+                .Callback<TxtFile>((t) =>
                 {
                     mockData = mockData.Where(txt => txt.Id != t.Id).ToList();
                 });
@@ -58,7 +58,7 @@ namespace TwoDrive.DataAccess.Tests
         public void TestCreateObject()
         {
             var txtFile = new TxtFile
-            { 
+            {
                 Id = 3,
                 Content = "testCreation3"
             };
@@ -99,6 +99,13 @@ namespace TwoDrive.DataAccess.Tests
             var fileResult = crudOperations.Read(1);
 
             Assert.AreSame(null, fileResult);
+        }
+
+        [TestMethod]
+        public void GetInMemoryDatabase()
+        {
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext");
+            Assert.IsNotNull(memoryDb);
         }
     }
 }
