@@ -16,5 +16,21 @@ namespace TwoDrive.Domain
         public ICollection<Writer> Friends { get; set; }
 
         public ICollection<Claim> Claims { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            
+            var toWriter = (Writer) obj;
+            return Id == toWriter.Id;
+        }
+        
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
