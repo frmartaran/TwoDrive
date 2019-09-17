@@ -216,7 +216,7 @@ namespace TwoDrive.DataAccess.Tests
             repository.Save();
 
             Assert.AreEqual("File", file.Name);
-            
+
             file.Name = "TXT";
             repository.Update(file);
             repository.Save();
@@ -227,5 +227,216 @@ namespace TwoDrive.DataAccess.Tests
 
         }
 
+        [TestMethod]
+        public void DeleteWriter()
+        {
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext11");
+            var writer = new Writer
+            {
+                Id = 1,
+                Token = Guid.NewGuid(),
+                UserName = "WRiter",
+                Password = "Pass",
+                Claims = new List<Claim>(),
+                Friends = new List<Writer>()
+            };
+            var repository = new CrudOperations<Writer>(memoryDb);
+            repository.Create(writer);
+            repository.Save();
+
+            var countBeforeDeleting = memoryDb.Set<Writer>().Count();
+            Assert.AreEqual(1, countBeforeDeleting);
+
+            repository.Delete(1);
+            repository.Save();
+
+            var countAfterDeleting = memoryDb.Set<Writer>().Count();
+            Assert.AreEqual(0, countAfterDeleting);
+
+        }
+
+        [TestMethod]
+        public void DeleteFolder()
+        {
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext12");
+            var repository = new CrudOperations<Element>(memoryDb);
+            var file = new TxtFile
+            {
+                Id = 1,
+                Name = "File",
+
+            };
+            repository.Create(file);
+            repository.Save();
+
+            var countBeforeDeleting = memoryDb.Set<Element>().Count();
+            Assert.AreEqual(1, countBeforeDeleting);
+
+            repository.Delete(1);
+            repository.Save();
+
+            var countAfterDeleting = memoryDb.Set<Element>().Count();
+            Assert.AreEqual(0, countAfterDeleting);
+
+        }
+
+        [TestMethod]
+        public void DeleteFile()
+        {
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext13");
+            var repository = new CrudOperations<Element>(memoryDb);
+            var folder = new Folder
+            {
+                Id = 1,
+                Name = "Root",
+                FolderChilden = new List<Element>()
+            };
+            repository.Create(folder);
+            repository.Save();
+
+            var countBeforeDeleting = memoryDb.Set<Element>().Count();
+            Assert.AreEqual(1, countBeforeDeleting);
+
+            repository.Delete(1);
+            repository.Save();
+
+            var countAfterDeleting = memoryDb.Set<Element>().Count();
+            Assert.AreEqual(0, countAfterDeleting);
+
+        }
+
+        [TestMethod]
+        public void ReadAllWriters()
+        {
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext14");
+            var writer = new Writer
+            {
+                Id = 1,
+                Token = Guid.NewGuid(),
+                UserName = "WRiter",
+                Password = "Pass",
+                Claims = new List<Claim>(),
+                Friends = new List<Writer>()
+            };
+            var anotherWriter = new Writer
+            {
+                Id = 2,
+                Token = Guid.NewGuid(),
+                UserName = "WRiter",
+                Password = "Pass",
+                Claims = new List<Claim>(),
+                Friends = new List<Writer>()
+            };
+            var repository = new CrudOperations<Writer>(memoryDb);
+            repository.Create(writer);
+            repository.Create(anotherWriter);
+            repository.Save();
+
+            var all = repository.ReadAll();
+            Assert.AreEqual(2, all.Count());
+            Assert.IsTrue(all.Contains(writer));
+            Assert.IsTrue(all.Contains(anotherWriter));
+
+        }
+
+        [TestMethod]
+        public void ReadAllFolders()
+        {
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext15");
+            var repository = new CrudOperations<Folder>(memoryDb);
+            var folder = new Folder
+            {
+                Id = 1,
+                Name = "Root",
+                FolderChilden = new List<Element>()
+            };
+            var child = new Folder
+            {
+                Id = 2,
+                Name = "Child",
+                ParentFolder = folder,
+                FolderChilden = new List<Element>()
+            };
+            repository.Create(folder);
+            repository.Create(child);
+            repository.Save();
+
+            var all = repository.ReadAll();
+            Assert.AreEqual(2, all.Count());
+            Assert.IsTrue(all.Contains(folder));
+            Assert.IsTrue(all.Contains(child));
+            Assert.IsTrue(all.All(f => f.GetType().Name == "Folder"));
+        }
+
+        [TestMethod]
+        public void ReadAllFiles()
+        {
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext16");
+            var repository = new CrudOperations<File>(memoryDb);
+            var file = new TxtFile
+            {
+                Id = 1,
+                Name = "File",
+
+            };
+            var anotherFile = new TxtFile
+            {
+                Id = 2,
+                Name = "File",
+
+            };
+            repository.Create(file);
+            repository.Create(anotherFile);
+            repository.Save();
+
+            var all = repository.ReadAll();
+            Assert.AreEqual(2, all.Count());
+            Assert.IsTrue(all.Contains(file));
+            Assert.IsTrue(all.Contains(anotherFile));
+            Assert.IsTrue(all.All(f => f.GetType().Name == "TxtFile"));
+        }
+
+         [TestMethod]
+        public void ReadAllFilesAndFolders()
+        {
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext18");
+            var repository = new CrudOperations<Element>(memoryDb);
+            var folder = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChilden = new List<Element>()
+            };
+            var file = new TxtFile
+            {
+                Id = 1,
+                Name = "File",
+
+            };
+            var anotherFile = new TxtFile
+            {
+                Id = 2,
+                Name = "File",
+
+            };
+            repository.Create(file);
+            repository.Create(anotherFile);
+            repository.Create(folder);
+            repository.Save();
+
+            var all = repository.ReadAll();
+            var fileCount = all.Where(e => e is TxtFile).Count();
+            var folderCount = all.Where(e => e is Folder).Count();
+
+            Assert.AreEqual(3, all.Count());
+            Assert.IsTrue(all.Contains(file));
+            Assert.IsTrue(all.Contains(anotherFile));
+            Assert.IsTrue(all.Contains(folder));
+            Assert.AreEqual(1, folderCount);
+            Assert.AreEqual(2, fileCount);
+
+        }
+
+        
     }
 }
