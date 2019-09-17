@@ -6,101 +6,20 @@ using Moq;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.Domain;
 using System;
+using TwoDrive.DataAccess.Interface;
 
 namespace TwoDrive.DataAccess.Tests
 {
     [TestClass]
     public class CrudOperationsTests
     {
-        private List<TxtFile> mockData;
-
-        private CrudOperations<TxtFile> crudOperations;
-
-        [TestInitialize]
-        public void Initialize()
+        [TestCleanup]
+        public void CleanUp()
         {
-            var mockSet = new Mock<DbSet<TxtFile>>();
-            var mockContext = new Mock<TwoDriveDbContext>();
-            mockData = new List<TxtFile>
-            {
-                new TxtFile
-                {
-                    Id = 1,
-                    Content = "testCreation1"
-                },
-                new TxtFile
-                {
-                    Id = 2,
-                    Content = "testCreation2"
-                }
-            };
-            mockContext.Setup(m => m.Set<TxtFile>()).Returns(mockSet.Object);
-            mockSet.Setup(m => m.Add(It.IsAny<TxtFile>()))
-                .Returns((TxtFile t) => null)
-                .Callback<TxtFile>((t) => mockData.Add(t));
-            mockSet.Setup(m => m.Find(It.IsAny<int>()))
-                .Returns<object[]>(t => mockData.Find(d => d.Id == (int)t[0]));
-            mockSet.Setup(m => m.Attach(It.IsAny<TxtFile>()))
-                .Returns((TxtFile t) => null)
-                .Callback<TxtFile>((t) =>
-                {
-                    mockData.Where(txt => txt.Id != t.Id).ToList();
-                    mockData.Add(t);
-                });
-            mockSet.Setup(m => m.Remove(It.IsAny<TxtFile>()))
-                .Returns((TxtFile t) => null)
-                .Callback<TxtFile>((t) =>
-                {
-                    mockData = mockData.Where(txt => txt.Id != t.Id).ToList();
-                });
-            crudOperations = new CrudOperations<TxtFile>(mockContext.Object);
-        }
-
-        [TestMethod]
-        public void TestCreateObject()
-        {
-            var txtFile = new TxtFile
-            {
-                Id = 3,
-                Content = "testCreation3"
-            };
-            crudOperations.Create(txtFile);
-            crudOperations.Save();
-
-            Assert.AreEqual(3, mockData[2].Id);
-            Assert.AreEqual("testCreation3", mockData[2].Content);
-        }
-
-        [TestMethod]
-        public void TestReadObject()
-        {
-            var fileResult = crudOperations.Read(2);
-
-            Assert.AreEqual(2, fileResult.Id);
-            Assert.AreEqual("testCreation2", fileResult.Content);
-        }
-
-        [TestMethod]
-        public void TestUpdateObject()
-        {
-            var fileResult = crudOperations.Read(1);
-            fileResult.Content = "testCreation1Updated";
-            crudOperations.Update(fileResult);
-            crudOperations.Save();
-            fileResult = crudOperations.Read(1);
-
-            Assert.AreEqual(1, fileResult.Id);
-            Assert.AreEqual("testCreation1Updated", fileResult.Content);
-        }
-
-        [TestMethod]
-        public void TestDeleteObject()
-        {
-            crudOperations.Delete(1);
-            crudOperations.Save();
-            var fileResult = crudOperations.Read(1);
-
-            Assert.AreSame(null, fileResult);
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext");
+            memoryDb.Set<Writer>().RemoveRange(memoryDb.Set<Writer>());
+            memoryDb.Set<Element>().RemoveRange(memoryDb.Set<Element>());
+            memoryDb.SaveChanges();
         }
 
         [TestMethod]
@@ -117,7 +36,6 @@ namespace TwoDrive.DataAccess.Tests
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext");
             var writer = new Writer
             {
-                Id = Guid.NewGuid(),
                 Token = Guid.NewGuid(),
                 UserName = "WRiter",
                 Password = "Pass",
@@ -131,7 +49,84 @@ namespace TwoDrive.DataAccess.Tests
 
             var writerInDb = memoryDb.Set<Writer>().FirstOrDefault();
             Assert.AreEqual(writer.Id, writerInDb.Id);
-            
+
         }
+
+        [TestMethod]
+        public void AddAFolder()
+        {
+
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext");
+            var folder = new Folder
+            {
+                Name = "Root",
+                FolderChilden = new List<Element>()
+            };
+
+            var repository = new CrudOperations<Element>(memoryDb);
+            repository.Create(folder);
+            repository.Save();
+
+            var writerInDb = memoryDb.Set<Element>().FirstOrDefault();
+            Assert.AreEqual(folder.Id, writerInDb.Id);
+
+        }
+
+        [TestMethod]
+        public void AddAFile()
+        {
+
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext");
+            var folder = new TxtFile
+            {
+                Name = "File",
+
+            };
+
+            var repository = new CrudOperations<Element>(memoryDb);
+            repository.Create(folder);
+            repository.Save();
+
+            var writerInDb = memoryDb.Set<Element>().FirstOrDefault();
+            Assert.AreEqual(folder.Id, writerInDb.Id);
+
+        }
+
+
+        [TestMethod]
+        public void FindWriter()
+        {
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext");
+            var writer = new Writer
+            {
+                Token = Guid.NewGuid(),
+                UserName = "WRiter",
+                Password = "Pass",
+                Claims = new List<Claim>(),
+                Friends = new List<Writer>()
+            };
+
+            var repository = new CrudOperations<Writer>(memoryDb);
+            repository.Create(writer);
+            repository.Save();
+
+            var writerFound = repository.Read(writer.Id);
+            Assert.AreEqual(writer.Id, writerFound.Id);
+        }
+
+        [TestMethod]
+        public void FindTxtFile()
+        {
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext");
+            var folder = new TxtFile
+            {
+                Name = "File",
+
+            };
+
+
+
+        }
+
     }
 }

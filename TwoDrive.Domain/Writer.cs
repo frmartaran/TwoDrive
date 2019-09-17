@@ -5,7 +5,7 @@ namespace TwoDrive.Domain
 {
     public class Writer
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         public Guid Token { get; set; }
 
@@ -14,7 +14,7 @@ namespace TwoDrive.Domain
         public string Password { get; set; }
 
         public ICollection<Writer> Friends { get; set; }
-        
+
         public ICollection<Claim> Claims { get; set; }
     }
 }

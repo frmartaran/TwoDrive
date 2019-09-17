@@ -6,7 +6,6 @@ namespace TwoDrive.DataAccess
 {
     public class TwoDriveDbContext : DbContext
     {
-        public TwoDriveDbContext(){}
         public TwoDriveDbContext(DbContextOptions<TwoDriveDbContext> options) : base(options)
         {
             
