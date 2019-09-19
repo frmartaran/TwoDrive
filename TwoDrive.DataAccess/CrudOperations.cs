@@ -1,9 +1,7 @@
-using System.Security;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using TwoDrive.DataAccess.Interface;
-using TwoDrive.Domain;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace TwoDrive.DataAccess
