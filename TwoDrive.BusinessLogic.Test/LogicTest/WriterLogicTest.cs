@@ -55,6 +55,7 @@ namespace TwoDrive.BusinessLogic.Test
             var mockRepository = new Mock<CrudOperations<Writer>>();
             mockRepository
             .Setup(m => m.Create(It.IsAny<Writer>()));
+            mockRepository.Setup(m => m.Save());
 
             var logic = new WriterLogic(mockRepository.Object);
             logic.Create(writer);
