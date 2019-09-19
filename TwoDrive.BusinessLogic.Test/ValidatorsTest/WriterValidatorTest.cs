@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TwoDrive.BusinessLogic.Validators;
+using TwoDrive.DataAccess;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 
@@ -284,6 +285,24 @@ namespace TwoDrive.BusinessLogic.Test
 
             var validator = new WriterValidator();
             bool isValid = validator.isValid(writer);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InvalidWriterUsernameExists(){
+
+            var repository = ContextFactory.GetMemoryContext("Context");
+             var writer = new Writer
+            {
+                Id = 1,
+                Token = Guid.NewGuid(),
+                UserName = "Writer",
+                Password = "A password",
+                Friends = new List<Writer>(),
+                Claims = defaultClaims,
+            };
+            //repository.Writers.Add(writer);
+
         }
 
     }
