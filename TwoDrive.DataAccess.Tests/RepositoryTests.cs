@@ -11,7 +11,7 @@ using TwoDrive.DataAccess.Interface;
 namespace TwoDrive.DataAccess.Tests
 {
     [TestClass]
-    public class CrudOperationsTests
+    public class RepositoryTests
     {
         [TestMethod]
         public void GetInMemoryDatabase()
@@ -35,8 +35,8 @@ namespace TwoDrive.DataAccess.Tests
                 Friends = new List<Writer>()
             };
 
-            var repository = new CrudOperations<Writer>(memoryDb);
-            repository.Create(writer);
+            var repository = new Repository<Writer>(memoryDb);
+            repository.Insert(writer);
             repository.Save();
 
             var writerInDb = memoryDb.Set<Writer>().FirstOrDefault();
@@ -56,8 +56,8 @@ namespace TwoDrive.DataAccess.Tests
                 FolderChilden = new List<Element>()
             };
 
-            var repository = new CrudOperations<Element>(memoryDb);
-            repository.Create(folder);
+            var repository = new Repository<Element>(memoryDb);
+            repository.Insert(folder);
             repository.Save();
 
             var writerInDb = memoryDb.Set<Element>().FirstOrDefault();
@@ -76,8 +76,8 @@ namespace TwoDrive.DataAccess.Tests
                 Name = "File",
             };
 
-            var repository = new CrudOperations<Element>(memoryDb);
-            repository.Create(file);
+            var repository = new Repository<Element>(memoryDb);
+            repository.Insert(file);
             repository.Save();
 
             var writerInDb = memoryDb.Set<Element>().FirstOrDefault();
@@ -100,11 +100,11 @@ namespace TwoDrive.DataAccess.Tests
                 Friends = new List<Writer>()
             };
 
-            var repository = new CrudOperations<Writer>(memoryDb);
-            repository.Create(writer);
+            var repository = new Repository<Writer>(memoryDb);
+            repository.Insert(writer);
             repository.Save();
 
-            var writerFound = repository.Read(1);
+            var writerFound = repository.Get(1);
             Assert.AreEqual(writer, writerFound);
         }
 
@@ -118,11 +118,11 @@ namespace TwoDrive.DataAccess.Tests
                 Name = "File",
 
             };
-            var repository = new CrudOperations<Element>(memoryDb);
-            repository.Create(file);
+            var repository = new Repository<Element>(memoryDb);
+            repository.Insert(file);
             repository.Save();
 
-            var folderInMemory = repository.Read(1);
+            var folderInMemory = repository.Get(1);
             Assert.AreEqual(file, folderInMemory);
 
         }
@@ -137,11 +137,11 @@ namespace TwoDrive.DataAccess.Tests
                 Name = "Root",
                 FolderChilden = new List<Element>()
             };
-            var repository = new CrudOperations<Element>(memoryDb);
-            repository.Create(folder);
+            var repository = new Repository<Element>(memoryDb);
+            repository.Insert(folder);
             repository.Save();
 
-            var folderInMemory = repository.Read(1);
+            var folderInMemory = repository.Get(1);
             Assert.AreEqual(folder, folderInMemory);
 
         }
@@ -159,8 +159,8 @@ namespace TwoDrive.DataAccess.Tests
                 Claims = new List<Claim>(),
                 Friends = new List<Writer>()
             };
-            var repository = new CrudOperations<Writer>(memoryDb);
-            repository.Create(writer);
+            var repository = new Repository<Writer>(memoryDb);
+            repository.Insert(writer);
             repository.Save();
 
             Assert.AreEqual("WRiter", writer.UserName);
@@ -168,7 +168,7 @@ namespace TwoDrive.DataAccess.Tests
             writer.UserName = "Writer";
             repository.Update(writer);
             repository.Save();
-            var foundWriter = repository.Read(1);
+            var foundWriter = repository.Get(1);
 
             Assert.AreEqual("Writer", foundWriter.UserName);
             Assert.AreEqual(writer, foundWriter);
@@ -179,14 +179,14 @@ namespace TwoDrive.DataAccess.Tests
         public void UpdateFolder()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext9");
-            var repository = new CrudOperations<Element>(memoryDb);
+            var repository = new Repository<Element>(memoryDb);
             var folder = new Folder
             {
                 Id = 1,
                 Name = "Root",
                 FolderChilden = new List<Element>()
             };
-            repository.Create(folder);
+            repository.Insert(folder);
             repository.Save();
 
             Assert.AreEqual("Root", folder.Name);
@@ -194,7 +194,7 @@ namespace TwoDrive.DataAccess.Tests
             folder.Name = " root ";
             repository.Update(folder);
             repository.Save();
-            var foundFolder = repository.Read(1);
+            var foundFolder = repository.Get(1);
 
             Assert.AreEqual(" root ", foundFolder.Name);
             Assert.AreEqual(folder, foundFolder);
@@ -205,14 +205,14 @@ namespace TwoDrive.DataAccess.Tests
         public void UpdateFile()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext10");
-            var repository = new CrudOperations<Element>(memoryDb);
+            var repository = new Repository<Element>(memoryDb);
             var file = new TxtFile
             {
                 Id = 1,
                 Name = "File",
 
             };
-            repository.Create(file);
+            repository.Insert(file);
             repository.Save();
 
             Assert.AreEqual("File", file.Name);
@@ -220,7 +220,7 @@ namespace TwoDrive.DataAccess.Tests
             file.Name = "TXT";
             repository.Update(file);
             repository.Save();
-            var foundFile = repository.Read(1);
+            var foundFile = repository.Get(1);
 
             Assert.AreEqual("TXT", foundFile.Name);
             Assert.AreEqual(file, foundFile);
@@ -240,8 +240,8 @@ namespace TwoDrive.DataAccess.Tests
                 Claims = new List<Claim>(),
                 Friends = new List<Writer>()
             };
-            var repository = new CrudOperations<Writer>(memoryDb);
-            repository.Create(writer);
+            var repository = new Repository<Writer>(memoryDb);
+            repository.Insert(writer);
             repository.Save();
 
             var countBeforeDeleting = memoryDb.Set<Writer>().Count();
@@ -259,14 +259,14 @@ namespace TwoDrive.DataAccess.Tests
         public void DeleteFolder()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext12");
-            var repository = new CrudOperations<Element>(memoryDb);
+            var repository = new Repository<Element>(memoryDb);
             var file = new TxtFile
             {
                 Id = 1,
                 Name = "File",
 
             };
-            repository.Create(file);
+            repository.Insert(file);
             repository.Save();
 
             var countBeforeDeleting = memoryDb.Set<Element>().Count();
@@ -284,14 +284,14 @@ namespace TwoDrive.DataAccess.Tests
         public void DeleteFile()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext13");
-            var repository = new CrudOperations<Element>(memoryDb);
+            var repository = new Repository<Element>(memoryDb);
             var folder = new Folder
             {
                 Id = 1,
                 Name = "Root",
                 FolderChilden = new List<Element>()
             };
-            repository.Create(folder);
+            repository.Insert(folder);
             repository.Save();
 
             var countBeforeDeleting = memoryDb.Set<Element>().Count();
@@ -306,7 +306,7 @@ namespace TwoDrive.DataAccess.Tests
         }
 
         [TestMethod]
-        public void ReadAllWriters()
+        public void GetAllWriters()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext14");
             var writer = new Writer
@@ -327,12 +327,12 @@ namespace TwoDrive.DataAccess.Tests
                 Claims = new List<Claim>(),
                 Friends = new List<Writer>()
             };
-            var repository = new CrudOperations<Writer>(memoryDb);
-            repository.Create(writer);
-            repository.Create(anotherWriter);
+            var repository = new Repository<Writer>(memoryDb);
+            repository.Insert(writer);
+            repository.Insert(anotherWriter);
             repository.Save();
 
-            var all = repository.ReadAll();
+            var all = repository.GetAll();
             Assert.AreEqual(2, all.Count());
             Assert.IsTrue(all.Contains(writer));
             Assert.IsTrue(all.Contains(anotherWriter));
@@ -340,10 +340,10 @@ namespace TwoDrive.DataAccess.Tests
         }
 
         [TestMethod]
-        public void ReadAllFolders()
+        public void GetAllFolders()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext15");
-            var repository = new CrudOperations<Folder>(memoryDb);
+            var repository = new Repository<Folder>(memoryDb);
             var folder = new Folder
             {
                 Id = 1,
@@ -357,11 +357,11 @@ namespace TwoDrive.DataAccess.Tests
                 ParentFolder = folder,
                 FolderChilden = new List<Element>()
             };
-            repository.Create(folder);
-            repository.Create(child);
+            repository.Insert(folder);
+            repository.Insert(child);
             repository.Save();
 
-            var all = repository.ReadAll();
+            var all = repository.GetAll();
             Assert.AreEqual(2, all.Count());
             Assert.IsTrue(all.Contains(folder));
             Assert.IsTrue(all.Contains(child));
@@ -369,10 +369,10 @@ namespace TwoDrive.DataAccess.Tests
         }
 
         [TestMethod]
-        public void ReadAllFiles()
+        public void GetAllFiles()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext16");
-            var repository = new CrudOperations<File>(memoryDb);
+            var repository = new Repository<File>(memoryDb);
             var file = new TxtFile
             {
                 Id = 1,
@@ -385,11 +385,11 @@ namespace TwoDrive.DataAccess.Tests
                 Name = "File",
 
             };
-            repository.Create(file);
-            repository.Create(anotherFile);
+            repository.Insert(file);
+            repository.Insert(anotherFile);
             repository.Save();
 
-            var all = repository.ReadAll();
+            var all = repository.GetAll();
             Assert.AreEqual(2, all.Count());
             Assert.IsTrue(all.Contains(file));
             Assert.IsTrue(all.Contains(anotherFile));
@@ -397,10 +397,10 @@ namespace TwoDrive.DataAccess.Tests
         }
 
          [TestMethod]
-        public void ReadAllFilesAndFolders()
+        public void GetAllFilesAndFolders()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext18");
-            var repository = new CrudOperations<Element>(memoryDb);
+            var repository = new Repository<Element>(memoryDb);
             var folder = new Folder
             {
                 Id = 3,
@@ -419,12 +419,12 @@ namespace TwoDrive.DataAccess.Tests
                 Name = "File",
 
             };
-            repository.Create(file);
-            repository.Create(anotherFile);
-            repository.Create(folder);
+            repository.Insert(file);
+            repository.Insert(anotherFile);
+            repository.Insert(folder);
             repository.Save();
 
-            var all = repository.ReadAll();
+            var all = repository.GetAll();
             var fileCount = all.Where(e => e is TxtFile).Count();
             var folderCount = all.Where(e => e is Folder).Count();
 
