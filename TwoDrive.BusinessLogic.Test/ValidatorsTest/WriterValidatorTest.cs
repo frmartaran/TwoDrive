@@ -14,6 +14,7 @@ namespace TwoDrive.BusinessLogic.Test
     {
         private List<Claim> defaultClaims;
         private Folder root;
+        
         [TestInitialize]
         public void SetUp()
         {
