@@ -49,7 +49,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
-                Id = Guid.NewGuid(),
+                Id = 1,
                 UserName = "Writer",
                 Password = "A password",
                 Friends = new List<Writer>(),
@@ -67,7 +67,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
-                Id = Guid.NewGuid(),
+                Id = 1,
                 Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
@@ -88,7 +88,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
-                Id = Guid.NewGuid(),
+                Id = 1,
                 Token = Guid.NewGuid(),
                 UserName = "",
                 Password = "A password",
@@ -108,7 +108,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
-                Id = Guid.NewGuid(),
+                Id = 1,
                 Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "",
@@ -126,7 +126,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
-                Id = Guid.NewGuid(),
+                Id = 1,
                 Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
@@ -136,7 +136,7 @@ namespace TwoDrive.BusinessLogic.Test
 
             var friend = new Writer
             {
-                Id = Guid.NewGuid(),
+                Id = 1,
                 Token = Guid.NewGuid(),
                 UserName = "Frined",
                 Password = "A password",
@@ -159,7 +159,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
-                Id = Guid.NewGuid(),
+                Id = 1,
                 Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
@@ -178,7 +178,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
-                Id = Guid.NewGuid(),
+                Id = 1,
                 Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
@@ -198,7 +198,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
-                Id = Guid.NewGuid(),
+                Id = 1,
                 Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
@@ -226,7 +226,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
-                Id = Guid.NewGuid(),
+                Id = 1,
                 Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
@@ -248,7 +248,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
-                Id = Guid.NewGuid(),
+                Id = 1,
                 Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
@@ -270,7 +270,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var writer = new Writer
             {
-                Id = Guid.NewGuid(),
+                Id = 1,
                 Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",

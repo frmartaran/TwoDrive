@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.Domain;
@@ -18,7 +17,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             owner = new Writer
             {
-                Id = Guid.NewGuid(),
+                Id = 1,
                 Token = Guid.NewGuid(),
                 UserName = "Owner"
             };
