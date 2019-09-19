@@ -4,13 +4,13 @@ using TwoDrive.Domain;
 
 namespace TwoDrive.DataAccess.Interface
 {
-    public interface ICrudOperations<T> where T : class
+    public interface IRepository<T> where T : class
     {
-        void Create(T objectToCreate);
-        T Read(int Id);
+        void Insert(T objectToCreate);
+        T Get(int Id);
         void Update(T objectToUpdate);
         void Delete(int Id);
-        ICollection<T> ReadAll();
+        ICollection<T> GetAll();
         void Save();
     }
 }

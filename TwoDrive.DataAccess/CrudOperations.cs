@@ -8,23 +8,23 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace TwoDrive.DataAccess
 {
-    public class CrudOperations<T> : ICrudOperations<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class
     {
         private TwoDriveDbContext context;
         private DbSet<T> table;
 
-        public CrudOperations(TwoDriveDbContext context)
+        public Repository(TwoDriveDbContext context)
         {
             this.context = context;
             table = context.Set<T>();
         }
 
-        public void Create(T objectToCreate)
+        public void Insert(T objectToCreate)
         {
             table.Add(objectToCreate);
         }
 
-        public T Read(int Id)
+        public T Get(int Id)
         {
             return table.Find(Id);
         }
@@ -42,7 +42,7 @@ namespace TwoDrive.DataAccess
             table.Remove(existingObject);
         }
 
-        public ICollection<T> ReadAll()
+        public ICollection<T> GetAll()
         {
             return table.ToList();
         }
