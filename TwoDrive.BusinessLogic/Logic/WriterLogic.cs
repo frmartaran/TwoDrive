@@ -17,6 +17,7 @@ namespace TwoDrive.BusinessLogic.Logic
         }
         public void Create(Writer writer)
         {
+            var isValid = Validator.isValid(writer);
             Repository.Insert(writer);
             Repository.Save();
         }
