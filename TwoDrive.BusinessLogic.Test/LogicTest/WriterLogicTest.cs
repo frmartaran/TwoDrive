@@ -76,39 +76,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void CreateInvalidUser()
-        {
-            var invalidWriter = new Writer
-            {
-                Id = 1,
-                Token = Guid.NewGuid(),
-                UserName = "Writer",
-                Password = "A password",
-                Friends = new List<Writer>(),
-                Claims = new List<Claim>()
-            };
-
-            var mockRepository = new Mock<IRepository<Writer>>(MockBehavior.Strict);
-            mockRepository
-            .Setup(m => m.Insert(It.IsAny<Writer>()));
-            mockRepository.Setup(m => m.Save());
-
-            var mockValidator = new Mock<IValidator<Writer>>(MockBehavior.Strict);
-            mockValidator
-            .Setup(m => m.isValid(It.IsAny<Writer>()))
-            .Throws(new ArgumentException());
-
-            var logic = new WriterLogic(mockRepository.Object, mockValidator.Object);
-            logic.Create(invalidWriter);
-
-            mockRepository.VerifyAll();
-            mockValidator.VerifyAll();
-
-        }
-
-        [TestMethod]
-        public void CreateUserCheckState()
+        public void CreateWriterCheckState()
         {
             var context = ContextFactory.GetMemoryContext("TwoDrive");
             var repository = new Repository<Writer>(context);
@@ -117,6 +85,18 @@ namespace TwoDrive.BusinessLogic.Test
             logic.Create(writer);
             var writersInDb = repository.Get(1);
             Assert.AreEqual(writer, writersInDb);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CreateInvalidWriterCheckState()
+        {
+            var context = ContextFactory.GetMemoryContext("TwoDrive");
+            var repository = new Repository<Writer>(context);
+            var validator = new WriterValidator();
+            var logic = new WriterLogic(repository, validator);
+            writer.UserName = "";
+            logic.Create(writer);
         }
     }
 }
