@@ -2,7 +2,11 @@ using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.BusinessLogic.Logic;
+using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.DataAccess;
+using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 
@@ -52,12 +56,16 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void CreateUser()
         {
-            var mockRepository = new Mock<CrudOperations<Writer>>();
+            var mockRepository = new Mock<IRepository<Writer>>(MockBehavior.Strict);
             mockRepository
-            .Setup(m => m.Create(It.IsAny<Writer>()));
+            .Setup(m => m.Insert(It.IsAny<Writer>()));
             mockRepository.Setup(m => m.Save());
 
-            var logic = new WriterLogic(mockRepository.Object);
+            var mockValidator = new Mock<IValidator<Writer>>(MockBehavior.Strict);
+            mockValidator
+            .Setup(m => m.isValid(It.IsAny<Writer>()));
+
+            var logic = new WriterLogic(mockRepository.Object, mockValidator.Object);
             logic.Create(writer);
 
             mockRepository.VerifyAll();
