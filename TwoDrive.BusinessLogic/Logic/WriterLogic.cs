@@ -42,9 +42,9 @@ namespace TwoDrive.BusinessLogic.Logic
             throw new NotImplementedException();
         }
 
-        public void Update(Writer objectToCreate)
+        public void Update(Writer writer)
         {
-            throw new NotImplementedException();
+            Repository.Update(writer);
         }
     }
 }
