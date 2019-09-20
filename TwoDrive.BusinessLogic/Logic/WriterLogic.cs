@@ -10,6 +10,11 @@ namespace TwoDrive.BusinessLogic.Logic
     {
         private IRepository<Writer> Repository { get; set; }
         private IValidator<Writer> Validator { get; set; }
+
+        public WriterLogic(IRepository<Writer> currentRepository)
+        {
+            Repository = currentRepository;
+        }
         public WriterLogic(IRepository<Writer> currentRepository, IValidator<Writer> CurrentValidator)
         {
             Repository = currentRepository;
@@ -29,7 +34,7 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public Writer Get(int Id)
         {
-            throw new NotImplementedException();
+            return Repository.Get(Id);
         }
 
         public ICollection<Writer> GetAll()

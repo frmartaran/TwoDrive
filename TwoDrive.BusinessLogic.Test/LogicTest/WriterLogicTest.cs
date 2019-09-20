@@ -108,7 +108,7 @@ namespace TwoDrive.BusinessLogic.Test
             var logic = new WriterLogic(mockRepository.Object);
             var writerGotten = logic.Get(1);
 
-            Assert.AreEqual(writer, writerGotten);
+            mockRepository.VerifyAll();
 
         }
     }
