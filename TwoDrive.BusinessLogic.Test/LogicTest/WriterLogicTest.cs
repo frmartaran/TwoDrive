@@ -52,6 +52,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Friends = new List<Writer>(),
                 Claims = defaultClaims,
             };
+            root.Owner = writer;
         }
         [TestMethod]
         public void CreateUser()
@@ -114,9 +115,7 @@ namespace TwoDrive.BusinessLogic.Test
             var validator = new WriterValidator();
             var logic = new WriterLogic(repository, validator);
             logic.Create(writer);
-
             var writersInDb = repository.Get(1);
-
             Assert.AreEqual(writer, writersInDb);
         }
     }
