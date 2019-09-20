@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TwoDrive.DataAccess;
+using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic.Test.LogicTest
@@ -34,15 +35,14 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
         [TestMethod]
         public void CreateFile()
         {
-            var mockRepository = new Mock<Repository<TxtFile>>();
+            var mockRepository = new Mock<IRepository<File>>();
             mockRepository
-            .Setup(m => m.Insert(It.IsAny<TxtFile>()));
+            .Setup(m => m.Insert(It.IsAny<File>()));
 
             var logic = new FileLogic(mockRepository.Object);
             logic.Create(file);
 
             mockRepository.VerifyAll();
-
         }
     }
 }
