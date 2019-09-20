@@ -98,5 +98,18 @@ namespace TwoDrive.BusinessLogic.Test
             writer.UserName = "";
             logic.Create(writer);
         }
+
+        [TestMethod]
+        public void GetWriter()
+        {
+            var mockRepository = new Mock<IRepository<Writer>>(MockBehavior.Strict);
+            mockRepository.Setup(m => m.Get(It.IsAny<int>()))
+            .Returns(writer);
+            var logic = new WriterLogic(mockRepository.Object);
+            var writerGotten = logic.Get(1);
+
+            Assert.AreEqual(writer, writerGotten);
+
+        }
     }
 }
