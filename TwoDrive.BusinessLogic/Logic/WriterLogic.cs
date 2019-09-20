@@ -22,7 +22,7 @@ namespace TwoDrive.BusinessLogic.Logic
         }
         public void Create(Writer writer)
         {
-            var isValid = Validator.isValid(writer);
+            Validator.isValid(writer);
             Repository.Insert(writer);
             Repository.Save();
         }
@@ -44,6 +44,7 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public void Update(Writer writer)
         {
+            Validator.isValid(writer);
             Repository.Update(writer);
         }
     }
