@@ -111,5 +111,36 @@ namespace TwoDrive.BusinessLogic.Test
             mockRepository.VerifyAll();
 
         }
+
+        [TestMethod]
+        public void GetWriterCheckState()
+        {
+            var context = ContextFactory.GetMemoryContext("TwoDriveContext");
+            context.Set<Writer>().Add(writer);
+            var repository = new Repository<Writer>(context);
+            var logic = new WriterLogic(repository);
+            var writerInDb = logic.Get(1);
+
+            Assert.AreEqual(writer, writerInDb);
+        }
+
+        [TestMethod]
+        public void UpdateWriter()
+        {
+            var mockRepository = new Mock<IRepository<Writer>>();
+            mockRepository.Setup(m => m.Update(It.IsAny<Writer>()));
+            var mockValidator = new Mock<IValidator<Writer>>();
+            mockValidator.Setup(m => m.isValid(It.IsAny<Writer>()))
+            .Returns(true);
+
+            var logic = new WriterLogic(mockRepository.Object, mockValidator.Object);
+            writer.UserName = "Another Username";
+            logic.Update(writer);
+
+            mockRepository.VerifyAll();
+            mockValidator.VerifyAll();
+
+        }
+
     }
 }
