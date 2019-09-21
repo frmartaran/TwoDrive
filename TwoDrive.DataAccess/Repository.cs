@@ -9,21 +9,20 @@ namespace TwoDrive.DataAccess
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private TwoDriveDbContext context;
-        private DbSet<T> table;
+        protected TwoDriveDbContext context;
+        protected DbSet<T> table;
 
-        public Repository(TwoDriveDbContext context)
+        public Repository(TwoDriveDbContext current)
         {
-            this.context = context;
+            context = current;
             table = context.Set<T>();
         }
-
         public void Insert(T objectToCreate)
         {
             table.Add(objectToCreate);
         }
 
-        public T Get(int Id)
+        public virtual T Get(int Id)
         {
             return table.Find(Id);
         }
@@ -53,10 +52,14 @@ namespace TwoDrive.DataAccess
 
         private void SetModified(EntityEntry<T> entity)
         {
-            if(entity != null)
+            if (entity != null)
             {
                 entity.State = EntityState.Modified;
-            }            
+            }
+        }
+        public virtual bool Exists(T objectToFind)
+        {
+            return table.Any();
         }
     }
 }

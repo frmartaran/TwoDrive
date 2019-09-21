@@ -14,10 +14,13 @@ namespace TwoDrive.BusinessLogic.Test
     {
         private List<Claim> defaultClaims;
         private Folder root;
-        
+        private WriterRepository repository;
+
         [TestInitialize]
         public void SetUp()
         {
+            var context = ContextFactory.GetMemoryContext("TwoDriveContext");
+            repository = new WriterRepository(context);
 
             root = new Folder
             {
@@ -46,31 +49,11 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void InvalidWriterNoToken()
-        {
-            var writer = new Writer
-            {
-                Id = 1,
-                UserName = "Writer",
-                Password = "A password",
-                Friends = new List<Writer>(),
-                Claims = defaultClaims,
-            };
-
-            root.Owner = writer;
-            var validator = new WriterValidator();
-            bool isValid = validator.isValid(writer);
-
-        }
-
-        [TestMethod]
         public void ValidWriter()
         {
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
                 Friends = new List<Writer>(),
@@ -78,7 +61,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             root.Owner = writer;
-            var validator = new WriterValidator();
+            var validator = new WriterValidator(repository);
             bool isValid = validator.isValid(writer);
 
             Assert.AreEqual(true, isValid);
@@ -91,7 +74,6 @@ namespace TwoDrive.BusinessLogic.Test
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "",
                 Password = "A password",
                 Friends = new List<Writer>(),
@@ -99,7 +81,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             root.Owner = writer;
-            var validator = new WriterValidator();
+            var validator = new WriterValidator(repository);
             bool isValid = validator.isValid(writer);
 
         }
@@ -111,7 +93,6 @@ namespace TwoDrive.BusinessLogic.Test
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "",
                 Friends = new List<Writer>(),
@@ -119,7 +100,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             root.Owner = writer;
-            var validator = new WriterValidator();
+            var validator = new WriterValidator(repository);
             bool isValid = validator.isValid(writer);
         }
 
@@ -129,7 +110,6 @@ namespace TwoDrive.BusinessLogic.Test
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
                 Friends = new List<Writer>(),
@@ -139,7 +119,6 @@ namespace TwoDrive.BusinessLogic.Test
             var friend = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "Frined",
                 Password = "A password",
                 Friends = new List<Writer>(),
@@ -148,7 +127,7 @@ namespace TwoDrive.BusinessLogic.Test
 
             root.Owner = writer;
             writer.Friends.Add(friend);
-            var validator = new WriterValidator();
+            var validator = new WriterValidator(repository);
             bool isValid = validator.isValid(writer);
 
             Assert.IsTrue(isValid);
@@ -162,7 +141,6 @@ namespace TwoDrive.BusinessLogic.Test
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
                 Friends = new List<Writer>(),
@@ -170,7 +148,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             root.Owner = writer;
-            var validator = new WriterValidator();
+            var validator = new WriterValidator(repository);
             bool isValid = validator.isValid(writer);
         }
 
@@ -181,16 +159,15 @@ namespace TwoDrive.BusinessLogic.Test
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
                 Friends = new List<Writer>(),
                 Claims = null,
             };
 
-            
+
             root.Owner = writer;
-            var validator = new WriterValidator();
+            var validator = new WriterValidator(repository);
             bool isValid = validator.isValid(writer);
         }
 
@@ -201,7 +178,6 @@ namespace TwoDrive.BusinessLogic.Test
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
                 Friends = new List<Writer>(),
@@ -218,7 +194,7 @@ namespace TwoDrive.BusinessLogic.Test
             root.Owner = writer;
             writer.Claims.Add(delete);
 
-            var validator = new WriterValidator();
+            var validator = new WriterValidator(repository);
             bool isValid = validator.isValid(writer);
         }
 
@@ -229,7 +205,6 @@ namespace TwoDrive.BusinessLogic.Test
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
                 Friends = new List<Writer>(),
@@ -240,7 +215,7 @@ namespace TwoDrive.BusinessLogic.Test
             var read = writer.Claims.FirstOrDefault(c => c.Type == ClaimType.Read);
             writer.Claims.Remove(read);
 
-            var validator = new WriterValidator();
+            var validator = new WriterValidator(repository);
             bool isValid = validator.isValid(writer);
         }
 
@@ -251,7 +226,6 @@ namespace TwoDrive.BusinessLogic.Test
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
                 Friends = new List<Writer>(),
@@ -262,7 +236,7 @@ namespace TwoDrive.BusinessLogic.Test
             var write = writer.Claims.FirstOrDefault(c => c.Type == ClaimType.Write);
             writer.Claims.Remove(write);
 
-            var validator = new WriterValidator();
+            var validator = new WriterValidator(repository);
             bool isValid = validator.isValid(writer);
         }
 
@@ -273,7 +247,6 @@ namespace TwoDrive.BusinessLogic.Test
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
                 Friends = new List<Writer>(),
@@ -284,25 +257,43 @@ namespace TwoDrive.BusinessLogic.Test
             var share = writer.Claims.FirstOrDefault(c => c.Type == ClaimType.Share);
             writer.Claims.Remove(share);
 
-            var validator = new WriterValidator();
+            var validator = new WriterValidator(repository);
             bool isValid = validator.isValid(writer);
         }
 
-        //[TestMethod]
-        //[ExpectedException(typeof(ArgumentException))]
-        public void InvalidWriterUsernameExists(){
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InvalidWriterUsernameExists()
+        {
 
-            var repository = ContextFactory.GetMemoryContext("Context");
-             var writer = new Writer
+            var context = ContextFactory.GetMemoryContext("Context");
+            var repository = new WriterRepository(context);
+            var name = "Writer";
+            var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
-                UserName = "Writer",
+                UserName = name,
                 Password = "A password",
                 Friends = new List<Writer>(),
                 Claims = defaultClaims,
             };
-            //repository.Writers.Add(writer);
+            repository.Insert(writer);
+            repository.Save();
+            var folder = root;
+            var anotherWriter = new Writer
+            {
+                Id = 2,
+                UserName = name,
+                Password = "Holus",
+                Friends = new List<Writer>(),
+            };
+            folder.Owner = anotherWriter;
+            var claims = defaultClaims;
+            claims.ToList().ForEach(c => c.Element = folder);
+            anotherWriter.Claims = claims;
+
+            var validator = new WriterValidator(repository);
+            validator.isValid(anotherWriter);
 
         }
 

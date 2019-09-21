@@ -24,18 +24,5 @@ namespace TwoDrive.BusinessLogic.Validators
             if (!hasParentFolder)
                 throw new ArgumentException("A file should have a parent folder");
         }
-
-        protected override void Hook(Element element)
-        {
-            var file = (File)element;
-            ValidateDates(file);
-        }
-
-        private void ValidateDates(File file)
-        {
-            var earlyModifiedDate = file.CreationDate.CompareTo(file.DateModified);
-            if (earlyModifiedDate > 0)
-                throw new ArgumentException("The modified date should be later than the creation date");
-        }
     }
 }
