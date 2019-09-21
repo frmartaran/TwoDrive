@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TwoDrive.BusinessLogic.Interfaces;
@@ -156,6 +157,34 @@ namespace TwoDrive.BusinessLogic.Test
             logic.Update(writer);
             var currentWriter = logic.Get(1);
             Assert.AreEqual(currentWriter.UserName, newName);
+        }
+
+        [TestMethod]
+        public void UpdateWriterAddFolder()
+        {
+            var context = ContextFactory.GetMemoryContext("Some Context");
+            var repository = new Repository<Writer>(context);
+            var validator = new WriterValidator();
+            var logic = new WriterLogic(repository, validator);
+
+            var newFolder = new Folder
+            {
+                Id = 1,
+                Name = "Folder",
+                Owner = writer,
+                FolderChilden = new List<Element>()
+            };
+
+            var claim = new Claim
+            {
+                Element = newFolder,
+                Type = ClaimType.Read
+            };
+            
+            writer.Claims.Add(claim);
+            var currentWriter = logic.Get(1);
+            var newClaim = currentWriter.Claims.Where(c => c == claim).FirstOrDefault();
+            Assert.AreEqual(claim, newClaim);
         }
 
     }
