@@ -161,7 +161,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Claims = null,
             };
 
-            
+
             root.Owner = writer;
             var validator = new WriterValidator();
             bool isValid = validator.isValid(writer);
@@ -259,10 +259,11 @@ namespace TwoDrive.BusinessLogic.Test
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void InvalidWriterUsernameExists(){
+        public void InvalidWriterUsernameExists()
+        {
 
-            var repository = ContextFactory.GetMemoryContext("Context");
-             var writer = new Writer
+            var context = ContextFactory.GetMemoryContext("Context");
+            var writer = new Writer
             {
                 Id = 1,
                 UserName = "Writer",
@@ -270,7 +271,18 @@ namespace TwoDrive.BusinessLogic.Test
                 Friends = new List<Writer>(),
                 Claims = defaultClaims,
             };
-            //repository.Writers.Add(writer);
+            context.Set<Writer>().Add(writer);
+            var anotherWriter = new Writer
+            {
+                Id = 2,
+                UserName = "Writer",
+                Password = "Holus",
+                Friends = new List<Writer>(),
+                Claims = defaultClaims
+            };
+
+            var validator = new WriterValidator(context);
+            validator.isValid(anotherWriter);
 
         }
 
