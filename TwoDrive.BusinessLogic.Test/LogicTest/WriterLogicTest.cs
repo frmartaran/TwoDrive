@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TwoDrive.BusinessLogic.Interfaces;
@@ -147,6 +148,8 @@ namespace TwoDrive.BusinessLogic.Test
         public void UpdateWriterCheckState()
         {
             var context = ContextFactory.GetMemoryContext("Some Context");
+            context.Set<Writer>().Add(writer);
+
             var repository = new Repository<Writer>(context);
             var validator = new WriterValidator();
             var logic = new WriterLogic(repository, validator);
@@ -163,6 +166,8 @@ namespace TwoDrive.BusinessLogic.Test
         public void UpdateWriterAddFolder()
         {
             var context = ContextFactory.GetMemoryContext("Some Context");
+            context.Set<Writer>().Add(writer);
+
             var repository = new Repository<Writer>(context);
             var validator = new WriterValidator();
             var logic = new WriterLogic(repository, validator);
@@ -182,8 +187,12 @@ namespace TwoDrive.BusinessLogic.Test
             };
             
             writer.Claims.Add(claim);
-            var currentWriter = logic.Get(1);
-            var newClaim = currentWriter.Claims.Where(c => c == claim).FirstOrDefault();
+            var writerInDb = context.Set<Writer>()
+            .Include(w => w.Claims)
+            .Where(w => w.Id == 1)
+            .FirstOrDefault();
+
+            var newClaim = writerInDb.Claims;
             Assert.AreEqual(claim, newClaim);
         }
 
