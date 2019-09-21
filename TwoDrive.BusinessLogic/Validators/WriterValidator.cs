@@ -2,12 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 
 namespace TwoDrive.BusinessLogic.Validators
 {
     public class WriterValidator : IValidator<Writer>
     {
+        private IRepository<Writer> repository { get; set; }
+
+        public WriterValidator(IRepository<Writer> current)
+        {
+            repository = current;
+        }
+
         public bool isValid(Writer writer)
         {
             ValidateUserName(writer);
@@ -75,12 +83,15 @@ namespace TwoDrive.BusinessLogic.Validators
             if (!hasPassword)
                 throw new ArgumentException("Writer has no password");
         }
-
         private void ValidateUserName(Writer writer)
         {
             var hasUserName = !string.IsNullOrWhiteSpace(writer.UserName);
             if (!hasUserName)
                 throw new ArgumentException("Writer has no username set");
+
+            var usernameExists = repository.Exists(writer);
+            if (usernameExists)
+                throw new ArgumentException("The username must be unique");
         }
     }
 }
