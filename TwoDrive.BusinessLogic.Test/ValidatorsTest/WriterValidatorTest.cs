@@ -45,25 +45,6 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void InvalidWriterNoToken()
-        {
-            var writer = new Writer
-            {
-                Id = 1,
-                UserName = "Writer",
-                Password = "A password",
-                Friends = new List<Writer>(),
-                Claims = defaultClaims,
-            };
-
-            root.Owner = writer;
-            var validator = new WriterValidator();
-            bool isValid = validator.isValid(writer);
-
-        }
-
-        [TestMethod]
         public void ValidWriter()
         {
             var writer = new Writer

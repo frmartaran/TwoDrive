@@ -13,6 +13,7 @@ namespace TwoDrive.BusinessLogic.Validators
             ValidateOwner(element);
             ValidateParentFolder(element);
             ValidateNamesAtSameLevel(element);
+            ValidateDates(element);
             Hook(element);
 
             return true;
@@ -36,6 +37,13 @@ namespace TwoDrive.BusinessLogic.Validators
             var hasName = !string.IsNullOrWhiteSpace(element.Name);
             if (!hasName)
                 throw new ArgumentException("The folder or file should have a name");
+        }
+
+        private void ValidateDates(Element element)
+        {
+            var earlyModifiedDate = element.CreationDate.CompareTo(element.DateModified);
+            if (earlyModifiedDate > 0)
+                throw new ArgumentException("The modified date should be later than the creation date");
         }
     }
 
