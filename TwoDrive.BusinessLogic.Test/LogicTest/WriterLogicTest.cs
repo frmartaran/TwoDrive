@@ -48,7 +48,6 @@ namespace TwoDrive.BusinessLogic.Test
             writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "Writer",
                 Password = "A password",
                 Friends = new List<Writer>(),
@@ -81,8 +80,8 @@ namespace TwoDrive.BusinessLogic.Test
         public void CreateWriterCheckState()
         {
             var context = ContextFactory.GetMemoryContext("TwoDrive");
-            var repository = new Repository<Writer>(context);
-            var validator = new WriterValidator();
+            var repository = new WriterRepository(context);
+            var validator = new WriterValidator(repository);
             var logic = new WriterLogic(repository, validator);
             logic.Create(writer);
             var writersInDb = repository.Get(1);
@@ -94,8 +93,8 @@ namespace TwoDrive.BusinessLogic.Test
         public void CreateInvalidWriterCheckState()
         {
             var context = ContextFactory.GetMemoryContext("TwoDrive");
-            var repository = new Repository<Writer>(context);
-            var validator = new WriterValidator();
+            var repository = new WriterRepository(context);
+            var validator = new WriterValidator(repository);
             var logic = new WriterLogic(repository, validator);
             writer.UserName = "";
             logic.Create(writer);
@@ -148,10 +147,12 @@ namespace TwoDrive.BusinessLogic.Test
         public void UpdateWriterCheckState()
         {
             var context = ContextFactory.GetMemoryContext("Some Context");
-            context.Set<Writer>().Add(writer);
 
-            var repository = new Repository<Writer>(context);
-            var validator = new WriterValidator();
+            var repository = new WriterRepository(context);
+            repository.Insert(writer);
+            repository.Save();
+
+            var validator = new WriterValidator(repository);
             var logic = new WriterLogic(repository, validator);
 
             Assert.AreEqual(writer.UserName, "Writer");
@@ -165,16 +166,17 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void UpdateWriterAddFolder()
         {
-            var context = ContextFactory.GetMemoryContext("Some Context");
-            context.Set<Writer>().Add(writer);
+            var context = ContextFactory.GetMemoryContext("Test");
 
-            var repository = new Repository<Writer>(context);
-            var validator = new WriterValidator();
+            var repository = new WriterRepository(context);
+            repository.Insert(writer);
+            repository.Save();
+            var validator = new WriterValidator(repository);
             var logic = new WriterLogic(repository, validator);
 
             var newFolder = new Folder
             {
-                Id = 1,
+                Id = 2,
                 Name = "Folder",
                 Owner = writer,
                 FolderChilden = new List<Element>()
@@ -185,15 +187,12 @@ namespace TwoDrive.BusinessLogic.Test
                 Element = newFolder,
                 Type = ClaimType.Read
             };
-            
-            writer.Claims.Add(claim);
-            var writerInDb = context.Set<Writer>()
-            .Include(w => w.Claims)
-            .Where(w => w.Id == 1)
-            .FirstOrDefault();
 
+            writer.Claims.Add(claim);
+            repository.Update(writer);
+            var writerInDb = repository.Get(1);
             var newClaim = writerInDb.Claims;
-            Assert.AreEqual(claim, newClaim);
+            Assert.AreEqual(true, newClaim.Contains(claim));
         }
 
     }
