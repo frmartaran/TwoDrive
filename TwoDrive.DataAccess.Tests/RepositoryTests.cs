@@ -30,7 +30,7 @@ namespace TwoDrive.DataAccess.Tests
                 Friends = new List<Writer>()
             };
 
-            var repository = new Repository<Writer>(memoryDb);
+            var repository = new WriterRepository(memoryDb);
             repository.Insert(writer);
             repository.Save();
 
@@ -51,7 +51,7 @@ namespace TwoDrive.DataAccess.Tests
                 FolderChilden = new List<Element>()
             };
 
-            var repository = new Repository<Element>(memoryDb);
+            var repository = new ElementRepository(memoryDb);
             repository.Insert(folder);
             repository.Save();
 
@@ -71,7 +71,7 @@ namespace TwoDrive.DataAccess.Tests
                 Name = "File",
             };
 
-            var repository = new Repository<Element>(memoryDb);
+            var repository = new ElementRepository(memoryDb);
             repository.Insert(file);
             repository.Save();
 
@@ -94,7 +94,7 @@ namespace TwoDrive.DataAccess.Tests
                 Friends = new List<Writer>()
             };
 
-            var repository = new Repository<Writer>(memoryDb);
+            var repository = new WriterRepository(memoryDb);
             repository.Insert(writer);
             repository.Save();
 
@@ -112,7 +112,7 @@ namespace TwoDrive.DataAccess.Tests
                 Name = "File",
 
             };
-            var repository = new Repository<Element>(memoryDb);
+            var repository = new ElementRepository(memoryDb);
             repository.Insert(file);
             repository.Save();
 
@@ -131,7 +131,7 @@ namespace TwoDrive.DataAccess.Tests
                 Name = "Root",
                 FolderChilden = new List<Element>()
             };
-            var repository = new Repository<Element>(memoryDb);
+            var repository = new ElementRepository(memoryDb);
             repository.Insert(folder);
             repository.Save();
 
@@ -152,7 +152,7 @@ namespace TwoDrive.DataAccess.Tests
                 Claims = new List<Claim>(),
                 Friends = new List<Writer>()
             };
-            var repository = new Repository<Writer>(memoryDb);
+            var repository = new WriterRepository(memoryDb);
             repository.Insert(writer);
             repository.Save();
 
@@ -172,7 +172,7 @@ namespace TwoDrive.DataAccess.Tests
         public void UpdateFolder()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext9");
-            var repository = new Repository<Element>(memoryDb);
+            var repository = new ElementRepository(memoryDb);
             var folder = new Folder
             {
                 Id = 1,
@@ -198,7 +198,7 @@ namespace TwoDrive.DataAccess.Tests
         public void UpdateFile()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext10");
-            var repository = new Repository<Element>(memoryDb);
+            var repository = new ElementRepository(memoryDb);
             var file = new TxtFile
             {
                 Id = 1,
@@ -232,7 +232,7 @@ namespace TwoDrive.DataAccess.Tests
                 Claims = new List<Claim>(),
                 Friends = new List<Writer>()
             };
-            var repository = new Repository<Writer>(memoryDb);
+            var repository = new WriterRepository(memoryDb);
             repository.Insert(writer);
             repository.Save();
 
@@ -251,7 +251,7 @@ namespace TwoDrive.DataAccess.Tests
         public void DeleteFolder()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext12");
-            var repository = new Repository<Element>(memoryDb);
+            var repository = new ElementRepository(memoryDb);
             var file = new TxtFile
             {
                 Id = 1,
@@ -276,7 +276,7 @@ namespace TwoDrive.DataAccess.Tests
         public void DeleteFile()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext13");
-            var repository = new Repository<Element>(memoryDb);
+            var repository = new ElementRepository(memoryDb);
             var folder = new Folder
             {
                 Id = 1,
@@ -317,7 +317,7 @@ namespace TwoDrive.DataAccess.Tests
                 Claims = new List<Claim>(),
                 Friends = new List<Writer>()
             };
-            var repository = new Repository<Writer>(memoryDb);
+            var repository = new WriterRepository(memoryDb);
             repository.Insert(writer);
             repository.Insert(anotherWriter);
             repository.Save();
