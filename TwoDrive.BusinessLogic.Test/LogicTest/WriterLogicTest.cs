@@ -142,5 +142,21 @@ namespace TwoDrive.BusinessLogic.Test
 
         }
 
+        [TestMethod]
+        public void UpdateWriterCheckState()
+        {
+            var context = ContextFactory.GetMemoryContext("Some Context");
+            var repository = new Repository<Writer>(context);
+            var validator = new WriterValidator();
+            var logic = new WriterLogic(repository, validator);
+
+            Assert.AreEqual(writer.UserName, "Writer");
+            var newName = "Another Username";
+            writer.UserName = newName;
+            logic.Update(writer);
+            var currentWriter = logic.Get(1);
+            Assert.AreEqual(currentWriter.UserName, newName);
+        }
+
     }
 }
