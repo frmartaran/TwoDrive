@@ -1,12 +1,8 @@
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.Domain;
-using System;
-using TwoDrive.DataAccess.Interface;
 
 namespace TwoDrive.DataAccess.Tests
 {
@@ -28,7 +24,6 @@ namespace TwoDrive.DataAccess.Tests
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "WRiter",
                 Password = "Pass",
                 Claims = new List<Claim>(),
@@ -93,7 +88,6 @@ namespace TwoDrive.DataAccess.Tests
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "WRiter",
                 Password = "Pass",
                 Claims = new List<Claim>(),
@@ -153,7 +147,6 @@ namespace TwoDrive.DataAccess.Tests
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "WRiter",
                 Password = "Pass",
                 Claims = new List<Claim>(),
@@ -234,7 +227,6 @@ namespace TwoDrive.DataAccess.Tests
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "WRiter",
                 Password = "Pass",
                 Claims = new List<Claim>(),
@@ -312,7 +304,6 @@ namespace TwoDrive.DataAccess.Tests
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "WRiter",
                 Password = "Pass",
                 Claims = new List<Claim>(),
@@ -321,7 +312,6 @@ namespace TwoDrive.DataAccess.Tests
             var anotherWriter = new Writer
             {
                 Id = 2,
-                Token = Guid.NewGuid(),
                 UserName = "WRiter",
                 Password = "Pass",
                 Claims = new List<Claim>(),

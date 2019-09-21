@@ -12,7 +12,6 @@ namespace TwoDrive.BusinessLogic.Validators
         {
             ValidateUserName(writer);
             ValidatePassword(writer);
-            ValidateToken(writer);
             ValidateClaims(writer);
 
             return true;
@@ -70,13 +69,6 @@ namespace TwoDrive.BusinessLogic.Validators
             if (isListNull || writer.Claims.Count() == 0)
                 throw new ArgumentException("The list of claims is empty");
         }
-        private void ValidateToken(Writer writer)
-        {
-            var hasToken = writer.Token != Guid.Empty;
-            if (!hasToken)
-                throw new ArgumentException("Writer has no token");
-        }
-
         private void ValidatePassword(Writer writer)
         {
             var hasPassword = !string.IsNullOrWhiteSpace(writer.Password);

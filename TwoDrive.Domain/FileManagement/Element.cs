@@ -1,6 +1,6 @@
 namespace TwoDrive.Domain.FileManagement
 {
-    public abstract class Element : IIdentifiable
+    public abstract class Element
     {
         public int Id { get; set; }
         

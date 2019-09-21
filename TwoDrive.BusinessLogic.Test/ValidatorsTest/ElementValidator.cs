@@ -18,7 +18,6 @@ namespace TwoDrive.BusinessLogic.Test
             owner = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "Owner"
             };
         }
