@@ -39,7 +39,7 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public ICollection<Writer> GetAll()
         {
-            throw new NotImplementedException();
+            return Repository.GetAll();
         }
 
         public void Update(Writer writer)
