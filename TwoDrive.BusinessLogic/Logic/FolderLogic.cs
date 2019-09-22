@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using System.Linq;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
@@ -30,6 +31,10 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public void Delete(Folder folder)
         {
+            if(folder.FolderChilden.Count != 0){
+                var child = folder.FolderChilden.FirstOrDefault();
+                Repository.Delete(child.Id);
+            }
             Repository.Delete(folder.Id);
             Repository.Save();
         }
