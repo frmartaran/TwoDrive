@@ -195,5 +195,16 @@ namespace TwoDrive.BusinessLogic.Test
             Assert.AreEqual(true, newClaim.Contains(claim));
         }
 
+        [TestMethod]
+        public void GetAll()
+        {
+            var writers = new List<Writer>();
+            var mockRepository = new Mock<IRepository<Writer>>(MockBehavior.Strict);
+            mockRepository.Setup(m => m.GetAll())
+            .Returns(writers);
+            var logic = new WriterLogic(mockRepository.Object);
+            var list = logic.GetAll();
+            mockRepository.VerifyAll();
+        }
     }
 }
