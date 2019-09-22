@@ -31,12 +31,33 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public void Delete(Folder folder)
         {
-            foreach (var element in folder.FolderChilden)
+            RecursiveDeleteChildren(folder);
+            
+        }
+
+        private void RecursiveDeleteChildren(Element folder)
+        {
+            if (folder.GetType().IsSubclassOf(typeof(File)))
             {
-                Repository.Delete(element.Id);
+                Repository.Delete(folder.Id);
+                Repository.Save();
+                return;
             }
-            Repository.Delete(folder.Id);
-            Repository.Save();
+            var asfolder = (Folder)folder;
+            if (asfolder.FolderChilden.Count == 0)
+            {
+                Repository.Delete(folder.Id);
+                Repository.Save();
+                return;
+            }
+            var child = asfolder.FolderChilden.FirstOrDefault();
+            while (child != null)
+            {
+                RecursiveDeleteChildren(child);
+                child = asfolder.FolderChilden.FirstOrDefault();
+            }
+            RecursiveDeleteChildren(folder);
+
         }
 
         public Folder Get(int Id)

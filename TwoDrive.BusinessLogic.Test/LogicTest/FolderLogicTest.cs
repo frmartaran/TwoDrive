@@ -222,7 +222,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void DeleteParentWithTwoLevelsOfChilds()
         {
-            var context = ContextFactory.GetMemoryContext("Delete Test 2");
+            var context = ContextFactory.GetMemoryContext("Delete Test 4");
             var repository = new ElementRepository(context);
             repository.Insert(root);
             repository.Save();
@@ -275,6 +275,5 @@ namespace TwoDrive.BusinessLogic.Test
             allFoldersInDb = repository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
         }
-
     }
 }
