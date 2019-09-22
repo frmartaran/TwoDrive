@@ -219,5 +219,38 @@ namespace TwoDrive.BusinessLogic.Test
             Assert.AreEqual(1, allWriters.Count());
             Assert.IsTrue(allWriters.Contains(writer));
         }
+
+        [TestMethod]
+        public void DeleteWriter()
+        {
+            var mockRepository = new Mock<IRepository<Writer>>(MockBehavior.Strict);
+            mockRepository.Setup(m => m.Delete(It.IsAny<int>()));
+            mockRepository.Setup(m => m.Save());
+            var logic = new WriterLogic(mockRepository.Object);
+            logic.Delete(writer);
+
+            mockRepository.VerifyAll();
+        }
+
+        [TestMethod]
+        public void DeleteWriterCheckState()
+        {
+            var context = ContextFactory.GetMemoryContext("Delete Context");
+            var repository = new WriterRepository(context);
+            repository.Insert(writer);
+            repository.Save();
+            var allWritersInDb = repository.GetAll();
+
+            Assert.IsTrue(allWritersInDb.Contains(writer));
+            Assert.AreEqual(1, allWritersInDb.Count());
+
+            var logic = new WriterLogic(repository);
+            logic.Delete(writer);
+
+            var currentWritersInDb = repository.GetAll(); 
+
+            Assert.IsFalse(currentWritersInDb.Contains(writer));
+            Assert.AreEqual(0, currentWritersInDb.Count());           
+        }
     }
 }
