@@ -62,7 +62,39 @@ namespace TwoDrive.BusinessLogic.Test
             logic.Create(root);
 
             var folderinDb = repository.Get(1);
-            Assert.AreEqual(root, folderinDb);            
+            Assert.AreEqual(root, folderinDb);
+        }
+
+        [TestMethod]
+        public void DeleteFolder()
+        {
+            var mockRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
+            mockRepository.Setup(m => m.Delete(It.IsAny<int>()));
+            mockRepository.Setup(m => m.Save());
+
+            var logic = new FolderLogic(mockRepository.Object);
+            logic.Create(root);
+            logic.Delete(root);
+
+            mockRepository.VerifyAll();
+        }
+
+        [TestMethod]
+        public void DeleteOneFolder()
+        {
+            var context = ContextFactory.GetMemoryContext("Delete Test");
+            var repository = new ElementRepository(context);
+            repository.Insert(root);
+            repository.Save();
+
+            var isRootInDb = repository.Exists(root);
+            Assert.IsTrue(isRootInDb);
+
+            var logic = new FolderLogic(repository);
+            logic.Delete(root);
+
+            isRootInDb = repository.Exists(root);
+            Assert.IsFalse(isRootInDb);    
         }
 
 
