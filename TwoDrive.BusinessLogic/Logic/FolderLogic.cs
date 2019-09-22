@@ -31,9 +31,9 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public void Delete(Folder folder)
         {
-            if(folder.FolderChilden.Count != 0){
-                var child = folder.FolderChilden.FirstOrDefault();
-                Repository.Delete(child.Id);
+            foreach (var element in folder.FolderChilden)
+            {
+                Repository.Delete(element.Id);
             }
             Repository.Delete(folder.Id);
             Repository.Save();
