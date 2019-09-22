@@ -1,15 +1,31 @@
 
 using System.Collections.Generic;
 using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic.Logic
 {
     public class FolderLogic : ILogic<Folder>
     {
+        private IRepository<Element> Repository { get; set; }
+
+        private IValidator<Folder> Validator { get; set; }
+        public FolderLogic(IRepository<Element> current)
+        {
+            Repository = current;
+        }
+
+        public FolderLogic(IRepository<Element> current, IValidator<Folder> validator)
+        {
+            Repository = current;
+            Validator = validator;
+        }
         public void Create(Folder folder)
         {
-            throw new System.NotImplementedException();
+            Validator.isValid(folder);
+            Repository.Insert(folder);
+            Repository.Save();
         }
 
         public void Delete(Folder folder)
