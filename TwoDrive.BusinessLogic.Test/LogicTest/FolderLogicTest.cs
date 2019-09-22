@@ -73,7 +73,6 @@ namespace TwoDrive.BusinessLogic.Test
             mockRepository.Setup(m => m.Save());
 
             var logic = new FolderLogic(mockRepository.Object);
-            logic.Create(root);
             logic.Delete(root);
 
             mockRepository.VerifyAll();
@@ -87,14 +86,14 @@ namespace TwoDrive.BusinessLogic.Test
             repository.Insert(root);
             repository.Save();
 
-            var isRootInDb = repository.Exists(root);
-            Assert.IsTrue(isRootInDb);
+            var rootInDb = repository.Get(1);
+            Assert.AreEqual(root, rootInDb);
 
             var logic = new FolderLogic(repository);
             logic.Delete(root);
 
-            isRootInDb = repository.Exists(root);
-            Assert.IsFalse(isRootInDb);    
+            rootInDb = repository.Get(1);
+            Assert.IsNull(rootInDb);    
         }
 
 

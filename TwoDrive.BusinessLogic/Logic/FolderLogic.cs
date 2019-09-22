@@ -30,7 +30,8 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public void Delete(Folder folder)
         {
-            throw new System.NotImplementedException();
+            Repository.Delete(folder.Id);
+            Repository.Save();
         }
 
         public Folder Get(int Id)
