@@ -206,5 +206,18 @@ namespace TwoDrive.BusinessLogic.Test
             var list = logic.GetAll();
             mockRepository.VerifyAll();
         }
+
+        [TestMethod]
+        public void GetAllWriters()
+        {
+            var context = ContextFactory.GetMemoryContext("A test context");
+            var repository = new WriterRepository(context);
+            repository.Insert(writer);
+            repository.Save();
+            var logic = new WriterLogic(repository);
+            var allWriters = logic.GetAll();
+            Assert.AreEqual(1, allWriters.Count());
+            Assert.IsTrue(allWriters.Contains(writer));
+        }
     }
 }
