@@ -4,6 +4,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Logic;
+using TwoDrive.BusinessLogic.Validators;
+using TwoDrive.DataAccess;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
@@ -38,8 +40,8 @@ namespace TwoDrive.BusinessLogic.Test
             mockRepository.Setup(m => m.Insert(It.IsAny<Element>()));
             mockRepository.Setup(m => m.Save());
 
-            var mockValidator = new Mock<IValidator<Folder>>(MockBehavior.Strict);
-            mockValidator.Setup(m => m.isValid(It.IsAny<Folder>()))
+            var mockValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
+            mockValidator.Setup(m => m.isValid(It.IsAny<Element>()))
             .Returns(true);
 
             var logic = new FolderLogic(mockRepository.Object, mockValidator.Object);
@@ -48,5 +50,21 @@ namespace TwoDrive.BusinessLogic.Test
             mockRepository.VerifyAll();
             mockValidator.VerifyAll();
         }
+
+        [TestMethod]
+        public void CreateFolderCheckState()
+        {
+            var context = ContextFactory.GetMemoryContext("Create Test");
+            var repository = new ElementRepository(context);
+            var validator = new FolderValidator();
+            var logic = new FolderLogic(repository, validator);
+
+            logic.Create(root);
+
+            var folderinDb = repository.Get(1);
+            Assert.AreEqual(root, folderinDb);            
+        }
+
+
     }
 }
