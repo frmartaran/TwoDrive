@@ -126,7 +126,7 @@ namespace TwoDrive.BusinessLogic.Test
             logic.Delete(root);
 
             allFoldersInDb = repository.GetAll();
-            Assert.AreEqual(0, allFoldersInDb.Count);            
+            Assert.AreEqual(0, allFoldersInDb.Count);
         }
 
         [TestMethod]
@@ -167,12 +167,56 @@ namespace TwoDrive.BusinessLogic.Test
             Assert.IsTrue(allFoldersInDb.Contains(child));
             Assert.IsTrue(allFoldersInDb.Contains(secondChild));
 
+            var logic = new FolderLogic(repository);
+            logic.Delete(root);
+
+            allFoldersInDb = repository.GetAll();
+            Assert.AreEqual(0, allFoldersInDb.Count);
+        }
+
+        [TestMethod]
+        public void DeleteParentWithAFolderAndFile()
+        {
+            var context = ContextFactory.GetMemoryContext("Delete Test 3");
+            var repository = new ElementRepository(context);
+            repository.Insert(root);
+            repository.Save();
+            var child = new Folder
+            {
+                Id = 2,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChilden = new List<Element>()
+            };
+            var file = new TxtFile
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                Content = "Content"
+            };
+            root.FolderChilden.Add(child);
+            repository.Insert(child);
+            repository.Insert(file);
+            repository.Update(root);
+            repository.Save();
+
+            var allFoldersInDb = repository.GetAll();
+            Assert.IsTrue(allFoldersInDb.Contains(root));
+            Assert.IsTrue(allFoldersInDb.Contains(child));
+            Assert.IsTrue(allFoldersInDb.Contains(file));
 
             var logic = new FolderLogic(repository);
             logic.Delete(root);
 
             allFoldersInDb = repository.GetAll();
-            Assert.AreEqual(0, allFoldersInDb.Count);            
+            Assert.AreEqual(0, allFoldersInDb.Count);
         }
     }
 }
