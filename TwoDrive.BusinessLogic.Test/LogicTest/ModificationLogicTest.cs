@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TwoDrive.BusinessLogic.Logic;
@@ -108,7 +109,9 @@ namespace TwoDrive.BusinessLogic.Test
             logic.Create(anotherModification);
 
             var modificationsGroups = logic.GetAllFromDateRange(startDate, endDate);
+            var modificationsForFolder = modificationsGroups.FirstOrDefault().ToList().Count;
             Assert.AreEqual(1, modificationsGroups.Count);
+            Assert.AreEqual(2, modificationsForFolder);
         }
 
         [TestMethod]
