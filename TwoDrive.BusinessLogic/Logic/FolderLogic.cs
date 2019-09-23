@@ -28,12 +28,13 @@ namespace TwoDrive.BusinessLogic.Logic
             Validator.isValid(folder);
             Repository.Insert(folder);
             Repository.Save();
+            
         }
 
         public void Delete(Folder folder)
         {
             DeleteChildren(folder);
-            
+
         }
 
         private void DeleteChildren(Element element)
@@ -67,7 +68,7 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public Folder Get(int Id)
         {
-            return (Folder) Repository.Get(Id);
+            return (Folder)Repository.Get(Id);
         }
 
         public ICollection<Folder> GetAll()
@@ -76,7 +77,7 @@ namespace TwoDrive.BusinessLogic.Logic
             return allElements
                     .Where(f => f is Folder)
                     .ToList()
-                    .ConvertAll(f => (Folder) f);
+                    .ConvertAll(f => (Folder)f);
         }
 
         public void Update(Folder folder)

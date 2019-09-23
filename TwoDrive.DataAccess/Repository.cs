@@ -1,4 +1,3 @@
-using System.Security;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +6,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace TwoDrive.DataAccess
 {
-    public abstract class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class
     {
         protected TwoDriveDbContext context;
         protected DbSet<T> table;
