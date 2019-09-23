@@ -347,6 +347,13 @@ namespace TwoDrive.DataAccess.Tests
                 ParentFolder = folder,
                 FolderChilden = new List<Element>()
             };
+            var file = new TxtFile
+            {
+                Id = 1,
+                Name = "File",
+
+            };
+            repository.Insert(file);
             repository.Insert(folder);
             repository.Insert(child);
             repository.Save();
@@ -363,6 +370,12 @@ namespace TwoDrive.DataAccess.Tests
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext16");
             var repository = new ElementRepository(memoryDb);
+            var folder = new Folder
+            {
+                Id = 1,
+                Name = "Root",
+                FolderChilden = new List<Element>()
+            };
             var file = new TxtFile
             {
                 Id = 1,
@@ -375,6 +388,7 @@ namespace TwoDrive.DataAccess.Tests
                 Name = "File",
 
             };
+            repository.Insert(folder);
             repository.Insert(file);
             repository.Insert(anotherFile);
             repository.Save();
