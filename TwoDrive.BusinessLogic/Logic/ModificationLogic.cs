@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
 
@@ -17,6 +18,11 @@ namespace TwoDrive.BusinessLogic.Logic
         {
             Repository.Insert(modification);
             Repository.Save();
+        }
+
+        public ICollection<Modification> GetAllFromDateRange(DateTime startDate, DateTime endDate)
+        {
+            throw new NotImplementedException();
         }
     }
 }
