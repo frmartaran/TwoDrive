@@ -304,16 +304,17 @@ namespace TwoDrive.BusinessLogic.Test
             repository.Insert(root);
             repository.Save();
 
+            var newOwner = new Writer();
+
             var dateModified = root.DateModified;
-            var name = "New name";
-            root.Name = name;
+            root.Owner = newOwner;
             var logic = new FolderLogic(repository, validator);
             logic.Update(root);
 
             var folderInDb = repository.Get(1);
 
             Assert.AreNotEqual(dateModified, folderInDb.DateModified);
-            Assert.AreEqual(name, folderInDb.Name);
+            Assert.AreEqual(newOwner, folderInDb.Owner);
         }
     }
 }

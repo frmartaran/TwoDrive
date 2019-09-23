@@ -1,4 +1,4 @@
-
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TwoDrive.BusinessLogic.Interfaces;
@@ -76,7 +76,11 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public void Update(Folder folder)
         {
-            throw new System.NotImplementedException();
+            var newDateModified = DateTime.Now;
+            Validator.isValid(folder);
+            folder.DateModified = newDateModified;
+            Repository.Update(folder);
+            Repository.Save();
         }
     }
 }
