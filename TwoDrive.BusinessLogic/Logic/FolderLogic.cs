@@ -68,7 +68,7 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public Folder Get(int Id)
         {
-            throw new System.NotImplementedException();
+            return (Folder) Repository.Get(Id);
         }
 
         public ICollection<Folder> GetAll()
