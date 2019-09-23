@@ -72,8 +72,8 @@ namespace TwoDrive.BusinessLogic.Test
             var mockRepository = new Mock<IRepository<Modification>>(MockBehavior.Strict);
             mockRepository.Setup(m => m.GetAll())
             .Returns(testList);
-            var startDate = new DateTime(2019, 5, 4);
-            var endDate = new DateTime(2019, 5, 5);
+            var startDate = new DateTime(2019, 5, 22);
+            var endDate = new DateTime(2019, 5, 25);
             var logic = new ModificationLogic(mockRepository.Object);
             var allModifications = logic.GetAllFromDateRange(startDate, endDate);
 
@@ -85,11 +85,12 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var context = ContextFactory.GetMemoryContext("Modification Test 2");
             var repository = new ModificationRepository(context);
-            var startDate = new DateTime(2019, 5, 4);
-            var endDate = new DateTime(2019, 5, 6);
+            var startDate = new DateTime(2019, 5, 20);
+            var endDate = new DateTime(2019, 5, 26);
             var modification = new Modification
             {
                 Id = 2,
+                ElementId = folder.Id,
                 ElementModified = folder,
                 type = ModificationType.Added,
                 Date = folder.DateModified
@@ -97,6 +98,7 @@ namespace TwoDrive.BusinessLogic.Test
             var anotherModification = new Modification
             {
                 Id = 1,
+                ElementId = folder.Id,
                 ElementModified = folder,
                 type = ModificationType.Changed,
                 Date = folder.DateModified

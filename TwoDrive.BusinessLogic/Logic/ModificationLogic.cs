@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
 
@@ -20,9 +21,13 @@ namespace TwoDrive.BusinessLogic.Logic
             Repository.Save();
         }
 
-        public ICollection<Modification> GetAllFromDateRange(DateTime startDate, DateTime endDate)
+        public ICollection<IGrouping<int,Modification>> GetAllFromDateRange(DateTime startDate, DateTime endDate)
         {
-            throw new NotImplementedException();
+            return Repository.GetAll()
+                .Where(m => m.Date >= startDate)
+                .Where(m => m.Date < endDate)
+                .GroupBy(m => m.ElementId)
+                .ToList();
         }
     }
 }
