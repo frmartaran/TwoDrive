@@ -450,6 +450,33 @@ namespace TwoDrive.DataAccess.Tests
             Assert.AreEqual(1, modificationInDb);
         }
 
+        [TestMethod]
+        public void UpdateModification()
+        {
+            var context = ContextFactory.GetMemoryContext("Modification Test 2");
+            var folder = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChilden = new List<Element>()
+            };
+            var modification = new Modification
+            {
+                ElementModified = folder,
+                type = ModificationType.Added
+            };
+            var repository = new ModificationRepository(context);
+            repository.Insert(modification);
+            repository.Save();
+            modification.type = ModificationType.Changed;
+            repository.Update(modification);
+            repository.Save();
+
+            var modificationInDb = context.Modifications.FirstOrDefault();
+            Assert.AreEqual(ModificationType.Changed, modificationInDb.type);
+        }
+
+
 
     }
 }
