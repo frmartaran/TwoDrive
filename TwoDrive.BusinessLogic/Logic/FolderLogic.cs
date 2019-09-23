@@ -13,7 +13,6 @@ namespace TwoDrive.BusinessLogic.Logic
 
         private IValidator<Element> Validator { get; set; }
 
-        private const string type = "Folder";
         public FolderLogic(IRepository<Element> current)
         {
             Repository = current;
