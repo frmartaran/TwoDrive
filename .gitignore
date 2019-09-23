@@ -360,3 +360,5 @@ MigrationBackup/
 *.nuget.dgspec.json
 project.lock.json
 project.assets.json
+.vscode/tasks.json
+.vscode/launch.json

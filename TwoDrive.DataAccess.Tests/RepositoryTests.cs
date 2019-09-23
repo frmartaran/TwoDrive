@@ -333,7 +333,7 @@ namespace TwoDrive.DataAccess.Tests
         public void GetAllFolders()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext15");
-            var repository = new Repository<Folder>(memoryDb);
+            var repository = new ElementRepository(memoryDb);
             var folder = new Folder
             {
                 Id = 1,
@@ -362,7 +362,7 @@ namespace TwoDrive.DataAccess.Tests
         public void GetAllFiles()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext16");
-            var repository = new Repository<File>(memoryDb);
+            var repository = new ElementRepository(memoryDb);
             var file = new TxtFile
             {
                 Id = 1,
@@ -390,7 +390,7 @@ namespace TwoDrive.DataAccess.Tests
         public void GetAllFilesAndFolders()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext18");
-            var repository = new Repository<Element>(memoryDb);
+            var repository = new ElementRepository(memoryDb);
             var folder = new Folder
             {
                 Id = 3,

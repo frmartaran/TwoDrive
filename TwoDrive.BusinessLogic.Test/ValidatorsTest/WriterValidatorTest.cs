@@ -19,7 +19,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestInitialize]
         public void SetUp()
         {
-            var context = ContextFactory.GetMemoryContext("TwoDriveContext");
+            var context = ContextFactory.GetMemoryContext("Validator Test");
             repository = new WriterRepository(context);
 
             root = new Folder
@@ -110,7 +110,7 @@ namespace TwoDrive.BusinessLogic.Test
             var writer = new Writer
             {
                 Id = 1,
-                UserName = "Writer",
+                UserName = "A Writer",
                 Password = "A password",
                 Friends = new List<Writer>(),
                 Claims = defaultClaims,
@@ -119,7 +119,7 @@ namespace TwoDrive.BusinessLogic.Test
             var friend = new Writer
             {
                 Id = 1,
-                UserName = "Frined",
+                UserName = "Friend ",
                 Password = "A password",
                 Friends = new List<Writer>(),
                 Claims = new List<Claim>(),

@@ -79,7 +79,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void CreateWriterCheckState()
         {
-            var context = ContextFactory.GetMemoryContext("TwoDrive");
+            var context = ContextFactory.GetMemoryContext("TwoDrive Test");
             var repository = new WriterRepository(context);
             var validator = new WriterValidator(repository);
             var logic = new WriterLogic(repository, validator);
@@ -92,7 +92,7 @@ namespace TwoDrive.BusinessLogic.Test
         [ExpectedException(typeof(ArgumentException))]
         public void CreateInvalidWriterCheckState()
         {
-            var context = ContextFactory.GetMemoryContext("TwoDrive");
+            var context = ContextFactory.GetMemoryContext("TwoDrive Test 2");
             var repository = new WriterRepository(context);
             var validator = new WriterValidator(repository);
             var logic = new WriterLogic(repository, validator);
@@ -118,7 +118,8 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var context = ContextFactory.GetMemoryContext("TwoDriveContext");
             context.Set<Writer>().Add(writer);
-            var repository = new Repository<Writer>(context);
+            context.SaveChanges();
+            var repository = new WriterRepository(context);
             var logic = new WriterLogic(repository);
             var writerInDb = logic.Get(1);
 
