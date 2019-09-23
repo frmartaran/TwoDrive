@@ -437,8 +437,13 @@ namespace TwoDrive.DataAccess.Tests
                 Name = "Root",
                 FolderChilden = new List<Element>()
             };
+            var modification = new Modification
+            {
+                ElementModified = folder,
+                type = ModificationType.Added
+            };
             var repository = new ModificationRepository(context);
-            repository.Insert(context);
+            repository.Insert(modification);
             repository.Save();
 
             var modificationInDb = context.Modifications.ToList().Count;
