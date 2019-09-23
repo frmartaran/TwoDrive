@@ -336,10 +336,12 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var context = ContextFactory.GetMemoryContext("Get All test");
             var repository = new ElementRepository(context);
-            var newFolder = new Folder{
+            var newFolder = new Folder
+            {
                 Id = 2
             };
-            var file = new TxtFile{
+            var file = new TxtFile
+            {
                 Id = 3
             };
             repository.Insert(root);
@@ -353,7 +355,33 @@ namespace TwoDrive.BusinessLogic.Test
             Assert.IsTrue(allFoldersInDb.Contains(newFolder));
             Assert.AreEqual(2, allFoldersInDb.Count);
 
+        }
 
+        [TestMethod]
+        public void Get()
+        {
+            var mockRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
+            mockRepository.Setup(m => m.Get(It.IsAny<int>()))
+                        .Returns(root);
+
+            var logic = new FolderLogic(mockRepository.Object);
+            var folder = logic.Get(1);
+
+            mockRepository.VerifyAll();
+        }
+
+        [TestMethod]
+        public void GetFolder()
+        {
+            var context = ContextFactory.GetMemoryContext("Get test");
+            var repository = new ElementRepository(context);
+            repository.Insert(root);
+            repository.Save();
+
+            var logic = new FolderLogic(repository);
+            var folderinDb = logic.Get(1);
+
+            Assert.AreEqual(root, folderinDb);
         }
     }
 }
