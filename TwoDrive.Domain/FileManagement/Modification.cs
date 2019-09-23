@@ -9,5 +9,19 @@ namespace TwoDrive.Domain.FileManagement
         public Element ElementModified { get; set; }
         public ModificationType type { get; set; }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            var modification = (Modification) obj;
+            return Id == modification.Id;
+        }
+        
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
