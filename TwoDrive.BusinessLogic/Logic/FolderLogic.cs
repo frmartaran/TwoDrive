@@ -12,6 +12,8 @@ namespace TwoDrive.BusinessLogic.Logic
         private IRepository<Element> Repository { get; set; }
 
         private IValidator<Element> Validator { get; set; }
+
+        private const string type = "Folder";
         public FolderLogic(IRepository<Element> current)
         {
             Repository = current;
@@ -71,7 +73,11 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public ICollection<Folder> GetAll()
         {
-            throw new System.NotImplementedException();
+            var allElements = Repository.GetAll();
+            return allElements
+                    .Where(f => f is Folder)
+                    .ToList()
+                    .ConvertAll(f => (Folder) f);
         }
 
         public void Update(Folder folder)

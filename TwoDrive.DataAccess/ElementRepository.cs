@@ -18,9 +18,6 @@ namespace TwoDrive.DataAccess
                         .Any();
         }
 
-        public override Element Get(int Id)
-        {
-            return table.Find(Id);
-        }
+        
     }
 }
