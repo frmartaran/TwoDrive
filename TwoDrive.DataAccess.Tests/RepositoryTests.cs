@@ -386,7 +386,7 @@ namespace TwoDrive.DataAccess.Tests
             Assert.IsTrue(all.All(f => f.GetType().Name == "TxtFile"));
         }
 
-         [TestMethod]
+        [TestMethod]
         public void GetAllFilesAndFolders()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext18");
@@ -427,6 +427,24 @@ namespace TwoDrive.DataAccess.Tests
 
         }
 
-        
+        [TestMethod]
+        public void CreateModification()
+        {
+            var context = ContextFactory.GetMemoryContext("Modification Test 1");
+            var folder = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChilden = new List<Element>()
+            };
+            var repository = new ModificationRepository(context);
+            repository.Insert(context);
+            repository.Save();
+
+            var modificationInDb = context.Modifications.ToList().Count;
+            Assert.AreEqual(1, modificationInDb);
+        }
+
+
     }
 }
