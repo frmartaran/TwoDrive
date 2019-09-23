@@ -20,14 +20,23 @@ namespace TwoDrive.DataAccess
                         .Any();
         }
 
-        public ICollection<Folder> GetAllFolders(){
-            
-            return context.Folders
-            .Include(f => f.Owner)
-            .Include(f => f.ParentFolder)
-            .Include(f => f.FolderChilden)
-            .ToList();
+        public ICollection<Folder> GetAllFolders()
+        {
 
+            return context.Folders
+                .Include(f => f.Owner)
+                .Include(f => f.ParentFolder)
+                .Include(f => f.FolderChilden)
+                .ToList();
+
+        }
+
+        public ICollection<File> GetAllFiles()
+        {
+            return context.Files
+                .Include(f => f.Owner)
+                .Include(f => f.ParentFolder)
+                .ToList();
         }
 
     }

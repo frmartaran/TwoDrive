@@ -393,7 +393,7 @@ namespace TwoDrive.DataAccess.Tests
             repository.Insert(anotherFile);
             repository.Save();
 
-            var all = repository.GetAll();
+            var all = repository.GetAllFiles();
             Assert.AreEqual(2, all.Count());
             Assert.IsTrue(all.Contains(file));
             Assert.IsTrue(all.Contains(anotherFile));
