@@ -1,4 +1,4 @@
-
+using System;
 namespace TwoDrive.Domain.FileManagement
 {
     public class Modification
@@ -8,6 +8,7 @@ namespace TwoDrive.Domain.FileManagement
         public int ElementId { get; set; }
         public Element ElementModified { get; set; }
         public ModificationType type { get; set; }
+        public DateTime Date { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -15,10 +16,10 @@ namespace TwoDrive.Domain.FileManagement
             {
                 return false;
             }
-            var modification = (Modification) obj;
+            var modification = (Modification)obj;
             return Id == modification.Id;
         }
-        
+
         public override int GetHashCode()
         {
             return base.GetHashCode();
