@@ -16,6 +16,7 @@ namespace TwoDrive.DataAccess
         public virtual DbSet<Folder> Folders { get; set; }
         public virtual DbSet<File> Files { get; set; }
         public virtual DbSet<TxtFile> Txts { get; set; }
+        public virtual DbSet<Modification> Modifications { get; set; }
 
     }
 }
