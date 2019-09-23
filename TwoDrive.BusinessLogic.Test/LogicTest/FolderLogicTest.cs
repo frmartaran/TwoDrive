@@ -275,5 +275,45 @@ namespace TwoDrive.BusinessLogic.Test
             allFoldersInDb = repository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
         }
+
+        [TestMethod]
+        public void UpdateFolder()
+        {
+            var mockRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
+            var mockValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
+
+            mockRepository.Setup(m => m.Update(It.IsAny<Element>()));
+            mockRepository.Setup(m => m.Save());
+            mockValidator.Setup(m => m.isValid(It.IsAny<Element>()))
+            .Returns(true);
+
+            root.Name = "Root 2.0";
+            var logic = new FolderLogic(mockRepository.Object, mockValidator.Object);
+            logic.Update(root);
+            mockRepository.VerifyAll();
+            mockValidator.VerifyAll();
+
+        }
+
+        [TestMethod]
+        public void UpdateFolderCheckState()
+        {
+            var context = ContextFactory.GetMemoryContext("Update Test");
+            var repository = new ElementRepository(context);
+            var validator = new FolderValidator();
+            repository.Insert(root);
+            repository.Save();
+
+            var dateModified = root.DateModified;
+            var name = "New name";
+            root.Name = name;
+            var logic = new FolderLogic(repository, validator);
+            logic.Update(root);
+
+            var folderInDb = repository.Get(1);
+
+            Assert.AreNotEqual(dateModified, folderInDb.DateModified);
+            Assert.AreEqual(name, folderInDb.Name);
+        }
     }
 }
