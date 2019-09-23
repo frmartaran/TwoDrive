@@ -110,5 +110,36 @@ namespace TwoDrive.BusinessLogic.Test
             var modificationsGroups = logic.GetAllFromDateRange(startDate, endDate);
             Assert.AreEqual(1, modificationsGroups.Count);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetModificationFromDateRangeInvalidRange()
+        {
+            var context = ContextFactory.GetMemoryContext("Modification Test 2");
+            var repository = new ModificationRepository(context);
+            var startDate = new DateTime(2019, 5, 20);
+            var endDate = new DateTime(2019, 5, 15);
+            var modification = new Modification
+            {
+                Id = 2,
+                ElementId = folder.Id,
+                ElementModified = folder,
+                type = ModificationType.Added,
+                Date = folder.DateModified
+            };
+            var anotherModification = new Modification
+            {
+                Id = 1,
+                ElementId = folder.Id,
+                ElementModified = folder,
+                type = ModificationType.Changed,
+                Date = folder.DateModified
+            };
+            var logic = new ModificationLogic(repository);
+            logic.Create(modification);
+            logic.Create(anotherModification);
+
+            var modificationsGroups = logic.GetAllFromDateRange(startDate, endDate);
+        }
     }
 }
