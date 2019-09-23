@@ -349,7 +349,7 @@ namespace TwoDrive.DataAccess.Tests
             };
             var file = new TxtFile
             {
-                Id = 1,
+                Id = 3,
                 Name = "File",
 
             };
@@ -358,7 +358,7 @@ namespace TwoDrive.DataAccess.Tests
             repository.Insert(child);
             repository.Save();
 
-            var all = repository.GetAll();
+            var all = repository.GetAllFolders();
             Assert.AreEqual(2, all.Count());
             Assert.IsTrue(all.Contains(folder));
             Assert.IsTrue(all.Contains(child));
@@ -372,7 +372,7 @@ namespace TwoDrive.DataAccess.Tests
             var repository = new ElementRepository(memoryDb);
             var folder = new Folder
             {
-                Id = 1,
+                Id = 3,
                 Name = "Root",
                 FolderChilden = new List<Element>()
             };

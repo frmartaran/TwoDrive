@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.DataAccess
@@ -17,6 +18,16 @@ namespace TwoDrive.DataAccess
                         .Where(e => e.GetType().Name == type)
                         .Where(e => e.ParentFolderId == element.ParentFolderId)
                         .Any();
+        }
+
+        public ICollection<Folder> GetAllFolders(){
+            
+            return context.Folders
+            .Include(f => f.Owner)
+            .Include(f => f.ParentFolder)
+            .Include(f => f.FolderChilden)
+            .ToList();
+
         }
 
     }
