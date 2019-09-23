@@ -316,5 +316,42 @@ namespace TwoDrive.BusinessLogic.Test
             Assert.AreNotEqual(dateModified, folderInDb.DateModified);
             Assert.AreEqual(newOwner, folderInDb.Owner);
         }
+
+        [TestMethod]
+        public void GetAll()
+        {
+            var testList = new List<Element>();
+            var mockRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
+            mockRepository.Setup(m => m.GetAll())
+            .Returns(testList);
+
+            var logic = new FolderLogic(mockRepository.Object);
+            var elements = logic.GetAll();
+
+            mockRepository.VerifyAll();
+        }
+
+        [TestMethod]
+        public void GetAllFolders()
+        {
+            var context = ContextFactory.GetMemoryContext("Get All test");
+            var repository = new ElementRepository(context);
+            var newFolder = root;
+            newFolder.Id = 2;
+            var file = new TxtFile();
+            repository.Insert(root);
+            repository.Insert(newFolder);
+            repository.Insert(file);
+            repository.Save();
+
+            var logic = new FolderLogic(repository);
+            var allFoldersInDb = logic.GetAll();
+
+            Assert.IsTrue(allFoldersInDb.Contains(root));
+            Assert.IsTrue(allFoldersInDb.Contains(newFolder));
+            Assert.AreEqual(2, allFoldersInDb.Count);
+
+
+        }
     }
 }
