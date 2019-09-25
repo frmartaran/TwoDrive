@@ -34,32 +34,34 @@ namespace TwoDrive.BusinessLogic.Logic
         public void Delete(Folder folder)
         {
             DeleteChildren(folder);
-            
         }
 
         private void DeleteChildren(Element element)
         {
-            if (IsFile(element))
+            if (element is Folder folder)
+            {
+                if (folder.FolderChilden.Count == 0)
+                {
+                    Repository.Delete(element.Id);
+                    Repository.Save();
+                    return;
+                }
+                var child = folder.FolderChilden.FirstOrDefault();
+                while (child != null)
+                {
+                    DeleteChildren(child);
+                    child = folder.FolderChilden.FirstOrDefault();
+                }
+                DeleteChildren(element);
+            }
+            else
             {
                 Repository.Delete(element.Id);
                 Repository.Save();
                 return;
             }
-            var asfolder = (Folder)element;
-            if (asfolder.FolderChilden.Count == 0)
-            {
-                Repository.Delete(element.Id);
-                Repository.Save();
-                return;
-            }
-            var child = asfolder.FolderChilden.FirstOrDefault();
-            while (child != null)
-            {
-                DeleteChildren(child);
-                child = asfolder.FolderChilden.FirstOrDefault();
-            }
-            DeleteChildren(element);
         }
+
 
         private static bool IsFile(Element folder)
         {
@@ -68,7 +70,7 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public Folder Get(int Id)
         {
-            return (Folder) Repository.Get(Id);
+            return (Folder)Repository.Get(Id);
         }
 
         public ICollection<Folder> GetAll()
@@ -77,7 +79,7 @@ namespace TwoDrive.BusinessLogic.Logic
             return allElements
                     .Where(f => f is Folder)
                     .ToList()
-                    .ConvertAll(f => (Folder) f);
+                    .ConvertAll(f => (Folder)f);
         }
 
         public void Update(Folder folder)
