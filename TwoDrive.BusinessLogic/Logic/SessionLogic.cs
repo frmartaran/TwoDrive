@@ -16,6 +16,11 @@ namespace TwoDrive.BusinessLogic.Logic
             WriterRepository = writerRepository;
         }
 
+        public SessionLogic(IRepository<Session> repository)
+        {
+            Repository = repository;
+        }
+
         public Guid? Create(string username, string password)
         {
             var user = WriterRepository.GetAll()
@@ -33,6 +38,15 @@ namespace TwoDrive.BusinessLogic.Logic
             Repository.Insert(session);
             Repository.Save();
             return token;
+        }
+
+        public Writer GetUser(Guid token)
+        {
+            var writer = Repository.GetAll()
+                    .Where(s => s.Token == token)
+                    .Select(s => s.Writer)
+                    .FirstOrDefault();
+            return writer;
         }
     }
 }

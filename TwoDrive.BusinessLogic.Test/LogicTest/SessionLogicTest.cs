@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -92,7 +93,7 @@ namespace TwoDrive.BusinessLogic.Test
             mockRepository.Setup(m => m.GetAll())
                             .Returns(testList);
             var logic = new SessionLogic(mockRepository.Object);
-            logic.GetUser(Guid.newGuid());
+            Writer writer = logic.GetUser(Guid.NewGuid());
             mockRepository.VerifyAll();
         }
     }
