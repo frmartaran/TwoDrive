@@ -57,5 +57,22 @@ namespace TwoDrive.BusinessLogic.Test
             Assert.AreEqual(username, sessionInContext.Writer.UserName);
             Assert.AreEqual(password, sessionInContext.Writer.Password);
         }
+
+        [TestMethod]
+        public void CreateSessionUserDoesntExists()
+        {
+            var context = ContextFactory.GetMemoryContext("Create Session Null Case");
+            var repository = new SessionRepository(context);
+            var writerRepository = new WriterRepository(context);
+
+            var logic = new SessionLogic(repository, writerRepository);
+            var username = "Username";
+            var password = "Password";
+            logic.Create(username, password);
+            var sessionInContext = context.Sessions
+                                    .Include(s => s.Writer)
+                                    .FirstOrDefault();
+            Assert.IsNull(sessionInContext);
+        }
     }
 }
