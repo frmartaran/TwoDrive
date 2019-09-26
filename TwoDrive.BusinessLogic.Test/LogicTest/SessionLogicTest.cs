@@ -83,5 +83,17 @@ namespace TwoDrive.BusinessLogic.Test
                                     .FirstOrDefault();
             Assert.IsNull(sessionInContext);
         }
+
+        [TestMethod]
+        public void GetWriterByTokenMock()
+        {
+            var mockRepository = new Mock<IRepository<Session>>(MockBehavior.Strict);
+            var testList = new List<Session>();
+            mockRepository.Setup(m => m.GetAll())
+                            .Returns(testList);
+            var logic = new SessionLogic(mockRepository.Object);
+            logic.GetUser(Guid.newGuid());
+            mockRepository.VerifyAll();
+        }
     }
 }
