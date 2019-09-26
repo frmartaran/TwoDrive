@@ -17,10 +17,19 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void CreateSessionMock()
         {
+            var writer = new Writer
+            {
+                Id = 1,
+                UserName = "Username",
+                Password = "Password",
+                Friends = new List<Writer>(),
+            };
             var mockRepository = new Mock<IRepository<Session>>(MockBehavior.Strict);
             mockRepository.Setup(m => m.Insert(It.IsAny<Session>()));
             mockRepository.Setup(m => m.Save());
-            var testList = new List<Writer>();
+            var testList = new List<Writer>{
+                writer
+            };
             var mockWriterRepository = new Mock<IRepository<Writer>>(MockBehavior.Strict);
             mockWriterRepository.Setup(m => m.GetAll())
                                 .Returns(testList);

@@ -16,12 +16,14 @@ namespace TwoDrive.BusinessLogic.Logic
             WriterRepository = writerRepository;
         }
 
-        public void Create(string username, string password)
+        public Guid? Create(string username, string password)
         {
             var user = WriterRepository.GetAll()
                         .Where(w => w.UserName == username)
                         .Where(w => w.Password == password)
                         .FirstOrDefault();
+            if (user == null)
+                return null;
             var token = Guid.NewGuid();
             var session = new Session
             {
@@ -30,8 +32,7 @@ namespace TwoDrive.BusinessLogic.Logic
             };
             Repository.Insert(session);
             Repository.Save();
-
-
+            return token;
         }
     }
 }
