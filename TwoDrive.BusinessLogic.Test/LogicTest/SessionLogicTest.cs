@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.DataAccess;
 using TwoDrive.DataAccess.Interface;
@@ -93,8 +94,94 @@ namespace TwoDrive.BusinessLogic.Test
             mockRepository.Setup(m => m.GetAll())
                             .Returns(testList);
             var logic = new SessionLogic(mockRepository.Object);
-            Writer writer = logic.GetUser(Guid.NewGuid());
+            Writer writer = logic.GetWriter(Guid.NewGuid());
             mockRepository.VerifyAll();
+        }
+
+        [TestMethod]
+        public void GetWriterByToken()
+        {
+            var context = ContextFactory.GetMemoryContext("Get Writer By Token");
+            var repository = new SessionRepository(context);
+            var logic = new SessionLogic(repository);
+            var writer = new Writer
+            {
+                Id = 1,
+                UserName = "Username",
+                Password = "Password",
+                Friends = new List<Writer>(),
+            };
+            var token = Guid.NewGuid();
+            var session = new Session
+            {
+                Writer = writer,
+                Token = token
+            };
+            context.Sessions.Add(session);
+            context.SaveChanges();
+
+            var writerInDb = logic.GetWriter(token);
+            Assert.AreEqual(writer, writerInDb);
+        }
+
+        [TestMethod]
+        public void NoWriterWithToken()
+        {
+            var context = ContextFactory.GetMemoryContext("No Writer With Token");
+            var repository = new SessionRepository(context);
+            var logic = new SessionLogic(repository);
+            var token = Guid.NewGuid();
+
+            var writerInDb = logic.GetWriter(token);
+            Assert.IsNull(writerInDb);
+        }
+
+        [TestMethod]
+        public void HasLevelMock()
+        {
+            var mockRepository = new Mock<IRepository<Session>>(MockBehavior.Strict);
+            var mockSessionLogic = new Mock<ISessionLogic<Writer>>(MockBehavior.Strict);
+            var writer = new Writer
+            {
+                Id = 1,
+                UserName = "Username",
+                Password = "Password",
+                Role = Role.Administrator,
+                Friends = new List<Writer>(),
+            };
+            mockSessionLogic.Setup(m => m.GetWriter(It.IsAny<Guid>()))
+                            .Returns(writer);
+            var logic = new SessionLogic(mockRepository.Object);
+            var hasLevel = logic.HasLevel(Guid.NewGuid());
+            mockSessionLogic.VerifyAll();
+
+        }
+
+        [TestMethod]
+        public void HasLevel()
+        {
+            var context = ContextFactory.GetMemoryContext("Has level test");
+            var repository = new SessionRepository(context);
+            var writer = new Writer
+            {
+                Id = 1,
+                UserName = "Username",
+                Password = "Password",
+                Role = Role.Administrator,
+                Friends = new List<Writer>(),
+            };
+            var token = Guid.NewGuid();
+            var session = new Session
+            {
+                Writer = writer,
+                Token = token
+            };
+            context.Sessions.Add(session);
+            context.SaveChanges();
+            var logic = new SessionLogic(repository);
+            var hasLevel = logic.HasLevel(token);
+            Assert.IsTrue(hasLevel);
+
         }
     }
 }
