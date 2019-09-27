@@ -1,13 +1,12 @@
 
 using System;
 using System.Linq;
-using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 
 namespace TwoDrive.BusinessLogic.Logic
 {
-    public class SessionLogic : ISessionLogic<Writer>
+    public class SessionLogic : ISessionLogic
     {
         private IRepository<Session> Repository { get; set; }
         private IRepository<Writer> WriterRepository { get; set; }
@@ -52,7 +51,8 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public bool HasLevel(Guid token)
         {
-            throw new NotImplementedException();
+            var writer = GetWriter(token);
+            return writer.Role == Role.Administrator;
         }
     }
 }

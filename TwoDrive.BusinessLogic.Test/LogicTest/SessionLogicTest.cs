@@ -5,7 +5,6 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.DataAccess;
 using TwoDrive.DataAccess.Interface;
@@ -140,7 +139,7 @@ namespace TwoDrive.BusinessLogic.Test
         public void HasLevelMock()
         {
             var mockRepository = new Mock<IRepository<Session>>(MockBehavior.Strict);
-            var mockSessionLogic = new Mock<ISessionLogic<Writer>>(MockBehavior.Strict);
+            var mockSessionLogic = new Mock<ISessionLogic>(MockBehavior.Strict);
             var writer = new Writer
             {
                 Id = 1,
