@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.BusinessLogic.LogicInput;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
 
@@ -9,26 +10,30 @@ namespace TwoDrive.BusinessLogic.Logic
 {
     public class FolderLogic : ILogic<Folder>
     {
-        private IRepository<Element> Repository { get; set; }
+        private IRepository<Folder> FolderRepository { get; set; }
 
-        private IValidator<Element> Validator { get; set; }
+        private IValidator<Element> ElementValidator { get; set; }
+
+        private IRepository<File> FileRepository { get; set; }
 
         private const string type = "Folder";
-        public FolderLogic(IRepository<Element> current)
+        public FolderLogic(IRepository<Folder> currentFolderRepository, IRepository<File> currentFileRepository)
         {
-            Repository = current;
+            FolderRepository = currentFolderRepository;
+            FileRepository = currentFileRepository;
         }
 
-        public FolderLogic(IRepository<Element> current, IValidator<Element> validator)
+        public FolderLogic(FolderLogicDependencies dependencies)
         {
-            Repository = current;
-            Validator = validator;
-        }
+            FolderRepository = dependencies.FolderRepository;
+            ElementValidator = dependencies.ElementValidator;
+            FileRepository = dependencies.FileRepository;
+}
         public void Create(Folder folder)
         {
-            Validator.isValid(folder);
-            Repository.Insert(folder);
-            Repository.Save();
+            ElementValidator.isValid(folder);
+            FolderRepository.Insert(folder);
+            FolderRepository.Save();
         }
 
         public void Delete(Folder folder)
@@ -42,8 +47,8 @@ namespace TwoDrive.BusinessLogic.Logic
             {
                 if (folder.FolderChilden.Count == 0)
                 {
-                    Repository.Delete(element.Id);
-                    Repository.Save();
+                    FolderRepository.Delete(element.Id);
+                    FolderRepository.Save();
                     return;
                 }
                 var child = folder.FolderChilden.FirstOrDefault();
@@ -56,8 +61,8 @@ namespace TwoDrive.BusinessLogic.Logic
             }
             else
             {
-                Repository.Delete(element.Id);
-                Repository.Save();
+                FileRepository.Delete(element.Id);
+                FileRepository.Save();
                 return;
             }
         }
@@ -70,25 +75,22 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public Folder Get(int Id)
         {
-            return (Folder)Repository.Get(Id);
+            return FolderRepository.Get(Id);
         }
 
         public ICollection<Folder> GetAll()
         {
-            var allElements = Repository.GetAll();
-            return allElements
-                    .Where(f => f is Folder)
-                    .ToList()
-                    .ConvertAll(f => (Folder)f);
+            var allElements = FolderRepository.GetAll();
+            return allElements;
         }
 
         public void Update(Folder folder)
         {
             var newDateModified = DateTime.Now;
-            Validator.isValid(folder);
+            ElementValidator.isValid(folder);
             folder.DateModified = newDateModified;
-            Repository.Update(folder);
-            Repository.Save();
+            FolderRepository.Update(folder);
+            FolderRepository.Save();
         }
     }
 }
