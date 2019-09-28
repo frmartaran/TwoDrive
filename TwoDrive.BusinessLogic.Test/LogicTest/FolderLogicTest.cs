@@ -9,6 +9,7 @@ using TwoDrive.DataAccess;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
+using TwoDrive.BusinessLogic.LogicInput;
 
 namespace TwoDrive.BusinessLogic.Test
 {
@@ -36,151 +37,60 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void CreateFolder()
         {
-            var mockRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
-            mockRepository.Setup(m => m.Insert(It.IsAny<Element>()));
-            mockRepository.Setup(m => m.Save());
+            var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
+            mockFolderRepository.Setup(m => m.Insert(It.IsAny<Folder>()));
+            mockFolderRepository.Setup(m => m.Save());
 
-            var mockValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
-            mockValidator.Setup(m => m.isValid(It.IsAny<Element>()))
+            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            mockFileRepository.Setup(m => m.Insert(It.IsAny<File>()));
+            mockFileRepository.Setup(m => m.Save());
+
+            var mockElementValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
+            mockElementValidator.Setup(m => m.isValid(It.IsAny<Element>()))
             .Returns(true);
 
-            var logic = new FolderLogic(mockRepository.Object, mockValidator.Object);
+            var folderLogicDependencies = new FolderLogicDependencies
+            {
+                FolderRepository = mockFolderRepository.Object,
+                FileRepository = mockFileRepository.Object,
+                ElementValidator = mockElementValidator.Object
+            };
+
+            var logic = new FolderLogic(folderLogicDependencies);
             logic.Create(root);
 
-            mockRepository.VerifyAll();
-            mockValidator.VerifyAll();
+            mockFolderRepository.VerifyAll();
+            mockElementValidator.VerifyAll();
         }
 
         [TestMethod]
         public void CreateFolderCheckState()
         {
             var context = ContextFactory.GetMemoryContext("Create Test");
-            var repository = new ElementRepository(context);
-            var validator = new FolderValidator();
-            var logic = new FolderLogic(repository, validator);
+            var folderRepository = new FolderRepository(context);
+            var folderValidator = new FolderValidator();
+            var folderLogicDependencies = new FolderLogicDependencies
+            {
+                FolderRepository = folderRepository,
+                ElementValidator = folderValidator
+            };
+            var logic = new FolderLogic(folderLogicDependencies);
 
             logic.Create(root);
 
-            var folderinDb = repository.Get(1);
+            var folderinDb = folderRepository.Get(1);
             Assert.AreEqual(root, folderinDb);
         }
 
         [TestMethod]
-        public void DeleteFolder()
+        public void CreateParentFolderWithTwoChildren()
         {
-            var mockRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
-            mockRepository.Setup(m => m.Delete(It.IsAny<int>()));
-            mockRepository.Setup(m => m.Save());
+            var context = ContextFactory.GetMemoryContext("Create Test 2");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
 
-            var logic = new FolderLogic(mockRepository.Object);
-            logic.Delete(root);
-
-            mockRepository.VerifyAll();
-        }
-
-        [TestMethod]
-        public void DeleteOneFolder()
-        {
-            var context = ContextFactory.GetMemoryContext("Delete Test");
-            var repository = new ElementRepository(context);
-            repository.Insert(root);
-            repository.Save();
-
-            var rootInDb = repository.Get(1);
-            Assert.AreEqual(root, rootInDb);
-
-            var logic = new FolderLogic(repository);
-            logic.Delete(root);
-
-            rootInDb = repository.Get(1);
-            Assert.IsNull(rootInDb);
-        }
-
-        [TestMethod]
-        public void DeleteParentFolder()
-        {
-            var context = ContextFactory.GetMemoryContext("Delete Test 2");
-            var repository = new ElementRepository(context);
-            repository.Insert(root);
-            repository.Save();
-            var child = new Folder
-            {
-                Id = 2,
-                CreationDate = new DateTime(2019, 9, 22),
-                DateModified = new DateTime(2019, 9, 22),
-                Name = "child",
-                Owner = root.Owner,
-                ParentFolder = root,
-                FolderChilden = new List<Element>()
-            };
-            root.FolderChilden.Add(child);
-            repository.Insert(child);
-            repository.Update(root);
-            repository.Save();
-
-            var allFoldersInDb = repository.GetAll();
-            Assert.IsTrue(allFoldersInDb.Contains(root));
-            Assert.IsTrue(allFoldersInDb.Contains(child));
-
-            var logic = new FolderLogic(repository);
-            logic.Delete(root);
-
-            allFoldersInDb = repository.GetAll();
-            Assert.AreEqual(0, allFoldersInDb.Count);
-        }
-
-        [TestMethod]
-        public void DeleteParentWithTwoChilds()
-        {
-            var context = ContextFactory.GetMemoryContext("Delete Test 2");
-            var repository = new ElementRepository(context);
-            repository.Insert(root);
-            repository.Save();
-            var child = new Folder
-            {
-                Id = 2,
-                CreationDate = new DateTime(2019, 9, 22),
-                DateModified = new DateTime(2019, 9, 22),
-                Name = "child",
-                Owner = root.Owner,
-                ParentFolder = root,
-                FolderChilden = new List<Element>()
-            };
-            var secondChild = new Folder
-            {
-                Id = 3,
-                CreationDate = new DateTime(2019, 9, 22),
-                DateModified = new DateTime(2019, 9, 22),
-                Name = "child 2",
-                Owner = root.Owner,
-                ParentFolder = root,
-                FolderChilden = new List<Element>()
-            };
-            root.FolderChilden.Add(child);
-            repository.Insert(child);
-            repository.Insert(secondChild);
-            repository.Update(root);
-            repository.Save();
-
-            var allFoldersInDb = repository.GetAll();
-            Assert.IsTrue(allFoldersInDb.Contains(root));
-            Assert.IsTrue(allFoldersInDb.Contains(child));
-            Assert.IsTrue(allFoldersInDb.Contains(secondChild));
-
-            var logic = new FolderLogic(repository);
-            logic.Delete(root);
-
-            allFoldersInDb = repository.GetAll();
-            Assert.AreEqual(0, allFoldersInDb.Count);
-        }
-
-        [TestMethod]
-        public void DeleteParentWithAFolderAndFile()
-        {
-            var context = ContextFactory.GetMemoryContext("Delete Test 3");
-            var repository = new ElementRepository(context);
-            repository.Insert(root);
-            repository.Save();
+            folderRepository.Insert(root);
+            folderRepository.Save();
             var child = new Folder
             {
                 Id = 2,
@@ -202,30 +112,28 @@ namespace TwoDrive.BusinessLogic.Test
                 Content = "Content"
             };
             root.FolderChilden.Add(child);
-            repository.Insert(child);
-            repository.Insert(file);
-            repository.Update(root);
-            repository.Save();
+            folderRepository.Insert(child);
+            fileRepository.Insert(file);
+            folderRepository.Update(root);
+            folderRepository.Save();
 
-            var allFoldersInDb = repository.GetAll();
+            var allFoldersInDb = folderRepository.GetAll();
+            var allFilesInDb = fileRepository.GetAll();
+
             Assert.IsTrue(allFoldersInDb.Contains(root));
             Assert.IsTrue(allFoldersInDb.Contains(child));
-            Assert.IsTrue(allFoldersInDb.Contains(file));
-
-            var logic = new FolderLogic(repository);
-            logic.Delete(root);
-
-            allFoldersInDb = repository.GetAll();
-            Assert.AreEqual(0, allFoldersInDb.Count);
+            Assert.IsTrue(allFilesInDb.Contains(file));
         }
 
         [TestMethod]
-        public void DeleteParentWithTwoLevelsOfChilds()
+        public void CreateParentFolderWithTwoLevelsOfChildren()
         {
-            var context = ContextFactory.GetMemoryContext("Delete Test 4");
-            var repository = new ElementRepository(context);
-            repository.Insert(root);
-            repository.Save();
+            var context = ContextFactory.GetMemoryContext("Create Test 3");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+
+            folderRepository.Insert(root);
+            folderRepository.Save();
             var child = new Folder
             {
                 Id = 2,
@@ -258,40 +166,242 @@ namespace TwoDrive.BusinessLogic.Test
             };
             root.FolderChilden.Add(child);
             child.FolderChilden.Add(grandson);
-            repository.Insert(child);
-            repository.Insert(secondChild);
-            repository.Update(root);
-            repository.Save();
+            folderRepository.Insert(child);
+            folderRepository.Insert(secondChild);
+            folderRepository.Update(root);
+            folderRepository.Save();
 
-            var allFoldersInDb = repository.GetAll();
+            var allFoldersInDb = folderRepository.GetAll();
             Assert.IsTrue(allFoldersInDb.Contains(root));
             Assert.IsTrue(allFoldersInDb.Contains(child));
             Assert.IsTrue(allFoldersInDb.Contains(secondChild));
             Assert.IsTrue(allFoldersInDb.Contains(grandson));
+        }
 
-            var logic = new FolderLogic(repository);
+        [TestMethod]
+        public void DeleteFolder()
+        {
+            var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
+            mockFolderRepository.Setup(m => m.Delete(It.IsAny<int>()));
+            mockFolderRepository.Setup(m => m.Save());
+
+            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+
+            var logic = new FolderLogic(mockFolderRepository.Object, mockFileRepository.Object);
             logic.Delete(root);
 
-            allFoldersInDb = repository.GetAll();
+            mockFolderRepository.VerifyAll();
+        }
+
+        [TestMethod]
+        public void DeleteOneFolder()
+        {
+            var context = ContextFactory.GetMemoryContext("Delete Test");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+
+            folderRepository.Insert(root);
+            folderRepository.Save();
+
+            var logic = new FolderLogic(folderRepository, fileRepository);
+            logic.Delete(root);
+
+            var rootInDb = folderRepository.Get(1);
+            Assert.IsNull(rootInDb);
+        }
+
+        [TestMethod]
+        public void DeleteParentFolder()
+        {
+            var context = ContextFactory.GetMemoryContext("Delete Test 1");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+
+            folderRepository.Insert(root);
+            folderRepository.Save();
+            var child = new Folder
+            {
+                Id = 2,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChilden = new List<Element>()
+            };
+            root.FolderChilden.Add(child);
+            folderRepository.Insert(child);
+            folderRepository.Update(root);
+            folderRepository.Save();
+
+            var logic = new FolderLogic(folderRepository, fileRepository);
+            logic.Delete(root);
+
+            var allFoldersInDb = folderRepository.GetAll();
+            Assert.AreEqual(0, allFoldersInDb.Count);
+        }
+
+        [TestMethod]
+        public void DeleteParentWithTwoChildren()
+        {
+            var context = ContextFactory.GetMemoryContext("Delete Test 2");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+
+            folderRepository.Insert(root);
+            folderRepository.Save();
+            var child = new Folder
+            {
+                Id = 2,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChilden = new List<Element>()
+            };
+            var secondChild = new Folder
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "child 2",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChilden = new List<Element>()
+            };
+            root.FolderChilden.Add(child);
+            folderRepository.Insert(child);
+            folderRepository.Insert(secondChild);
+            folderRepository.Update(root);
+            folderRepository.Save();
+
+            var logic = new FolderLogic(folderRepository, fileRepository);
+            logic.Delete(root);
+
+            var allFoldersInDb = folderRepository.GetAll();
+            Assert.AreEqual(0, allFoldersInDb.Count);
+        }
+
+        [TestMethod]
+        public void DeleteParentWithAFolderAndFile()
+        {
+            var context = ContextFactory.GetMemoryContext("Delete Test 3");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+
+            folderRepository.Insert(root);
+            folderRepository.Save();
+            var child = new Folder
+            {
+                Id = 2,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChilden = new List<Element>()
+            };
+            var file = new TxtFile
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                Content = "Content"
+            };
+            root.FolderChilden.Add(child);
+            folderRepository.Insert(child);
+            fileRepository.Insert(file);
+            folderRepository.Update(root);
+            folderRepository.Save();
+
+            var logic = new FolderLogic(folderRepository, fileRepository);
+            logic.Delete(root);
+
+            var allFoldersInDb = folderRepository.GetAll();
+            Assert.AreEqual(0, allFoldersInDb.Count);
+        }
+
+        [TestMethod]
+        public void DeleteParentWithTwoLevelsOfChildren()
+        {
+            var context = ContextFactory.GetMemoryContext("Delete Test 4");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+
+            folderRepository.Insert(root);
+            folderRepository.Save();
+            var child = new Folder
+            {
+                Id = 2,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChilden = new List<Element>()
+            };
+            var secondChild = new Folder
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "child 2",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChilden = new List<Element>()
+            };
+            var grandson = new Folder
+            {
+                Id = 4,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "child 3",
+                Owner = root.Owner,
+                ParentFolder = child,
+                FolderChilden = new List<Element>()
+            };
+            root.FolderChilden.Add(child);
+            child.FolderChilden.Add(grandson);
+            folderRepository.Insert(child);
+            folderRepository.Insert(secondChild);
+            folderRepository.Update(root);
+            folderRepository.Save();
+
+            var logic = new FolderLogic(folderRepository, fileRepository);
+            logic.Delete(root);
+
+            var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
         }
 
         [TestMethod]
         public void UpdateFolder()
         {
-            var mockRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
-            var mockValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
+            var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
+            var mockFolderValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
+            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
 
-            mockRepository.Setup(m => m.Update(It.IsAny<Element>()));
-            mockRepository.Setup(m => m.Save());
-            mockValidator.Setup(m => m.isValid(It.IsAny<Element>()))
+            var folderLogicDependencies = new FolderLogicDependencies
+            {
+                FolderRepository = mockFolderRepository.Object,
+                FileRepository = mockFileRepository.Object,
+                ElementValidator = mockFolderValidator.Object
+            };
+
+            mockFolderRepository.Setup(m => m.Update(It.IsAny<Folder>()));
+            mockFolderRepository.Setup(m => m.Save());
+            mockFolderValidator.Setup(m => m.isValid(It.IsAny<Element>()))
             .Returns(true);
 
             root.Name = "Root 2.0";
-            var logic = new FolderLogic(mockRepository.Object, mockValidator.Object);
+            var logic = new FolderLogic(folderLogicDependencies);
             logic.Update(root);
-            mockRepository.VerifyAll();
-            mockValidator.VerifyAll();
+            mockFolderRepository.VerifyAll();
+            mockFolderValidator.VerifyAll();
 
         }
 
@@ -299,19 +409,28 @@ namespace TwoDrive.BusinessLogic.Test
         public void UpdateFolderCheckState()
         {
             var context = ContextFactory.GetMemoryContext("Update Test");
-            var repository = new ElementRepository(context);
-            var validator = new FolderValidator();
-            repository.Insert(root);
-            repository.Save();
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+            var folderValidator = new FolderValidator();
+
+            folderRepository.Insert(root);
+            folderRepository.Save();
+
+            var folderLogicDependencies = new FolderLogicDependencies
+            {
+                FolderRepository = folderRepository,
+                FileRepository = fileRepository,
+                ElementValidator = folderValidator
+            };
 
             var newOwner = new Writer();
 
             var dateModified = root.DateModified;
             root.Owner = newOwner;
-            var logic = new FolderLogic(repository, validator);
+            var logic = new FolderLogic(folderLogicDependencies);
             logic.Update(root);
 
-            var folderInDb = repository.Get(1);
+            var folderInDb = folderRepository.Get(1);
 
             Assert.AreNotEqual(dateModified, folderInDb.DateModified);
             Assert.AreEqual(newOwner, folderInDb.Owner);
@@ -320,22 +439,26 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void GetAll()
         {
-            var testList = new List<Element>();
-            var mockRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
-            mockRepository.Setup(m => m.GetAll())
+            var testList = new List<Folder>();
+            var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
+            mockFolderRepository.Setup(m => m.GetAll())
             .Returns(testList);
 
-            var logic = new FolderLogic(mockRepository.Object);
+            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+
+            var logic = new FolderLogic(mockFolderRepository.Object, mockFileRepository.Object);
             var elements = logic.GetAll();
 
-            mockRepository.VerifyAll();
+            mockFolderRepository.VerifyAll();
         }
 
         [TestMethod]
         public void GetAllFolders()
         {
             var context = ContextFactory.GetMemoryContext("Get All test");
-            var repository = new ElementRepository(context);
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+
             var newFolder = new Folder
             {
                 Id = 2
@@ -344,12 +467,12 @@ namespace TwoDrive.BusinessLogic.Test
             {
                 Id = 3
             };
-            repository.Insert(root);
-            repository.Insert(newFolder);
-            repository.Insert(file);
-            repository.Save();
+            folderRepository.Insert(root);
+            folderRepository.Insert(newFolder);
+            fileRepository.Insert(file);
+            folderRepository.Save();
 
-            var logic = new FolderLogic(repository);
+            var logic = new FolderLogic(folderRepository, fileRepository);
             var allFoldersInDb = logic.GetAll();
             Assert.IsTrue(allFoldersInDb.Contains(root));
             Assert.IsTrue(allFoldersInDb.Contains(newFolder));
@@ -360,25 +483,28 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void Get()
         {
-            var mockRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
-            mockRepository.Setup(m => m.Get(It.IsAny<int>()))
+            var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
+            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            mockFolderRepository.Setup(m => m.Get(It.IsAny<int>()))
                         .Returns(root);
 
-            var logic = new FolderLogic(mockRepository.Object);
+            var logic = new FolderLogic(mockFolderRepository.Object, mockFileRepository.Object);
             var folder = logic.Get(1);
 
-            mockRepository.VerifyAll();
+            mockFolderRepository.VerifyAll();
         }
 
         [TestMethod]
         public void GetFolder()
         {
             var context = ContextFactory.GetMemoryContext("Get test");
-            var repository = new ElementRepository(context);
-            repository.Insert(root);
-            repository.Save();
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
 
-            var logic = new FolderLogic(repository);
+            folderRepository.Insert(root);
+            folderRepository.Save();
+
+            var logic = new FolderLogic(folderRepository, fileRepository);
             var folderinDb = logic.Get(1);
 
             Assert.AreEqual(root, folderinDb);
