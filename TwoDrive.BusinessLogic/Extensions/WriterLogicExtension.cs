@@ -14,5 +14,10 @@ namespace TwoDrive.BusinessLogic.Extensions
                     .Where(c => c.Type == type)
                     .Any();
         }
+
+        public static bool IsFriendsWith(this Writer writer, Writer friend)
+        {
+            return writer.Friends.Contains(friend);
+        }
     }
 }
