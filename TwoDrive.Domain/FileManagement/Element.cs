@@ -9,7 +9,10 @@ namespace TwoDrive.Domain.FileManagement
         public string Name { get; set; }
 
         public int? ParentFolderId { get; set; }
+
         public Folder ParentFolder { get; set; }
+
+        public int? OwnerId { get; set; }
 
         public Writer Owner { get; set; }
 
