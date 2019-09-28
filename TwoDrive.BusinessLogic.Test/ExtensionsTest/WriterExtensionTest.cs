@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 
@@ -14,7 +15,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestInitialize]
         public void SetUp()
         {
-            
+
             root = new Folder
             {
                 Name = "Root"
@@ -57,15 +58,14 @@ namespace TwoDrive.BusinessLogic.Test
             var canRead = writer.HasClaimsFor(root, ClaimType.Read);
             var canShare = writer.HasClaimsFor(root, ClaimType.Share);
             var canDelete = writer.HasClaimsFor(root, ClaimType.Delete);
-            
+
             Assert.IsTrue(canWrite);
             Assert.IsTrue(canRead);
             Assert.IsTrue(canShare);
-            Assert.IsTrue(canDelete);
 
         }
 
-        
+
         [TestMethod]
         public void WriterDoesntHaveClaimsFor()
         {
@@ -74,12 +74,30 @@ namespace TwoDrive.BusinessLogic.Test
             var canRead = writer.HasClaimsFor(file, ClaimType.Read);
             var canShare = writer.HasClaimsFor(file, ClaimType.Share);
             var canDelete = writer.HasClaimsFor(file, ClaimType.Delete);
-            
-            Assert.IsTrue(canWrite);
-            Assert.IsTrue(canRead);
-            Assert.IsTrue(canShare);
-            Assert.IsTrue(canDelete);
 
+            Assert.IsFalse(canWrite);
+            Assert.IsFalse(canRead);
+            Assert.IsFalse(canShare);
+            Assert.IsFalse(canDelete);
+
+        }
+
+        [TestMethod]
+        public void IsFriendsWith()
+        {
+            var friend = new Writer();
+            writer.Friends.Add(friend);
+            var isAFriend = writer.IsFriendsWith(friend);
+            Assert.IsTrue(isAFriend);
+        }
+
+        
+        [TestMethod]
+        public void IsNotFriendsWith()
+        {
+            var friend = new Writer();
+            var isAFriend = writer.IsFriendsWith(friend);
+            Assert.IsFalse(isAFriend);
         }
     }
 }
