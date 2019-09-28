@@ -254,7 +254,6 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void InvalidStringToken()
         {
          var context = ContextFactory.GetMemoryContext("Is valid");
@@ -262,6 +261,7 @@ namespace TwoDrive.BusinessLogic.Test
             var repository = new SessionRepository(context);
             var logic = new SessionLogic(repository);
             var valid = logic.IsValidToken("InvalidToken");
+            Assert.IsFalse(valid);
         }
     }
 }
