@@ -9,6 +9,7 @@ namespace TwoDrive.BusinessLogic
     public class FileLogic : ILogic<File>, IFileLogic
     {
         private IRepository<File> repository;
+        
         public FileLogic(IRepository<File> repository)
         {
             this.repository = repository;

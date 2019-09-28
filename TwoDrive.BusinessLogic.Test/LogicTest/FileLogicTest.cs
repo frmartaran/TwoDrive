@@ -13,10 +13,12 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
     {
         private TxtFile file;
 
+        private Folder root;
+
         [TestInitialize]
         public void SetUp()
         {
-            var root = new Folder
+            root = new Folder
             {
                 Name = "Root"
             };
@@ -25,11 +27,8 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 Id = 1,
                 Content = "TestFile",
                 CreationDate = DateTime.Now,
-                DateModified = DateTime.Now
-            };
-            root.FolderChilden = new List<Element>
-            {
-                file
+                DateModified = DateTime.Now,
+                ParentFolder = root
             };
         }
 
@@ -55,6 +54,36 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             fileLogic.Create(file);
             var fileInsertedInDB = fileLogic.Get(1);
             Assert.AreEqual(1, fileInsertedInDB.Id);
+        }
+
+        [TestMethod]
+        public void DeleteFile()
+        {
+            var mockRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            mockRepository
+            .Setup(m => m.Delete(It.IsAny<int>()));
+            mockRepository.Setup(m => m.Save());
+
+            var logic = new FileLogic(mockRepository.Object);
+            logic.Delete(file);
+
+            mockRepository.VerifyAll();
+        }
+
+        [TestMethod]
+        public void DeleteOneFile()
+        {
+            var context = ContextFactory.GetMemoryContext("Delete Test");
+            var fileRepository = new FileRepository(context);
+            var folderRepository = new FolderRepository(context);
+
+            folderRepository.Insert(root);
+            fileRepository.Insert(file);
+
+            var logic = new FileLogic(fileRepository);
+            logic.Delete(file);
+
+            Assert.IsNull(fileRepository.Get(file.Id));
         }
     }
 }
