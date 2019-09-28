@@ -1,10 +1,10 @@
 ﻿{
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
+    "windowsAuthentication": false, 
+    "anonymousAuthentication": true, 
     "iisExpress": {
-      "applicationUrl": "http://localhost:7289",
+      "applicationUrl": "http://localhost:3682",
       "sslPort": 0
     }
   },
@@ -12,15 +12,15 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "api/values",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "TwoDrive.WebAPI": {
+    "TwoDrive.WebApi": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "api/values",
       "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
