@@ -64,14 +64,20 @@ namespace TwoDrive.BusinessLogic.Logic
         public bool HasLevel(string token)
         {
             var writer = GetWriter(token);
-            if(writer == null)
+            if (writer == null)
                 return false;
             return writer.Role == Role.Administrator;
         }
 
         public bool IsValidToken(string token)
         {
-            throw new NotImplementedException();
+            Guid realToken;
+            Guid.TryParse(token, out realToken);
+            var auxSession = new Session
+            {
+                Token = realToken   
+            };
+            return Repository.Exists(auxSession);
         }
     }
 }
