@@ -52,6 +52,8 @@ namespace TwoDrive.BusinessLogic.Logic
         public bool HasLevel(Guid token)
         {
             var writer = GetWriter(token);
+            if(writer == null)
+                return false;
             return writer.Role == Role.Administrator;
         }
     }
