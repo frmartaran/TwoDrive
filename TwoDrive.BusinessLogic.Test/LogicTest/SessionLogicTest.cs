@@ -136,27 +136,6 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        public void HasLevelMock()
-        {
-            var mockRepository = new Mock<IRepository<Session>>(MockBehavior.Strict);
-            var mockSessionLogic = new Mock<ISessionLogic>(MockBehavior.Strict);
-            var writer = new Writer
-            {
-                Id = 1,
-                UserName = "Username",
-                Password = "Password",
-                Role = Role.Administrator,
-                Friends = new List<Writer>(),
-            };
-            mockSessionLogic.Setup(m => m.GetWriter(It.IsAny<Guid>()))
-                            .Returns(writer);
-            var logic = new SessionLogic(mockRepository.Object);
-            var hasLevel = logic.HasLevel(Guid.NewGuid());
-            mockSessionLogic.VerifyAll();
-
-        }
-
-        [TestMethod]
         public void HasLevel()
         {
             var context = ContextFactory.GetMemoryContext("Has level test");
