@@ -1,7 +1,7 @@
 using System;
 namespace TwoDrive.Domain
 {
-    public class Sesion
+    public class Session
     {
         public int Id { get; set; }
         public Guid Token { get; set; }

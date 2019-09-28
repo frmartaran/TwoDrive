@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.Domain;
+using System;
 
 namespace TwoDrive.DataAccess.Tests
 {
@@ -558,6 +559,26 @@ namespace TwoDrive.DataAccess.Tests
             repository.Save();
 
             var exists = repository.Exists(modification);
+            Assert.IsTrue(exists);
+        }
+        public void ExistsSession()
+        {
+            var token = Guid.NewGuid();
+            var context = ContextFactory.GetMemoryContext("Session Test");
+            var writer = new Writer{
+                Id =1
+            };
+            var session = new Session{
+                Id = 2,
+                Writer = writer,
+                Token = token
+
+            };
+            var repository = new SessionRepository(context);
+            repository.Insert(session);
+            repository.Save();
+
+            var exists = repository.Exists(session);
             Assert.IsTrue(exists);
         }
     }
