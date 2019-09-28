@@ -10,8 +10,8 @@ namespace TwoDrive.WebApi.Filters
 {
     public abstract class ClaimFilter : Attribute, IActionFilter
     {
-        private Element Element { get; set; }
-        private ClaimType Action { get; set; }
+        protected Element Element { get; set; }
+        protected ClaimType Action { get; set; }
         public void OnActionExecuted(ActionExecutedContext context)
         {
             var token = context.HttpContext.Request.Headers["Authorization"];
