@@ -22,6 +22,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             };
             file = new TxtFile
             {
+                Id = 1,
                 Content = "TestFile",
                 CreationDate = DateTime.Now,
                 DateModified = DateTime.Now
@@ -35,7 +36,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
         [TestMethod]
         public void CreateFile()
         {
-            var mockRepository = new Mock<IRepository<File>>();
+            var mockRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
             mockRepository
             .Setup(m => m.Insert(It.IsAny<File>()));
 
@@ -43,6 +44,17 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             logic.Create(file);
 
             mockRepository.VerifyAll();
+        }
+
+        [TestMethod]
+        public void CreateFileLogicCheckState()
+        {
+            var context = ContextFactory.GetMemoryContext("Create Test");
+            var fileRepository = new FileRepository(context);
+            var fileLogic = new FileLogic(fileRepository);
+            fileLogic.Create(file);
+            var fileInsertedInDB = fileLogic.Get(1);
+            Assert.AreEqual(1, fileInsertedInDB.Id);
         }
     }
 }
