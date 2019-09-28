@@ -20,9 +20,9 @@ namespace TwoDrive.BusinessLogic
             repository.Insert(objectToCreate);
         }
 
-        public void Delete(File objectToDelete)
+        public void Delete(int id)
         {
-            repository.Delete(objectToDelete.Id);
+            repository.Delete(id);
         }
 
         public File Get(int Id)

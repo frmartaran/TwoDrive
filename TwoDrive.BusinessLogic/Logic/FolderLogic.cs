@@ -36,8 +36,9 @@ namespace TwoDrive.BusinessLogic.Logic
             FolderRepository.Save();
         }
 
-        public void Delete(Folder folder)
+        public void Delete(int id)
         {
+            var folder = Get(id);
             DeleteChildren(folder);
         }
 

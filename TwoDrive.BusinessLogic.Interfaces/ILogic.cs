@@ -7,7 +7,7 @@ namespace TwoDrive.BusinessLogic.Interfaces
     {
         void Create(T objectToCreate);
         void Update(T objectToUpdate);
-        void Delete(T objectToDelete);
+        void Delete(int id);
         T Get(int Id);
         ICollection<T> GetAll();
     }

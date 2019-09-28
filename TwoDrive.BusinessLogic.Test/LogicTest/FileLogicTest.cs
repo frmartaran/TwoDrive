@@ -65,7 +65,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             mockRepository.Setup(m => m.Save());
 
             var logic = new FileLogic(mockRepository.Object);
-            logic.Delete(file);
+            logic.Delete(file.Id);
 
             mockRepository.VerifyAll();
         }
@@ -81,7 +81,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             fileRepository.Insert(file);
 
             var logic = new FileLogic(fileRepository);
-            logic.Delete(file);
+            logic.Delete(file.Id);
 
             Assert.IsNull(fileRepository.Get(file.Id));
         }
