@@ -8,21 +8,26 @@ namespace TwoDrive.BusinessLogic
 {
     public class FileLogic : ILogic<File>, IFileLogic
     {
-        private IRepository<File> repository;
+        private IRepository<File> FileRepository;
 
-        public FileLogic(IRepository<File> repository)
+        private IValidator<File> FileValidator;
+
+        public FileLogic(IRepository<File> repository, IValidator<File> validator)
         {
-            this.repository = repository;
+            this.FileRepository = repository;
+            this.FileValidator = validator;
         }
 
-        public void Create(File objectToCreate)
+        public void Create(File fileToCreate)
         {
-            repository.Insert(objectToCreate);
+            FileValidator.isValid(fileToCreate);
+            FileRepository.Insert(fileToCreate);
+            FileRepository.Save();
         }
 
         public void Delete(int id)
         {
-            repository.Delete(id);
+            FileRepository.Delete(id);
         }
 
         public File Get(int Id)
@@ -35,7 +40,7 @@ namespace TwoDrive.BusinessLogic
             throw new NotImplementedException();
         }
 
-        public void Update(File objectToUpdate)
+        public void Update(File fileToUpdate)
         {
             throw new NotImplementedException();
         }
