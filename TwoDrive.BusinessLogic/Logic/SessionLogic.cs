@@ -23,21 +23,33 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public Guid? Create(string username, string password)
         {
-            var user = WriterRepository.GetAll()
-                        .Where(w => w.UserName == username)
-                        .Where(w => w.Password == password)
-                        .FirstOrDefault();
+            var user = FetchWriter(username, password);
+
             if (user == null)
                 return null;
+
             var token = Guid.NewGuid();
             var session = new Session
             {
                 Writer = user,
                 Token = token
             };
+            SaveSession(session);
+            return token;
+        }
+
+        private void SaveSession(Session session)
+        {
             Repository.Insert(session);
             Repository.Save();
-            return token;
+        }
+
+        private Writer FetchWriter(string username, string password)
+        {
+            return WriterRepository.GetAll()
+                        .Where(w => w.UserName == username)
+                        .Where(w => w.Password == password)
+                        .FirstOrDefault();
         }
 
         public Writer GetWriter(Guid token)
