@@ -40,7 +40,7 @@ namespace TwoDrive.DataAccess
             table.Remove(existingObject);
         }
 
-        public ICollection<T> GetAll()
+        public virtual ICollection<T> GetAll()
         {
             return table.ToList();
         }

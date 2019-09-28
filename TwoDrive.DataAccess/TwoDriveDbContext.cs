@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
@@ -17,6 +18,8 @@ namespace TwoDrive.DataAccess
         public virtual DbSet<File> Files { get; set; }
         public virtual DbSet<TxtFile> Txts { get; set; }
         public virtual DbSet<Modification> Modifications { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder) { }
 
     }
 }
