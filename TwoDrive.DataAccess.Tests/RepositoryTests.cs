@@ -1,12 +1,9 @@
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.Domain;
 using System;
-using TwoDrive.DataAccess.Interface;
 
 namespace TwoDrive.DataAccess.Tests
 {
@@ -28,20 +25,18 @@ namespace TwoDrive.DataAccess.Tests
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "WRiter",
                 Password = "Pass",
                 Claims = new List<Claim>(),
                 Friends = new List<Writer>()
             };
 
-            var repository = new Repository<Writer>(memoryDb);
+            var repository = new WriterRepository(memoryDb);
             repository.Insert(writer);
             repository.Save();
 
             var writerInDb = memoryDb.Set<Writer>().FirstOrDefault();
             Assert.AreEqual(writer, writerInDb);
-
         }
 
         [TestMethod]
@@ -56,13 +51,12 @@ namespace TwoDrive.DataAccess.Tests
                 FolderChilden = new List<Element>()
             };
 
-            var repository = new Repository<Element>(memoryDb);
+            var repository = new FolderRepository(memoryDb);
             repository.Insert(folder);
             repository.Save();
 
             var writerInDb = memoryDb.Set<Element>().FirstOrDefault();
             Assert.AreEqual(folder.Id, writerInDb.Id);
-
         }
 
         [TestMethod]
@@ -76,13 +70,12 @@ namespace TwoDrive.DataAccess.Tests
                 Name = "File",
             };
 
-            var repository = new Repository<Element>(memoryDb);
+            var repository = new FileRepository(memoryDb);
             repository.Insert(file);
             repository.Save();
 
             var writerInDb = memoryDb.Set<Element>().FirstOrDefault();
             Assert.AreEqual(file.Id, writerInDb.Id);
-
         }
 
 
@@ -93,14 +86,13 @@ namespace TwoDrive.DataAccess.Tests
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "WRiter",
                 Password = "Pass",
                 Claims = new List<Claim>(),
                 Friends = new List<Writer>()
             };
 
-            var repository = new Repository<Writer>(memoryDb);
+            var repository = new WriterRepository(memoryDb);
             repository.Insert(writer);
             repository.Save();
 
@@ -118,13 +110,12 @@ namespace TwoDrive.DataAccess.Tests
                 Name = "File",
 
             };
-            var repository = new Repository<Element>(memoryDb);
-            repository.Insert(file);
-            repository.Save();
+            var fileRepository = new FileRepository(memoryDb);
+            fileRepository.Insert(file);
+            fileRepository.Save();
 
-            var folderInMemory = repository.Get(1);
-            Assert.AreEqual(file, folderInMemory);
-
+            var fileInMemory = fileRepository.Get(1);
+            Assert.AreEqual(file, fileInMemory);
         }
 
         [TestMethod]
@@ -137,13 +128,12 @@ namespace TwoDrive.DataAccess.Tests
                 Name = "Root",
                 FolderChilden = new List<Element>()
             };
-            var repository = new Repository<Element>(memoryDb);
+            var repository = new FolderRepository(memoryDb);
             repository.Insert(folder);
             repository.Save();
 
             var folderInMemory = repository.Get(1);
             Assert.AreEqual(folder, folderInMemory);
-
         }
 
         [TestMethod]
@@ -153,13 +143,12 @@ namespace TwoDrive.DataAccess.Tests
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "WRiter",
                 Password = "Pass",
                 Claims = new List<Claim>(),
                 Friends = new List<Writer>()
             };
-            var repository = new Repository<Writer>(memoryDb);
+            var repository = new WriterRepository(memoryDb);
             repository.Insert(writer);
             repository.Save();
 
@@ -172,14 +161,13 @@ namespace TwoDrive.DataAccess.Tests
 
             Assert.AreEqual("Writer", foundWriter.UserName);
             Assert.AreEqual(writer, foundWriter);
-
         }
 
         [TestMethod]
         public void UpdateFolder()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext9");
-            var repository = new Repository<Element>(memoryDb);
+            var repository = new FolderRepository(memoryDb);
             var folder = new Folder
             {
                 Id = 1,
@@ -198,14 +186,13 @@ namespace TwoDrive.DataAccess.Tests
 
             Assert.AreEqual(" root ", foundFolder.Name);
             Assert.AreEqual(folder, foundFolder);
-
         }
 
         [TestMethod]
         public void UpdateFile()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext10");
-            var repository = new Repository<Element>(memoryDb);
+            var repository = new FileRepository(memoryDb);
             var file = new TxtFile
             {
                 Id = 1,
@@ -224,7 +211,6 @@ namespace TwoDrive.DataAccess.Tests
 
             Assert.AreEqual("TXT", foundFile.Name);
             Assert.AreEqual(file, foundFile);
-
         }
 
         [TestMethod]
@@ -234,13 +220,12 @@ namespace TwoDrive.DataAccess.Tests
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "WRiter",
                 Password = "Pass",
                 Claims = new List<Claim>(),
                 Friends = new List<Writer>()
             };
-            var repository = new Repository<Writer>(memoryDb);
+            var repository = new WriterRepository(memoryDb);
             repository.Insert(writer);
             repository.Save();
 
@@ -252,14 +237,13 @@ namespace TwoDrive.DataAccess.Tests
 
             var countAfterDeleting = memoryDb.Set<Writer>().Count();
             Assert.AreEqual(0, countAfterDeleting);
-
         }
 
         [TestMethod]
-        public void DeleteFolder()
+        public void DeleteFile()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext12");
-            var repository = new Repository<Element>(memoryDb);
+            var repository = new FileRepository(memoryDb);
             var file = new TxtFile
             {
                 Id = 1,
@@ -277,14 +261,13 @@ namespace TwoDrive.DataAccess.Tests
 
             var countAfterDeleting = memoryDb.Set<Element>().Count();
             Assert.AreEqual(0, countAfterDeleting);
-
         }
 
         [TestMethod]
-        public void DeleteFile()
+        public void DeleteFolder()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext13");
-            var repository = new Repository<Element>(memoryDb);
+            var repository = new FolderRepository(memoryDb);
             var folder = new Folder
             {
                 Id = 1,
@@ -302,7 +285,6 @@ namespace TwoDrive.DataAccess.Tests
 
             var countAfterDeleting = memoryDb.Set<Element>().Count();
             Assert.AreEqual(0, countAfterDeleting);
-
         }
 
         [TestMethod]
@@ -312,7 +294,6 @@ namespace TwoDrive.DataAccess.Tests
             var writer = new Writer
             {
                 Id = 1,
-                Token = Guid.NewGuid(),
                 UserName = "WRiter",
                 Password = "Pass",
                 Claims = new List<Claim>(),
@@ -321,13 +302,12 @@ namespace TwoDrive.DataAccess.Tests
             var anotherWriter = new Writer
             {
                 Id = 2,
-                Token = Guid.NewGuid(),
                 UserName = "WRiter",
                 Password = "Pass",
                 Claims = new List<Claim>(),
                 Friends = new List<Writer>()
             };
-            var repository = new Repository<Writer>(memoryDb);
+            var repository = new WriterRepository(memoryDb);
             repository.Insert(writer);
             repository.Insert(anotherWriter);
             repository.Save();
@@ -336,7 +316,6 @@ namespace TwoDrive.DataAccess.Tests
             Assert.AreEqual(2, all.Count());
             Assert.IsTrue(all.Contains(writer));
             Assert.IsTrue(all.Contains(anotherWriter));
-
         }
 
         [TestMethod]
@@ -396,7 +375,7 @@ namespace TwoDrive.DataAccess.Tests
             Assert.IsTrue(all.All(f => f.GetType().Name == "TxtFile"));
         }
 
-         [TestMethod]
+        [TestMethod]
         public void GetAllFilesAndFolders()
         {
             var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext18");
@@ -434,9 +413,173 @@ namespace TwoDrive.DataAccess.Tests
             Assert.IsTrue(all.Contains(folder));
             Assert.AreEqual(1, folderCount);
             Assert.AreEqual(2, fileCount);
-
         }
 
-        
+        [TestMethod]
+        public void CreateModification()
+        {
+            var context = ContextFactory.GetMemoryContext("Modification Test 1");
+            var folder = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChilden = new List<Element>()
+            };
+            var modification = new Modification
+            {
+                ElementModified = folder,
+                type = ModificationType.Added
+            };
+            var repository = new ModificationRepository(context);
+            repository.Insert(modification);
+            repository.Save();
+
+            var modificationInDb = context.Modifications.ToList().Count;
+            Assert.AreEqual(1, modificationInDb);
+        }
+
+        [TestMethod]
+        public void UpdateModification()
+        {
+            var context = ContextFactory.GetMemoryContext("Modification Test 2");
+            var folder = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChilden = new List<Element>()
+            };
+            var modification = new Modification
+            {
+                ElementModified = folder,
+                type = ModificationType.Added
+            };
+            var repository = new ModificationRepository(context);
+            repository.Insert(modification);
+            repository.Save();
+            modification.type = ModificationType.Changed;
+            repository.Update(modification);
+            repository.Save();
+
+            var modificationInDb = context.Modifications.FirstOrDefault();
+            Assert.AreEqual(ModificationType.Changed, modificationInDb.type);
+        }
+
+        [TestMethod]
+        public void DeleteModification()
+        {
+            var context = ContextFactory.GetMemoryContext("Modification Test 3");
+            var folder = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChilden = new List<Element>()
+            };
+            var modification = new Modification
+            {
+                Id = 1,
+                ElementModified = folder,
+                type = ModificationType.Added
+            };
+            var repository = new ModificationRepository(context);
+            repository.Insert(modification);
+            repository.Save();
+
+            repository.Delete(1);
+            repository.Save();
+
+            var modificationInDb = context.Modifications.ToList().Count;
+            Assert.AreEqual(0, modificationInDb);
+        }
+
+        [TestMethod]
+        public void GetModification()
+        {
+            var context = ContextFactory.GetMemoryContext("Modification Test 4");
+            var folder = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChilden = new List<Element>()
+            };
+            var modification = new Modification
+            {
+                Id = 1,
+                ElementModified = folder,
+                type = ModificationType.Added
+            };
+            var repository = new ModificationRepository(context);
+            repository.Insert(modification);
+            repository.Save();
+
+            var modificationInDb = repository.Get(1);
+            Assert.AreEqual(modification, modificationInDb);
+        }
+
+        [TestMethod]
+        public void GetAllModifications()
+        {
+            var context = ContextFactory.GetMemoryContext("Modification Test 5");
+            var folder = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChilden = new List<Element>()
+            };
+            var modification = new Modification
+            {
+                ElementModified = folder,
+                type = ModificationType.Added
+            };
+            var repository = new ModificationRepository(context);
+            repository.Insert(modification);
+            repository.Save();
+
+            var modificationInDb = repository.GetAll();
+            Assert.AreEqual(1, modificationInDb.Count);
+            Assert.IsTrue(modificationInDb.Contains(modification));
+        }
+
+        [TestMethod]
+        public void ExistsModification()
+        {
+            var context = ContextFactory.GetMemoryContext("Modification Test 6");
+            var folder = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChilden = new List<Element>()
+            };
+            var modification = new Modification
+            {
+                ElementModified = folder,
+                type = ModificationType.Added
+            };
+            var repository = new ModificationRepository(context);
+            repository.Insert(modification);
+            repository.Save();
+
+            var exists = repository.Exists(modification);
+            Assert.IsTrue(exists);
+        }
+        public void ExistsSession()
+        {
+            var token = Guid.NewGuid();
+            var context = ContextFactory.GetMemoryContext("Session Test");
+            var writer = new Writer{
+                Id =1
+            };
+            var session = new Session{
+                Id = 2,
+                Writer = writer,
+                Token = token
+
+            };
+            var repository = new SessionRepository(context);
+            repository.Insert(session);
+            repository.Save();
+
+            var exists = repository.Exists(session);
+            Assert.IsTrue(exists);
+        }
     }
 }

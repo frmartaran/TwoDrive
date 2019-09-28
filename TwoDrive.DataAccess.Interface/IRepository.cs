@@ -12,5 +12,6 @@ namespace TwoDrive.DataAccess.Interface
         void Delete(int Id);
         ICollection<T> GetAll();
         void Save();
+        bool Exists(T objectToFind);
     }
 }
