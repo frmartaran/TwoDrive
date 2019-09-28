@@ -9,7 +9,7 @@ namespace TwoDrive.BusinessLogic
     public class FileLogic : ILogic<File>, IFileLogic
     {
         private IRepository<File> repository;
-        
+
         public FileLogic(IRepository<File> repository)
         {
             this.repository = repository;
@@ -20,9 +20,9 @@ namespace TwoDrive.BusinessLogic
             repository.Insert(objectToCreate);
         }
 
-        public void Delete(File objectToCreate)
+        public void Delete(File objectToDelete)
         {
-            throw new NotImplementedException();
+            repository.Delete(objectToDelete.Id);
         }
 
         public File Get(int Id)
@@ -35,7 +35,7 @@ namespace TwoDrive.BusinessLogic
             throw new NotImplementedException();
         }
 
-        public void Update(File objectToCreate)
+        public void Update(File objectToUpdate)
         {
             throw new NotImplementedException();
         }
