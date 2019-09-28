@@ -74,8 +74,8 @@ namespace TwoDrive.BusinessLogic.Logic
             Guid realToken;
 
             if(!Guid.TryParse(token, out realToken))
-                throw new ArgumentException("Invalid string as token");
-                
+                return false;
+                                
             var auxSession = new Session
             {
                 Token = realToken   

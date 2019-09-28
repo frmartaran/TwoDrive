@@ -28,6 +28,15 @@ namespace TwoDrive.WebApi.Filters
                 return;
             }
             var sessionLogic = (SessionLogic)context.HttpContext.RequestServices.GetService(typeof(SessionLogic));
+            if (!sessionLogic.IsValidToken(token))
+            {
+                context.Result = new ContentResult
+                {
+                    StatusCode = 400,
+                    Content = "Invalid Token"
+                };
+                return;
+            }
             if (!sessionLogic.HasLevel(token))
             {
                 context.Result = new ContentResult
@@ -41,7 +50,6 @@ namespace TwoDrive.WebApi.Filters
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            throw new NotImplementedException();
         }
     }
 }
