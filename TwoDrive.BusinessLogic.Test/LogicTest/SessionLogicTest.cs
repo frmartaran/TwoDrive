@@ -161,5 +161,43 @@ namespace TwoDrive.BusinessLogic.Test
             Assert.IsTrue(hasLevel);
 
         }
+
+        [TestMethod]
+        public void DoesntHaveLevel()
+        {
+            var context = ContextFactory.GetMemoryContext("Doesn't have test");
+            var repository = new SessionRepository(context);
+            var writer = new Writer
+            {
+                Id = 1,
+                UserName = "Username",
+                Password = "Password",
+                Role = Role.Writer,
+                Friends = new List<Writer>(),
+            };
+            var token = Guid.NewGuid();
+            var session = new Session
+            {
+                Writer = writer,
+                Token = token
+            };
+            context.Sessions.Add(session);
+            context.SaveChanges();
+            var logic = new SessionLogic(repository);
+            var hasLevel = logic.HasLevel(token);
+            Assert.IsFalse(hasLevel);
+
+        }
+
+        [TestMethod]
+        public void ThereIsNoSession()
+        {
+            var context = ContextFactory.GetMemoryContext("Doesn't have test");
+            var repository = new SessionRepository(context);
+            var token = Guid.NewGuid();
+            var logic = new SessionLogic(repository);
+            var hasLevel = logic.HasLevel(token);
+            Assert.IsFalse(hasLevel);
+        }
     }
 }
