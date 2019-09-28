@@ -93,7 +93,7 @@ namespace TwoDrive.BusinessLogic.Test
             mockRepository.Setup(m => m.GetAll())
                             .Returns(testList);
             var logic = new SessionLogic(mockRepository.Object);
-            Writer writer = logic.GetWriter(Guid.NewGuid());
+            Writer writer = logic.GetWriter(Guid.NewGuid().ToString());
             mockRepository.VerifyAll();
         }
 
@@ -119,7 +119,7 @@ namespace TwoDrive.BusinessLogic.Test
             context.Sessions.Add(session);
             context.SaveChanges();
 
-            var writerInDb = logic.GetWriter(token);
+            var writerInDb = logic.GetWriter(token.ToString());
             Assert.AreEqual(writer, writerInDb);
         }
 
@@ -131,7 +131,7 @@ namespace TwoDrive.BusinessLogic.Test
             var logic = new SessionLogic(repository);
             var token = Guid.NewGuid();
 
-            var writerInDb = logic.GetWriter(token);
+            var writerInDb = logic.GetWriter(token.ToString());
             Assert.IsNull(writerInDb);
         }
 
@@ -157,7 +157,7 @@ namespace TwoDrive.BusinessLogic.Test
             context.Sessions.Add(session);
             context.SaveChanges();
             var logic = new SessionLogic(repository);
-            var hasLevel = logic.HasLevel(token);
+            var hasLevel = logic.HasLevel(token.ToString());
             Assert.IsTrue(hasLevel);
 
         }
@@ -184,7 +184,7 @@ namespace TwoDrive.BusinessLogic.Test
             context.Sessions.Add(session);
             context.SaveChanges();
             var logic = new SessionLogic(repository);
-            var hasLevel = logic.HasLevel(token);
+            var hasLevel = logic.HasLevel(token.ToString());
             Assert.IsFalse(hasLevel);
 
         }
@@ -196,8 +196,61 @@ namespace TwoDrive.BusinessLogic.Test
             var repository = new SessionRepository(context);
             var token = Guid.NewGuid();
             var logic = new SessionLogic(repository);
-            var hasLevel = logic.HasLevel(token);
+            var hasLevel = logic.HasLevel(token.ToString());
             Assert.IsFalse(hasLevel);
+        }
+
+        [TestMethod]
+        public void IsValidTokenMock()
+        {
+            var mockRepository = new Mock<IRepository<Session>>(MockBehavior.Strict);
+            mockRepository.Setup(m => m.Exists(It.IsAny<Session>()))
+            .Returns(true);
+            var logic = new SessionLogic(mockRepository.Object);
+            logic.IsValidToken(Guid.NewGuid().ToString());
+            mockRepository.VerifyAll();
+        }
+
+        [TestMethod]
+        public void IsNotValidTokenMock()
+        {
+            var mockRepository = new Mock<IRepository<Session>>(MockBehavior.Strict);
+            mockRepository.Setup(m => m.Exists(It.IsAny<Session>()))
+            .Returns(false);
+            var logic = new SessionLogic(mockRepository.Object);
+            logic.IsValidToken(Guid.NewGuid().ToString());
+            mockRepository.VerifyAll();
+        }
+
+        [TestMethod]
+        public void IsValidToken()
+        {
+            var context = ContextFactory.GetMemoryContext("Is valid");
+            var token = Guid.NewGuid();
+            var session = new Session
+            {
+                Writer = new Writer(),
+                Token = token
+            };
+            var repository = new SessionRepository(context);
+            repository.Insert(session);
+            repository.Save();
+            var logic = new SessionLogic(repository);
+            var valid = logic.IsValidToken(token.ToString());
+            Assert.IsTrue(valid);
+
+        }
+
+        [TestMethod]
+        public void IsNotValidToken()
+        {
+            var context = ContextFactory.GetMemoryContext("Is valid");
+            var token = Guid.NewGuid();
+            var repository = new SessionRepository(context);
+            var logic = new SessionLogic(repository);
+            var valid = logic.IsValidToken(token.ToString());
+            Assert.IsFalse(valid);
+
         }
     }
 }

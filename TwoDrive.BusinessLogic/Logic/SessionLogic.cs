@@ -52,21 +52,26 @@ namespace TwoDrive.BusinessLogic.Logic
                         .FirstOrDefault();
         }
 
-        public Writer GetWriter(Guid token)
+        public Writer GetWriter(string token)
         {
             var writer = Repository.GetAll()
-                    .Where(s => s.Token == token)
+                    .Where(s => s.Token.ToString() == token)
                     .Select(s => s.Writer)
                     .FirstOrDefault();
             return writer;
         }
 
-        public bool HasLevel(Guid token)
+        public bool HasLevel(string token)
         {
             var writer = GetWriter(token);
             if(writer == null)
                 return false;
             return writer.Role == Role.Administrator;
+        }
+
+        public bool IsValidToken(string token)
+        {
+            throw new NotImplementedException();
         }
     }
 }

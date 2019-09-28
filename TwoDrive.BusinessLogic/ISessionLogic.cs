@@ -7,9 +7,11 @@ namespace TwoDrive.BusinessLogic
     {
         Guid? Create(string username, string password);
 
-        Writer GetWriter(Guid token);
+        Writer GetWriter(string token);
 
-        bool HasLevel(Guid token);
+        bool HasLevel(string token);
+
+        bool IsValidToken(string token);
 
 
     }

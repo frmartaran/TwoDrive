@@ -2,6 +2,7 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.Domain;
 
 namespace TwoDrive.WebApi.Filters
@@ -23,6 +24,16 @@ namespace TwoDrive.WebApi.Filters
                 {
                     StatusCode = 400,
                     Content = "Token is required"
+                };
+                return;
+            }
+            var sessionLogic = (SessionLogic)context.HttpContext.RequestServices.GetService(typeof(SessionLogic));
+            if (!sessionLogic.HasLevel(token))
+            {
+                context.Result = new ContentResult
+                {
+                    StatusCode = 400,
+                    Content = "The user is no authorized"
                 };
                 return;
             }
