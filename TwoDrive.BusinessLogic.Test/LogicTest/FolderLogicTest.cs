@@ -736,6 +736,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
             child.FolderChilden.Add(FirstGrandson);
             child.FolderChilden.Add(SecondGrandson);
+            child.FolderChilden.Add(ThirdGrandson);
             child.FolderChilden.Add(file);
             var secondChild = new Folder
             {
@@ -835,7 +836,7 @@ namespace TwoDrive.BusinessLogic.Test
             expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}|", fileThree.Name);
             expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}|", fileFour.Name);
             expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}\\", AnotherFolder.Name);
-            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix + prefix}|", fileFive.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix + prefix}\\", fileFive.Name);
             Assert.AreEqual(expectedString, tree);
         }
     }
