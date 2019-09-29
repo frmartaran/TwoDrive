@@ -520,12 +520,12 @@ namespace TwoDrive.BusinessLogic.Test
             Assert.AreEqual(" +- Root \n", tree);
         }
 
-         [TestMethod]
+        [TestMethod]
         public void ShowTreeTwoFolders()
         {
             var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
             var logic = new FolderLogic(mockDependecies.Object);
-              var child = new Folder
+            var child = new Folder
             {
                 Id = 2,
                 CreationDate = new DateTime(2019, 9, 22),
@@ -539,13 +539,13 @@ namespace TwoDrive.BusinessLogic.Test
             testList.Add(child);
             root.FolderChilden = testList;
             var tree = logic.ShowTree(root);
-            
+
             var expectedString = string.Format("{0} +- {1} \n", "", root.Name);
             expectedString += string.Format("{0} +- {1} \n", "      |", child.Name);
             Assert.AreEqual(expectedString, tree);
         }
 
-         [TestMethod]
+        [TestMethod]
         public void ShowTreeFolderAndFile()
         {
             var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
@@ -566,6 +566,92 @@ namespace TwoDrive.BusinessLogic.Test
             var tree = logic.ShowTree(root);
             var expectedString = string.Format("{0} +- {1} \n", "", root.Name);
             expectedString += string.Format("{0} +- {1} \n", "      |", file.Name);
+            Assert.AreEqual(expectedString, tree);
+        }
+
+        [TestMethod]
+        public void ShowTreeTwoChildFolders()
+        {
+            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
+            var logic = new FolderLogic(mockDependecies.Object);
+            var child = new Folder
+            {
+                Id = 2,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChilden = new List<Element>()
+            };
+            var secondChild = new Folder
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChilden = new List<Element>()
+            };
+            var testList = new List<Element>();
+            testList.Add(child);
+            testList.Add(secondChild);
+            root.FolderChilden = testList;
+            var tree = logic.ShowTree(root);
+
+            var expectedString = string.Format("{0} +- {1} \n", "", root.Name);
+            expectedString += string.Format("{0} +- {1} \n", "      |", child.Name);
+            expectedString += string.Format("{0} +- {1} \n", "      |", secondChild.Name);
+            Assert.AreEqual(expectedString, tree);
+        }
+
+        [TestMethod]
+        public void ShowTreeOfThreeLevels()
+        {
+            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
+            var logic = new FolderLogic(mockDependecies.Object);
+            var child = new Folder
+            {
+                Id = 2,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "First Child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChilden = new List<Element>()
+            };
+            var file = new TxtFile
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "File",
+                Owner = root.Owner,
+                ParentFolder = child,
+                Content = "Content"
+            };
+            child.FolderChilden.Add(file);
+            var secondChild = new Folder
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Second Child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChilden = new List<Element>()
+            };
+            var testList = new List<Element>();
+            testList.Add(child);
+            testList.Add(secondChild);
+            root.FolderChilden = testList;
+            var tree = logic.ShowTree(root);
+            var prefix = "      ";
+            var expectedString = string.Format("{0} +- {1} \n", "", root.Name);
+            expectedString += string.Format("{0} +- {1} \n", "      |", child.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"      {prefix}\\", file.Name);
+            expectedString += string.Format("{0} +- {1} \n", "      |", secondChild.Name);
             Assert.AreEqual(expectedString, tree);
         }
     }
