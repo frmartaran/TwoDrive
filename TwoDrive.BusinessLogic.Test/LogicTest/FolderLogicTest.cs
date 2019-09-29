@@ -184,7 +184,8 @@ namespace TwoDrive.BusinessLogic.Test
             var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
             mockFolderRepository.Setup(m => m.Delete(It.IsAny<int>()));
             mockFolderRepository
-            .Setup(m => m.Get(It.IsAny<int>()));
+            .Setup(m => m.Get(It.IsAny<int>()))
+            .Returns(root);
             mockFolderRepository.Setup(m => m.Save());
 
             var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
