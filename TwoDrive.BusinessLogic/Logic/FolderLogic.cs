@@ -28,7 +28,7 @@ namespace TwoDrive.BusinessLogic.Logic
             FolderRepository = dependencies.FolderRepository;
             ElementValidator = dependencies.ElementValidator;
             FileRepository = dependencies.FileRepository;
-}
+        }
         public void Create(Folder folder)
         {
             ElementValidator.isValid(folder);
@@ -67,13 +67,6 @@ namespace TwoDrive.BusinessLogic.Logic
                 return;
             }
         }
-
-
-        private static bool IsFile(Element folder)
-        {
-            return folder.GetType().IsSubclassOf(typeof(File));
-        }
-
         public Folder Get(int Id)
         {
             return FolderRepository.Get(Id);

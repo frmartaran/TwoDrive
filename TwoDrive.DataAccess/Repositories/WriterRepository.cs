@@ -9,11 +9,10 @@ namespace TwoDrive.DataAccess
     {
         public WriterRepository(TwoDriveDbContext current) : base(current)
         {
-            table = current.Set<Writer>();
+            table = current.Writers;
         }
         public override bool Exists(Writer writer)
         {
-            var holi = table.ToList();
             return table.Where(w => w.UserName.Equals(writer.UserName))
                         .Any();
         }

@@ -7,6 +7,7 @@ namespace TwoDrive.DataAccess
     {
         public FileRepository(TwoDriveDbContext current) : base(current)
         {
+            table = current.Files;
         }
 
         public override bool Exists(File file)
