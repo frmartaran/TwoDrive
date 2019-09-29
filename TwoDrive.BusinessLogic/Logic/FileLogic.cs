@@ -12,6 +12,11 @@ namespace TwoDrive.BusinessLogic
 
         private IValidator<File> FileValidator;
 
+        public FileLogic(IRepository<File> repository)
+        {
+            this.FileRepository = repository;
+        }
+
         public FileLogic(IRepository<File> repository, IValidator<File> validator)
         {
             this.FileRepository = repository;

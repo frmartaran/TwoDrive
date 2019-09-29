@@ -57,6 +57,37 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
         }
 
         [TestMethod]
+        public void GetFileLogic()
+        {
+            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            mockFileRepository.Setup(m => m.Get(It.IsAny<int>()))
+                        .Returns(file);
+
+            var logic = new FileLogic(mockFileRepository.Object);
+            var fileReturned = logic.Get(1);
+
+            mockFileRepository.VerifyAll();
+        }
+
+        [TestMethod]
+        public void GetFileLogicCheckState()
+        {
+            var context = ContextFactory.GetMemoryContext("Get test");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+
+            folderRepository.Insert(root);
+            folderRepository.Save();
+            fileRepository.Insert(file);
+            fileRepository.Save();
+
+            var logic = new FileLogic(fileRepository);
+            var folderinDb = logic.Get(1);
+
+            Assert.AreEqual(root, folderinDb);
+        }
+
+        [TestMethod]
         public void DeleteFile()
         {
             var mockRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
