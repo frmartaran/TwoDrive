@@ -84,5 +84,10 @@ namespace TwoDrive.BusinessLogic.Logic
             FolderRepository.Update(folder);
             FolderRepository.Save();
         }
+
+        public object ShowTree(Folder root)
+        {  
+            return $"+- {root.Name}"; 
+        }
     }
 }
