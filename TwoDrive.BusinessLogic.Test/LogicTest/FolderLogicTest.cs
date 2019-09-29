@@ -519,5 +519,52 @@ namespace TwoDrive.BusinessLogic.Test
 
             Assert.AreEqual("+- Root", tree);
         }
+
+         [TestMethod]
+        public void ShowTreeTwoFolders()
+        {
+            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
+            var logic = new FolderLogic(mockDependecies.Object);
+            var tree = logic.ShowTree(root);
+              var child = new Folder
+            {
+                Id = 2,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChilden = new List<Element>()
+            };
+            var testList = new List<Element>();
+            testList.Add(child);
+            root.FolderChilden = testList;
+            
+            var expectedString = "+- Root\n\t+-child";
+            Assert.AreEqual(expectedString, tree);
+        }
+
+         [TestMethod]
+        public void ShowTreeFolderAndFile()
+        {
+            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
+            var logic = new FolderLogic(mockDependecies.Object);
+            var tree = logic.ShowTree(root);
+            var file = new TxtFile
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                Content = "Content"
+            };
+            var testList = new List<Element>();
+            testList.Add(file);
+            root.FolderChilden = testList;
+            var expectedString = "+- Root\n\t+-child";
+            Assert.AreEqual(expectedString, tree);
+        }
     }
 }
