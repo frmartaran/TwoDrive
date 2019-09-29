@@ -97,7 +97,8 @@ namespace TwoDrive.BusinessLogic.Logic
         {
             if (element is Folder folder)
             {
-                var children = folder.FolderChilden.ToList();
+                var elementInlcudingChilds = FolderRepository.Get(folder.Id);
+                var children = elementInlcudingChilds.FolderChilden.ToList();
                 if (children.Count == 0)
                     return;
                 foreach (var child in children)
