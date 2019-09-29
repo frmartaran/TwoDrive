@@ -26,7 +26,8 @@ namespace TwoDrive.BusinessLogic.Test
             root = new Folder
             {
                 Id = 1,
-                Name = "Root"
+                Name = "Root",
+                FolderChilden = new List<Element>()
             };
             file = new TxtFile
             {
@@ -64,9 +65,14 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var context = ContextFactory.GetMemoryContext("Create Test");
             var fileRepository = new FileRepository(context);
+            var folderRepository = new FolderRepository(context);
+
+            folderRepository.Insert(root);
+            folderRepository.Save();
             var fileValidator = new FileValidator();
             var fileLogic = new FileLogic(fileRepository, fileValidator);
             fileLogic.Create(file);
+
             var fileInsertedInDB = fileLogic.Get(2);
             Assert.AreEqual(2, fileInsertedInDB.Id);
         }
@@ -97,7 +103,7 @@ namespace TwoDrive.BusinessLogic.Test
             fileRepository.Save();
 
             var logic = new FileLogic(fileRepository);
-            var fileInDb = logic.Get(1);
+            var fileInDb = logic.Get(2);
 
             Assert.AreEqual(file.Id, fileInDb.Id);
         }
@@ -180,7 +186,6 @@ namespace TwoDrive.BusinessLogic.Test
             logic.Update(file);
             mockFileRepository.VerifyAll();
             mockFileValidator.VerifyAll();
-
         }
 
         [TestMethod]
@@ -199,7 +204,7 @@ namespace TwoDrive.BusinessLogic.Test
             var logic = new FileLogic(fileRepository, fileValidator);
             logic.Update(file);
 
-            var fileInDb = fileRepository.Get(1);
+            var fileInDb = fileRepository.Get(2);
             var txtFile = (TxtFile) fileInDb;
 
             Assert.AreEqual(typeof(TxtFile), fileInDb.GetType());
