@@ -540,8 +540,9 @@ namespace TwoDrive.BusinessLogic.Test
             root.FolderChilden = testList;
             var tree = logic.ShowTree(root);
 
+            var prefix = "      ";
             var expectedString = string.Format("{0} +- {1} \n", "", root.Name);
-            expectedString += string.Format("{0} +- {1} \n", "      |", child.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix}\\", child.Name);
             Assert.AreEqual(expectedString, tree);
         }
 
@@ -564,8 +565,9 @@ namespace TwoDrive.BusinessLogic.Test
             testList.Add(file);
             root.FolderChilden = testList;
             var tree = logic.ShowTree(root);
+            var prefix = "      ";
             var expectedString = string.Format("{0} +- {1} \n", "", root.Name);
-            expectedString += string.Format("{0} +- {1} \n", "      |", file.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix}\\", file.Name);
             Assert.AreEqual(expectedString, tree);
         }
 
@@ -600,9 +602,10 @@ namespace TwoDrive.BusinessLogic.Test
             root.FolderChilden = testList;
             var tree = logic.ShowTree(root);
 
+            var prefix = "      ";
             var expectedString = string.Format("{0} +- {1} \n", "", root.Name);
-            expectedString += string.Format("{0} +- {1} \n", "      |", child.Name);
-            expectedString += string.Format("{0} +- {1} \n", "      |", secondChild.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix}|", child.Name);
+            expectedString += string.Format("{0} +- {1} \n", "      \\", secondChild.Name);
             Assert.AreEqual(expectedString, tree);
         }
 
@@ -650,8 +653,189 @@ namespace TwoDrive.BusinessLogic.Test
             var prefix = "      ";
             var expectedString = string.Format("{0} +- {1} \n", "", root.Name);
             expectedString += string.Format("{0} +- {1} \n", "      |", child.Name);
-            expectedString += string.Format("{0} +- {1} \n", $"      {prefix}\\", file.Name);
-            expectedString += string.Format("{0} +- {1} \n", "      |", secondChild.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}\\", file.Name);
+            expectedString += string.Format("{0} +- {1} \n", "      \\", secondChild.Name);
+            Assert.AreEqual(expectedString, tree);
+        }
+
+        [TestMethod]
+        public void ShowComplexTree()
+        {
+            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
+            var logic = new FolderLogic(mockDependecies.Object);
+            var child = new Folder
+            {
+                Id = 2,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "First Child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChilden = new List<Element>()
+            };
+            var FirstGrandson = new Folder
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 1",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChilden = new List<Element>()
+            };
+            var SecondGrandson = new Folder
+            {
+                Id = 4,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 2",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChilden = new List<Element>()
+            };
+            var SecondGrandsonFile = new TxtFile
+            {
+                Id = 5,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson Child 1",
+                Owner = root.Owner,
+                ParentFolder = SecondGrandson,
+                Content = "Content"
+            };var SecondGrandsonFileTwo = new TxtFile
+            {
+                Id = 6,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson Child 2",
+                Owner = root.Owner,
+                ParentFolder = SecondGrandson,
+                Content = "Content"
+            };
+            SecondGrandson.FolderChilden.Add(SecondGrandsonFile);
+            SecondGrandson.FolderChilden.Add(SecondGrandsonFileTwo);
+            var ThirdGrandson = new Folder
+            {
+                Id = 2,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 3",
+                Owner = root.Owner,
+                ParentFolder = child,
+                FolderChilden = new List<Element>()
+            };
+            var file = new TxtFile
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 4",
+                Owner = root.Owner,
+                ParentFolder = child,
+                Content = "Content"
+            };
+            child.FolderChilden.Add(FirstGrandson);
+            child.FolderChilden.Add(SecondGrandson);
+            child.FolderChilden.Add(file);
+            var secondChild = new Folder
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Second Child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChilden = new List<Element>()
+            };
+            
+            var fileOne = new TxtFile
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 5",
+                Owner = root.Owner,
+                ParentFolder = secondChild,
+                Content = "Content"
+            };
+            var fileTwo = new TxtFile
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 6",
+                Owner = root.Owner,
+                ParentFolder = secondChild,
+                Content = "Content"
+            };
+            var fileThree = new TxtFile
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 7",
+                Owner = root.Owner,
+                ParentFolder = secondChild,
+                Content = "Content"
+            };
+            var fileFour = new TxtFile
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 8",
+                Owner = root.Owner,
+                ParentFolder = secondChild,
+                Content = "Content"
+            };
+            var AnotherFolder = new Folder
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 9",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChilden = new List<Element>()
+            };
+            var fileFive = new TxtFile
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 9 Child",
+                Owner = root.Owner,
+                ParentFolder = AnotherFolder,
+                Content = "Content"
+            };
+            AnotherFolder.FolderChilden.Add(fileFive);
+            secondChild.FolderChilden.Add(fileOne);
+            secondChild.FolderChilden.Add(fileTwo);
+            secondChild.FolderChilden.Add(fileThree);
+            secondChild.FolderChilden.Add(fileFour);
+            secondChild.FolderChilden.Add(AnotherFolder);
+
+            var testList = new List<Element>();
+            testList.Add(child);
+            testList.Add(secondChild);
+            root.FolderChilden = testList;
+            var tree = logic.ShowTree(root);
+            var prefix = "      ";
+            var expectedString = string.Format("{0} +- {1} \n", "", root.Name);
+            expectedString += string.Format("{0} +- {1} \n", "      |", child.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}|", FirstGrandson.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}|", SecondGrandson.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix + prefix}|", SecondGrandsonFile.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix + prefix}\\", SecondGrandsonFileTwo.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}|", ThirdGrandson.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}\\", file.Name);
+            expectedString += string.Format("{0} +- {1} \n", "      \\", secondChild.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}|", fileOne.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}|", fileTwo.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}|", fileThree.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}|", fileFour.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}\\", AnotherFolder.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix + prefix}|", fileFive.Name);
             Assert.AreEqual(expectedString, tree);
         }
     }
