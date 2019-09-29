@@ -8,6 +8,7 @@ using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Validators;
+using TwoDrive.Domain;
 
 namespace TwoDrive.BusinessLogic.Test
 {
@@ -21,17 +22,21 @@ namespace TwoDrive.BusinessLogic.Test
         [TestInitialize]
         public void SetUp()
         {
+            var writer = new Writer();
             root = new Folder
             {
+                Id = 1,
                 Name = "Root"
             };
             file = new TxtFile
             {
-                Id = 1,
+                Id = 2,
                 Content = "TestFile",
+                Name = "FileName",
                 CreationDate = DateTime.Now,
                 DateModified = DateTime.Now,
-                ParentFolder = root
+                ParentFolder = root,
+                Owner = writer
             };
         }
 
@@ -59,10 +64,11 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var context = ContextFactory.GetMemoryContext("Create Test");
             var fileRepository = new FileRepository(context);
-            var fileLogic = new FileLogic(fileRepository);
+            var fileValidator = new FileValidator();
+            var fileLogic = new FileLogic(fileRepository, fileValidator);
             fileLogic.Create(file);
-            var fileInsertedInDB = fileLogic.Get(1);
-            Assert.AreEqual(1, fileInsertedInDB.Id);
+            var fileInsertedInDB = fileLogic.Get(2);
+            Assert.AreEqual(2, fileInsertedInDB.Id);
         }
 
         [TestMethod]

@@ -10,12 +10,20 @@ namespace TwoDrive.BusinessLogic.Validators
         protected override void ValidateNamesAtSameLevel(Element element)
         {
             var ParentFolder = element.ParentFolder;
-            var hasSameName = ParentFolder.FolderChilden
-            .Where(f => f.Name == element.Name)
-            .Where(f => f.GetType() == element.GetType())
-            .Any();
-            if (hasSameName)
-                throw new ArgumentException("Two files at same level can have the same name");
+            if (!IsEmpty(ParentFolder))
+            {
+                var hasSameName = ParentFolder.FolderChilden
+                    .Where(f => f.Name == element.Name)
+                    .Where(f => f.GetType() == element.GetType())
+                    .Any();
+                if (hasSameName)
+                    throw new ArgumentException("Two files at same level can have the same name");
+            }
+        }
+
+        private static bool IsEmpty(Folder ParentFolder)
+        {
+            return ParentFolder.FolderChilden == null || ParentFolder.FolderChilden.Count == 0;
         }
 
         protected override void ValidateParentFolder(Element element)
