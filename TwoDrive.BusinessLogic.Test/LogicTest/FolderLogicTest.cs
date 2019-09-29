@@ -517,7 +517,7 @@ namespace TwoDrive.BusinessLogic.Test
             var logic = new FolderLogic(mockDependecies.Object);
             var tree = logic.ShowTree(root);
 
-            Assert.AreEqual("+- Root", tree);
+            Assert.AreEqual(" +- Root \n", tree);
         }
 
          [TestMethod]
@@ -525,7 +525,6 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
             var logic = new FolderLogic(mockDependecies.Object);
-            var tree = logic.ShowTree(root);
               var child = new Folder
             {
                 Id = 2,
@@ -539,8 +538,10 @@ namespace TwoDrive.BusinessLogic.Test
             var testList = new List<Element>();
             testList.Add(child);
             root.FolderChilden = testList;
+            var tree = logic.ShowTree(root);
             
-            var expectedString = "+- Root\n\t+-child";
+            var expectedString = string.Format("{0} +- {1} \n", "", root.Name);
+            expectedString += string.Format("{0} +- {1} \n", "      |", child.Name);
             Assert.AreEqual(expectedString, tree);
         }
 
@@ -549,7 +550,6 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
             var logic = new FolderLogic(mockDependecies.Object);
-            var tree = logic.ShowTree(root);
             var file = new TxtFile
             {
                 Id = 3,
@@ -563,7 +563,9 @@ namespace TwoDrive.BusinessLogic.Test
             var testList = new List<Element>();
             testList.Add(file);
             root.FolderChilden = testList;
-            var expectedString = "+- Root\n\t+-child";
+            var tree = logic.ShowTree(root);
+            var expectedString = string.Format("{0} +- {1} \n", "", root.Name);
+            expectedString += string.Format("{0} +- {1} \n", "      |", file.Name);
             Assert.AreEqual(expectedString, tree);
         }
     }

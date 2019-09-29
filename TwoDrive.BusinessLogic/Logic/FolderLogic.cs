@@ -86,8 +86,15 @@ namespace TwoDrive.BusinessLogic.Logic
         }
 
         public object ShowTree(Folder root)
-        {  
-            return $"+- {root.Name}"; 
+        {
+            var tree = string.Format("{0} +- {1} \n", "", root.Name);
+            foreach (var child in root.FolderChilden)
+            {
+                tree += string.Format("{0} +- {1} \n", "      |", child.Name);
+                Console.Write(tree);
+
+            }
+            return tree;
         }
     }
 }
