@@ -31,11 +31,11 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "Root",
                 Owner = owner,
                 ParentFolder = null,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
 
             var validator = new FolderValidator();
-            var isValid = validator.isValid(folder);
+            var isValid = validator.IsValid(folder);
 
             Assert.IsTrue(isValid);
         }
@@ -49,7 +49,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "Root",
                 Owner = owner,
                 ParentFolder = null,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
 
             var child = new Folder
@@ -60,7 +60,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             var validator = new FolderValidator();
-            var isValid = validator.isValid(child);
+            var isValid = validator.IsValid(child);
 
             Assert.IsTrue(isValid);
         }
@@ -73,7 +73,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "Root",
                 Owner = owner,
                 ParentFolder = null,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
 
             var file = new TxtFile
@@ -86,7 +86,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             var validator = new FileValidator();
-            var isValid = validator.isValid(file);
+            var isValid = validator.IsValid(file);
 
             Assert.IsTrue(isValid);
         }
@@ -103,7 +103,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             var validator = new FolderValidator();
-            var isValid = validator.isValid(folder);
+            var isValid = validator.IsValid(folder);
 
         }
 
@@ -128,7 +128,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             var validator = new FileValidator();
-            var isValid = validator.isValid(file);
+            var isValid = validator.IsValid(file);
 
         }
 
@@ -144,7 +144,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             var validator = new FolderValidator();
-            var isValid = validator.isValid(folder);
+            var isValid = validator.IsValid(folder);
 
         }
 
@@ -169,7 +169,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             var validator = new FileValidator();
-            var isValid = validator.isValid(file);
+            var isValid = validator.IsValid(file);
 
         }
 
@@ -185,7 +185,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             var validator = new FolderValidator();
-            var isValid = validator.isValid(folder);
+            var isValid = validator.IsValid(folder);
 
         }
 
@@ -203,7 +203,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             var validator = new FileValidator();
-            var isValid = validator.isValid(file);
+            var isValid = validator.IsValid(file);
 
         }
 
@@ -234,10 +234,10 @@ namespace TwoDrive.BusinessLogic.Test
 
             var children = new List<Element>();
             children.Add(firstChild);
-            root.FolderChilden = children;
+            root.FolderChildren = children;
 
             var validator = new FolderValidator();
-            var isValid = validator.isValid(secondChild);
+            var isValid = validator.IsValid(secondChild);
 
         }
 
@@ -272,10 +272,10 @@ namespace TwoDrive.BusinessLogic.Test
 
             var children = new List<Element>();
             children.Add(firstChild);
-            root.FolderChilden = children;
+            root.FolderChildren = children;
 
             var validator = new FileValidator();
-            var isValid = validator.isValid(secondChild);
+            var isValid = validator.IsValid(secondChild);
 
         }
 
@@ -288,7 +288,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "Root",
                 ParentFolder = null,
                 Owner = owner,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
 
             var file = new TxtFile
@@ -301,7 +301,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             var validator = new FileValidator();
-            var isValid = validator.isValid(file);
+            var isValid = validator.IsValid(file);
 
         }
 

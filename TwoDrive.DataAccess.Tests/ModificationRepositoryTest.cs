@@ -17,7 +17,7 @@ namespace TwoDrive.DataAccess.Tests
             {
                 Id = 3,
                 Name = "Root",
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var modification = new Modification
             {
@@ -40,7 +40,7 @@ namespace TwoDrive.DataAccess.Tests
             {
                 Id = 3,
                 Name = "Root",
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var modification = new Modification
             {
@@ -66,7 +66,7 @@ namespace TwoDrive.DataAccess.Tests
             {
                 Id = 3,
                 Name = "Root",
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var modification = new Modification
             {
@@ -93,7 +93,7 @@ namespace TwoDrive.DataAccess.Tests
             {
                 Id = 3,
                 Name = "Root",
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var modification = new Modification
             {
@@ -117,7 +117,7 @@ namespace TwoDrive.DataAccess.Tests
             {
                 Id = 3,
                 Name = "Root",
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var modification = new Modification
             {
@@ -141,7 +141,7 @@ namespace TwoDrive.DataAccess.Tests
             {
                 Id = 3,
                 Name = "Root",
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var modification = new Modification
             {

@@ -62,7 +62,7 @@ namespace TwoDrive.BusinessLogic.Test
 
             root.Owner = writer;
             var validator = new WriterValidator(repository);
-            bool isValid = validator.isValid(writer);
+            bool isValid = validator.IsValid(writer);
 
             Assert.AreEqual(true, isValid);
         }
@@ -82,7 +82,7 @@ namespace TwoDrive.BusinessLogic.Test
 
             root.Owner = writer;
             var validator = new WriterValidator(repository);
-            bool isValid = validator.isValid(writer);
+            bool isValid = validator.IsValid(writer);
 
         }
 
@@ -101,7 +101,7 @@ namespace TwoDrive.BusinessLogic.Test
 
             root.Owner = writer;
             var validator = new WriterValidator(repository);
-            bool isValid = validator.isValid(writer);
+            bool isValid = validator.IsValid(writer);
         }
 
         [TestMethod]
@@ -128,7 +128,7 @@ namespace TwoDrive.BusinessLogic.Test
             root.Owner = writer;
             writer.Friends.Add(friend);
             var validator = new WriterValidator(repository);
-            bool isValid = validator.isValid(writer);
+            bool isValid = validator.IsValid(writer);
 
             Assert.IsTrue(isValid);
 
@@ -149,7 +149,7 @@ namespace TwoDrive.BusinessLogic.Test
 
             root.Owner = writer;
             var validator = new WriterValidator(repository);
-            bool isValid = validator.isValid(writer);
+            bool isValid = validator.IsValid(writer);
         }
 
         [TestMethod]
@@ -168,7 +168,7 @@ namespace TwoDrive.BusinessLogic.Test
 
             root.Owner = writer;
             var validator = new WriterValidator(repository);
-            bool isValid = validator.isValid(writer);
+            bool isValid = validator.IsValid(writer);
         }
 
         [TestMethod]
@@ -195,7 +195,7 @@ namespace TwoDrive.BusinessLogic.Test
             writer.Claims.Add(delete);
 
             var validator = new WriterValidator(repository);
-            bool isValid = validator.isValid(writer);
+            bool isValid = validator.IsValid(writer);
         }
 
         [TestMethod]
@@ -216,7 +216,7 @@ namespace TwoDrive.BusinessLogic.Test
             writer.Claims.Remove(read);
 
             var validator = new WriterValidator(repository);
-            bool isValid = validator.isValid(writer);
+            bool isValid = validator.IsValid(writer);
         }
 
         [TestMethod]
@@ -237,7 +237,7 @@ namespace TwoDrive.BusinessLogic.Test
             writer.Claims.Remove(write);
 
             var validator = new WriterValidator(repository);
-            bool isValid = validator.isValid(writer);
+            bool isValid = validator.IsValid(writer);
         }
 
         [TestMethod]
@@ -258,7 +258,7 @@ namespace TwoDrive.BusinessLogic.Test
             writer.Claims.Remove(share);
 
             var validator = new WriterValidator(repository);
-            bool isValid = validator.isValid(writer);
+            bool isValid = validator.IsValid(writer);
         }
 
         [TestMethod]
@@ -293,7 +293,7 @@ namespace TwoDrive.BusinessLogic.Test
             anotherWriter.Claims = claims;
 
             var validator = new WriterValidator(repository);
-            validator.isValid(anotherWriter);
+            validator.IsValid(anotherWriter);
 
         }
 

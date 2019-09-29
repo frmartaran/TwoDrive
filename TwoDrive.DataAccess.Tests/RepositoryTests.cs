@@ -26,7 +26,7 @@ namespace TwoDrive.DataAccess.Tests
             {
                 Id = 3,
                 Name = "Root",
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var file = new TxtFile
             {
@@ -89,7 +89,7 @@ namespace TwoDrive.DataAccess.Tests
             {
                 Id = 3,
                 Name = "Root",
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var file = new TxtFile
             {

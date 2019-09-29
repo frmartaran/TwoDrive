@@ -18,7 +18,7 @@ namespace TwoDrive.DataAccess.Tests
             {
                 Id = 1,
                 Name = "Root",
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
 
             var repository = new FolderRepository(memoryDb);
@@ -37,7 +37,7 @@ namespace TwoDrive.DataAccess.Tests
             {
                 Id = 1,
                 Name = "Root",
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var repository = new FolderRepository(memoryDb);
             repository.Insert(folder);
@@ -56,7 +56,7 @@ namespace TwoDrive.DataAccess.Tests
             {
                 Id = 1,
                 Name = "Root",
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             repository.Insert(folder);
             repository.Save();
@@ -81,7 +81,7 @@ namespace TwoDrive.DataAccess.Tests
             {
                 Id = 1,
                 Name = "Root",
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             repository.Insert(folder);
             repository.Save();
@@ -105,14 +105,14 @@ namespace TwoDrive.DataAccess.Tests
             {
                 Id = 1,
                 Name = "Root",
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var child = new Folder
             {
                 Id = 2,
                 Name = "Child",
                 ParentFolder = folder,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             repository.Insert(folder);
             repository.Insert(child);
@@ -134,14 +134,14 @@ namespace TwoDrive.DataAccess.Tests
             {
                 Id = 3,
                 Name = "Root",
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var folder = new Folder
             {
                 Id = 5,
                 Name = "Folder",
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             repository.Insert(root);
             repository.Insert(folder);

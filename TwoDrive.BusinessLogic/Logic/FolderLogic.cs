@@ -31,7 +31,7 @@ namespace TwoDrive.BusinessLogic.Logic
         }
         public void Create(Folder folder)
         {
-            ElementValidator.isValid(folder);
+            ElementValidator.IsValid(folder);
             FolderRepository.Insert(folder);
             FolderRepository.Save();
         }
@@ -44,17 +44,17 @@ namespace TwoDrive.BusinessLogic.Logic
         {
             if (element is Folder folder)
             {
-                if (folder.FolderChilden.Count == 0)
+                if (folder.FolderChildren.Count == 0)
                 {
                     FolderRepository.Delete(element.Id);
                     FolderRepository.Save();
                     return;
                 }
-                var child = folder.FolderChilden.FirstOrDefault();
+                var child = folder.FolderChildren.FirstOrDefault();
                 while (child != null)
                 {
                     DeleteChildren(child);
-                    child = folder.FolderChilden.FirstOrDefault();
+                    child = folder.FolderChildren.FirstOrDefault();
                 }
                 DeleteChildren(element);
             }
@@ -79,7 +79,7 @@ namespace TwoDrive.BusinessLogic.Logic
         public void Update(Folder folder)
         {
             var newDateModified = DateTime.Now;
-            ElementValidator.isValid(folder);
+            ElementValidator.IsValid(folder);
             folder.DateModified = newDateModified;
             FolderRepository.Update(folder);
             FolderRepository.Save();
@@ -97,13 +97,13 @@ namespace TwoDrive.BusinessLogic.Logic
         {
             if (element is Folder folder)
             {
-                var elementInlcudingChilds = FolderRepository.Get(folder.Id);
-                var children = elementInlcudingChilds.FolderChilden.ToList();
+                var folderWithChildren = FolderRepository.Get(folder.Id);
+                var children = folderWithChildren.FolderChildren.ToList();
                 if (children.Count == 0)
                     return;
                 foreach (var child in children)
                 {
-                    if (children.IndexOf(child) == folder.FolderChilden.Count - 1)
+                    if (children.IndexOf(child) == folder.FolderChildren.Count - 1)
                         tree += string.Format("{0} +- {1} \n", $"{prefix}\\", child.Name);
                     else
                         tree += string.Format("{0} +- {1} \n", $"{prefix}|", child.Name);

@@ -29,7 +29,7 @@ namespace TwoDrive.BusinessLogic.Test
                 DateModified = new DateTime(2019, 9, 22),
                 Name = "Root",
                 Owner = writer,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
 
         }
@@ -46,7 +46,7 @@ namespace TwoDrive.BusinessLogic.Test
             mockFileRepository.Setup(m => m.Save());
 
             var mockElementValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
-            mockElementValidator.Setup(m => m.isValid(It.IsAny<Element>()))
+            mockElementValidator.Setup(m => m.IsValid(It.IsAny<Element>()))
             .Returns(true);
 
             var folderLogicDependencies = new FolderLogicDependencies
@@ -99,7 +99,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var file = new TxtFile
             {
@@ -111,7 +111,7 @@ namespace TwoDrive.BusinessLogic.Test
                 ParentFolder = root,
                 Content = "Content"
             };
-            root.FolderChilden.Add(child);
+            root.FolderChildren.Add(child);
             folderRepository.Insert(child);
             fileRepository.Insert(file);
             folderRepository.Update(root);
@@ -142,7 +142,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var secondChild = new Folder
             {
@@ -152,7 +152,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child 2",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var grandson = new Folder
             {
@@ -162,10 +162,10 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child 3",
                 Owner = root.Owner,
                 ParentFolder = child,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
-            root.FolderChilden.Add(child);
-            child.FolderChilden.Add(grandson);
+            root.FolderChildren.Add(child);
+            child.FolderChildren.Add(grandson);
             folderRepository.Insert(child);
             folderRepository.Insert(secondChild);
             folderRepository.Update(root);
@@ -227,9 +227,9 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
-            root.FolderChilden.Add(child);
+            root.FolderChildren.Add(child);
             folderRepository.Insert(child);
             folderRepository.Update(root);
             folderRepository.Save();
@@ -258,7 +258,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var secondChild = new Folder
             {
@@ -268,9 +268,9 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child 2",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
-            root.FolderChilden.Add(child);
+            root.FolderChildren.Add(child);
             folderRepository.Insert(child);
             folderRepository.Insert(secondChild);
             folderRepository.Update(root);
@@ -300,7 +300,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var file = new TxtFile
             {
@@ -312,7 +312,7 @@ namespace TwoDrive.BusinessLogic.Test
                 ParentFolder = root,
                 Content = "Content"
             };
-            root.FolderChilden.Add(child);
+            root.FolderChildren.Add(child);
             folderRepository.Insert(child);
             fileRepository.Insert(file);
             folderRepository.Update(root);
@@ -342,7 +342,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var secondChild = new Folder
             {
@@ -352,7 +352,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child 2",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var grandson = new Folder
             {
@@ -362,10 +362,10 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child 3",
                 Owner = root.Owner,
                 ParentFolder = child,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
-            root.FolderChilden.Add(child);
-            child.FolderChilden.Add(grandson);
+            root.FolderChildren.Add(child);
+            child.FolderChildren.Add(grandson);
             folderRepository.Insert(child);
             folderRepository.Insert(secondChild);
             folderRepository.Update(root);
@@ -394,7 +394,7 @@ namespace TwoDrive.BusinessLogic.Test
 
             mockFolderRepository.Setup(m => m.Update(It.IsAny<Folder>()));
             mockFolderRepository.Setup(m => m.Save());
-            mockFolderValidator.Setup(m => m.isValid(It.IsAny<Element>()))
+            mockFolderValidator.Setup(m => m.IsValid(It.IsAny<Element>()))
             .Returns(true);
 
             root.Name = "Root 2.0";
@@ -533,11 +533,11 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var testList = new List<Element>();
             testList.Add(child);
-            root.FolderChilden = testList;
+            root.FolderChildren = testList;
             var tree = logic.ShowTree(root);
 
             var prefix = "      ";
@@ -563,7 +563,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
             var testList = new List<Element>();
             testList.Add(file);
-            root.FolderChilden = testList;
+            root.FolderChildren = testList;
             var tree = logic.ShowTree(root);
             var prefix = "      ";
             var expectedString = string.Format("{0} +- {1} \n", "", root.Name);
@@ -584,7 +584,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var secondChild = new Folder
             {
@@ -594,12 +594,12 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var testList = new List<Element>();
             testList.Add(child);
             testList.Add(secondChild);
-            root.FolderChilden = testList;
+            root.FolderChildren = testList;
             var tree = logic.ShowTree(root);
 
             var prefix = "      ";
@@ -622,7 +622,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "First Child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var file = new TxtFile
             {
@@ -634,7 +634,7 @@ namespace TwoDrive.BusinessLogic.Test
                 ParentFolder = child,
                 Content = "Content"
             };
-            child.FolderChilden.Add(file);
+            child.FolderChildren.Add(file);
             var secondChild = new Folder
             {
                 Id = 3,
@@ -643,12 +643,12 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "Second Child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var testList = new List<Element>();
             testList.Add(child);
             testList.Add(secondChild);
-            root.FolderChilden = testList;
+            root.FolderChildren = testList;
             var tree = logic.ShowTree(root);
             var prefix = "      ";
             var expectedString = string.Format("{0} +- {1} \n", "", root.Name);
@@ -671,7 +671,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "First Child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var FirstGrandson = new Folder
             {
@@ -681,7 +681,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "Grandson 1",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var SecondGrandson = new Folder
             {
@@ -691,7 +691,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "Grandson 2",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var SecondGrandsonFile = new TxtFile
             {
@@ -712,8 +712,8 @@ namespace TwoDrive.BusinessLogic.Test
                 ParentFolder = SecondGrandson,
                 Content = "Content"
             };
-            SecondGrandson.FolderChilden.Add(SecondGrandsonFile);
-            SecondGrandson.FolderChilden.Add(SecondGrandsonFileTwo);
+            SecondGrandson.FolderChildren.Add(SecondGrandsonFile);
+            SecondGrandson.FolderChildren.Add(SecondGrandsonFileTwo);
             var ThirdGrandson = new Folder
             {
                 Id = 2,
@@ -722,7 +722,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "Grandson 3",
                 Owner = root.Owner,
                 ParentFolder = child,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var file = new TxtFile
             {
@@ -734,10 +734,10 @@ namespace TwoDrive.BusinessLogic.Test
                 ParentFolder = child,
                 Content = "Content"
             };
-            child.FolderChilden.Add(FirstGrandson);
-            child.FolderChilden.Add(SecondGrandson);
-            child.FolderChilden.Add(ThirdGrandson);
-            child.FolderChilden.Add(file);
+            child.FolderChildren.Add(FirstGrandson);
+            child.FolderChildren.Add(SecondGrandson);
+            child.FolderChildren.Add(ThirdGrandson);
+            child.FolderChildren.Add(file);
             var secondChild = new Folder
             {
                 Id = 3,
@@ -746,7 +746,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "Second Child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             
             var fileOne = new TxtFile
@@ -797,7 +797,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "Grandson 9",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var fileFive = new TxtFile
             {
@@ -809,17 +809,17 @@ namespace TwoDrive.BusinessLogic.Test
                 ParentFolder = AnotherFolder,
                 Content = "Content"
             };
-            AnotherFolder.FolderChilden.Add(fileFive);
-            secondChild.FolderChilden.Add(fileOne);
-            secondChild.FolderChilden.Add(fileTwo);
-            secondChild.FolderChilden.Add(fileThree);
-            secondChild.FolderChilden.Add(fileFour);
-            secondChild.FolderChilden.Add(AnotherFolder);
+            AnotherFolder.FolderChildren.Add(fileFive);
+            secondChild.FolderChildren.Add(fileOne);
+            secondChild.FolderChildren.Add(fileTwo);
+            secondChild.FolderChildren.Add(fileThree);
+            secondChild.FolderChildren.Add(fileFour);
+            secondChild.FolderChildren.Add(AnotherFolder);
 
             var testList = new List<Element>();
             testList.Add(child);
             testList.Add(secondChild);
-            root.FolderChilden = testList;
+            root.FolderChildren = testList;
             var tree = logic.ShowTree(root);
             var prefix = "      ";
             var expectedString = string.Format("{0} +- {1} \n", "", root.Name);

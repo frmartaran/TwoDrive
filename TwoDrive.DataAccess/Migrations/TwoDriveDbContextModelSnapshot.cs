@@ -89,6 +89,23 @@ namespace TwoDrive.DataAccess.Migrations
                     b.ToTable("Modifications");
                 });
 
+            modelBuilder.Entity("TwoDrive.Domain.Session", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<Guid>("Token");
+
+                    b.Property<int?>("WriterId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WriterId");
+
+                    b.ToTable("Sessions");
+                });
+
             modelBuilder.Entity("TwoDrive.Domain.Writer", b =>
                 {
                     b.Property<int>("Id")
@@ -151,7 +168,7 @@ namespace TwoDrive.DataAccess.Migrations
                         .HasForeignKey("OwnerId");
 
                     b.HasOne("TwoDrive.Domain.FileManagement.Folder", "ParentFolder")
-                        .WithMany("FolderChilden")
+                        .WithMany("FolderChildren")
                         .HasForeignKey("ParentFolderId");
                 });
 
@@ -161,6 +178,13 @@ namespace TwoDrive.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("ElementId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TwoDrive.Domain.Session", b =>
+                {
+                    b.HasOne("TwoDrive.Domain.Writer", "Writer")
+                        .WithMany()
+                        .HasForeignKey("WriterId");
                 });
 
             modelBuilder.Entity("TwoDrive.Domain.Writer", b =>

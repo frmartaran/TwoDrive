@@ -15,7 +15,7 @@ namespace TwoDrive.DataAccess
         public override Folder Get(int Id)
         {
             return table
-                .Include(f => f.FolderChilden)
+                .Include(f => f.FolderChildren)
                 .Where(f => f.Id == Id)
                 .FirstOrDefault();
         }
@@ -23,7 +23,7 @@ namespace TwoDrive.DataAccess
         public override ICollection<Folder> GetAll()
         {
             return table
-                .Include(f => f.FolderChilden)
+                .Include(f => f.FolderChildren)
                 .ToList();
         }
 
