@@ -9,6 +9,7 @@ namespace TwoDrive.DataAccess
     {
         public FolderRepository(TwoDriveDbContext current) : base(current)
         {
+            table = current.Folders;
         }
 
         public override Folder Get(int Id)

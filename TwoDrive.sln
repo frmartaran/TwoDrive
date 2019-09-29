@@ -3,23 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoDrive.Domain", "TwoDrive.Domain\TwoDrive.Domain.csproj", "{A0947E7E-FD77-48F2-A036-12520EF72304}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwoDrive.Domain", "TwoDrive.Domain\TwoDrive.Domain.csproj", "{A0947E7E-FD77-48F2-A036-12520EF72304}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoDrive.DataAccess.Interface", "TwoDrive.DataAccess.Interface\TwoDrive.DataAccess.Interface.csproj", "{4E78ACB2-8E8A-4012-A751-19B58062EEED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwoDrive.DataAccess.Interface", "TwoDrive.DataAccess.Interface\TwoDrive.DataAccess.Interface.csproj", "{4E78ACB2-8E8A-4012-A751-19B58062EEED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoDrive.DataAccess", "TwoDrive.DataAccess\TwoDrive.DataAccess.csproj", "{456D6EA5-A30D-466E-B94E-6889858DBC67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwoDrive.DataAccess", "TwoDrive.DataAccess\TwoDrive.DataAccess.csproj", "{456D6EA5-A30D-466E-B94E-6889858DBC67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoDrive.BusinessLogic.Interfaces", "TwoDrive.BusinessLogic.Interface\TwoDrive.BusinessLogic.Interfaces.csproj", "{404E61D0-E682-49E9-B7A9-21140D500262}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwoDrive.BusinessLogic.Interfaces", "TwoDrive.BusinessLogic.Interface\TwoDrive.BusinessLogic.Interfaces.csproj", "{404E61D0-E682-49E9-B7A9-21140D500262}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoDrive.BusinessLogic", "TwoDrive.BusinessLogic\TwoDrive.BusinessLogic.csproj", "{598A9926-B0C7-420C-A963-A5E91BE196C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwoDrive.BusinessLogic", "TwoDrive.BusinessLogic\TwoDrive.BusinessLogic.csproj", "{598A9926-B0C7-420C-A963-A5E91BE196C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoDrive.BusinessLogic.Test", "TwoDrive.BusinessLogic.Test\TwoDrive.BusinessLogic.Test.csproj", "{F663CE3E-7DD2-4C4E-B24E-35A00829B3C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwoDrive.BusinessLogic.Test", "TwoDrive.BusinessLogic.Test\TwoDrive.BusinessLogic.Test.csproj", "{F663CE3E-7DD2-4C4E-B24E-35A00829B3C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoDrive.DataAccess.Tests", "TwoDrive.DataAccess.Tests\TwoDrive.DataAccess.Tests.csproj", "{A4FEA2B6-A5BF-4E16-BA52-B490B1478EED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwoDrive.DataAccess.Tests", "TwoDrive.DataAccess.Tests\TwoDrive.DataAccess.Tests.csproj", "{A4FEA2B6-A5BF-4E16-BA52-B490B1478EED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoDrive.WebApi", "TwoDrive.WebApi\TwoDrive.WebApi.csproj", "{2F7742A4-9A97-4FC6-BBC4-8D0EB4B71657}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwoDrive.WebApi", "TwoDrive.WebApi\TwoDrive.WebApi.csproj", "{2F7742A4-9A97-4FC6-BBC4-8D0EB4B71657}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoDrive.WebApi.Test", "TwoDrive.WebApi.Test\TwoDrive.WebApi.Test.csproj", "{0A18B712-C0D8-47F8-9749-E4DC35D6FBC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwoDrive.WebApi.Test", "TwoDrive.WebApi.Test\TwoDrive.WebApi.Test.csproj", "{0A18B712-C0D8-47F8-9749-E4DC35D6FBC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,9 +29,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A0947E7E-FD77-48F2-A036-12520EF72304}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -142,5 +139,11 @@ Global
 		{0A18B712-C0D8-47F8-9749-E4DC35D6FBC5}.Release|x64.Build.0 = Release|Any CPU
 		{0A18B712-C0D8-47F8-9749-E4DC35D6FBC5}.Release|x86.ActiveCfg = Release|Any CPU
 		{0A18B712-C0D8-47F8-9749-E4DC35D6FBC5}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {128FA913-2A83-4175-8111-7EE57B9B2DFA}
 	EndGlobalSection
 EndGlobal
