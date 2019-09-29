@@ -6,6 +6,8 @@ using Moq;
 using TwoDrive.DataAccess;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
+using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.BusinessLogic.Validators;
 
 namespace TwoDrive.BusinessLogic.Test.LogicTest
 {
@@ -149,6 +151,48 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             logic.Delete(file.Id);
 
             Assert.IsNull(fileRepository.Get(file.Id));
+        }
+
+        [TestMethod]
+        public void UpdateFileLogic()
+        {
+            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            var mockFileValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
+
+            mockFileRepository.Setup(m => m.Update(It.IsAny<File>()));
+            mockFileRepository.Setup(m => m.Save());
+            mockFileValidator.Setup(m => m.isValid(It.IsAny<File>()))
+            .Returns(true);
+
+            var logic = new FileLogic(mockFileRepository.Object, mockFileValidator.Object);
+            logic.Update(file);
+            mockFileRepository.VerifyAll();
+            mockFileValidator.VerifyAll();
+
+        }
+
+        [TestMethod]
+        public void UpdateOneFile()
+        {
+            var context = ContextFactory.GetMemoryContext("Update Test");
+            var fileRepository = new FileRepository(context);
+            var fileValidator = new FileValidator();
+
+            fileRepository.Insert(file);
+            fileRepository.Save();
+
+            var dateModified = file.DateModified;
+            file.Content = "Modified content";
+
+            var logic = new FileLogic(fileRepository, fileValidator);
+            logic.Update(file);
+
+            var fileInDb = fileRepository.Get(1);
+            var txtFile = (TxtFile) fileInDb;
+
+            Assert.AreEqual(typeof(TxtFile), fileInDb.GetType());
+            Assert.AreNotEqual(dateModified, fileInDb.DateModified);
+            Assert.AreEqual(file.Content, txtFile.Content);
         }
     }
 }
