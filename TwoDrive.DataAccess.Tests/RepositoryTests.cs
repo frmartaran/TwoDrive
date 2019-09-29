@@ -565,10 +565,12 @@ namespace TwoDrive.DataAccess.Tests
         {
             var token = Guid.NewGuid();
             var context = ContextFactory.GetMemoryContext("Session Test");
-            var writer = new Writer{
-                Id =1
+            var writer = new Writer
+            {
+                Id = 1
             };
-            var session = new Session{
+            var session = new Session
+            {
                 Id = 2,
                 Writer = writer,
                 Token = token
@@ -580,6 +582,101 @@ namespace TwoDrive.DataAccess.Tests
 
             var exists = repository.Exists(session);
             Assert.IsTrue(exists);
+        }
+
+        [TestMethod]
+        public void ExistsFolder()
+        {
+            var context = ContextFactory.GetMemoryContext("Folder Exists Test");
+            var repository = new FolderRepository(context);
+            var root = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChilden = new List<Element>()
+            };
+            var folder = new Folder
+            {
+                Id = 5,
+                Name = "Folder",
+                ParentFolder = root,
+                FolderChilden = new List<Element>()
+            };
+            repository.Insert(root);
+            repository.Insert(folder);
+            repository.Save();
+
+            var exists = repository.Exists(folder);
+            Assert.IsTrue(exists);
+        }
+
+        [TestMethod]
+        public void ExistsFile()
+        {
+            var context = ContextFactory.GetMemoryContext("File Exists Test");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+            var root = new Folder
+            {
+                Id = 2,
+                Name = "Root",
+                FolderChilden = new List<Element>()
+            };
+            var file = new TxtFile
+            {
+                Id = 3,
+                Name = "Folder",
+                ParentFolder = root,
+            };
+            folderRepository.Insert(root);
+            fileRepository.Insert(file);
+            folderRepository.Save();
+
+            var exists = fileRepository.Exists(file);
+            Assert.IsTrue(exists);
+        }
+
+        [TestMethod]
+        public void TxtDbSet()
+        {
+            var context = ContextFactory.GetMemoryContext("Txt Test");
+            var repository = new FileRepository(context);
+            var file = new TxtFile
+            {
+                Id = 3,
+                Name = "Folder",
+                Content = ""
+            };
+            repository.Insert(file);
+            repository.Save();
+            Assert.IsTrue(context.Txts.Contains(file));
+        }
+
+        
+        [TestMethod]
+        public void ElementDbSet()
+        {
+            var context = ContextFactory.GetMemoryContext("Element Test");
+            var repository = new Repository<Element>(context);
+            
+            var root = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChilden = new List<Element>()
+            };
+            var file = new TxtFile
+            {
+                Id = 4,
+                Name = "Folder",
+                Content = "",
+                ParentFolder = root
+            };
+            repository.Insert(file);
+            repository.Insert(root);
+            repository.Save();
+            Assert.IsTrue(context.Elements.Contains(file));
+            Assert.IsTrue(context.Elements.Contains(root));
         }
     }
 }
