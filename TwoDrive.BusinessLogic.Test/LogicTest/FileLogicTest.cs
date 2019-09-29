@@ -9,7 +9,7 @@ using TwoDrive.Domain.FileManagement;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Validators;
 
-namespace TwoDrive.BusinessLogic.Test.LogicTest
+namespace TwoDrive.BusinessLogic.Test
 {
     [TestClass]
     public class FileLogicTest
@@ -39,10 +39,16 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
         public void CreateFile()
         {
             var mockRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            var mockValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
             mockRepository
             .Setup(m => m.Insert(It.IsAny<File>()));
+            mockRepository
+            .Setup(m => m.Save());
+            mockValidator
+            .Setup(m => m.isValid(It.IsAny<File>()))
+            .Returns(true);
 
-            var logic = new FileLogic(mockRepository.Object);
+            var logic = new FileLogic(mockRepository.Object, mockValidator.Object);
             logic.Create(file);
 
             mockRepository.VerifyAll();
