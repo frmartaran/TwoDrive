@@ -27,9 +27,9 @@ namespace TwoDrive.BusinessLogic.Logic
             Repository.Save();
         }
 
-        public void Delete(Writer writer)
+        public void Delete(int id)
         {
-            Repository.Delete(writer.Id);
+            Repository.Delete(id);
             Repository.Save();
         }
 

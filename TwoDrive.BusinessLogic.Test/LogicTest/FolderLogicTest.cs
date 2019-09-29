@@ -183,12 +183,15 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
             mockFolderRepository.Setup(m => m.Delete(It.IsAny<int>()));
+            mockFolderRepository
+            .Setup(m => m.Get(It.IsAny<int>()))
+            .Returns(root);
             mockFolderRepository.Setup(m => m.Save());
 
             var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
 
             var logic = new FolderLogic(mockFolderRepository.Object, mockFileRepository.Object);
-            logic.Delete(root);
+            logic.Delete(root.Id);
 
             mockFolderRepository.VerifyAll();
         }
@@ -204,7 +207,7 @@ namespace TwoDrive.BusinessLogic.Test
             folderRepository.Save();
 
             var logic = new FolderLogic(folderRepository, fileRepository);
-            logic.Delete(root);
+            logic.Delete(root.Id);
 
             var rootInDb = folderRepository.Get(1);
             Assert.IsNull(rootInDb);
@@ -235,7 +238,7 @@ namespace TwoDrive.BusinessLogic.Test
             folderRepository.Save();
 
             var logic = new FolderLogic(folderRepository, fileRepository);
-            logic.Delete(root);
+            logic.Delete(root.Id);
 
             var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
@@ -277,7 +280,7 @@ namespace TwoDrive.BusinessLogic.Test
             folderRepository.Save();
 
             var logic = new FolderLogic(folderRepository, fileRepository);
-            logic.Delete(root);
+            logic.Delete(root.Id);
 
             var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
@@ -319,7 +322,7 @@ namespace TwoDrive.BusinessLogic.Test
             folderRepository.Save();
 
             var logic = new FolderLogic(folderRepository, fileRepository);
-            logic.Delete(root);
+            logic.Delete(root.Id);
 
             var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
@@ -372,7 +375,7 @@ namespace TwoDrive.BusinessLogic.Test
             folderRepository.Save();
 
             var logic = new FolderLogic(folderRepository, fileRepository);
-            logic.Delete(root);
+            logic.Delete(root.Id);
 
             var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);

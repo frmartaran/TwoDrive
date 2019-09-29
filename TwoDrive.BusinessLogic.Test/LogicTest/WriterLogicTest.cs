@@ -227,7 +227,7 @@ namespace TwoDrive.BusinessLogic.Test
             mockRepository.Setup(m => m.Delete(It.IsAny<int>()));
             mockRepository.Setup(m => m.Save());
             var logic = new WriterLogic(mockRepository.Object);
-            logic.Delete(writer);
+            logic.Delete(writer.Id);
 
             mockRepository.VerifyAll();
         }
@@ -245,7 +245,7 @@ namespace TwoDrive.BusinessLogic.Test
             Assert.AreEqual(1, allWritersInDb.Count());
 
             var logic = new WriterLogic(repository);
-            logic.Delete(writer);
+            logic.Delete(writer.Id);
 
             var currentWritersInDb = repository.GetAll(); 
 
