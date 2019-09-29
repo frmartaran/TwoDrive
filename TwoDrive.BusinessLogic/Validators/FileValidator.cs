@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic.Validators
@@ -10,9 +9,9 @@ namespace TwoDrive.BusinessLogic.Validators
         protected override void ValidateNamesAtSameLevel(Element element)
         {
             var ParentFolder = element.ParentFolder;
-            if(ParentFolder.FolderChilden != null)
+            if(ParentFolder.FolderChildren != null)
             {
-                var hasSameName = ParentFolder.FolderChilden
+                var hasSameName = ParentFolder.FolderChildren
                     .Where(f => f.Name == element.Name)
                     .Where(f => f.Id != element.Id)
                     .Where(f => f.GetType() == element.GetType())

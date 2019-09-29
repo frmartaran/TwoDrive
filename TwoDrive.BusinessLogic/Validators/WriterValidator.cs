@@ -16,7 +16,7 @@ namespace TwoDrive.BusinessLogic.Validators
             repository = current;
         }
 
-        public bool isValid(Writer writer)
+        public bool IsValid(Writer writer)
         {
             ValidateUserName(writer);
             ValidatePassword(writer);

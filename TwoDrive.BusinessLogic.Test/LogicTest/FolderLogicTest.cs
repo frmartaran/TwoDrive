@@ -29,7 +29,7 @@ namespace TwoDrive.BusinessLogic.Test
                 DateModified = new DateTime(2019, 9, 22),
                 Name = "Root",
                 Owner = writer,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
 
         }
@@ -46,7 +46,7 @@ namespace TwoDrive.BusinessLogic.Test
             mockFileRepository.Setup(m => m.Save());
 
             var mockElementValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
-            mockElementValidator.Setup(m => m.isValid(It.IsAny<Element>()))
+            mockElementValidator.Setup(m => m.IsValid(It.IsAny<Element>()))
             .Returns(true);
 
             var folderLogicDependencies = new FolderLogicDependencies
@@ -99,7 +99,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var file = new TxtFile
             {
@@ -111,7 +111,7 @@ namespace TwoDrive.BusinessLogic.Test
                 ParentFolder = root,
                 Content = "Content"
             };
-            root.FolderChilden.Add(child);
+            root.FolderChildren.Add(child);
             folderRepository.Insert(child);
             fileRepository.Insert(file);
             folderRepository.Update(root);
@@ -142,7 +142,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var secondChild = new Folder
             {
@@ -152,7 +152,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child 2",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var grandson = new Folder
             {
@@ -162,10 +162,10 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child 3",
                 Owner = root.Owner,
                 ParentFolder = child,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
-            root.FolderChilden.Add(child);
-            child.FolderChilden.Add(grandson);
+            root.FolderChildren.Add(child);
+            child.FolderChildren.Add(grandson);
             folderRepository.Insert(child);
             folderRepository.Insert(secondChild);
             folderRepository.Update(root);
@@ -230,9 +230,9 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
-            root.FolderChilden.Add(child);
+            root.FolderChildren.Add(child);
             folderRepository.Insert(child);
             folderRepository.Update(root);
             folderRepository.Save();
@@ -261,7 +261,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var secondChild = new Folder
             {
@@ -271,9 +271,9 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child 2",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
-            root.FolderChilden.Add(child);
+            root.FolderChildren.Add(child);
             folderRepository.Insert(child);
             folderRepository.Insert(secondChild);
             folderRepository.Update(root);
@@ -303,7 +303,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var file = new TxtFile
             {
@@ -315,7 +315,7 @@ namespace TwoDrive.BusinessLogic.Test
                 ParentFolder = root,
                 Content = "Content"
             };
-            root.FolderChilden.Add(child);
+            root.FolderChildren.Add(child);
             folderRepository.Insert(child);
             fileRepository.Insert(file);
             folderRepository.Update(root);
@@ -345,7 +345,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var secondChild = new Folder
             {
@@ -355,7 +355,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child 2",
                 Owner = root.Owner,
                 ParentFolder = root,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var grandson = new Folder
             {
@@ -365,10 +365,10 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "child 3",
                 Owner = root.Owner,
                 ParentFolder = child,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
-            root.FolderChilden.Add(child);
-            child.FolderChilden.Add(grandson);
+            root.FolderChildren.Add(child);
+            child.FolderChildren.Add(grandson);
             folderRepository.Insert(child);
             folderRepository.Insert(secondChild);
             folderRepository.Update(root);
@@ -397,7 +397,7 @@ namespace TwoDrive.BusinessLogic.Test
 
             mockFolderRepository.Setup(m => m.Update(It.IsAny<Folder>()));
             mockFolderRepository.Setup(m => m.Save());
-            mockFolderValidator.Setup(m => m.isValid(It.IsAny<Element>()))
+            mockFolderValidator.Setup(m => m.IsValid(It.IsAny<Element>()))
             .Returns(true);
 
             root.Name = "Root 2.0";
@@ -511,6 +511,336 @@ namespace TwoDrive.BusinessLogic.Test
             var folderinDb = logic.Get(1);
 
             Assert.AreEqual(root, folderinDb);
+        }
+
+        [TestMethod]
+        public void ShowTreeOneFolder()
+        {
+            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
+            var logic = new FolderLogic(mockDependecies.Object);
+            var tree = logic.ShowTree(root);
+
+            Assert.AreEqual(" +- Root \n", tree);
+        }
+
+        [TestMethod]
+        public void ShowTreeTwoFolders()
+        {
+            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
+            var logic = new FolderLogic(mockDependecies.Object);
+            var child = new Folder
+            {
+                Id = 2,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChildren = new List<Element>()
+            };
+            var testList = new List<Element>();
+            testList.Add(child);
+            root.FolderChildren = testList;
+            var tree = logic.ShowTree(root);
+
+            var prefix = "      ";
+            var expectedString = string.Format("{0} +- {1} \n", "", root.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix}\\", child.Name);
+            Assert.AreEqual(expectedString, tree);
+        }
+
+        [TestMethod]
+        public void ShowTreeFolderAndFile()
+        {
+            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
+            var logic = new FolderLogic(mockDependecies.Object);
+            var file = new TxtFile
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                Content = "Content"
+            };
+            var testList = new List<Element>();
+            testList.Add(file);
+            root.FolderChildren = testList;
+            var tree = logic.ShowTree(root);
+            var prefix = "      ";
+            var expectedString = string.Format("{0} +- {1} \n", "", root.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix}\\", file.Name);
+            Assert.AreEqual(expectedString, tree);
+        }
+
+        [TestMethod]
+        public void ShowTreeTwoChildFolders()
+        {
+            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
+            var logic = new FolderLogic(mockDependecies.Object);
+            var child = new Folder
+            {
+                Id = 2,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChildren = new List<Element>()
+            };
+            var secondChild = new Folder
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChildren = new List<Element>()
+            };
+            var testList = new List<Element>();
+            testList.Add(child);
+            testList.Add(secondChild);
+            root.FolderChildren = testList;
+            var tree = logic.ShowTree(root);
+
+            var prefix = "      ";
+            var expectedString = string.Format("{0} +- {1} \n", "", root.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix}|", child.Name);
+            expectedString += string.Format("{0} +- {1} \n", "      \\", secondChild.Name);
+            Assert.AreEqual(expectedString, tree);
+        }
+
+        [TestMethod]
+        public void ShowTreeOfThreeLevels()
+        {
+            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
+            var logic = new FolderLogic(mockDependecies.Object);
+            var child = new Folder
+            {
+                Id = 2,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "First Child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChildren = new List<Element>()
+            };
+            var file = new TxtFile
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "File",
+                Owner = root.Owner,
+                ParentFolder = child,
+                Content = "Content"
+            };
+            child.FolderChildren.Add(file);
+            var secondChild = new Folder
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Second Child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChildren = new List<Element>()
+            };
+            var testList = new List<Element>();
+            testList.Add(child);
+            testList.Add(secondChild);
+            root.FolderChildren = testList;
+            var tree = logic.ShowTree(root);
+            var prefix = "      ";
+            var expectedString = string.Format("{0} +- {1} \n", "", root.Name);
+            expectedString += string.Format("{0} +- {1} \n", "      |", child.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}\\", file.Name);
+            expectedString += string.Format("{0} +- {1} \n", "      \\", secondChild.Name);
+            Assert.AreEqual(expectedString, tree);
+        }
+
+        [TestMethod]
+        public void ShowComplexTree()
+        {
+            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
+            var logic = new FolderLogic(mockDependecies.Object);
+            var child = new Folder
+            {
+                Id = 2,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "First Child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChildren = new List<Element>()
+            };
+            var FirstGrandson = new Folder
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 1",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChildren = new List<Element>()
+            };
+            var SecondGrandson = new Folder
+            {
+                Id = 4,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 2",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChildren = new List<Element>()
+            };
+            var SecondGrandsonFile = new TxtFile
+            {
+                Id = 5,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson Child 1",
+                Owner = root.Owner,
+                ParentFolder = SecondGrandson,
+                Content = "Content"
+            };var SecondGrandsonFileTwo = new TxtFile
+            {
+                Id = 6,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson Child 2",
+                Owner = root.Owner,
+                ParentFolder = SecondGrandson,
+                Content = "Content"
+            };
+            SecondGrandson.FolderChildren.Add(SecondGrandsonFile);
+            SecondGrandson.FolderChildren.Add(SecondGrandsonFileTwo);
+            var ThirdGrandson = new Folder
+            {
+                Id = 2,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 3",
+                Owner = root.Owner,
+                ParentFolder = child,
+                FolderChildren = new List<Element>()
+            };
+            var file = new TxtFile
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 4",
+                Owner = root.Owner,
+                ParentFolder = child,
+                Content = "Content"
+            };
+            child.FolderChildren.Add(FirstGrandson);
+            child.FolderChildren.Add(SecondGrandson);
+            child.FolderChildren.Add(ThirdGrandson);
+            child.FolderChildren.Add(file);
+            var secondChild = new Folder
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Second Child",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChildren = new List<Element>()
+            };
+            
+            var fileOne = new TxtFile
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 5",
+                Owner = root.Owner,
+                ParentFolder = secondChild,
+                Content = "Content"
+            };
+            var fileTwo = new TxtFile
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 6",
+                Owner = root.Owner,
+                ParentFolder = secondChild,
+                Content = "Content"
+            };
+            var fileThree = new TxtFile
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 7",
+                Owner = root.Owner,
+                ParentFolder = secondChild,
+                Content = "Content"
+            };
+            var fileFour = new TxtFile
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 8",
+                Owner = root.Owner,
+                ParentFolder = secondChild,
+                Content = "Content"
+            };
+            var AnotherFolder = new Folder
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 9",
+                Owner = root.Owner,
+                ParentFolder = root,
+                FolderChildren = new List<Element>()
+            };
+            var fileFive = new TxtFile
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 9, 22),
+                DateModified = new DateTime(2019, 9, 22),
+                Name = "Grandson 9 Child",
+                Owner = root.Owner,
+                ParentFolder = AnotherFolder,
+                Content = "Content"
+            };
+            AnotherFolder.FolderChildren.Add(fileFive);
+            secondChild.FolderChildren.Add(fileOne);
+            secondChild.FolderChildren.Add(fileTwo);
+            secondChild.FolderChildren.Add(fileThree);
+            secondChild.FolderChildren.Add(fileFour);
+            secondChild.FolderChildren.Add(AnotherFolder);
+
+            var testList = new List<Element>();
+            testList.Add(child);
+            testList.Add(secondChild);
+            root.FolderChildren = testList;
+            var tree = logic.ShowTree(root);
+            var prefix = "      ";
+            var expectedString = string.Format("{0} +- {1} \n", "", root.Name);
+            expectedString += string.Format("{0} +- {1} \n", "      |", child.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}|", FirstGrandson.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}|", SecondGrandson.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix + prefix}|", SecondGrandsonFile.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix + prefix}\\", SecondGrandsonFileTwo.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}|", ThirdGrandson.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}\\", file.Name);
+            expectedString += string.Format("{0} +- {1} \n", "      \\", secondChild.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}|", fileOne.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}|", fileTwo.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}|", fileThree.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}|", fileFour.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix}\\", AnotherFolder.Name);
+            expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix + prefix}\\", fileFive.Name);
+            Assert.AreEqual(expectedString, tree);
         }
     }
 }

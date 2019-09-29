@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TwoDrive.DataAccess;
 
 namespace TwoDrive.DataAccess.Migrations
 {
     [DbContext(typeof(TwoDriveDbContext))]
-    partial class TwoDriveDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190929204036_NameRefractor")]
+    partial class AddSessions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

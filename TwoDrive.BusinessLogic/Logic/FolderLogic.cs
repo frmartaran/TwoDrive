@@ -15,7 +15,7 @@ namespace TwoDrive.BusinessLogic.Logic
         private IValidator<Element> ElementValidator { get; set; }
 
         private IRepository<File> FileRepository { get; set; }
-
+        private const string Spaces = "      ";
         private const string type = "Folder";
         public FolderLogic(IRepository<Folder> currentFolderRepository, IRepository<File> currentFileRepository)
         {
@@ -31,7 +31,7 @@ namespace TwoDrive.BusinessLogic.Logic
         }
         public void Create(Folder folder)
         {
-            ElementValidator.isValid(folder);
+            ElementValidator.IsValid(folder);
             FolderRepository.Insert(folder);
             FolderRepository.Save();
         }
@@ -46,17 +46,17 @@ namespace TwoDrive.BusinessLogic.Logic
         {
             if (element is Folder folder)
             {
-                if (folder.FolderChilden.Count == 0)
+                if (folder.FolderChildren.Count == 0)
                 {
                     FolderRepository.Delete(element.Id);
                     FolderRepository.Save();
                     return;
                 }
-                var child = folder.FolderChilden.FirstOrDefault();
+                var child = folder.FolderChildren.FirstOrDefault();
                 while (child != null)
                 {
                     DeleteChildren(child);
-                    child = folder.FolderChilden.FirstOrDefault();
+                    child = folder.FolderChildren.FirstOrDefault();
                 }
                 DeleteChildren(element);
             }
@@ -81,10 +81,42 @@ namespace TwoDrive.BusinessLogic.Logic
         public void Update(Folder folder)
         {
             var newDateModified = DateTime.Now;
-            ElementValidator.isValid(folder);
+            ElementValidator.IsValid(folder);
             folder.DateModified = newDateModified;
             FolderRepository.Update(folder);
             FolderRepository.Save();
+        }
+
+        public object ShowTree(Folder root)
+        {
+            var tree = string.Format("{0} +- {1} \n", "", root.Name);
+            ShowChildren(root, ref tree, Spaces);
+            Console.Write(tree);
+            return tree;
+        }
+
+        public void ShowChildren(Element element, ref string tree, string prefix)
+        {
+            if (element is Folder folder)
+            {
+                var folderWithChildren = FolderRepository.Get(folder.Id);
+                var children = folderWithChildren.FolderChildren.ToList();
+                if (children.Count == 0)
+                    return;
+                foreach (var child in children)
+                {
+                    if (children.IndexOf(child) == folder.FolderChildren.Count - 1)
+                        tree += string.Format("{0} +- {1} \n", $"{prefix}\\", child.Name);
+                    else
+                        tree += string.Format("{0} +- {1} \n", $"{prefix}|", child.Name);
+                    ShowChildren(child, ref tree, prefix + Spaces);
+                }
+                return;
+            }
+            else
+            {
+                return;
+            }
         }
     }
 }

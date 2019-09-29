@@ -65,7 +65,7 @@ namespace TwoDrive.BusinessLogic.Test
 
             var mockValidator = new Mock<IValidator<Writer>>(MockBehavior.Strict);
             mockValidator
-            .Setup(m => m.isValid(It.IsAny<Writer>()))
+            .Setup(m => m.IsValid(It.IsAny<Writer>()))
             .Returns(true);
 
             var logic = new WriterLogic(mockRepository.Object, mockValidator.Object);
@@ -131,7 +131,7 @@ namespace TwoDrive.BusinessLogic.Test
             var mockRepository = new Mock<IRepository<Writer>>();
             mockRepository.Setup(m => m.Update(It.IsAny<Writer>()));
             var mockValidator = new Mock<IValidator<Writer>>();
-            mockValidator.Setup(m => m.isValid(It.IsAny<Writer>()))
+            mockValidator.Setup(m => m.IsValid(It.IsAny<Writer>()))
             .Returns(true);
 
             var logic = new WriterLogic(mockRepository.Object, mockValidator.Object);
@@ -179,7 +179,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Id = 2,
                 Name = "Folder",
                 Owner = writer,
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
 
             var claim = new Claim

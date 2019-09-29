@@ -27,7 +27,7 @@ namespace TwoDrive.BusinessLogic.Test
             {
                 Id = 1,
                 Name = "Root",
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             file = new TxtFile
             {
@@ -51,7 +51,7 @@ namespace TwoDrive.BusinessLogic.Test
             mockRepository
             .Setup(m => m.Save());
             mockValidator
-            .Setup(m => m.isValid(It.IsAny<File>()))
+            .Setup(m => m.IsValid(It.IsAny<File>()))
             .Returns(true);
 
             var logic = new FileLogic(mockRepository.Object, mockValidator.Object);
@@ -179,7 +179,7 @@ namespace TwoDrive.BusinessLogic.Test
 
             mockFileRepository.Setup(m => m.Update(It.IsAny<File>()));
             mockFileRepository.Setup(m => m.Save());
-            mockFileValidator.Setup(m => m.isValid(It.IsAny<File>()))
+            mockFileValidator.Setup(m => m.IsValid(It.IsAny<File>()))
             .Returns(true);
 
             var logic = new FileLogic(mockFileRepository.Object, mockFileValidator.Object);

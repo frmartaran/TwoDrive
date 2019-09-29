@@ -25,7 +25,7 @@ namespace TwoDrive.BusinessLogic.Test
                 CreationDate = new DateTime(2019, 5, 23),
                 DateModified = new DateTime(2019, 5, 23),
                 Owner = new Writer(),
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
         }
 

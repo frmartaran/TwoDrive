@@ -7,7 +7,7 @@ namespace TwoDrive.BusinessLogic.Validators
 {
     public abstract class ElementValidator : IValidator<Element>
     {
-        public bool isValid(Element element)
+        public bool IsValid(Element element)
         {
             ValidateName(element);
             ValidateOwner(element);

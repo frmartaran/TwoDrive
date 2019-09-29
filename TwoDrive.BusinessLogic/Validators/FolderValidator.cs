@@ -13,7 +13,7 @@ namespace TwoDrive.BusinessLogic.Validators
             if (!isRoot(element))
             {
                 var ParentFolder = element.ParentFolder;
-                var hasSameName = ParentFolder.FolderChilden
+                var hasSameName = ParentFolder.FolderChildren
                 .Where(f => f.Name == element.Name)
                 .Where(f => f.GetType().Name == "Folder")
                 .Any();

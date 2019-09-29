@@ -132,7 +132,7 @@ namespace TwoDrive.DataAccess.Tests
             {
                 Id = 2,
                 Name = "Root",
-                FolderChilden = new List<Element>()
+                FolderChildren = new List<Element>()
             };
             var file = new TxtFile
             {
