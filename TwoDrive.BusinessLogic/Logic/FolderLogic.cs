@@ -15,7 +15,7 @@ namespace TwoDrive.BusinessLogic.Logic
         private IValidator<Element> ElementValidator { get; set; }
 
         private IRepository<File> FileRepository { get; set; }
-
+        private const string Spaces = "      ";
         private const string type = "Folder";
         public FolderLogic(IRepository<Folder> currentFolderRepository, IRepository<File> currentFileRepository)
         {
@@ -88,13 +88,32 @@ namespace TwoDrive.BusinessLogic.Logic
         public object ShowTree(Folder root)
         {
             var tree = string.Format("{0} +- {1} \n", "", root.Name);
-            foreach (var child in root.FolderChilden)
-            {
-                tree += string.Format("{0} +- {1} \n", "      |", child.Name);
-                Console.Write(tree);
-
-            }
+            ShowChildren(root, ref tree, Spaces);
+            Console.Write(tree);
             return tree;
+        }
+
+        public void ShowChildren(Element element, ref string tree, string prefix)
+        {
+            if (element is Folder folder)
+            {
+                var children = folder.FolderChilden.ToList();
+                if (children.Count == 0)
+                    return;
+                foreach (var child in children)
+                {
+                    if (children.IndexOf(child) == folder.FolderChilden.Count - 1)
+                        tree += string.Format("{0} +- {1} \n", $"{prefix}\\", child.Name);
+                    else
+                        tree += string.Format("{0} +- {1} \n", $"{prefix}|", child.Name);
+                    ShowChildren(child, ref tree, prefix + Spaces);
+                }
+                return;
+            }
+            else
+            {
+                return;
+            }
         }
     }
 }
