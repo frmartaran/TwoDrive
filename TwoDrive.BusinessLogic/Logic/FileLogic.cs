@@ -42,7 +42,7 @@ namespace TwoDrive.BusinessLogic
 
         public ICollection<File> GetAll()
         {
-            throw new NotImplementedException();
+            return FileRepository.GetAll();
         }
 
         public void Update(File fileToUpdate)
