@@ -1,3 +1,4 @@
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -82,9 +83,42 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             fileRepository.Save();
 
             var logic = new FileLogic(fileRepository);
-            var folderinDb = logic.Get(1);
+            var fileInDb = logic.Get(1);
 
-            Assert.AreEqual(root, folderinDb);
+            Assert.AreEqual(file.Id, fileInDb.Id);
+        }
+
+        [TestMethod]
+        public void GetAllFileLogic()
+        {
+            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            mockFileRepository.Setup(m => m.GetAll())
+                        .Returns(new List<File> {file} );
+
+            var logic = new FileLogic(mockFileRepository.Object);
+            var allFilesReturned = logic.GetAll();
+
+            mockFileRepository.VerifyAll();
+        }
+
+        [TestMethod]
+        public void GetAllFileLogicCheckState()
+        {
+            var context = ContextFactory.GetMemoryContext("Get all test");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+
+            folderRepository.Insert(root);
+            folderRepository.Save();
+            fileRepository.Insert(file);
+            fileRepository.Save();
+
+            var logic = new FileLogic(fileRepository);
+            var allFilesReturned = logic.GetAll();
+            var firstFileReturned = allFilesReturned.FirstOrDefault();
+
+            Assert.AreEqual(1, allFilesReturned.Count);
+            Assert.AreEqual(file.Id, firstFileReturned.Id);
         }
 
         [TestMethod]
