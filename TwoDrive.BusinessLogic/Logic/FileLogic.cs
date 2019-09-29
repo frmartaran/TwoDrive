@@ -25,7 +25,7 @@ namespace TwoDrive.BusinessLogic
 
         public void Create(File fileToCreate)
         {
-            ElementValidator.isValid(fileToCreate);
+            ElementValidator.IsValid(fileToCreate);
             FileRepository.Insert(fileToCreate);
             FileRepository.Save();
         }
@@ -48,7 +48,7 @@ namespace TwoDrive.BusinessLogic
 
         public void Update(File fileToUpdate)
         {
-            ElementValidator.isValid(fileToUpdate);
+            ElementValidator.IsValid(fileToUpdate);
             fileToUpdate.DateModified = DateTime.Now;
             FileRepository.Update(fileToUpdate);
             FileRepository.Save();
