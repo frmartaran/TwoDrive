@@ -509,5 +509,15 @@ namespace TwoDrive.BusinessLogic.Test
 
             Assert.AreEqual(root, folderinDb);
         }
+
+        [TestMethod]
+        public void ShowTreeOneFolder()
+        {
+            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
+            var logic = new FolderLogic(mockDependecies.Object);
+            var tree = logic.ShowTree(root);
+
+            Assert.AreEqual("Level: 1 Parent Folder: Root", tree);
+        }
     }
 }
