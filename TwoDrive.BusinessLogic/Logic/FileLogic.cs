@@ -33,6 +33,7 @@ namespace TwoDrive.BusinessLogic
         public void Delete(int id)
         {
             FileRepository.Delete(id);
+            FileRepository.Save();
         }
 
         public File Get(int Id)
