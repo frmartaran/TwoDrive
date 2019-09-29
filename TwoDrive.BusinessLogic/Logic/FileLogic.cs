@@ -37,7 +37,7 @@ namespace TwoDrive.BusinessLogic
 
         public File Get(int Id)
         {
-            throw new NotImplementedException();
+            return FileRepository.Get(Id);
         }
 
         public ICollection<File> GetAll()
