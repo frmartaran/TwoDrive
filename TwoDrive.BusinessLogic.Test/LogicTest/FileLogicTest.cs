@@ -63,7 +63,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void CreateFileLogicCheckState()
         {
-            var context = ContextFactory.GetMemoryContext("Create Test");
+            var context = ContextFactory.GetMemoryContext("Create Test fileTests");
             var fileRepository = new FileRepository(context);
             var folderRepository = new FolderRepository(context);
 
@@ -93,7 +93,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void GetFileLogicCheckState()
         {
-            var context = ContextFactory.GetMemoryContext("Get test");
+            var context = ContextFactory.GetMemoryContext("Get fileTests");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
 
@@ -124,7 +124,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void GetAllFileLogicCheckState()
         {
-            var context = ContextFactory.GetMemoryContext("Get all test");
+            var context = ContextFactory.GetMemoryContext("Get all test fileTests");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
 
@@ -158,7 +158,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void DeleteOneFile()
         {
-            var context = ContextFactory.GetMemoryContext("Delete Test");
+            var context = ContextFactory.GetMemoryContext("Delete Test fileTests");
             var fileRepository = new FileRepository(context);
             var folderRepository = new FolderRepository(context);
 
@@ -191,7 +191,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void UpdateOneFile()
         {
-            var context = ContextFactory.GetMemoryContext("Update Test");
+            var context = ContextFactory.GetMemoryContext("Update Test fileTests");
             var fileRepository = new FileRepository(context);
             var fileValidator = new FileValidator();
 
