@@ -66,7 +66,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void CreateFolderCheckState()
         {
-            var context = ContextFactory.GetMemoryContext("Create Test");
+            var context = ContextFactory.GetMemoryContext("Create Folder Check State");
             var folderRepository = new FolderRepository(context);
             var folderValidator = new FolderValidator();
             var folderLogicDependencies = new FolderLogicDependencies
@@ -199,7 +199,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void DeleteOneFolder()
         {
-            var context = ContextFactory.GetMemoryContext("Delete Test");
+            var context = ContextFactory.GetMemoryContext("Delete One Folder");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
 
@@ -411,7 +411,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void UpdateFolderCheckState()
         {
-            var context = ContextFactory.GetMemoryContext("Update Test");
+            var context = ContextFactory.GetMemoryContext("Update Folder Check State");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
             var folderValidator = new FolderValidator();
@@ -500,7 +500,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void GetFolder()
         {
-            var context = ContextFactory.GetMemoryContext("Get test");
+            var context = ContextFactory.GetMemoryContext("Get Folder");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
 
@@ -516,8 +516,16 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void ShowTreeOneFolder()
         {
-            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
-            var logic = new FolderLogic(mockDependecies.Object);
+            var context = ContextFactory.GetMemoryContext("Show One Tree");
+            var dependecies = new FolderLogicDependencies
+            {
+                ElementValidator = new Mock<IValidator<Element>>().Object,
+                FolderRepository = new FolderRepository(context),
+                FileRepository = new Mock<IRepository<File>>().Object,
+            };
+            dependecies.FolderRepository.Insert(root);
+            dependecies.FolderRepository.Save();
+            var logic = new FolderLogic(dependecies);
             var tree = logic.ShowTree(root);
 
             Assert.AreEqual(" +- Root \n", tree);
@@ -526,8 +534,14 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void ShowTreeTwoFolders()
         {
-            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
-            var logic = new FolderLogic(mockDependecies.Object);
+            var context = ContextFactory.GetMemoryContext("Show Two Folders Tree");
+            var dependecies = new FolderLogicDependencies
+            {
+                ElementValidator = new Mock<IValidator<Element>>().Object,
+                FolderRepository = new FolderRepository(context),
+                FileRepository = new Mock<IRepository<File>>().Object,
+            };
+            var logic = new FolderLogic(dependecies);
             var child = new Folder
             {
                 Id = 2,
@@ -538,6 +552,9 @@ namespace TwoDrive.BusinessLogic.Test
                 ParentFolder = root,
                 FolderChildren = new List<Element>()
             };
+            dependecies.FolderRepository.Insert(root);
+            dependecies.FolderRepository.Insert(child);
+            dependecies.FolderRepository.Save();
             var testList = new List<Element>();
             testList.Add(child);
             root.FolderChildren = testList;
@@ -552,8 +569,14 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void ShowTreeFolderAndFile()
         {
-            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
-            var logic = new FolderLogic(mockDependecies.Object);
+            var context = ContextFactory.GetMemoryContext("Show Folder and Child Tree");
+            var dependecies = new FolderLogicDependencies
+            {
+                ElementValidator = new Mock<IValidator<Element>>().Object,
+                FolderRepository = new FolderRepository(context),
+                FileRepository = new FileRepository(context),
+            };
+            var logic = new FolderLogic(dependecies);
             var file = new TxtFile
             {
                 Id = 3,
@@ -564,6 +587,9 @@ namespace TwoDrive.BusinessLogic.Test
                 ParentFolder = root,
                 Content = "Content"
             };
+            dependecies.FolderRepository.Insert(root);
+            dependecies.FileRepository.Insert(file);
+            dependecies.FileRepository.Save();
             var testList = new List<Element>();
             testList.Add(file);
             root.FolderChildren = testList;
@@ -577,8 +603,14 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void ShowTreeTwoChildFolders()
         {
-            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
-            var logic = new FolderLogic(mockDependecies.Object);
+            var context = ContextFactory.GetMemoryContext("Show Two Child Tree");
+            var dependecies = new FolderLogicDependencies
+            {
+                ElementValidator = new Mock<IValidator<Element>>().Object,
+                FolderRepository = new FolderRepository(context),
+                FileRepository = new Mock<IRepository<File>>().Object,
+            };
+            var logic = new FolderLogic(dependecies);
             var child = new Folder
             {
                 Id = 2,
@@ -599,6 +631,10 @@ namespace TwoDrive.BusinessLogic.Test
                 ParentFolder = root,
                 FolderChildren = new List<Element>()
             };
+            dependecies.FolderRepository.Insert(root);
+            dependecies.FolderRepository.Insert(child);
+            dependecies.FolderRepository.Insert(secondChild);
+            dependecies.FolderRepository.Save();
             var testList = new List<Element>();
             testList.Add(child);
             testList.Add(secondChild);
@@ -615,8 +651,14 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void ShowTreeOfThreeLevels()
         {
-            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
-            var logic = new FolderLogic(mockDependecies.Object);
+            var context = ContextFactory.GetMemoryContext("Show Three level Tree");
+            var dependecies = new FolderLogicDependencies
+            {
+                ElementValidator = new FolderValidator(),
+                FolderRepository = new FolderRepository(context),
+                FileRepository = new FileRepository(context),
+            };
+            var logic = new FolderLogic(dependecies);
             var child = new Folder
             {
                 Id = 2,
@@ -640,7 +682,7 @@ namespace TwoDrive.BusinessLogic.Test
             child.FolderChildren.Add(file);
             var secondChild = new Folder
             {
-                Id = 3,
+                Id = 4,
                 CreationDate = new DateTime(2019, 9, 22),
                 DateModified = new DateTime(2019, 9, 22),
                 Name = "Second Child",
@@ -648,6 +690,11 @@ namespace TwoDrive.BusinessLogic.Test
                 ParentFolder = root,
                 FolderChildren = new List<Element>()
             };
+            dependecies.FolderRepository.Insert(root);
+            dependecies.FolderRepository.Insert(child);
+            dependecies.FolderRepository.Insert(secondChild);
+            dependecies.FileRepository.Insert(file);
+            dependecies.FolderRepository.Save();
             var testList = new List<Element>();
             testList.Add(child);
             testList.Add(secondChild);
@@ -664,13 +711,17 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void ShowComplexTree()
         {
-            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
-            var logic = new FolderLogic(mockDependecies.Object);
+            var context = ContextFactory.GetMemoryContext("Show Complex Tree");
+            var dependecies = new FolderLogicDependencies
+            {
+                ElementValidator = new FolderValidator(),
+                FolderRepository = new FolderRepository(context),
+                FileRepository = new FileRepository(context),
+            };
+            var logic = new FolderLogic(dependecies);
             var child = new Folder
             {
                 Id = 2,
-                CreationDate = new DateTime(2019, 9, 22),
-                DateModified = new DateTime(2019, 9, 22),
                 Name = "First Child",
                 Owner = root.Owner,
                 ParentFolder = root,
@@ -679,8 +730,6 @@ namespace TwoDrive.BusinessLogic.Test
             var FirstGrandson = new Folder
             {
                 Id = 3,
-                CreationDate = new DateTime(2019, 9, 22),
-                DateModified = new DateTime(2019, 9, 22),
                 Name = "Grandson 1",
                 Owner = root.Owner,
                 ParentFolder = root,
@@ -689,8 +738,6 @@ namespace TwoDrive.BusinessLogic.Test
             var SecondGrandson = new Folder
             {
                 Id = 4,
-                CreationDate = new DateTime(2019, 9, 22),
-                DateModified = new DateTime(2019, 9, 22),
                 Name = "Grandson 2",
                 Owner = root.Owner,
                 ParentFolder = root,
@@ -699,29 +746,22 @@ namespace TwoDrive.BusinessLogic.Test
             var SecondGrandsonFile = new TxtFile
             {
                 Id = 5,
-                CreationDate = new DateTime(2019, 9, 22),
-                DateModified = new DateTime(2019, 9, 22),
                 Name = "Grandson Child 1",
                 Owner = root.Owner,
                 ParentFolder = SecondGrandson,
-                Content = "Content"
-            };var SecondGrandsonFileTwo = new TxtFile
+            }; 
+            var SecondGrandsonFileTwo = new TxtFile
             {
                 Id = 6,
-                CreationDate = new DateTime(2019, 9, 22),
                 DateModified = new DateTime(2019, 9, 22),
                 Name = "Grandson Child 2",
                 Owner = root.Owner,
                 ParentFolder = SecondGrandson,
-                Content = "Content"
             };
             SecondGrandson.FolderChildren.Add(SecondGrandsonFile);
-            SecondGrandson.FolderChildren.Add(SecondGrandsonFileTwo);
             var ThirdGrandson = new Folder
             {
-                Id = 2,
-                CreationDate = new DateTime(2019, 9, 22),
-                DateModified = new DateTime(2019, 9, 22),
+                Id = 7,
                 Name = "Grandson 3",
                 Owner = root.Owner,
                 ParentFolder = child,
@@ -729,9 +769,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
             var file = new TxtFile
             {
-                Id = 3,
-                CreationDate = new DateTime(2019, 9, 22),
-                DateModified = new DateTime(2019, 9, 22),
+                Id = 8,
                 Name = "Grandson 4",
                 Owner = root.Owner,
                 ParentFolder = child,
@@ -743,60 +781,44 @@ namespace TwoDrive.BusinessLogic.Test
             child.FolderChildren.Add(file);
             var secondChild = new Folder
             {
-                Id = 3,
-                CreationDate = new DateTime(2019, 9, 22),
-                DateModified = new DateTime(2019, 9, 22),
+                Id = 9,
                 Name = "Second Child",
                 Owner = root.Owner,
                 ParentFolder = root,
                 FolderChildren = new List<Element>()
             };
-            
+
             var fileOne = new TxtFile
             {
-                Id = 3,
-                CreationDate = new DateTime(2019, 9, 22),
-                DateModified = new DateTime(2019, 9, 22),
+                Id = 10,
                 Name = "Grandson 5",
                 Owner = root.Owner,
                 ParentFolder = secondChild,
-                Content = "Content"
             };
             var fileTwo = new TxtFile
             {
-                Id = 3,
-                CreationDate = new DateTime(2019, 9, 22),
-                DateModified = new DateTime(2019, 9, 22),
+                Id = 11,
                 Name = "Grandson 6",
                 Owner = root.Owner,
                 ParentFolder = secondChild,
-                Content = "Content"
             };
             var fileThree = new TxtFile
             {
-                Id = 3,
-                CreationDate = new DateTime(2019, 9, 22),
-                DateModified = new DateTime(2019, 9, 22),
+                Id = 12,
                 Name = "Grandson 7",
                 Owner = root.Owner,
                 ParentFolder = secondChild,
-                Content = "Content"
             };
             var fileFour = new TxtFile
             {
-                Id = 3,
-                CreationDate = new DateTime(2019, 9, 22),
-                DateModified = new DateTime(2019, 9, 22),
+                Id = 13,
                 Name = "Grandson 8",
                 Owner = root.Owner,
                 ParentFolder = secondChild,
-                Content = "Content"
             };
             var AnotherFolder = new Folder
             {
-                Id = 3,
-                CreationDate = new DateTime(2019, 9, 22),
-                DateModified = new DateTime(2019, 9, 22),
+                Id = 14,
                 Name = "Grandson 9",
                 Owner = root.Owner,
                 ParentFolder = root,
@@ -804,13 +826,10 @@ namespace TwoDrive.BusinessLogic.Test
             };
             var fileFive = new TxtFile
             {
-                Id = 3,
-                CreationDate = new DateTime(2019, 9, 22),
-                DateModified = new DateTime(2019, 9, 22),
+                Id = 15,
                 Name = "Grandson 9 Child",
                 Owner = root.Owner,
                 ParentFolder = AnotherFolder,
-                Content = "Content"
             };
             AnotherFolder.FolderChildren.Add(fileFive);
             secondChild.FolderChildren.Add(fileOne);
@@ -818,7 +837,22 @@ namespace TwoDrive.BusinessLogic.Test
             secondChild.FolderChildren.Add(fileThree);
             secondChild.FolderChildren.Add(fileFour);
             secondChild.FolderChildren.Add(AnotherFolder);
-
+            dependecies.FolderRepository.Insert(root);
+            dependecies.FolderRepository.Insert(child);
+            dependecies.FolderRepository.Insert(secondChild);
+            dependecies.FolderRepository.Insert(FirstGrandson);
+            dependecies.FolderRepository.Insert(SecondGrandson);
+            dependecies.FolderRepository.Insert(ThirdGrandson);
+            dependecies.FolderRepository.Insert(AnotherFolder);
+            dependecies.FileRepository.Insert(file);
+            dependecies.FileRepository.Insert(fileOne);
+            dependecies.FileRepository.Insert(fileTwo);
+            dependecies.FileRepository.Insert(fileThree);
+            dependecies.FileRepository.Insert(fileFour);
+            dependecies.FileRepository.Insert(fileFive);
+            dependecies.FileRepository.Insert(SecondGrandsonFile);
+            dependecies.FileRepository.Insert(SecondGrandsonFileTwo);
+            dependecies.FolderRepository.Save();
             var testList = new List<Element>();
             testList.Add(child);
             testList.Add(secondChild);
