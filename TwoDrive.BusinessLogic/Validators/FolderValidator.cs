@@ -33,6 +33,13 @@ namespace TwoDrive.BusinessLogic.Validators
 
         public bool IsValidDestination(Writer ownerOfFolderToTransfer, Element elementDestination)
         {
+            ValidateDestinationIsAFolder();
+
+            return true;
+        }
+
+        private void ValidateDestinationIsAFolder()
+        {
             throw new NotImplementedException();
         }
 
