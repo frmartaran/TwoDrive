@@ -6,7 +6,7 @@ using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic
 {
-    public class FileLogic : ILogic<File>, IFileLogic
+    public class FileLogic : ElementLogic, ILogic<File>
     {
         private IRepository<File> FileRepository;
 

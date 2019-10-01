@@ -8,7 +8,7 @@ using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic.Logic
 {
-    public class FolderLogic : ILogic<Folder>
+    public class FolderLogic : ElementLogic, ILogic<Folder>
     {
         private IRepository<Folder> FolderRepository { get; set; }
 
