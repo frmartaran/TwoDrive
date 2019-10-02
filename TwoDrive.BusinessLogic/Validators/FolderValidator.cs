@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 
@@ -9,6 +10,17 @@ namespace TwoDrive.BusinessLogic.Validators
     public class FolderValidator : ElementValidator
     {
         private const string rootName = "Root";
+
+        private IRepository<Folder> FolderRepository { get; set; }
+
+        private IRepository<File> FileRepository { get; set; }
+
+        public FolderValidator(IRepository<Folder> FolderRepository, IRepository<File> FileRepository)
+        {
+            this.FolderRepository = FolderRepository;
+            this.FileRepository = FileRepository;
+        }
+
         protected override void ValidateNamesAtSameLevel(Element element)
         {
             if (!isRoot(element))
@@ -33,14 +45,17 @@ namespace TwoDrive.BusinessLogic.Validators
 
         public bool IsValidDestination(Writer ownerOfFolderToTransfer, Element elementDestination)
         {
-            ValidateDestinationIsAFolder();
-
+            ValidateDestinationIsAFolder(elementDestination);
             return true;
         }
 
-        private void ValidateDestinationIsAFolder()
+        private void ValidateDestinationIsAFolder(Element elementDestination)
         {
-            throw new NotImplementedException();
+            var isElementAFolder = FolderRepository.Get(elementDestination.Id) != null;
+            if (!isElementAFolder)
+            {
+                throw new ArgumentException("Destination is not a folder");
+            }
         }
 
         private bool isRoot(Element folder)
