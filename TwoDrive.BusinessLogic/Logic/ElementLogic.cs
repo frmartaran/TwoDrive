@@ -1,7 +1,7 @@
 using TwoDrive.BusinessLogic.Interface;
 using TwoDrive.Domain.FileManagement;
 
-namespace TwoDrive.BusinessLogic.Logic
+namespace TwoDrive.BusinessLogic
 {
     public class ElementLogic : IElementLogic
     {

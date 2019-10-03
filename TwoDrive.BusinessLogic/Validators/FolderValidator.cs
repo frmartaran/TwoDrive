@@ -15,6 +15,8 @@ namespace TwoDrive.BusinessLogic.Validators
 
         private IRepository<File> FileRepository { get; set; }
 
+        public FolderValidator() { }
+
         public FolderValidator(IRepository<Folder> FolderRepository, IRepository<File> FileRepository)
         {
             this.FolderRepository = FolderRepository;
@@ -45,16 +47,19 @@ namespace TwoDrive.BusinessLogic.Validators
 
         public bool IsValidDestination(Writer ownerOfFolderToTransfer, Element elementDestination)
         {
-            ValidateDestinationIsAFolder(elementDestination);
+            var folderDestination = ValidateDestinationIsAFolder(elementDestination);
             return true;
         }
 
-        private void ValidateDestinationIsAFolder(Element elementDestination)
+        private Folder ValidateDestinationIsAFolder(Element elementDestination)
         {
-            var isElementAFolder = FolderRepository.Get(elementDestination.Id) != null;
-            if (!isElementAFolder)
+            if (elementDestination is Folder folder)
             {
-                throw new ArgumentException("Destination is not a folder");
+                return folder;
+            }
+            else
+            {
+                throw new ArgumentException("Destination must be a folder");
             }
         }
 
