@@ -181,6 +181,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void DeleteFolder()
         {
+            var mockModificationRepository = new Mock<ModificationRepository>(MockBehavior.Strict);
             var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
             mockFolderRepository.Setup(m => m.Delete(It.IsAny<int>()));
             mockFolderRepository
@@ -188,29 +189,43 @@ namespace TwoDrive.BusinessLogic.Test
             .Returns(root);
             mockFolderRepository.Setup(m => m.Save());
 
+            mockModificationRepository.Setup(m => m.Insert(It.IsAny<Modification>()));
+            mockModificationRepository.Setup(m => m.Save());
+
             var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
 
             var logic = new FolderLogic(mockFolderRepository.Object, mockFileRepository.Object);
             logic.Delete(root.Id);
 
             mockFolderRepository.VerifyAll();
+            mockModificationRepository.VerifyAll();
         }
 
         [TestMethod]
         public void DeleteOneFolder()
         {
             var context = ContextFactory.GetMemoryContext("Delete One Folder");
+            var modificationRepository = new ModificationRepository(context);
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
+            var dependecies = new FolderLogicDependencies
+            {
+                ElementValidator = new Mock<IValidator<Element>>().Object,
+                FileRepository = fileRepository,
+                FolderRepository = folderRepository,
+                ModificationRepository = modificationRepository
 
+            };
             folderRepository.Insert(root);
             folderRepository.Save();
 
-            var logic = new FolderLogic(folderRepository, fileRepository);
+            var logic = new FolderLogic(dependecies);
             logic.Delete(root.Id);
 
             var rootInDb = folderRepository.Get(1);
+            var modifications = modificationRepository.GetAll().Count;
             Assert.IsNull(rootInDb);
+            Assert.AreEqual(1 , modifications);
         }
 
         [TestMethod]
@@ -219,7 +234,15 @@ namespace TwoDrive.BusinessLogic.Test
             var context = ContextFactory.GetMemoryContext("Delete Test 1");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
+            var modificationRepository = new ModificationRepository(context);
+            var dependecies = new FolderLogicDependencies
+            {
+                ElementValidator = new Mock<IValidator<Element>>().Object,
+                FileRepository = fileRepository,
+                FolderRepository = folderRepository,
+                ModificationRepository = modificationRepository
 
+            };
             folderRepository.Insert(root);
             folderRepository.Save();
             var child = new Folder
@@ -240,8 +263,10 @@ namespace TwoDrive.BusinessLogic.Test
             var logic = new FolderLogic(folderRepository, fileRepository);
             logic.Delete(root.Id);
 
+            var modifications = modificationRepository.GetAll().Count;
             var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
+            Assert.AreEqual(1, modifications);
         }
 
         [TestMethod]
@@ -250,7 +275,15 @@ namespace TwoDrive.BusinessLogic.Test
             var context = ContextFactory.GetMemoryContext("Delete Test 2");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
+            var modificationRepository = new ModificationRepository(context);
+            var dependecies = new FolderLogicDependencies
+            {
+                ElementValidator = new Mock<IValidator<Element>>().Object,
+                FileRepository = fileRepository,
+                FolderRepository = folderRepository,
+                ModificationRepository = modificationRepository
 
+            };
             folderRepository.Insert(root);
             folderRepository.Save();
             var child = new Folder
@@ -282,8 +315,10 @@ namespace TwoDrive.BusinessLogic.Test
             var logic = new FolderLogic(folderRepository, fileRepository);
             logic.Delete(root.Id);
 
+            var modifications = modificationRepository.GetAll().Count;
             var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
+            Assert.AreEqual(1, modifications);
         }
 
         [TestMethod]
@@ -292,7 +327,15 @@ namespace TwoDrive.BusinessLogic.Test
             var context = ContextFactory.GetMemoryContext("Delete Test 3");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
+            var modificationRepository = new ModificationRepository(context);
+            var dependecies = new FolderLogicDependencies
+            {
+                ElementValidator = new Mock<IValidator<Element>>().Object,
+                FileRepository = fileRepository,
+                FolderRepository = folderRepository,
+                ModificationRepository = modificationRepository
 
+            };
             folderRepository.Insert(root);
             folderRepository.Save();
             var child = new Folder
@@ -324,8 +367,10 @@ namespace TwoDrive.BusinessLogic.Test
             var logic = new FolderLogic(folderRepository, fileRepository);
             logic.Delete(root.Id);
 
+            var modifications = modificationRepository.GetAll().Count;
             var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
+            Assert.AreEqual(2, modifications);
         }
 
         [TestMethod]
@@ -334,7 +379,15 @@ namespace TwoDrive.BusinessLogic.Test
             var context = ContextFactory.GetMemoryContext("Delete Test 4");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
+            var modificationRepository = new ModificationRepository(context);
+            var dependecies = new FolderLogicDependencies
+            {
+                ElementValidator = new Mock<IValidator<Element>>().Object,
+                FileRepository = fileRepository,
+                FolderRepository = folderRepository,
+                ModificationRepository = modificationRepository
 
+            };
             folderRepository.Insert(root);
             folderRepository.Save();
             var child = new Folder
@@ -377,8 +430,10 @@ namespace TwoDrive.BusinessLogic.Test
             var logic = new FolderLogic(folderRepository, fileRepository);
             logic.Delete(root.Id);
 
+            var modifications = modificationRepository.GetAll().Count;
             var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
+            Assert.AreEqual(2, modifications);
         }
 
         [TestMethod]
@@ -749,7 +804,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "Grandson Child 1",
                 Owner = root.Owner,
                 ParentFolder = SecondGrandson,
-            }; 
+            };
             var SecondGrandsonFileTwo = new TxtFile
             {
                 Id = 6,
