@@ -308,6 +308,32 @@ namespace TwoDrive.BusinessLogic.Test
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
+        public void AreDependenciesSetForIsValidDestination()
+        {
+            var writer = new Writer();
+            var root = new Folder
+            {
+                Id = 1,
+                Name = "Root",
+                FolderChildren = new List<Element>()
+            };
+            var destination = new TxtFile
+            {
+                Id = 2,
+                Content = "TestFile",
+                Name = "FileName",
+                CreationDate = DateTime.Now,
+                DateModified = DateTime.Now,
+                ParentFolder = root,
+                Owner = writer
+            };
+
+            var validator = new FolderValidator();
+            var isValid = validator.IsValidDestination(owner, destination);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void ElementDestinationIsNotAFolder()
         {
             var writer = new Writer();
