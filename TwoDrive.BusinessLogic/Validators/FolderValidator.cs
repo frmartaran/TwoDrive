@@ -47,8 +47,15 @@ namespace TwoDrive.BusinessLogic.Validators
 
         public bool IsValidDestination(Writer ownerOfFolderToTransfer, Element elementDestination)
         {
-            var folderDestination = ValidateDestinationIsAFolder(elementDestination);
-            return true;
+            if (AreDependenciesSet())
+            {
+                var folderDestination = ValidateDestinationIsAFolder(elementDestination);
+                return true;
+            }
+            else
+            {
+                throw new ArgumentException("Dependencies must be set to validate destination");
+            }
         }
 
         private Folder ValidateDestinationIsAFolder(Element elementDestination)
@@ -66,6 +73,11 @@ namespace TwoDrive.BusinessLogic.Validators
         private bool isRoot(Element folder)
         {
             return folder.Name == rootName;
+        }
+
+        private bool AreDependenciesSet()
+        {
+            return FolderRepository != null && FileRepository != null;
         }
     }
 }
