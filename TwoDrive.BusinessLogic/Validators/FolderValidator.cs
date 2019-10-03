@@ -50,6 +50,7 @@ namespace TwoDrive.BusinessLogic.Validators
             if (AreDependenciesSet())
             {
                 var folderDestination = ValidateDestinationIsAFolder(elementDestination);
+                ValidateDestinationExists(folderDestination);
                 return true;
             }
             else
@@ -67,6 +68,15 @@ namespace TwoDrive.BusinessLogic.Validators
             else
             {
                 throw new ArgumentException("Destination must be a folder");
+            }
+        }
+
+        private void ValidateDestinationExists(Folder folderDestination)
+        {
+            var isDestinationInDB = FolderRepository.Get(folderDestination.Id) != null;
+            if (!isDestinationInDB)
+            {
+                throw new ArgumentException("Destination doesnt exists");
             }
         }
 
