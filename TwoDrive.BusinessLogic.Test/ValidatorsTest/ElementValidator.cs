@@ -363,7 +363,34 @@ namespace TwoDrive.BusinessLogic.Test
             fileRepository.Insert(destination);
             fileRepository.Save();
 
-            var validator = new FolderValidator();
+            var validator = new FolderValidator(folderRepository, fileRepository);
+            var isValid = validator.IsValidDestination(owner, destination);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ElementDestinationDoesntExist()
+        {
+            var context = ContextFactory.GetMemoryContext("Element destination doesnt exist");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+            var writer = new Writer();
+            var root = new Folder
+            {
+                Id = 1,
+                Name = "Root",
+                FolderChildren = new List<Element>()
+            };
+            var destination = new Folder
+            {
+                Id = 2,
+                Name = "Folder",
+                ParentFolder = root,
+                Owner = owner,
+                FolderChildren = new List<Element>()
+            };
+
+            var validator = new FolderValidator(folderRepository, fileRepository);
             var isValid = validator.IsValidDestination(owner, destination);
         }
     }
