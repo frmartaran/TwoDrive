@@ -68,7 +68,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void InvalidWriterNoUserName()
         {
             var writer = new Writer
@@ -87,7 +87,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void InvalidWriterHasNoPassword()
         {
             var writer = new Writer
@@ -135,7 +135,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void InvalidWriterHasNoClaims()
         {
             var writer = new Writer
@@ -153,7 +153,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void InvalidWriterClaimsListIsNull()
         {
             var writer = new Writer
@@ -172,7 +172,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void InvalidWriterHasDeleteClaim()
         {
             var writer = new Writer
@@ -199,7 +199,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void InvalidWriterMissingReadClaim()
         {
             var writer = new Writer
@@ -220,7 +220,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void InvalidWriterMissingWriteClaim()
         {
             var writer = new Writer
@@ -241,7 +241,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void InvalidWriterMissingShareClaim()
         {
             var writer = new Writer
@@ -262,7 +262,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void InvalidWriterUsernameExists()
         {
 
