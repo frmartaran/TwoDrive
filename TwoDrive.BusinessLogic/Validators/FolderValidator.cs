@@ -45,13 +45,13 @@ namespace TwoDrive.BusinessLogic.Validators
                 throw new ArgumentException("A child folder must have a parent folder");
         }
 
-        public bool IsValidDestination(Writer ownerOfFolderToTransfer, Element elementDestination)
+        public bool IsValidDestination(Element elementToTransfer, Element elementDestination)
         {
             if (AreDependenciesSet())
             {
                 var folderDestination = ValidateDestinationIsAFolder(elementDestination);
                 ValidateDestinationExists(folderDestination);
-                ValidateDestinationIsMyRootChild(ownerOfFolderToTransfer, folderDestination);
+                ValidateDestinationIsMyRootChild(elementToTransfer.Owner.Id, folderDestination);
                 return true;
             }
             else
@@ -60,9 +60,9 @@ namespace TwoDrive.BusinessLogic.Validators
             }
         }
 
-        private void ValidateDestinationIsMyRootChild(Writer ownerOfFolderToTransfer, Folder folderDestination)
+        private void ValidateDestinationIsMyRootChild(int ownerId, Folder folderDestination)
         {
-            var ownerRootFolder = FolderRepository.GetRoot(ownerOfFolderToTransfer.Id);
+            var ownerRootFolder = FolderRepository.GetRoot(ownerId);
             var isDestinationMyRootChild = IsElementInsideFolder(ownerRootFolder, folderDestination);
             if (!isDestinationMyRootChild)
             {
