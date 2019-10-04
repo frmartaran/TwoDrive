@@ -110,11 +110,14 @@ namespace TwoDrive.BusinessLogic.Validators
             {
                 result = true;
             }
-            foreach (var child in containerFolder.FolderChildren)
+            if (!result)
             {
-                if (child is Folder folder)
+                foreach (var child in containerFolder.FolderChildren)
                 {
-                    result = IsElementInsideFolder(folder, elementInFolder);
+                    if (child is Folder folder)
+                    {
+                        result = IsElementInsideFolder(folder, elementInFolder);
+                    }
                 }
             }
             return result;

@@ -444,13 +444,15 @@ namespace TwoDrive.BusinessLogic.Test
             {
                 Id = 3,
                 Name = "Root",
-                FolderChildren = new List<Element>()
+                FolderChildren = new List<Element>(),
+                Owner = ownerOfFolderToTransfer
             };
             var ownerOfFolderDestinationRoot = new Folder
             {
                 Id = 4,
                 Name = "Root",
-                FolderChildren = new List<Element>()
+                FolderChildren = new List<Element>(),
+                Owner = ownerOfFolderDestination
             };
             var destination = new Folder
             {
@@ -462,7 +464,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
             var elementToTransfer = new TxtFile
             {
-                Id = 3,
+                Id = 6,
                 Content = "TestFile",
                 Name = "FileName",
                 CreationDate = DateTime.Now,
@@ -474,9 +476,11 @@ namespace TwoDrive.BusinessLogic.Test
             folderRepository.Insert(ownerOfFolderToTransferRoot);
             folderRepository.Insert(ownerOfFolderDestinationRoot);
             folderRepository.Insert(destination);
+            fileRepository.Insert(elementToTransfer);
+            fileRepository.Save();
             folderRepository.Save();
 
-            var validator = new FolderValidator();
+            var validator = new FolderValidator(folderRepository, fileRepository);
             var isValid = validator.IsValidDestination(elementToTransfer, destination);
         }
 
@@ -487,12 +491,14 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var context = ContextFactory.GetMemoryContext("Element Destination Is Child Of Owner Parent Folder");
             var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
             var writer = new Writer();
             var root = new Folder
             {
                 Id = 1,
                 Name = "Root",
-                FolderChildren = new List<Element>()
+                FolderChildren = new List<Element>(),
+                Owner = writer
             };
             var elementToTransfer = new Folder
             {
@@ -516,7 +522,7 @@ namespace TwoDrive.BusinessLogic.Test
             folderRepository.Insert(destination);
             folderRepository.Save();
 
-            var validator = new FolderValidator();
+            var validator = new FolderValidator(folderRepository, fileRepository);
             var isValid = validator.IsValidDestination(elementToTransfer, destination);
         }
 
