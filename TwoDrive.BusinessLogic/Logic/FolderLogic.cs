@@ -41,6 +41,9 @@ namespace TwoDrive.BusinessLogic.Logic
         public void Delete(int id)
         {
             var folder = Get(id);
+            if (folder == null)
+                throw new ArgumentException("La carpeta no existe");
+
             DeleteChildren(folder);
         }
 
