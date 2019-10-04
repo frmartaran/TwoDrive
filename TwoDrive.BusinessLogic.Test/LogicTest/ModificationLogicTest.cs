@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.DataAccess;
 using TwoDrive.DataAccess.Interface;
@@ -112,7 +113,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(LogicException))]
         public void GetModificationFromDateRangeInvalidRange()
         {
             var context = ContextFactory.GetMemoryContext("Modification Test 2");

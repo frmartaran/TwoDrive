@@ -11,6 +11,7 @@ using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.BusinessLogic.LogicInput;
 using Microsoft.EntityFrameworkCore;
+using TwoDrive.BusinessLogic.Exceptions;
 
 namespace TwoDrive.BusinessLogic.Test
 {
@@ -942,7 +943,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(LogicException))]
         public void DeleteNullFolder()
         {
             var context = ContextFactory.GetMemoryContext("Delete null");
