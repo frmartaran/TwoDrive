@@ -1,7 +1,9 @@
 using System;
+using TwoDrive.Domain.Interface;
+
 namespace TwoDrive.Domain.FileManagement
 {
-    public class Modification 
+    public class Modification : ISoftDelete
     {
 
         public int Id { get; set; }
@@ -9,6 +11,8 @@ namespace TwoDrive.Domain.FileManagement
         public Element ElementModified { get; set; }
         public ModificationType type { get; set; }
         public DateTime Date { get; set; }
+        public bool IsDeleted { get; set; }
+        public DateTime DeletedDate { get; set; }
 
         public override bool Equals(object obj)
         {
