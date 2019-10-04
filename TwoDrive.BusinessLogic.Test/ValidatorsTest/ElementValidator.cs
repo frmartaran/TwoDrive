@@ -519,5 +519,13 @@ namespace TwoDrive.BusinessLogic.Test
             var validator = new FolderValidator();
             var isValid = validator.IsValidDestination(elementToTransfer, destination);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ElementToTransferAndDestinationAreEmpty()
+        {
+            var validator = new FolderValidator();
+            var isValid = validator.IsValidDestination(null, null);
+        }
     }
 }
