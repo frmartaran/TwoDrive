@@ -47,7 +47,7 @@ namespace TwoDrive.BusinessLogic.Validators
 
         public bool IsValidDestination(Element elementToTransfer, Element elementDestination)
         {
-            if (AreDependenciesSet())
+            if (!AreElementToTransferAndDestinationEmpty(elementToTransfer, elementDestination) && AreDependenciesSet())
             {
                 var folderDestination = ValidateDestinationIsAFolder(elementDestination);
                 ValidateDestinationExists(folderDestination);
@@ -118,6 +118,11 @@ namespace TwoDrive.BusinessLogic.Validators
                 }
             }
             return result;
+        }
+
+        private bool AreElementToTransferAndDestinationEmpty(Element elementToTransfer, Element elementDestination)
+        {
+            return elementToTransfer == null && elementDestination == null; 
         }
 
         private bool isRoot(Element folder)
