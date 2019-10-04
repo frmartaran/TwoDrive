@@ -8,16 +8,16 @@ namespace TwoDrive.BusinessLogic
 {
     public class FileLogic : ElementLogic, ILogic<File>
     {
-        private IRepository<File> FileRepository;
+        private IFileRepository FileRepository;
 
         private IValidator<Element> ElementValidator;
 
-        public FileLogic(IRepository<File> repository)
+        public FileLogic(IFileRepository repository)
         {
             this.FileRepository = repository;
         }
 
-        public FileLogic(IRepository<File> repository, IValidator<Element> validator)
+        public FileLogic(IFileRepository repository, IValidator<Element> validator)
         {
             this.FileRepository = repository;
             this.ElementValidator = validator;

@@ -37,11 +37,11 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void CreateFolder()
         {
-            var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
+            var mockFolderRepository = new Mock<IFolderRepository>(MockBehavior.Strict);
             mockFolderRepository.Setup(m => m.Insert(It.IsAny<Folder>()));
             mockFolderRepository.Setup(m => m.Save());
 
-            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            var mockFileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
             mockFileRepository.Setup(m => m.Insert(It.IsAny<File>()));
             mockFileRepository.Setup(m => m.Save());
 
@@ -181,14 +181,14 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void DeleteFolder()
         {
-            var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
+            var mockFolderRepository = new Mock<IFolderRepository>(MockBehavior.Strict);
             mockFolderRepository.Setup(m => m.Delete(It.IsAny<int>()));
             mockFolderRepository
             .Setup(m => m.Get(It.IsAny<int>()))
             .Returns(root);
             mockFolderRepository.Setup(m => m.Save());
 
-            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            var mockFileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
 
             var logic = new FolderLogic(mockFolderRepository.Object, mockFileRepository.Object);
             logic.Delete(root.Id);
@@ -384,9 +384,9 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void UpdateFolder()
         {
-            var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
+            var mockFolderRepository = new Mock<IFolderRepository>(MockBehavior.Strict);
             var mockFolderValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
-            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            var mockFileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
 
             var folderLogicDependencies = new FolderLogicDependencies
             {
@@ -443,11 +443,11 @@ namespace TwoDrive.BusinessLogic.Test
         public void GetAll()
         {
             var testList = new List<Folder>();
-            var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
+            var mockFolderRepository = new Mock<IFolderRepository>(MockBehavior.Strict);
             mockFolderRepository.Setup(m => m.GetAll())
             .Returns(testList);
 
-            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            var mockFileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
 
             var logic = new FolderLogic(mockFolderRepository.Object, mockFileRepository.Object);
             var elements = logic.GetAll();
@@ -486,8 +486,8 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void Get()
         {
-            var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
-            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            var mockFolderRepository = new Mock<IFolderRepository>(MockBehavior.Strict);
+            var mockFileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
             mockFolderRepository.Setup(m => m.Get(It.IsAny<int>()))
                         .Returns(root);
 

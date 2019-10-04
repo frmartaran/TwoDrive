@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.DataAccess
 {
-    public class FolderRepository : Repository<Folder>
+    public class FolderRepository : Repository<Folder>, IFolderRepository
     {
         public FolderRepository(TwoDriveDbContext current) : base(current)
         {
@@ -32,6 +33,12 @@ namespace TwoDrive.DataAccess
             return table.Where(e => e.Name == folder.Name)
                         .Where(e => e.ParentFolderId == folder.ParentFolderId)
                         .Any();
+        }
+
+        public Folder GetRoot(int ownerId)
+        {
+            return table.Where(e => e.ParentFolderId == null && e.OwnerId == ownerId)
+                        .FirstOrDefault();
         }
     }
 }

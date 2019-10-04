@@ -6,9 +6,9 @@ namespace TwoDrive.BusinessLogic.LogicInput
 {
     public class FolderLogicDependencies
     {
-        public IRepository<Folder> FolderRepository { get; set; }
+        public IFolderRepository FolderRepository { get; set; }
 
-        public IRepository<File> FileRepository { get; set; }
+        public IFileRepository FileRepository { get; set; }
 
         public IValidator<Element> ElementValidator { get; set; }
     }
