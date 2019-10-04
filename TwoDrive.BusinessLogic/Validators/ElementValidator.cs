@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain.FileManagement;
 
@@ -29,21 +30,21 @@ namespace TwoDrive.BusinessLogic.Validators
         {
             var hasOwner = element.Owner != null;
             if (!hasOwner)
-                throw new ArgumentException("The folder or file must have an owner");
+                throw new ValidationException("The folder or file must have an owner");
         }
 
         private void ValidateName(Element element)
         {
             var hasName = !string.IsNullOrWhiteSpace(element.Name);
             if (!hasName)
-                throw new ArgumentException("The folder or file should have a name");
+                throw new ValidationException("The folder or file should have a name");
         }
 
         private void ValidateDates(Element element)
         {
             var earlyModifiedDate = element.CreationDate.CompareTo(element.DateModified);
             if (earlyModifiedDate > 0)
-                throw new ArgumentException("The modified date should be later than the creation date");
+                throw new ValidationException("The modified date should be later than the creation date");
         }
     }
 

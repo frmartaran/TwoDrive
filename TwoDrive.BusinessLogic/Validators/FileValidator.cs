@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic.Validators
@@ -17,7 +18,7 @@ namespace TwoDrive.BusinessLogic.Validators
                     .Where(f => f.GetType() == element.GetType())
                     .Any();
                 if (hasSameName)
-                    throw new ArgumentException("Two files at same level can have the same name");
+                    throw new ValidationException("Two files at same level can have the same name");
             }
         }
 
@@ -25,7 +26,7 @@ namespace TwoDrive.BusinessLogic.Validators
         {
             var hasParentFolder = element.ParentFolder != null;
             if (!hasParentFolder)
-                throw new ArgumentException("A file should have a parent folder");
+                throw new ValidationException("A file should have a parent folder");
         }
     }
 }

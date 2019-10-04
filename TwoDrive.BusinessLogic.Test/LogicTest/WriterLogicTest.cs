@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.BusinessLogic.Validators;
@@ -89,7 +90,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void CreateInvalidWriterCheckState()
         {
             var context = ContextFactory.GetMemoryContext("TwoDrive");

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;

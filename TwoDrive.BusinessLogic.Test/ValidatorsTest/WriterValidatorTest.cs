@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.DataAccess;
 using TwoDrive.Domain;

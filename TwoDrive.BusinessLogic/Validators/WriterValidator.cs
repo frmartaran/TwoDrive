@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
@@ -49,7 +50,7 @@ namespace TwoDrive.BusinessLogic.Validators
             .Any();
 
             if (!canReadRoot || !canwriteRoot || !canShareRoot)
-                throw new ArgumentException("A writer must be able to read/write/share their root");
+                throw new ValidationException("A writer must be able to read/write/share their root");
         }
 
         private List<Claim> GetRootClaims(Writer writer)
@@ -68,30 +69,30 @@ namespace TwoDrive.BusinessLogic.Validators
                         .Where(c => c.Element.Owner.Id == writer.Id).
                         Any();
             if (canDeleteRoot)
-                throw new ArgumentException("A writer can't delete their root folder");
+                throw new ValidationException("A writer can't delete their root folder");
         }
 
         private void ValidateClaimsListNotEmpty(Writer writer)
         {
             var isListNull = writer.Claims == null;
             if (isListNull || writer.Claims.Count() == 0)
-                throw new ArgumentException("The list of claims is empty");
+                throw new ValidationException("The list of claims is empty");
         }
         private void ValidatePassword(Writer writer)
         {
             var hasPassword = !string.IsNullOrWhiteSpace(writer.Password);
             if (!hasPassword)
-                throw new ArgumentException("Writer has no password");
+                throw new ValidationException("Writer has no password");
         }
         private void ValidateUserName(Writer writer)
         {
             var hasUserName = !string.IsNullOrWhiteSpace(writer.UserName);
             if (!hasUserName)
-                throw new ArgumentException("Writer has no username set");
+                throw new ValidationException("Writer has no username set");
 
             var usernameExists = repository.Exists(writer);
             if (usernameExists)
-                throw new ArgumentException("The username must be unique");
+                throw new ValidationException("The username must be unique");
         }
     }
 }
