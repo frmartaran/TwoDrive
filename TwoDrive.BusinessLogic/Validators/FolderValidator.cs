@@ -11,13 +11,13 @@ namespace TwoDrive.BusinessLogic.Validators
     {
         private const string rootName = "Root";
 
-        private IRepository<Folder> FolderRepository { get; set; }
+        private IFolderRepository FolderRepository { get; set; }
 
-        private IRepository<File> FileRepository { get; set; }
+        private IFileRepository FileRepository { get; set; }
 
         public FolderValidator() { }
 
-        public FolderValidator(IRepository<Folder> FolderRepository, IRepository<File> FileRepository)
+        public FolderValidator(IFolderRepository FolderRepository, IFileRepository FileRepository)
         {
             this.FolderRepository = FolderRepository;
             this.FileRepository = FileRepository;
@@ -51,11 +51,22 @@ namespace TwoDrive.BusinessLogic.Validators
             {
                 var folderDestination = ValidateDestinationIsAFolder(elementDestination);
                 ValidateDestinationExists(folderDestination);
+                ValidateDestinationIsMyRootChild(ownerOfFolderToTransfer, folderDestination);
                 return true;
             }
             else
             {
                 throw new ArgumentException("Dependencies must be set to validate destination");
+            }
+        }
+
+        private void ValidateDestinationIsMyRootChild(Writer ownerOfFolderToTransfer, Folder folderDestination)
+        {
+            var ownerRootFolder = FolderRepository.GetRoot(ownerOfFolderToTransfer.Id);
+            var isDestinationMyRootChild = IsElementInsideFolder(ownerRootFolder, folderDestination);
+            if (!isDestinationMyRootChild)
+            {
+                throw new ArgumentException("Destination must be my root's child");
             }
         }
 
@@ -78,6 +89,23 @@ namespace TwoDrive.BusinessLogic.Validators
             {
                 throw new ArgumentException("Destination doesnt exists");
             }
+        }
+
+        private bool IsElementInsideFolder(Folder containerFolder, Element elementInFolder)
+        {
+            var result = false;
+            if (containerFolder.Id == elementInFolder.Id)
+            {
+                result = true;
+            }
+            foreach (var child in containerFolder.FolderChildren)
+            {
+                if (child is Folder folder)
+                {
+                    result = IsElementInsideFolder(folder, elementInFolder);
+                }
+            }
+            return result;
         }
 
         private bool isRoot(Element folder)
