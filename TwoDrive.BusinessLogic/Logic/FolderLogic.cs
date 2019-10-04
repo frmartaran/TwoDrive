@@ -46,9 +46,6 @@ namespace TwoDrive.BusinessLogic.Logic
 
         private void DeleteChildren(Element element)
         {
-            if (element == null)
-                return;
-
             if (element is Folder folder)
             {
                 var folderAndChildren = FolderRepository.Get(folder.Id);

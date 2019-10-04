@@ -940,5 +940,14 @@ namespace TwoDrive.BusinessLogic.Test
             expectedString += string.Format("{0} +- {1} \n", $"{prefix + prefix + prefix}\\", fileFive.Name);
             Assert.AreEqual(expectedString, tree);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void DeleteNullFolder()
+        {
+            var mockDependencies = new Mock<FolderLogicDependencies>();
+            var logic = new FolderLogic(mockDependencies.Object);
+            logic.Delete(1);
+        }
     }
 }
