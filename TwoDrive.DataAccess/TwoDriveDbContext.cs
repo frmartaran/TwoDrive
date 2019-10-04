@@ -28,7 +28,7 @@ namespace TwoDrive.DataAccess
             modelBuilder.Entity<Element>()
                 .Property<bool>("IsDeleted");
             modelBuilder.Entity<Element>()
-                .HasQueryFilter(e => EF.Property<bool>(e, "IsDeleted") == false);
+                .HasQueryFilter(e => !e.IsDeleted);
         }
 
         public override int SaveChanges()
@@ -47,7 +47,7 @@ namespace TwoDrive.DataAccess
         {
             foreach (var entry in ChangeTracker.Entries())
             {
-                if (typeof(ISoftDelete).IsAssignableFrom(entry.GetType()))
+                if (typeof(ISoftDelete).IsAssignableFrom(entry.Entity.GetType()))
                 {
                     switch (entry.State)
                     {
@@ -57,6 +57,7 @@ namespace TwoDrive.DataAccess
                         case EntityState.Deleted:
                             entry.CurrentValues["IsDeleted"] = true;
                             entry.CurrentValues["DeletedDate"] = DateTime.Now;
+                            entry.State = EntityState.Modified;
                             break;
                     }
                 }
