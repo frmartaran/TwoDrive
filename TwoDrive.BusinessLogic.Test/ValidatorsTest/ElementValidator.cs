@@ -393,5 +393,49 @@ namespace TwoDrive.BusinessLogic.Test
             var validator = new FolderValidator(folderRepository, fileRepository);
             var isValid = validator.IsValidDestination(owner, destination);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ElementDestinationIsNotMyRootsChild()
+        {
+            var context = ContextFactory.GetMemoryContext("Element Destination Is Child Of Root Folder Of Different User");
+            var folderRepository = new FolderRepository(context);
+            var ownerOfFolderToTransfer = new Writer
+            {
+                Id = 1
+            };
+            var ownerOfFolderDestination = new Writer
+            {
+                Id = 2
+            };
+            var ownerOfFolderToTransferRoot = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChildren = new List<Element>()
+            };
+            var ownerOfFolderDestinationRoot = new Folder
+            {
+                Id = 4,
+                Name = "Root",
+                FolderChildren = new List<Element>()
+            };
+            var destination = new Folder
+            {
+                Id = 5,
+                Name = "Folder",
+                ParentFolder = ownerOfFolderDestinationRoot,
+                Owner = ownerOfFolderDestination,
+                FolderChildren = new List<Element>()
+            };
+
+            folderRepository.Insert(ownerOfFolderToTransferRoot);
+            folderRepository.Insert(ownerOfFolderDestinationRoot);
+            folderRepository.Insert(destination);
+            folderRepository.Save();
+
+            var validator = new FolderValidator();
+            var isValid = validator.IsValidDestination(ownerOfFolderToTransfer, destination);
+        }
     }
 }
