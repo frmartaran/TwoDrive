@@ -10,6 +10,7 @@ using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.BusinessLogic.LogicInput;
+using Microsoft.EntityFrameworkCore;
 
 namespace TwoDrive.BusinessLogic.Test
 {
@@ -188,7 +189,7 @@ namespace TwoDrive.BusinessLogic.Test
                 ElementValidator = new Mock<IValidator<Element>>().Object,
                 FileRepository = new Mock<IRepository<File>>().Object,
                 FolderRepository = mockFolderRepository.Object,
-                ModificationRepository= mockModificationRepository.Object
+                ModificationRepository = mockModificationRepository.Object
 
             };
             mockFolderRepository.Setup(m => m.Delete(It.IsAny<int>()));
@@ -268,13 +269,13 @@ namespace TwoDrive.BusinessLogic.Test
             folderRepository.Update(root);
             folderRepository.Save();
 
-            var logic = new FolderLogic(folderRepository, fileRepository);
+            var logic = new FolderLogic(dependecies);
             logic.Delete(root.Id);
 
             var modifications = modificationRepository.GetAll().Count;
             var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
-            Assert.AreEqual(1, modifications);
+            Assert.AreEqual(2, modifications);
         }
 
         [TestMethod]
@@ -320,13 +321,13 @@ namespace TwoDrive.BusinessLogic.Test
             folderRepository.Update(root);
             folderRepository.Save();
 
-            var logic = new FolderLogic(folderRepository, fileRepository);
+            var logic = new FolderLogic(dependecies);
             logic.Delete(root.Id);
 
             var modifications = modificationRepository.GetAll().Count;
             var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
-            Assert.AreEqual(1, modifications);
+            Assert.AreEqual(3, modifications);
         }
 
         [TestMethod]
@@ -372,13 +373,13 @@ namespace TwoDrive.BusinessLogic.Test
             folderRepository.Update(root);
             folderRepository.Save();
 
-            var logic = new FolderLogic(folderRepository, fileRepository);
+            var logic = new FolderLogic(dependecies);
             logic.Delete(root.Id);
 
             var modifications = modificationRepository.GetAll().Count;
             var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
-            Assert.AreEqual(2, modifications);
+            Assert.AreEqual(3, modifications);
         }
 
         [TestMethod]
@@ -435,13 +436,13 @@ namespace TwoDrive.BusinessLogic.Test
             folderRepository.Update(root);
             folderRepository.Save();
 
-            var logic = new FolderLogic(folderRepository, fileRepository);
+            var logic = new FolderLogic(dependecies);
             logic.Delete(root.Id);
 
             var modifications = modificationRepository.GetAll().Count;
             var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
-            Assert.AreEqual(2, modifications);
+            Assert.AreEqual(4, modifications);
         }
 
         [TestMethod]
