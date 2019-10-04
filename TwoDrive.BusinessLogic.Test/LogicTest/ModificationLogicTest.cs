@@ -116,7 +116,7 @@ namespace TwoDrive.BusinessLogic.Test
         [ExpectedException(typeof(LogicException))]
         public void GetModificationFromDateRangeInvalidRange()
         {
-            var context = ContextFactory.GetMemoryContext("Modification Test 2");
+            var context = ContextFactory.GetMemoryContext("Modification Test 3");
             var repository = new ModificationRepository(context);
             var startDate = new DateTime(2019, 5, 20);
             var endDate = new DateTime(2019, 5, 15);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.LogicInput;
 using TwoDrive.DataAccess.Interface;
@@ -42,7 +43,7 @@ namespace TwoDrive.BusinessLogic.Logic
         {
             var folder = Get(id);
             if (folder == null)
-                throw new ArgumentException("La carpeta no existe");
+                throw new LogicException("The folder doesn't exists");
 
             DeleteChildren(folder);
         }
