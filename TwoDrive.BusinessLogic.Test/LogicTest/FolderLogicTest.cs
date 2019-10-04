@@ -945,7 +945,7 @@ namespace TwoDrive.BusinessLogic.Test
         [ExpectedException(typeof(ArgumentException))]
         public void DeleteNullFolder()
         {
-            var context = ContextFactory.GetMemoryContext("Show Complex Tree");
+            var context = ContextFactory.GetMemoryContext("Delete null");
             var dependecies = new FolderLogicDependencies
             {
                 ElementValidator = new FolderValidator(),
