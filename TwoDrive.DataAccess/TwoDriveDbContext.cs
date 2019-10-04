@@ -20,7 +20,10 @@ namespace TwoDrive.DataAccess
         public virtual DbSet<Modification> Modifications { get; set; }
         public virtual DbSet<Session> Sessions { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder) { }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            
+        }
 
     }
 }

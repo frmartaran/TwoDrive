@@ -181,8 +181,16 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void DeleteFolder()
         {
-            var mockModificationRepository = new Mock<ModificationRepository>(MockBehavior.Strict);
+            var mockModificationRepository = new Mock<IRepository<Modification>>(MockBehavior.Strict);
             var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
+            var dependecies = new FolderLogicDependencies
+            {
+                ElementValidator = new Mock<IValidator<Element>>().Object,
+                FileRepository = new Mock<IRepository<File>>().Object,
+                FolderRepository = mockFolderRepository.Object,
+                ModificationRepository= mockModificationRepository.Object
+
+            };
             mockFolderRepository.Setup(m => m.Delete(It.IsAny<int>()));
             mockFolderRepository
             .Setup(m => m.Get(It.IsAny<int>()))
@@ -194,7 +202,7 @@ namespace TwoDrive.BusinessLogic.Test
 
             var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
 
-            var logic = new FolderLogic(mockFolderRepository.Object, mockFileRepository.Object);
+            var logic = new FolderLogic(dependecies);
             logic.Delete(root.Id);
 
             mockFolderRepository.VerifyAll();
@@ -225,7 +233,7 @@ namespace TwoDrive.BusinessLogic.Test
             var rootInDb = folderRepository.Get(1);
             var modifications = modificationRepository.GetAll().Count;
             Assert.IsNull(rootInDb);
-            Assert.AreEqual(1 , modifications);
+            Assert.AreEqual(1, modifications);
         }
 
         [TestMethod]

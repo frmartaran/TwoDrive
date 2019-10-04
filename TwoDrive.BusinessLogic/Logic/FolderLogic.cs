@@ -15,8 +15,9 @@ namespace TwoDrive.BusinessLogic.Logic
         private IValidator<Element> ElementValidator { get; set; }
 
         private IRepository<File> FileRepository { get; set; }
+
+        private IRepository<Modification> ModificationRepository { get; set; }
         private const string Spaces = "      ";
-        private const string type = "Folder";
         public FolderLogic(IRepository<Folder> currentFolderRepository, IRepository<File> currentFileRepository)
         {
             FolderRepository = currentFolderRepository;
@@ -28,6 +29,7 @@ namespace TwoDrive.BusinessLogic.Logic
             FolderRepository = dependencies.FolderRepository;
             ElementValidator = dependencies.ElementValidator;
             FileRepository = dependencies.FileRepository;
+            ModificationRepository = dependencies.ModificationRepository;
         }
         public void Create(Folder folder)
         {
@@ -48,6 +50,7 @@ namespace TwoDrive.BusinessLogic.Logic
             {
                 if (folder.FolderChildren.Count == 0)
                 {
+                    AddDeleteModfication(element);
                     FolderRepository.Delete(element.Id);
                     FolderRepository.Save();
                     return;
@@ -62,10 +65,23 @@ namespace TwoDrive.BusinessLogic.Logic
             }
             else
             {
+                AddDeleteModfication(element);
                 FileRepository.Delete(element.Id);
                 FileRepository.Save();
                 return;
             }
+        }
+
+        private void AddDeleteModfication(Element element)
+        {
+            var modification = new Modification
+            {
+                ElementModified = element,
+                type = ModificationType.Deleted,
+                Date = DateTime.Now
+            };
+            ModificationRepository.Insert(modification);
+            ModificationRepository.Save();
         }
         public Folder Get(int Id)
         {

@@ -1,7 +1,7 @@
 using System;
 namespace TwoDrive.Domain.FileManagement
 {
-    public class Modification
+    public class Modification 
     {
 
         public int Id { get; set; }
