@@ -52,6 +52,7 @@ namespace TwoDrive.BusinessLogic.Validators
                 var folderDestination = ValidateDestinationIsAFolder(elementDestination);
                 ValidateDestinationExists(folderDestination);
                 ValidateDestinationIsMyRootChild(elementToTransfer.Owner.Id, folderDestination);
+                ValidateDestinationIsNotChildOfElementToTransfer(elementToTransfer, folderDestination);
                 return true;
             }
             else
@@ -88,6 +89,17 @@ namespace TwoDrive.BusinessLogic.Validators
             if (!isDestinationInDB)
             {
                 throw new ArgumentException("Destination doesnt exists");
+            }
+        }
+
+        private void ValidateDestinationIsNotChildOfElementToTransfer(Element elementToTransfer, Folder folderDestination)
+        {
+            if (elementToTransfer is Folder folder)
+            {
+                if (IsElementInsideFolder(folder, folderDestination))
+                {
+                    throw new ArgumentException("Destination is child of element to transfer");
+                }
             }
         }
 
