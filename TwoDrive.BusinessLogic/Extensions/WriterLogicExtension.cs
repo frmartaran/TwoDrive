@@ -143,5 +143,14 @@ namespace TwoDrive.BusinessLogic.Extensions
             if (canAlreardy)
                 throw new LogicException($"{friend.UserName} can already {type.ToString()} this element");
         }
+
+        public static void RevokeFriendFrom(this Writer writer, Writer friend, Element element, ClaimType type)
+        {
+            var claim = friend.Claims
+                .Where(e => e.Element == element)
+                .Where(c => c.Type == type)
+                .FirstOrDefault();
+            friend.Claims.Remove(claim);
+        }
     }
 }
