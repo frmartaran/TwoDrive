@@ -1,8 +1,11 @@
 
+using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
+using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Filters;
 using TwoDrive.WebApi.Models;
 
@@ -12,10 +15,11 @@ namespace TwoDrive.WebApi.Controllers
     public class WriterController : ControllerBase
     {
         private ILogic<Writer> Logic { get; set; }
-
-        public WriterController(ILogic<Writer> logic) : base()
+        private ILogic<Folder> FolderLogic { get; set; }
+        public WriterController(ILogic<Writer> logic, ILogic<Folder> folderLogic) : base()
         {
             Logic = logic;
+            FolderLogic =  folderLogic;
         }
 
         [HttpPost]
@@ -26,6 +30,15 @@ namespace TwoDrive.WebApi.Controllers
             {
                 var writer = WriterModel.ToDomain(model);
                 Logic.Create(writer);
+                var root = new Folder
+                {
+                    Name = "Root",
+                    CreationDate = DateTime.Now,
+                    DateModified = DateTime.Now,
+                    Owner = writer,
+                    FolderChildren = new List<Element>()
+                };
+                FolderLogic.Create(root);
                 return Ok("Writer Created");
             }
             catch (ValidationException validationError)
