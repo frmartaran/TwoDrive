@@ -127,5 +127,23 @@ namespace TwoDrive.BusinessLogic.Test
             writer.Claims = new List<Claim>();
             writer.AddRootClaims(folder);
         }
+
+        [TestMethod]
+        public void AddCreatorClaimsTo()
+        {
+            writer.Claims = new List<Claim>();
+            var folder = new Folder
+            {
+                Name = "Folder",
+                Owner = writer,
+                ParentFolder = root
+            };
+            writer.AddCreatorClaimsTo(folder);
+
+            Assert.IsTrue(writer.Claims.Any(c => c.Type == ClaimType.Read));
+            Assert.IsTrue(writer.Claims.Any(c => c.Type == ClaimType.Write));
+            Assert.IsTrue(writer.Claims.Any(c => c.Type == ClaimType.Share));
+            Assert.IsTrue(writer.Claims.Any(c => c.Type == ClaimType.Delete));
+        }
     }
 }
