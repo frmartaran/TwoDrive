@@ -177,7 +177,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Owner = writer,
                 Name = "Folder",
                 ParentFolder = root
-            }
+            };
             var read = new Claim
             {
                 Element = folder,

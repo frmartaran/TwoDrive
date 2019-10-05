@@ -58,7 +58,29 @@ namespace TwoDrive.BusinessLogic.Extensions
                 throw new LogicException("Can only add creator claims to it's owner");
             if (IsRoot(element))
                 throw new LogicException("Can't add creator claims to root");
+            var canAlreadyRead = writer.Claims
+                .Where(c => c.Element == element)
+                .Where(c => !c.Element.IsDeleted)
+                .Where(c => c.Type == ClaimType.Read)
+                .Any();
+            var canAlreadyWriter = writer.Claims
+                .Where(c => c.Element == element)
+                .Where(c => !c.Element.IsDeleted)
+                .Where(c => c.Type == ClaimType.Write)
+                .Any();
+            var canAlreadyShare = writer.Claims
+                .Where(c => c.Element == element)
+                .Where(c => !c.Element.IsDeleted)
+                .Where(c => c.Type == ClaimType.Share)
+                .Any();
+            var canAlreadyDelete = writer.Claims
+                .Where(c => c.Element == element)
+                .Where(c => !c.Element.IsDeleted)
+                .Where(c => c.Type == ClaimType.Delete)
+                .Any();
 
+            if (canAlreadyRead && canAlreadyWriter && canAlreadyShare && canAlreadyDelete)
+                throw new LogicException("Writer already has creator claims for this element");
 
             var read = new Claim
             {
