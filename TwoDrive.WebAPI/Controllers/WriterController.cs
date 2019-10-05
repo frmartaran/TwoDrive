@@ -158,5 +158,13 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public IActionResult ShowFriends(int id)
+        {
+            var writer = Logic.Get(id);
+            var toModel = WriterModel.AllToModel(writer.Friends);
+            return Ok(toModel);
+        }
+
     }
 }
