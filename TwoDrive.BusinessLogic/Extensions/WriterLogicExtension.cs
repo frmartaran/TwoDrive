@@ -118,6 +118,10 @@ namespace TwoDrive.BusinessLogic.Extensions
 
         public static void AllowFriendTo(this Writer owner, Writer friend, Element element, ClaimType type)
         {
+            var areFriends = owner.IsFriendsWith(friend);
+            if (!areFriends)
+                throw new LogicException($"The owner is not friends with {friend.UserName}");
+
             var claim = new Claim
             {
                 Element = element,
