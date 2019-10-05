@@ -10,6 +10,9 @@ namespace TwoDrive.BusinessLogic.Validators
     {
         public bool IsValid(Element element)
         {
+            if (element == null)
+                throw new ValidationException("The element can't be null");
+
             ValidateName(element);
             ValidateOwner(element);
             ValidateParentFolder(element);
