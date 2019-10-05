@@ -14,14 +14,9 @@ namespace TwoDrive.BusinessLogic.Validators
 
         private IFolderRepository FolderRepository { get; set; }
 
-        private IFileRepository FileRepository { get; set; }
-
-        public FolderValidator() { }
-
-        public FolderValidator(IFolderRepository FolderRepository, IFileRepository FileRepository)
+        public FolderValidator(IFolderRepository FolderRepository)
         {
             this.FolderRepository = FolderRepository;
-            this.FileRepository = FileRepository;
         }
 
         protected override void ValidateNamesAtSameLevel(Element element)
@@ -35,9 +30,7 @@ namespace TwoDrive.BusinessLogic.Validators
                 .Any();
                 if(hasSameName)
                     throw new ValidationException("Two folders at same level can have the same name");
-
             }
-
         }
 
         protected override void ValidateParentFolder(Element element)
@@ -47,11 +40,10 @@ namespace TwoDrive.BusinessLogic.Validators
                 throw new ValidationException("A child folder must have a parent folder");
         }
 
-        public override bool IsValidDestination(Element elementToTransfer, Element elementDestination)
+        public override bool IsValidDestination(Element elementToTransfer, Folder folderDestination)
         {
-            if (!AreElementToTransferAndDestinationEmpty(elementToTransfer, elementDestination) && AreDependenciesSet())
+            if (!AreElementToTransferAndDestinationEmpty(elementToTransfer, folderDestination))
             {
-                var folderDestination = ValidateDestinationIsAFolder(elementDestination);
                 ValidateDestinationExists(folderDestination);
                 ValidateDestinationIsMyRootChild(elementToTransfer.Owner.Id, folderDestination);
                 ValidateDestinationIsNotChildOfElementToTransfer(elementToTransfer, folderDestination);
@@ -70,18 +62,6 @@ namespace TwoDrive.BusinessLogic.Validators
             if (!isDestinationMyRootChild)
             {
                 throw new ArgumentException("Destination must be my root's child");
-            }
-        }
-
-        private Folder ValidateDestinationIsAFolder(Element elementDestination)
-        {
-            if (elementDestination is Folder folder)
-            {
-                return folder;
-            }
-            else
-            {
-                throw new ArgumentException("Destination must be a folder");
             }
         }
 
@@ -133,11 +113,6 @@ namespace TwoDrive.BusinessLogic.Validators
         private bool isRoot(Element folder)
         {
             return folder.Name == rootName;
-        }
-
-        private bool AreDependenciesSet()
-        {
-            return FolderRepository != null && FileRepository != null;
         }
     }
 }

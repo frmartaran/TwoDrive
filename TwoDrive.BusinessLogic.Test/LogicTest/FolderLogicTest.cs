@@ -70,7 +70,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var context = ContextFactory.GetMemoryContext("Create Folder Check State");
             var folderRepository = new FolderRepository(context);
-            var folderValidator = new FolderValidator();
+            var folderValidator = new FolderValidator(folderRepository);
             var ElementLogicDependencies = new ElementLogicDependencies
             {
                 FolderRepository = folderRepository,
@@ -479,7 +479,7 @@ namespace TwoDrive.BusinessLogic.Test
             var context = ContextFactory.GetMemoryContext("Update Folder Check State");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
-            var folderValidator = new FolderValidator();
+            var folderValidator = new FolderValidator(folderRepository);
 
             folderRepository.Insert(root);
             folderRepository.Save();
@@ -717,9 +717,10 @@ namespace TwoDrive.BusinessLogic.Test
         public void ShowTreeOfThreeLevels()
         {
             var context = ContextFactory.GetMemoryContext("Show Three level Tree");
+            var folderRepository = new FolderRepository(context);
             var dependecies = new ElementLogicDependencies
             {
-                ElementValidator = new FolderValidator(),
+                ElementValidator = new FolderValidator(folderRepository),
                 FolderRepository = new FolderRepository(context),
                 FileRepository = new FileRepository(context),
             };
@@ -777,9 +778,10 @@ namespace TwoDrive.BusinessLogic.Test
         public void ShowComplexTree()
         {
             var context = ContextFactory.GetMemoryContext("Show Complex Tree");
+            var folderRepository = new FolderRepository(context);
             var dependecies = new ElementLogicDependencies
             {
-                ElementValidator = new FolderValidator(),
+                ElementValidator = new FolderValidator(folderRepository),
                 FolderRepository = new FolderRepository(context),
                 FileRepository = new FileRepository(context),
             };
@@ -947,9 +949,10 @@ namespace TwoDrive.BusinessLogic.Test
         public void DeleteNullFolder()
         {
             var context = ContextFactory.GetMemoryContext("Delete null");
+            var folderRepository = new FolderRepository(context);
             var dependecies = new ElementLogicDependencies
             {
-                ElementValidator = new FolderValidator(),
+                ElementValidator = new FolderValidator(folderRepository),
                 FolderRepository = new FolderRepository(context),
                 FileRepository = new FileRepository(context),
             };

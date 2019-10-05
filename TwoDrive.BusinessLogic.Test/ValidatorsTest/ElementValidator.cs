@@ -27,7 +27,8 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void ValidRootFolder()
         {
-
+            var context = ContextFactory.GetMemoryContext("Valid Root Folder");
+            var folderRepository = new FolderRepository(context);
             var folder = new Folder
             {
                 Name = "Root",
@@ -36,7 +37,7 @@ namespace TwoDrive.BusinessLogic.Test
                 FolderChildren = new List<Element>()
             };
 
-            var validator = new FolderValidator();
+            var validator = new FolderValidator(folderRepository);
             var isValid = validator.IsValid(folder);
 
             Assert.IsTrue(isValid);
@@ -45,7 +46,8 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void ValidFolder()
         {
-
+            var context = ContextFactory.GetMemoryContext("Valid Folder");
+            var folderRepository = new FolderRepository(context);
             var root = new Folder
             {
                 Name = "Root",
@@ -61,7 +63,7 @@ namespace TwoDrive.BusinessLogic.Test
                 ParentFolder = root
             };
 
-            var validator = new FolderValidator();
+            var validator = new FolderValidator(folderRepository);
             var isValid = validator.IsValid(child);
 
             Assert.IsTrue(isValid);
@@ -97,6 +99,8 @@ namespace TwoDrive.BusinessLogic.Test
         [ExpectedException(typeof(ValidationException))]
         public void InvalidFolderWithoutName()
         {
+            var context = ContextFactory.GetMemoryContext("Invalid Folder Without Name");
+            var folderRepository = new FolderRepository(context);
             var folder = new Folder
             {
                 Name = "",
@@ -104,7 +108,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Owner = owner
             };
 
-            var validator = new FolderValidator();
+            var validator = new FolderValidator(folderRepository);
             var isValid = validator.IsValid(folder);
 
         }
@@ -138,6 +142,8 @@ namespace TwoDrive.BusinessLogic.Test
         [ExpectedException(typeof(ValidationException))]
         public void InvalidFolderWithoutOwner()
         {
+            var context = ContextFactory.GetMemoryContext("Invalid Folder Without Owner");
+            var folderRepository = new FolderRepository(context);
             var folder = new Folder
             {
                 Name = "Root",
@@ -145,7 +151,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Owner = null
             };
 
-            var validator = new FolderValidator();
+            var validator = new FolderValidator(folderRepository);
             var isValid = validator.IsValid(folder);
 
         }
@@ -179,6 +185,8 @@ namespace TwoDrive.BusinessLogic.Test
         [ExpectedException(typeof(ValidationException))]
         public void InvalidFolderWithoutParent()
         {
+            var context = ContextFactory.GetMemoryContext("Invalid Folder Without Parent");
+            var folderRepository = new FolderRepository(context);
             var folder = new Folder
             {
                 Name = "A folder",
@@ -186,7 +194,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Owner = owner
             };
 
-            var validator = new FolderValidator();
+            var validator = new FolderValidator(folderRepository);
             var isValid = validator.IsValid(folder);
 
         }
@@ -213,6 +221,8 @@ namespace TwoDrive.BusinessLogic.Test
         [ExpectedException(typeof(ValidationException))]
         public void TwoFoldersAtSameLevelWithSameName()
         {
+            var context = ContextFactory.GetMemoryContext("Two Folders At Same Level With Same Name");
+            var folderRepository = new FolderRepository(context);
             var root = new Folder
             {
                 Name = "Root",
@@ -238,7 +248,7 @@ namespace TwoDrive.BusinessLogic.Test
             children.Add(firstChild);
             root.FolderChildren = children;
 
-            var validator = new FolderValidator();
+            var validator = new FolderValidator(folderRepository);
             var isValid = validator.IsValid(secondChild);
 
         }
@@ -309,88 +319,6 @@ namespace TwoDrive.BusinessLogic.Test
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void AreDependenciesSetForIsValidDestination()
-        {
-            var writer = new Writer();
-            var root = new Folder
-            {
-                Id = 1,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var destination = new TxtFile
-            {
-                Id = 2,
-                Content = "TestFile",
-                Name = "FileName",
-                CreationDate = DateTime.Now,
-                DateModified = DateTime.Now,
-                ParentFolder = root,
-                Owner = writer
-            };
-            var elementToTransfer = new TxtFile
-            {
-                Id = 3,
-                Content = "TestFile",
-                Name = "FileName",
-                CreationDate = DateTime.Now,
-                DateModified = DateTime.Now,
-                ParentFolder = root,
-                Owner = writer
-            };
-
-            var validator = new FolderValidator();
-            var isValid = validator.IsValidDestination(elementToTransfer, destination);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void ElementDestinationIsNotAFolder()
-        {
-            var writer = new Writer();
-            var root = new Folder
-            {
-                Id = 1,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var destination = new TxtFile
-            {
-                Id = 2,
-                Content = "TestFile",
-                Name = "FileName",
-                CreationDate = DateTime.Now,
-                DateModified = DateTime.Now,
-                ParentFolder = root,
-                Owner = writer
-            };
-            var elementToTransfer = new TxtFile
-            {
-                Id = 3,
-                Content = "TestFile",
-                Name = "FileName",
-                CreationDate = DateTime.Now,
-                DateModified = DateTime.Now,
-                ParentFolder = root,
-                Owner = writer
-            };
-
-            var context = ContextFactory.GetMemoryContext("Element Destination Is Not A Folder");
-            var folderRepository = new FolderRepository(context);
-            var fileRepository = new FileRepository(context);
-
-            folderRepository.Insert(root);
-            folderRepository.Save();
-            fileRepository.Insert(destination);
-            fileRepository.Insert(elementToTransfer);
-            fileRepository.Save();
-
-            var validator = new FolderValidator(folderRepository, fileRepository);
-            var isValid = validator.IsValidDestination(elementToTransfer, destination);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ElementDestinationDoesntExist()
         {
             var context = ContextFactory.GetMemoryContext("Element destination doesnt exist");
@@ -422,7 +350,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Owner = writer
             };
 
-            var validator = new FolderValidator(folderRepository, fileRepository);
+            var validator = new FolderValidator(folderRepository);
             var isValid = validator.IsValidDestination(elementToTransfer, destination);
         }
 
@@ -481,7 +409,7 @@ namespace TwoDrive.BusinessLogic.Test
             fileRepository.Save();
             folderRepository.Save();
 
-            var validator = new FolderValidator(folderRepository, fileRepository);
+            var validator = new FolderValidator(folderRepository);
             var isValid = validator.IsValidDestination(elementToTransfer, destination);
         }
 
@@ -492,7 +420,6 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var context = ContextFactory.GetMemoryContext("Element Destination Is Child Of Owner Parent Folder");
             var folderRepository = new FolderRepository(context);
-            var fileRepository = new FileRepository(context);
             var writer = new Writer();
             var root = new Folder
             {
@@ -523,7 +450,7 @@ namespace TwoDrive.BusinessLogic.Test
             folderRepository.Insert(destination);
             folderRepository.Save();
 
-            var validator = new FolderValidator(folderRepository, fileRepository);
+            var validator = new FolderValidator(folderRepository);
             var isValid = validator.IsValidDestination(elementToTransfer, destination);
         }
 
@@ -531,16 +458,10 @@ namespace TwoDrive.BusinessLogic.Test
         [ExpectedException(typeof(ArgumentException))]
         public void ElementToTransferAndDestinationAreEmpty()
         {
-            var validator = new FolderValidator();
+            var context = ContextFactory.GetMemoryContext("Element To Transfer And Destination Are Empty");
+            var folderRepository = new FolderRepository(context);
+            var validator = new FolderValidator(folderRepository);
             var isValid = validator.IsValidDestination(null, null);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void DependenciesAreNotSet()
-        {
-            var validator = new FolderValidator();
-            var isValid = validator.ValidateDependenciesAreSet(null, null);
         }
     }
 }

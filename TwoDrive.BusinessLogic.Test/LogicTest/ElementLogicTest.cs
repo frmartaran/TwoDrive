@@ -7,6 +7,7 @@ using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.DataAccess;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
+using TwoDrive.BusinessLogic.Logic;
 
 namespace TwoDrive.BusinessLogic.Test
 {
@@ -70,25 +71,23 @@ namespace TwoDrive.BusinessLogic.Test
             var context = ContextFactory.GetMemoryContext("Move File From One Folder To Another");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
-            var folderValidator = new FolderValidator(folderRepository, fileRepository);
-
+            var elementRepository = new Repository<Element>(context);
+            var folderValidator = new FolderValidator(folderRepository);
 
             folderRepository.Insert(root);
             folderRepository.Insert(parentFolderOrigin);
             folderRepository.Insert(parentFolderDestination);
             folderRepository.Save();
-            fileRepository.Insert(fileToMove);
-            fileRepository.Save();
+            elementRepository.Insert(fileToMove);
+            elementRepository.Save();
 
-            var elementLogicDependencies = new ElementLogicDependencies
+            var moveElementDependencies = new MoveElementDependencies
             {
-                FileRepository = fileRepository,
-                FolderRepository = folderRepository,
+                ElementRepository = elementRepository,
                 ElementValidator = folderValidator
             };
-
-            var elementLogic = new ElementLogic(elementLogicDependencies);
-            elementLogic.MoveElement(fileToMove, parentFolderDestination);
+            var folderLogic = new FolderLogic(folderRepository, fileRepository);
+            folderLogic.MoveElement(fileToMove, parentFolderDestination, moveElementDependencies);
 
             var parentFolderDestinationChild = parentFolderDestination.FolderChildren.FirstOrDefault();
             Assert.AreEqual(4, parentFolderDestinationChild.Id);
