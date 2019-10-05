@@ -76,5 +76,20 @@ namespace TwoDrive.WebApi.Test
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
+
+        [TestMethod]
+        public void DeleteNullWriter()
+        {
+            var writer = new Writer();
+            var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+            .Returns(writer);
+            mockLogic.Setup(m => m.Delete(It.IsAny<int>()));
+            var controller = new WriterController(mockLogic.Object);
+            var result = controller.Delete(1);
+
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+        }
     }
 }
