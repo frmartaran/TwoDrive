@@ -135,5 +135,49 @@ namespace TwoDrive.DataAccess.Tests
             Assert.IsTrue(all.Contains(writer));
             Assert.IsTrue(all.Contains(anotherWriter));
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(DatabaseActionFailureException))]
+        public void DeleteNonExistantWriter()
+        {
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext15");
+            var repository = new WriterRepository(memoryDb);
+            repository.Delete(1);
+            repository.Save();
+
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(DatabaseActionFailureException))]
+        public void UpdateNonExistantWriter()
+        {
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext15");
+            var repository = new WriterRepository(memoryDb);
+            repository.Update(null);
+            repository.Save();
+
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(DatabaseActionFailureException))]
+        public void AddNonExistantWriter()
+        {
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext15");
+            var repository = new WriterRepository(memoryDb);
+            repository.Insert(null);
+            repository.Save();
+
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(DatabaseActionFailureException))]
+        public void GetNonExistantWriter()
+        {
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext15");
+            var repository = new WriterRepository(memoryDb);
+            repository.Get(1);
+            repository.Save();
+
+        }
     }
 }
