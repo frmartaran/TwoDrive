@@ -49,6 +49,9 @@ namespace TwoDrive.BusinessLogic.Extensions
 
         public static void AddCreatorClaimsTo(this Writer writer, Element element)
         {
+            if (element.Owner != writer)
+                throw new LogicException("Can only add creator claims to it's owner");
+
             var read = new Claim
             {
                 Element = element,
