@@ -39,6 +39,7 @@ namespace TwoDrive.WebApi.Test
             var result = controller.Create(writerModel);
 
             mockLogic.VerifyAll();
+            mockFolderLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
 
@@ -58,7 +59,6 @@ namespace TwoDrive.WebApi.Test
             mockLogic.Setup(m => m.Create(It.IsAny<Writer>()))
             .Throws(new ValidationException(""));
             var mockFolderLogic = new Mock<ILogic<Folder>>(MockBehavior.Strict);
-            mockFolderLogic.Setup(m => m.Create(It.IsAny<Folder>()));
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object);
             var result = controller.Create(writerModel);

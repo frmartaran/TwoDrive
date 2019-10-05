@@ -11,6 +11,9 @@ namespace TwoDrive.BusinessLogic.Test
     {
         private Writer writer;
         private Folder root;
+        private Claim read;
+        private Claim write;
+        private Claim share;
 
         [TestInitialize]
         public void SetUp()
@@ -20,17 +23,17 @@ namespace TwoDrive.BusinessLogic.Test
             {
                 Name = "Root"
             };
-            var read = new Claim
+            read = new Claim
             {
                 Element = root,
                 Type = ClaimType.Read
             };
-            var write = new Claim
+            write = new Claim
             {
                 Element = root,
                 Type = ClaimType.Write
             };
-            var share = new Claim
+            share = new Claim
             {
                 Element = root,
                 Type = ClaimType.Share
@@ -91,13 +94,31 @@ namespace TwoDrive.BusinessLogic.Test
             Assert.IsTrue(isAFriend);
         }
 
-        
+
         [TestMethod]
         public void IsNotFriendsWith()
         {
             var friend = new Writer();
             var isAFriend = writer.IsFriendsWith(friend);
             Assert.IsFalse(isAFriend);
+        }
+
+        [TestMethod]
+        public void AddRootClaims()
+        {
+            writer.Claims = new List<Claim>();
+            writer.AddRootClaims(root);
+            var delete = new Claim
+            {
+                Element = root,
+                Type = ClaimType.Delete
+            };
+
+            Assert.IsTrue(writer.Claims.Contains(read));
+            Assert.IsTrue(writer.Claims.Contains(write));
+            Assert.IsTrue(writer.Claims.Contains(share));
+            Assert.IsFalse(writer.Claims.Contains(delete));
+
         }
     }
 }
