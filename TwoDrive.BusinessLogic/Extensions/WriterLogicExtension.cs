@@ -118,14 +118,9 @@ namespace TwoDrive.BusinessLogic.Extensions
 
         public static void AllowFriendTo(this Writer owner, Writer friend, Element element, ClaimType type)
         {
-            var areFriends = owner.IsFriendsWith(friend);
-            if (!areFriends)
-                throw new LogicException($"The owner is not friends with {friend.UserName}");
+            ValidateIfFriends(owner, friend);
+            ValidateIfFriendCan(friend, element, type);
 
-            var canAlreardy = friend.HasClaimsFor(element, type);
-            if (canAlreardy)
-                throw new LogicException($"{friend.UserName} can already {type.ToString()} this element");
-            
             var claim = new Claim
             {
                 Element = element,
@@ -133,6 +128,20 @@ namespace TwoDrive.BusinessLogic.Extensions
             };
             friend.Claims.Add(claim);
 
+        }
+
+        private static void ValidateIfFriends(Writer owner, Writer friend)
+        {
+            var areFriends = owner.IsFriendsWith(friend);
+            if (!areFriends)
+                throw new LogicException($"The owner is not friends with {friend.UserName}");
+        }
+
+        private static void ValidateIfFriendCan(Writer friend, Element element, ClaimType type)
+        {
+            var canAlreardy = friend.HasClaimsFor(element, type);
+            if (canAlreardy)
+                throw new LogicException($"{friend.UserName} can already {type.ToString()} this element");
         }
     }
 }
