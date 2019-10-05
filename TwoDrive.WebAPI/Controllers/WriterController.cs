@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using TwoDrive.BusinessLogic.Exceptions;
+using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
@@ -29,7 +30,6 @@ namespace TwoDrive.WebApi.Controllers
             try
             {
                 var writer = WriterModel.ToDomain(model);
-                Logic.Create(writer);
                 var root = new Folder
                 {
                     Name = "Root",
@@ -38,6 +38,8 @@ namespace TwoDrive.WebApi.Controllers
                     Owner = writer,
                     FolderChildren = new List<Element>()
                 };
+                writer.AddRootClaims(root);
+                Logic.Create(writer);
                 FolderLogic.Create(root);
                 return Ok("Writer Created");
             }

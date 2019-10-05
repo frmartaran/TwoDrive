@@ -77,12 +77,13 @@ namespace TwoDrive.WebApi.Test
             mockLogic.Setup(m => m.Delete(It.IsAny<int>()));
             
             var mockFolderLogic = new Mock<ILogic<Folder>>(MockBehavior.Strict);
-            mockFolderLogic.Setup(m => m.Create(It.IsAny<Folder>()));
+            mockFolderLogic.Setup(m => m.Delete(It.IsAny<int>()));
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object);
             var result = controller.Delete(1);
 
             mockLogic.VerifyAll();
+            mockFolderLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
 
@@ -97,7 +98,6 @@ namespace TwoDrive.WebApi.Test
                 .Throws(new LogicException(""));
 
             var mockFolderLogic = new Mock<ILogic<Folder>>(MockBehavior.Strict);
-            mockFolderLogic.Setup(m => m.Create(It.IsAny<Folder>()));
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object);
             var result = controller.Delete(1);
