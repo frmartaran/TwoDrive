@@ -143,17 +143,10 @@ namespace TwoDrive.WebApi.Test
         [TestMethod]
         public void GetNonExistantWriter()
         {
-            var writer = new Writer
-            {
-                Role = Role.Writer,
-                UserName = "Valid Writer",
-                Password = "1234",
-                Friends = new List<Writer>(),
-                Claims = new List<Claim>()
-            };
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
-                .Returns(writer);
+                .Returns((Writer)null);
+
             var mockFolderLogic = new Mock<IFolderLogic>();
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object);

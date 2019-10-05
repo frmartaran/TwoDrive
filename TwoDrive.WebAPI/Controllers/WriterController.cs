@@ -72,6 +72,10 @@ namespace TwoDrive.WebApi.Controllers
         public IActionResult Get(int id)
         {
             var writer = Logic.Get(id);
+            if (writer == null)
+            {
+                return NotFound("User not found");
+            }
             var model = WriterModel.FromDomain(writer);
             return Ok(model);
         }
