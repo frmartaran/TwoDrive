@@ -110,7 +110,12 @@ namespace TwoDrive.BusinessLogic.Extensions
                 .Where(c => c.Element == element)
                 .ToList();
 
+            if (allClaims.Count == 0)
+                throw new LogicException("No claims to remove");
+
             writer.Claims.RemoveRange(allClaims);
         }
+
+
     }
 }
