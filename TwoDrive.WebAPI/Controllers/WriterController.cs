@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Mvc;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
 using TwoDrive.WebApi.Models;
@@ -19,9 +20,16 @@ namespace TwoDrive.WebApi.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] WriterModel model)
         {
-            var writer = WriterModel.ToDomain(model);
-            Logic.Create(writer);
-            return Ok("Writer Created");
+            try
+            {
+                var writer = WriterModel.ToDomain(model);
+                Logic.Create(writer);
+                return Ok("Writer Created");
+            }
+            catch (ValidationException validationError)
+            {
+                return BadRequest(validationError.Message);
+            }
         }
     }
 }
