@@ -19,14 +19,18 @@ namespace TwoDrive.BusinessLogic.Validators
 
         public bool IsValid(Writer writer)
         {
-            if (writer == null)
-                throw new ValidationException("Can't add or update null value");
-
+            ValidateIfNull(writer);
             ValidateUserName(writer);
             ValidatePassword(writer);
             ValidateClaims(writer);
 
             return true;
+        }
+
+        private void ValidateIfNull(Writer writer)
+        {
+            if (writer == null)
+                throw new ValidationException("Can't add or update null value");
         }
 
         private void ValidateClaims(Writer writer)
