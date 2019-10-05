@@ -38,9 +38,16 @@ namespace TwoDrive.WebApi.Controllers
         [AuthorizeFilter(Role.Administrator)]
         public IActionResult Delete(int id)
         {
-            var writer = Logic.Get(id);
-            Logic.Delete(id);
-            return Ok($"Writer: {writer.UserName} has been deleted");
+            try
+            {
+                var writer = Logic.Get(id);
+                Logic.Delete(id);
+                return Ok($"Writer: {writer.UserName} has been deleted");
+            }
+            catch (LogicException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
     }
 }
