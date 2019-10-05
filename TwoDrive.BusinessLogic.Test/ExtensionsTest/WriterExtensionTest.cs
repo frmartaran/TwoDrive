@@ -320,5 +320,26 @@ namespace TwoDrive.BusinessLogic.Test
 
             Assert.AreEqual(0, friend.Claims.Count);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void RevokeFriendFromTheirElement()
+        {
+            var folder = root;
+            var friend = new Writer
+            {
+                Claims = new List<Claim>()
+            };
+            var read = new Claim
+            {
+                Element = folder,
+                Type = ClaimType.Read
+            };
+            friend.Claims.Add(read);
+            folder.Owner = friend;
+            writer.Friends.Add(friend);
+            writer.RevokeFriendFrom(friend, root, ClaimType.Read);
+
+        }
     }
 }
