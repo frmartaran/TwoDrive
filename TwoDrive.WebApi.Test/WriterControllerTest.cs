@@ -124,7 +124,6 @@ namespace TwoDrive.WebApi.Test
                 Friends = new List<Writer>(),
                 Claims = new List<Claim>()
             };
-
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(writer);
@@ -132,9 +131,13 @@ namespace TwoDrive.WebApi.Test
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object);
             var result = controller.Get(1);
+            var asOk = result as OkObjectResult;
+            var writerModelResult = asOk.Value as WriterModel;
+            var resultWriter = WriterModel.ToDomain(writerModelResult);
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.AreEqual(writer, resultWriter);
         }
     }
 }
