@@ -16,8 +16,8 @@ namespace TwoDrive.WebApi.Controllers
     public class WriterController : ControllerBase
     {
         private ILogic<Writer> Logic { get; set; }
-        private ILogic<Folder> FolderLogic { get; set; }
-        public WriterController(ILogic<Writer> logic, ILogic<Folder> folderLogic) : base()
+        private IFolderLogic FolderLogic { get; set; }
+        public WriterController(ILogic<Writer> logic, IFolderLogic folderLogic) : base()
         {
             Logic = logic;
             FolderLogic =  folderLogic;
@@ -56,6 +56,8 @@ namespace TwoDrive.WebApi.Controllers
             try
             {
                 var writer = Logic.Get(id);
+                var folder = FolderLogic.GetRootFolder(writer);
+                FolderLogic.Delete(folder.Id);
                 Logic.Delete(id);
                 return Ok($"Writer: {writer.UserName} has been deleted");
             }

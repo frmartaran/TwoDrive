@@ -33,7 +33,7 @@ namespace TwoDrive.WebApi.Test
 
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Create(It.IsAny<Writer>()));
-            var mockFolderLogic = new Mock<ILogic<Folder>>(MockBehavior.Strict);
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             mockFolderLogic.Setup(m => m.Create(It.IsAny<Folder>()));
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object);
             var result = controller.Create(writerModel);
@@ -58,7 +58,7 @@ namespace TwoDrive.WebApi.Test
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Create(It.IsAny<Writer>()))
             .Throws(new ValidationException(""));
-            var mockFolderLogic = new Mock<ILogic<Folder>>(MockBehavior.Strict);
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object);
             var result = controller.Create(writerModel);
@@ -75,8 +75,11 @@ namespace TwoDrive.WebApi.Test
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
             .Returns(writer);
             mockLogic.Setup(m => m.Delete(It.IsAny<int>()));
-            
-            var mockFolderLogic = new Mock<ILogic<Folder>>(MockBehavior.Strict);
+
+            var root = new Folder();
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            mockFolderLogic.Setup(m => m.GetRootFolder(It.IsAny<Writer>()))
+                .Returns(root);
             mockFolderLogic.Setup(m => m.Delete(It.IsAny<int>()));
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object);
@@ -97,7 +100,11 @@ namespace TwoDrive.WebApi.Test
             mockLogic.Setup(m => m.Delete(It.IsAny<int>()))
                 .Throws(new LogicException(""));
 
-            var mockFolderLogic = new Mock<ILogic<Folder>>(MockBehavior.Strict);
+            var root = new Folder();
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            mockFolderLogic.Setup(m => m.GetRootFolder(It.IsAny<Writer>()))
+                .Returns(root);
+            mockFolderLogic.Setup(m => m.Delete(It.IsAny<int>()));
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object);
             var result = controller.Delete(1);

@@ -10,7 +10,7 @@ using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic.Logic
 {
-    public class FolderLogic : ILogic<Folder>, IFolderLogic, ElementLogic
+    public class FolderLogic : ElementLogic, ILogic<Folder>, IFolderLogic
     {
         private IFolderRepository FolderRepository { get; set; }
 
@@ -153,7 +153,7 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public Folder GetRootFolder(Writer owner)
         {
-            throw new NotImplementedException();
+            return FolderRepository.GetRoot(owner.Id);
         }
     }
 }
