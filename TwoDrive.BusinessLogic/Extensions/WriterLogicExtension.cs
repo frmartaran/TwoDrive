@@ -24,9 +24,9 @@ namespace TwoDrive.BusinessLogic.Extensions
         public static void AddRootClaims(this Writer writer, Folder root)
         {
             var isRoot = root.ParentFolder == null && root.Name == "Root";
-            if(!isRoot)
+            if (!isRoot)
                 throw new LogicException("Can't add root claims to a child folder");
-                
+
             var read = new Claim
             {
                 Element = root,
@@ -45,6 +45,34 @@ namespace TwoDrive.BusinessLogic.Extensions
             writer.Claims.Add(read);
             writer.Claims.Add(write);
             writer.Claims.Add(share);
+        }
+
+        public static void AddCreatorClaimsTo(this Writer writer, Element element)
+        {
+            var read = new Claim
+            {
+                Element = element,
+                Type = ClaimType.Read
+            };
+            var write = new Claim
+            {
+                Element = element,
+                Type = ClaimType.Write
+            };
+            var share = new Claim
+            {
+                Element = element,
+                Type = ClaimType.Share
+            };
+            var delete = new Claim
+            {
+                Element = element,
+                Type = ClaimType.Delete
+            };
+            writer.Claims.Add(read);
+            writer.Claims.Add(write);
+            writer.Claims.Add(share);
+            writer.Claims.Add(delete);
         }
     }
 }
