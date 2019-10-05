@@ -217,5 +217,33 @@ namespace TwoDrive.WebApi.Test
             Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
 
         }
+
+        [TestMethod]
+        public void UpdateWriter()
+        {
+            var writer = new Writer
+            {
+                Role = Role.Writer,
+                UserName = "Valid Writer",
+                Password = "12345",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>()
+            };
+            var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Update(It.IsAny<Writer>()));
+            mockLogic.Setup(m => m.Get(It.IsAny<int>())).Returns(writer);
+            var mockFolderLogic = new Mock<IFolderLogic>();
+
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object);
+            var result = controller.Update(1);
+            var asOk = result as OkObjectResult;
+            var writerModelResult = asOk.Value as WriterModel;
+            var resultWriter = WriterModel.ToDomain(writerModelResult);
+
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.AreEqual(writer, resultWriter);
+
+        }
     }
 }
