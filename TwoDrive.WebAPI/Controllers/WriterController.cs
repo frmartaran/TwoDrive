@@ -92,5 +92,16 @@ namespace TwoDrive.WebApi.Controllers
             var asModels = WriterModel.AllToModel(writers);
             return Ok(asModels);
         }
+
+        [HttpPut("{id}")]
+        [AuthorizeFilter(Role.Administrator)]
+        public IActionResult Update(int id)
+        {
+            var writer = Logic.Get(id);
+            Logic.Update(writer);
+            var updatedWriter = Logic.Get(id);
+            var toModel = WriterModel.FromDomain(updatedWriter);
+            return Ok(toModel);
+        }
     }
 }
