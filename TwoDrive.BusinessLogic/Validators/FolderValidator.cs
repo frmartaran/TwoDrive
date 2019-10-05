@@ -45,7 +45,7 @@ namespace TwoDrive.BusinessLogic.Validators
                 throw new ArgumentException("A child folder must have a parent folder");
         }
 
-        public bool IsValidDestination(Element elementToTransfer, Element elementDestination)
+        public override bool IsValidDestination(Element elementToTransfer, Element elementDestination)
         {
             if (!AreElementToTransferAndDestinationEmpty(elementToTransfer, elementDestination) && AreDependenciesSet())
             {

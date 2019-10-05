@@ -533,5 +533,13 @@ namespace TwoDrive.BusinessLogic.Test
             var validator = new FolderValidator();
             var isValid = validator.IsValidDestination(null, null);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void DependenciesAreNotSet()
+        {
+            var validator = new FolderValidator();
+            var isValid = validator.ValidateDependenciesAreSet(null, null);
+        }
     }
 }

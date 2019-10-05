@@ -48,12 +48,12 @@ namespace TwoDrive.BusinessLogic.Validators
                 throw new ArgumentException("The modified date should be later than the creation date");
         }
 
-        public bool ValidateDependenciesAreSet(IFolderRepository folderRepository, IFileRepository fileRepository)
+        public virtual bool ValidateDependenciesAreSet(IFolderRepository folderRepository, IFileRepository fileRepository)
         {
             throw new NotImplementedException();
         }
 
-        public bool IsValidDestination(Element elementToTransfer, Element elementDestination)
+        public virtual bool IsValidDestination(Element elementToTransfer, Element elementDestination)
         {
             throw new NotImplementedException();
         }
