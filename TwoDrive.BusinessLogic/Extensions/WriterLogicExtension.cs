@@ -152,6 +152,9 @@ namespace TwoDrive.BusinessLogic.Extensions
                 .Where(e => e.Element == element)
                 .Where(c => c.Type == type)
                 .FirstOrDefault();
+            if (claim == null)
+                throw new LogicException("There are no claims to remove");
+
             friend.Claims.Remove(claim);
         }
     }
