@@ -187,7 +187,7 @@ namespace TwoDrive.WebApi.Test
             var mockFolderLogic = new Mock<IFolderLogic>();
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object);
-            var result = controller.Get(1);
+            var result = controller.Get();
             var asOk = result as OkObjectResult;
             var writerModelResult = asOk.Value as List<WriterModel>;
             var resultWriter = WriterModel.AllToEntity(writerModelResult);

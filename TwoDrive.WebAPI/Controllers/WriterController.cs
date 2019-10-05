@@ -79,5 +79,14 @@ namespace TwoDrive.WebApi.Controllers
             var model = WriterModel.FromDomain(writer);
             return Ok(model);
         }
+
+        [HttpGet]
+        [AuthorizeFilter(Role.Administrator)]
+        public IActionResult Get()
+        {
+            var writers = Logic.GetAll();
+            var asModels = WriterModel.AllToModel(writers);
+            return Ok(asModels);
+        }
     }
 }
