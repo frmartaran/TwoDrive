@@ -1,10 +1,13 @@
 
+using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.DataAccess;
 using TwoDrive.Domain;
 using TwoDrive.WebApi.Controllers;
 using TwoDrive.WebApi.Models;
@@ -39,7 +42,7 @@ namespace TwoDrive.WebApi.Test
         [TestMethod]
         public void InvalidUser()
         {
-            
+
             var writerModel = new WriterModel
             {
                 Role = Role.Writer,
@@ -51,12 +54,24 @@ namespace TwoDrive.WebApi.Test
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Create(It.IsAny<Writer>()))
             .Throws(new ValidationException(""));
-            
+
             var controller = new WriterController(mockLogic.Object);
             var result = controller.Create(writerModel);
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        }
+
+        [TestMethod]
+        public void DeleteWriter()
+        {
+            var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Delete(It.IsAny<Writer>()));
+            var controller = new WriterController(mockLogic.Object);
+            var result = controller.Delete(1);
+
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
     }
 }

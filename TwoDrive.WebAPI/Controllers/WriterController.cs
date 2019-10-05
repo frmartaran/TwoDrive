@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
+using TwoDrive.WebApi.Filters;
 using TwoDrive.WebApi.Models;
 
 namespace TwoDrive.WebApi.Controllers
@@ -18,6 +19,7 @@ namespace TwoDrive.WebApi.Controllers
         }
 
         [HttpPost]
+        [AuthorizeFilter(Role.Administrator)]
         public IActionResult Create([FromBody] WriterModel model)
         {
             try
