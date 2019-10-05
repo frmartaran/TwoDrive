@@ -1,14 +1,10 @@
-
-using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TwoDrive.BusinessLogic;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
-using TwoDrive.DataAccess;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Controllers;
@@ -276,7 +272,7 @@ namespace TwoDrive.WebApi.Test
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSessionLogic = new Mock<ISessionLogic>();
 
-            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object, 
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
                 mockSessionLogic.Object);
             var result = controller.Update(1);
 
@@ -286,7 +282,7 @@ namespace TwoDrive.WebApi.Test
         }
 
         [TestMethod]
-        public void AddFriend()
+        public void ShowFriendList()
         {
             var writer = new Writer
             {
@@ -304,20 +300,26 @@ namespace TwoDrive.WebApi.Test
                 Friends = new List<Writer>(),
                 Claims = new List<Claim>()
             };
-            var mockSessionLogic = new Mock<ISessionLogic>(MockBehavior.Strict);
-            mockSessionLogic.Setup(m => m.GetWriter(It.IsAny<string>()))
-                .Returns(writer);
+            writer.Friends.Add(friend);
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
-            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
-                .Returns(friend);
+            mockLogic.Setup(m => m.GetAll())
+                .Returns(writer.Friends);
+
             var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSessionLogic = new Mock<ISessionLogic>();
 
-            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object, 
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
                 mockSessionLogic.Object);
-            var result = controller.AddFriend(1);
+            var result = controller.ShowFriends(1);
+            var asOk = result as OkObjectResult;
+            var writerModelResult = asOk.Value as List<WriterModel>;
+            var resultWriter = WriterModel.AllToEntity(writerModelResult);
 
+            mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.IsTrue(resultWriter.Contains(friend));
 
         }
+
     }
 }

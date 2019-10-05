@@ -114,5 +114,49 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
+        [HttpPut]
+        public IActionResult AddFriend(int id)
+        {
+            try
+            {
+                var token = HttpContext.Request.Headers["Authorization"];
+                var writer = SessionLogic.GetWriter(token);
+                var friend = Logic.Get(id);
+                if (writer.IsFriendsWith(friend))
+                {
+                    return BadRequest($"You're already friend with {friend.UserName}");
+                };
+                writer.Friends.Add(friend);
+                Logic.Update(writer);
+                return Ok($"You are now friends with {friend.UserName}");
+            }
+            catch (ValidationException exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        [HttpPut]
+        public IActionResult RemoveFriend(int id)
+        {
+            try
+            {
+                var token = HttpContext.Request.Headers["Authorization"];
+                var writer = SessionLogic.GetWriter(token);
+                var friend = Logic.Get(id);
+                if (!writer.IsFriendsWith(friend))
+                {
+                    return BadRequest("Can't remove friend since you aren't friends");
+                };
+                writer.Friends.Remove(friend);
+                Logic.Update(writer);
+                return Ok($"You are not friends with {friend.UserName} anymore");
+            }
+            catch (ValidationException exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
     }
 }
