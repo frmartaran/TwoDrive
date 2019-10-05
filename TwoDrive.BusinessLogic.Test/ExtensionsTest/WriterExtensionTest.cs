@@ -159,5 +159,19 @@ namespace TwoDrive.BusinessLogic.Test
             };
             writer.AddCreatorClaimsTo(folder);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void AddCreatorClaimsToRootFolder()
+        {
+            writer.Claims = new List<Claim>();
+            var folder = new Folder
+            {
+                Name = "Folder",
+                Owner = new Writer(),
+                ParentFolder = root
+            };
+            writer.AddCreatorClaimsTo(folder);
+        }
     }
 }
