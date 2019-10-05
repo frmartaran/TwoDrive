@@ -271,10 +271,11 @@ namespace TwoDrive.BusinessLogic.Test
         public void UpdateNullWriter()
         {
 
-            var context = ContextFactory.GetMemoryContext("Delete Context 1");
+            var context = ContextFactory.GetMemoryContext("Delete Context 2");
             var repository = new WriterRepository(context);
+            var validator = new WriterValidator(repository);
 
-            var logic = new WriterLogic(repository);
+            var logic = new WriterLogic(repository, validator);
             logic.Update(null);
         }
 
@@ -283,10 +284,11 @@ namespace TwoDrive.BusinessLogic.Test
         public void CreateNullWriter()
         {
 
-            var context = ContextFactory.GetMemoryContext("Delete Context 1");
+            var context = ContextFactory.GetMemoryContext("Delete Context 3");
             var repository = new WriterRepository(context);
+            var validator = new WriterValidator(repository);
 
-            var logic = new WriterLogic(repository);
+            var logic = new WriterLogic(repository, validator);
             logic.Create(null);
         }
     }
