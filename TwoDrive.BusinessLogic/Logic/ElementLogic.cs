@@ -35,11 +35,11 @@ namespace TwoDrive.BusinessLogic
                 elementToMove.ParentFolder = folderDestination;
                 elementToMove.ParentFolderId = folderDestination.Id;
                 FolderRepository.Update(elementToMove.ParentFolder);
-                if (elementDestination is Folder folder)
+                if (elementToMove is Folder folder)
                 {
                     FolderRepository.Update(folder);
                 }
-                else if (elementDestination is File file)
+                else if (elementToMove is File file)
                 {
                     FileRepository.Update(file);
                 }
