@@ -7,7 +7,7 @@ namespace TwoDrive.WebApi.Models
 {
     public class WriterModel : Model<Writer, WriterModel>
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public Role Role { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
@@ -15,15 +15,19 @@ namespace TwoDrive.WebApi.Models
         public ICollection<Claim> Claims { get; set; }
         protected override Writer ToEntity(WriterModel model)
         {
-            return new Writer
+            var writer = new Writer
             {
-                Id = this.Id,
                 Role = this.Role,
                 UserName = this.UserName,
                 Password = this.Password,
                 Friends = this.Friends,
                 Claims = this.Claims
             };
+
+            if (Id.HasValue)
+                writer.Id = Id.Value;
+                
+            return writer;
         }
         protected override WriterModel ToModel(Writer entity)
         {

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.Domain;
+using TwoDrive.WebApi.Controllers;
 using TwoDrive.WebApi.Models;
 
 namespace TwoDrive.WebApi.Test
@@ -25,15 +27,14 @@ namespace TwoDrive.WebApi.Test
                 Claims = new List<Claim>()
             };
 
-            var mockLogic = new Mock<WriterLogic>(MockBehavior.Strict);
+            var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Create(It.IsAny<Writer>()));
-            var mockController = new WriterController(mockLogic.Object);
+            var controller = new WriterController(mockLogic.Object);
 
-            var result = mockController.Post(writerModel);
-            var createdResult = result as CreatedAtRouteResult;
-            var modelResul = createdResult.Value as WriterModel;
+            var result = controller.Create(writerModel);
 
             mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
     }
 }
