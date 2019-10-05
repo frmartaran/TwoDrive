@@ -245,5 +245,22 @@ namespace TwoDrive.WebApi.Test
             Assert.AreEqual(writer, resultWriter);
 
         }
+
+        [TestMethod]
+        public void UpdateNullWriter()
+        {
+            var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Update(It.IsAny<Writer>()))
+                .Throws(new ValidationException(""));
+            mockLogic.Setup(m => m.Get(It.IsAny<int>())).Returns((Writer) null);
+            var mockFolderLogic = new Mock<IFolderLogic>();
+
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object);
+            var result = controller.Update(1);
+
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+
+        }
     }
 }
