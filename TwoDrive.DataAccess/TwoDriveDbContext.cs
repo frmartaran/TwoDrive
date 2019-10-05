@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
+using TwoDrive.Domain.Interface;
 
 namespace TwoDrive.DataAccess
 {
@@ -20,7 +23,45 @@ namespace TwoDrive.DataAccess
         public virtual DbSet<Modification> Modifications { get; set; }
         public virtual DbSet<Session> Sessions { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder) { }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Element>()
+                .Property<bool>("IsDeleted");
+            modelBuilder.Entity<Element>()
+                .HasQueryFilter(e => !e.IsDeleted);
+        }
 
+        public override int SaveChanges()
+        {
+            SoftDelete();
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            SoftDelete();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        private void SoftDelete()
+        {
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                if (typeof(ISoftDelete).IsAssignableFrom(entry.Entity.GetType()))
+                {
+                    switch (entry.State)
+                    {
+                        case EntityState.Added:
+                            entry.CurrentValues["IsDeleted"] = false;
+                            break;
+                        case EntityState.Deleted:
+                            entry.CurrentValues["IsDeleted"] = true;
+                            entry.CurrentValues["DeletedDate"] = DateTime.Now;
+                            entry.State = EntityState.Modified;
+                            break;
+                    }
+                }
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using TwoDrive.DataAccess.Interface;
@@ -16,9 +17,9 @@ namespace TwoDrive.BusinessLogic.Logic
 
         private IFileRepository FileRepository { get; set; }
 
-        private const string Spaces = "      ";
+        private IRepository<Modification> ModificationRepository { get; set; }
 
-        private const string type = "Folder";
+        private const string Spaces = "      ";
 
         public FolderLogic(IFolderRepository currentFolderRepository, IFileRepository currentFileRepository)
         {
@@ -31,6 +32,7 @@ namespace TwoDrive.BusinessLogic.Logic
             FolderRepository = dependencies.FolderRepository;
             ElementValidator = dependencies.ElementValidator;
             FileRepository = dependencies.FileRepository;
+            ModificationRepository = dependencies.ModificationRepository;
         }
         public void Create(Folder folder)
         {
@@ -42,6 +44,9 @@ namespace TwoDrive.BusinessLogic.Logic
         public void Delete(int id)
         {
             var folder = Get(id);
+            if (folder == null)
+                throw new LogicException("The folder doesn't exists");
+
             DeleteChildren(folder);
         }
 
@@ -49,26 +54,49 @@ namespace TwoDrive.BusinessLogic.Logic
         {
             if (element is Folder folder)
             {
-                if (folder.FolderChildren.Count == 0)
+                var folderAndChildren = FolderRepository.Get(folder.Id);
+                var children = folderAndChildren
+                    .FolderChildren
+                    .Where(c => !c.IsDeleted)
+                    .ToList();
+                if (children.Count == 0)
                 {
+                    AddDeleteModfication(element);
                     FolderRepository.Delete(element.Id);
                     FolderRepository.Save();
                     return;
                 }
-                var child = folder.FolderChildren.FirstOrDefault();
+                var child = folder.FolderChildren
+                    .Where(c => !c.IsDeleted)
+                    .FirstOrDefault();
                 while (child != null)
                 {
                     DeleteChildren(child);
-                    child = folder.FolderChildren.FirstOrDefault();
+                    child = folder.FolderChildren
+                        .Where(c => !c.IsDeleted)
+                        .FirstOrDefault();
                 }
                 DeleteChildren(element);
             }
             else
             {
+                AddDeleteModfication(element);
                 FileRepository.Delete(element.Id);
                 FileRepository.Save();
                 return;
             }
+        }
+
+        private void AddDeleteModfication(Element element)
+        {
+            var modification = new Modification
+            {
+                ElementModified = element,
+                type = ModificationType.Deleted,
+                Date = DateTime.Now
+            };
+            ModificationRepository.Insert(modification);
+            ModificationRepository.Save();
         }
         public Folder Get(int Id)
         {

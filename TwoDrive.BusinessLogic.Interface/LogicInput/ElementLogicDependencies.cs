@@ -11,5 +11,7 @@ namespace TwoDrive.BusinessLogic.Interfaces.LogicInput
         public IFileRepository FileRepository { get; set; }
 
         public IElementValidator ElementValidator { get; set; }
+
+        public IRepository<Modification> ModificationRepository { get; set; }
     }
 }

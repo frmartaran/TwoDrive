@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.DataAccess;
 using TwoDrive.Domain;
@@ -93,7 +94,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void InvalidFolderWithoutName()
         {
             var folder = new Folder
@@ -109,7 +110,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void InvalidFileWithoutName()
         {
             var root = new Folder
@@ -134,7 +135,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void InvalidFolderWithoutOwner()
         {
             var folder = new Folder
@@ -150,7 +151,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void InvalidFileWithoutOwner()
         {
             var root = new Folder
@@ -175,7 +176,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void InvalidFolderWithoutParent()
         {
             var folder = new Folder
@@ -191,7 +192,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void InvalidFileWithoutParent()
         {
             var file = new TxtFile
@@ -209,7 +210,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void TwoFoldersAtSameLevelWithSameName()
         {
             var root = new Folder
@@ -243,7 +244,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void TwoFilesAtSameLevelWithSameName()
         {
             var root = new Folder
@@ -281,7 +282,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void InvalidFileDateModifiedBeforeCreationDate()
         {
             var root = new Folder

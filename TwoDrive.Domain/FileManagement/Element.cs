@@ -1,24 +1,20 @@
 using System;
+using TwoDrive.Domain.Interface;
 
 namespace TwoDrive.Domain.FileManagement
 {
-    public abstract class Element
+    public abstract class Element : ISoftDelete
     {
         public int Id { get; set; }
-
         public string Name { get; set; }
-
         public int? ParentFolderId { get; set; }
-
         public Folder ParentFolder { get; set; }
-
         public int? OwnerId { get; set; }
-
         public Writer Owner { get; set; }
-
         public DateTime CreationDate { get; set; }
-
         public DateTime DateModified { get; set; }
+        public bool IsDeleted { get; set ; }
+        public DateTime DeletedDate { get; set; }
 
         public override bool Equals(object obj)
         {
