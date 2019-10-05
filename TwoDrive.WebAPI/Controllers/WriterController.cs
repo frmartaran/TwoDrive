@@ -20,7 +20,7 @@ namespace TwoDrive.WebApi.Controllers
         public WriterController(ILogic<Writer> logic, IFolderLogic folderLogic) : base()
         {
             Logic = logic;
-            FolderLogic =  folderLogic;
+            FolderLogic = folderLogic;
         }
 
         [HttpPost]
@@ -65,6 +65,15 @@ namespace TwoDrive.WebApi.Controllers
             {
                 return BadRequest(exception.Message);
             }
+        }
+
+        [HttpGet("{id}")]
+        [AuthorizeFilter(Role.Administrator)]
+        public IActionResult Get(int id)
+        {
+            var writer = Logic.Get(id);
+            var model = WriterModel.FromDomain(writer);
+            return Ok(model);
         }
     }
 }
