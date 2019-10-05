@@ -43,7 +43,7 @@ namespace TwoDrive.BusinessLogic.Extensions
 
         public static void AddCreatorClaimsTo(this Writer writer, Element element)
         {
-            writer.IsOwner(element);
+            ValidateIfOwner(writer, element);
             ValidateIsNotRoot(element);
             writer.AlreadyHasClaimsFor(element);
             var claims = CreateBasicClaims(element);
@@ -98,10 +98,10 @@ namespace TwoDrive.BusinessLogic.Extensions
                 throw new LogicException("Can't add creator claims to root");
         }
 
-        private static void IsOwner(this Writer writer, Element element)
+        private static void ValidateIfOwner(Writer writer, Element element)
         {
             if (element.Owner != writer)
-                throw new LogicException("Can only add creator claims to it's owner");
+                throw new LogicException($"{writer.UserName} not owner of this element");
         }
 
         public static void RemoveAllClaims(this Writer writer, Element element)
@@ -146,6 +146,8 @@ namespace TwoDrive.BusinessLogic.Extensions
 
         public static void RevokeFriendFrom(this Writer writer, Writer friend, Element element, ClaimType type)
         {
+            ValidateIfOwner(writer, element);
+
             var claim = friend.Claims
                 .Where(e => e.Element == element)
                 .Where(c => c.Type == type)
