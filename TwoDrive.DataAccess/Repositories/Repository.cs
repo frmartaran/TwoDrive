@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using TwoDrive.DataAccess.Interface;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
+using TwoDrive.DataAccess.Exceptions;
 
 namespace TwoDrive.DataAccess
 {
@@ -19,25 +21,56 @@ namespace TwoDrive.DataAccess
         }
         public void Insert(T objectToCreate)
         {
-            table.Add(objectToCreate);
+            try
+            {
+                table.Add(objectToCreate);
+            }
+            catch (ArgumentNullException exception)
+            {
+                throw new DatabaseActionFailureException(exception.Message, exception);
+            }
         }
 
         public virtual T Get(int Id)
         {
-            return table.Find(Id);
+            try
+            {
+                return table.Find(Id);
+
+            }
+            catch (ArgumentNullException exception)
+            {
+                throw new DatabaseActionFailureException(exception.Message, exception);
+
+            }
         }
 
         public void Update(T objectToUpdate)
         {
-            table.Attach(objectToUpdate);
-            var entry = context.Entry(objectToUpdate);
-            SetModified(entry);
+            try
+            {
+                table.Attach(objectToUpdate);
+                var entry = context.Entry(objectToUpdate);
+                SetModified(entry);
+            }
+            catch (ArgumentNullException exception)
+            {
+                throw new DatabaseActionFailureException(exception.Message, exception);
+
+            }
         }
 
         public void Delete(int Id)
         {
-            var existingObject = table.Find(Id);
-            table.Remove(existingObject);
+            try
+            {
+                var existingObject = table.Find(Id);
+                table.Remove(existingObject);
+            }
+            catch (ArgumentNullException exception)
+            {
+                throw new DatabaseActionFailureException(exception.Message, exception);
+            }
         }
 
         public virtual ICollection<T> GetAll()

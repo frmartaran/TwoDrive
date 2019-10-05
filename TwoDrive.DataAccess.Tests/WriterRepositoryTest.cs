@@ -1,7 +1,7 @@
-
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TwoDrive.DataAccess.Exceptions;
 using TwoDrive.Domain;
 
 namespace TwoDrive.DataAccess.Tests
@@ -151,7 +151,7 @@ namespace TwoDrive.DataAccess.Tests
         [ExpectedException(typeof(DatabaseActionFailureException))]
         public void UpdateNonExistantWriter()
         {
-            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext15");
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext16");
             var repository = new WriterRepository(memoryDb);
             repository.Update(null);
             repository.Save();
@@ -162,20 +162,9 @@ namespace TwoDrive.DataAccess.Tests
         [ExpectedException(typeof(DatabaseActionFailureException))]
         public void AddNonExistantWriter()
         {
-            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext15");
+            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext17");
             var repository = new WriterRepository(memoryDb);
             repository.Insert(null);
-            repository.Save();
-
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(DatabaseActionFailureException))]
-        public void GetNonExistantWriter()
-        {
-            var memoryDb = ContextFactory.GetMemoryContext("TwoDriveContext15");
-            var repository = new WriterRepository(memoryDb);
-            repository.Get(1);
             repository.Save();
 
         }
