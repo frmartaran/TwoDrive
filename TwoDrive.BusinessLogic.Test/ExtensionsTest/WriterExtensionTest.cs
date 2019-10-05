@@ -210,5 +210,47 @@ namespace TwoDrive.BusinessLogic.Test
             writer.Claims.Add(delete);
             writer.AddCreatorClaimsTo(folder);
         }
+
+
+        [TestMethod]
+        public void RemoveClaim()
+        {
+            writer.Claims = new List<Claim>();
+            var folder = new Folder
+            {
+                Owner = writer,
+                Name = "Folder",
+                ParentFolder = root
+            };
+            var read = new Claim
+            {
+                Element = folder,
+                Type = ClaimType.Read
+            };
+            var write = new Claim
+            {
+                Element = folder,
+                Type = ClaimType.Write
+            };
+            var share = new Claim
+            {
+                Element = folder,
+                Type = ClaimType.Share
+            };
+            var delete = new Claim
+            {
+                Element = folder,
+                Type = ClaimType.Delete
+            };
+            var defaultClaims = new List<Claim>{
+                write,
+                read,
+                share,
+                delete
+            };
+            writer.AddCreatorClaimsTo(folder);
+            writer.RemoveAllClaims(folder);
+            Assert.AreEqual(0, writer.Claims.Count);
+        }
     }
 }
