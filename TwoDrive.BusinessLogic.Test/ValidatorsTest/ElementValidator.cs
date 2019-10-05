@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Validators;
+using TwoDrive.DataAccess;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 
@@ -306,6 +307,240 @@ namespace TwoDrive.BusinessLogic.Test
 
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AreDependenciesSetForIsValidDestination()
+        {
+            var writer = new Writer();
+            var root = new Folder
+            {
+                Id = 1,
+                Name = "Root",
+                FolderChildren = new List<Element>()
+            };
+            var destination = new TxtFile
+            {
+                Id = 2,
+                Content = "TestFile",
+                Name = "FileName",
+                CreationDate = DateTime.Now,
+                DateModified = DateTime.Now,
+                ParentFolder = root,
+                Owner = writer
+            };
+            var elementToTransfer = new TxtFile
+            {
+                Id = 3,
+                Content = "TestFile",
+                Name = "FileName",
+                CreationDate = DateTime.Now,
+                DateModified = DateTime.Now,
+                ParentFolder = root,
+                Owner = writer
+            };
 
+            var validator = new FolderValidator();
+            var isValid = validator.IsValidDestination(elementToTransfer, destination);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ElementDestinationIsNotAFolder()
+        {
+            var writer = new Writer();
+            var root = new Folder
+            {
+                Id = 1,
+                Name = "Root",
+                FolderChildren = new List<Element>()
+            };
+            var destination = new TxtFile
+            {
+                Id = 2,
+                Content = "TestFile",
+                Name = "FileName",
+                CreationDate = DateTime.Now,
+                DateModified = DateTime.Now,
+                ParentFolder = root,
+                Owner = writer
+            };
+            var elementToTransfer = new TxtFile
+            {
+                Id = 3,
+                Content = "TestFile",
+                Name = "FileName",
+                CreationDate = DateTime.Now,
+                DateModified = DateTime.Now,
+                ParentFolder = root,
+                Owner = writer
+            };
+
+            var context = ContextFactory.GetMemoryContext("Element Destination Is Not A Folder");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+
+            folderRepository.Insert(root);
+            folderRepository.Save();
+            fileRepository.Insert(destination);
+            fileRepository.Insert(elementToTransfer);
+            fileRepository.Save();
+
+            var validator = new FolderValidator(folderRepository, fileRepository);
+            var isValid = validator.IsValidDestination(elementToTransfer, destination);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ElementDestinationDoesntExist()
+        {
+            var context = ContextFactory.GetMemoryContext("Element destination doesnt exist");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+            var writer = new Writer();
+            var root = new Folder
+            {
+                Id = 1,
+                Name = "Root",
+                FolderChildren = new List<Element>()
+            };
+            var destination = new Folder
+            {
+                Id = 2,
+                Name = "Folder",
+                ParentFolder = root,
+                Owner = owner,
+                FolderChildren = new List<Element>()
+            };
+            var elementToTransfer = new TxtFile
+            {
+                Id = 3,
+                Content = "TestFile",
+                Name = "FileName",
+                CreationDate = DateTime.Now,
+                DateModified = DateTime.Now,
+                ParentFolder = root,
+                Owner = writer
+            };
+
+            var validator = new FolderValidator(folderRepository, fileRepository);
+            var isValid = validator.IsValidDestination(elementToTransfer, destination);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ElementDestinationIsNotMyRootsChild()
+        {
+            var context = ContextFactory.GetMemoryContext("Element Destination Is Not my root's child");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+            var ownerOfFolderToTransfer = new Writer
+            {
+                Id = 1
+            };
+            var ownerOfFolderDestination = new Writer
+            {
+                Id = 2
+            };
+            var ownerOfFolderToTransferRoot = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChildren = new List<Element>(),
+                Owner = ownerOfFolderToTransfer
+            };
+            var ownerOfFolderDestinationRoot = new Folder
+            {
+                Id = 4,
+                Name = "Root",
+                FolderChildren = new List<Element>(),
+                Owner = ownerOfFolderDestination
+            };
+            var destination = new Folder
+            {
+                Id = 5,
+                Name = "Folder",
+                ParentFolder = ownerOfFolderDestinationRoot,
+                Owner = ownerOfFolderDestination,
+                FolderChildren = new List<Element>()
+            };
+            var elementToTransfer = new TxtFile
+            {
+                Id = 6,
+                Content = "TestFile",
+                Name = "FileName",
+                CreationDate = DateTime.Now,
+                DateModified = DateTime.Now,
+                ParentFolder = ownerOfFolderToTransferRoot,
+                Owner = ownerOfFolderToTransfer
+            };
+
+            folderRepository.Insert(ownerOfFolderToTransferRoot);
+            folderRepository.Insert(ownerOfFolderDestinationRoot);
+            folderRepository.Insert(destination);
+            fileRepository.Insert(elementToTransfer);
+            fileRepository.Save();
+            folderRepository.Save();
+
+            var validator = new FolderValidator(folderRepository, fileRepository);
+            var isValid = validator.IsValidDestination(elementToTransfer, destination);
+        }
+
+        
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ElementDestinationIsChildOfElementToTransfer()
+        {
+            var context = ContextFactory.GetMemoryContext("Element Destination Is Child Of Owner Parent Folder");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+            var writer = new Writer();
+            var root = new Folder
+            {
+                Id = 1,
+                Name = "Root",
+                FolderChildren = new List<Element>(),
+                Owner = writer
+            };
+            var elementToTransfer = new Folder
+            {
+                Id = 3,
+                Name = "Folder",
+                ParentFolder = root,
+                Owner = writer,
+                FolderChildren = new List<Element>()
+            };
+            var destination = new Folder
+            {
+                Id = 2,
+                Name = "Folder",
+                ParentFolder = elementToTransfer,
+                Owner = writer,
+                FolderChildren = new List<Element>()
+            };
+
+            folderRepository.Insert(root);
+            folderRepository.Insert(elementToTransfer);
+            folderRepository.Insert(destination);
+            folderRepository.Save();
+
+            var validator = new FolderValidator(folderRepository, fileRepository);
+            var isValid = validator.IsValidDestination(elementToTransfer, destination);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ElementToTransferAndDestinationAreEmpty()
+        {
+            var validator = new FolderValidator();
+            var isValid = validator.IsValidDestination(null, null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void DependenciesAreNotSet()
+        {
+            var validator = new FolderValidator();
+            var isValid = validator.ValidateDependenciesAreSet(null, null);
+        }
     }
 }

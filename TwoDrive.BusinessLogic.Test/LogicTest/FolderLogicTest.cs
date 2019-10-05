@@ -9,7 +9,7 @@ using TwoDrive.DataAccess;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
-using TwoDrive.BusinessLogic.LogicInput;
+using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using Microsoft.EntityFrameworkCore;
 using TwoDrive.BusinessLogic.Exceptions;
 
@@ -39,26 +39,26 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void CreateFolder()
         {
-            var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
+            var mockFolderRepository = new Mock<IFolderRepository>(MockBehavior.Strict);
             mockFolderRepository.Setup(m => m.Insert(It.IsAny<Folder>()));
             mockFolderRepository.Setup(m => m.Save());
 
-            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            var mockFileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
             mockFileRepository.Setup(m => m.Insert(It.IsAny<File>()));
             mockFileRepository.Setup(m => m.Save());
 
-            var mockElementValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
+            var mockElementValidator = new Mock<IElementValidator>(MockBehavior.Strict);
             mockElementValidator.Setup(m => m.IsValid(It.IsAny<Element>()))
             .Returns(true);
 
-            var folderLogicDependencies = new FolderLogicDependencies
+            var ElementLogicDependencies = new ElementLogicDependencies
             {
                 FolderRepository = mockFolderRepository.Object,
                 FileRepository = mockFileRepository.Object,
                 ElementValidator = mockElementValidator.Object
             };
 
-            var logic = new FolderLogic(folderLogicDependencies);
+            var logic = new FolderLogic(ElementLogicDependencies);
             logic.Create(root);
 
             mockFolderRepository.VerifyAll();
@@ -71,12 +71,12 @@ namespace TwoDrive.BusinessLogic.Test
             var context = ContextFactory.GetMemoryContext("Create Folder Check State");
             var folderRepository = new FolderRepository(context);
             var folderValidator = new FolderValidator();
-            var folderLogicDependencies = new FolderLogicDependencies
+            var ElementLogicDependencies = new ElementLogicDependencies
             {
                 FolderRepository = folderRepository,
                 ElementValidator = folderValidator
             };
-            var logic = new FolderLogic(folderLogicDependencies);
+            var logic = new FolderLogic(ElementLogicDependencies);
 
             logic.Create(root);
 
@@ -183,12 +183,12 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void DeleteFolder()
         {
+            var mockFolderRepository = new Mock<IFolderRepository>(MockBehavior.Strict);
             var mockModificationRepository = new Mock<IRepository<Modification>>(MockBehavior.Strict);
-            var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
-            var dependecies = new FolderLogicDependencies
+            var dependecies = new ElementLogicDependencies
             {
-                ElementValidator = new Mock<IValidator<Element>>().Object,
-                FileRepository = new Mock<IRepository<File>>().Object,
+                ElementValidator = new Mock<IElementValidator>().Object,
+                FileRepository = new Mock<IFileRepository>().Object,
                 FolderRepository = mockFolderRepository.Object,
                 ModificationRepository = mockModificationRepository.Object
 
@@ -202,7 +202,7 @@ namespace TwoDrive.BusinessLogic.Test
             mockModificationRepository.Setup(m => m.Insert(It.IsAny<Modification>()));
             mockModificationRepository.Setup(m => m.Save());
 
-            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            var mockFileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
 
             var logic = new FolderLogic(dependecies);
             logic.Delete(root.Id);
@@ -218,9 +218,9 @@ namespace TwoDrive.BusinessLogic.Test
             var modificationRepository = new ModificationRepository(context);
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
-            var dependecies = new FolderLogicDependencies
+            var dependecies = new ElementLogicDependencies
             {
-                ElementValidator = new Mock<IValidator<Element>>().Object,
+                ElementValidator = new Mock<IElementValidator>().Object,
                 FileRepository = fileRepository,
                 FolderRepository = folderRepository,
                 ModificationRepository = modificationRepository
@@ -245,9 +245,9 @@ namespace TwoDrive.BusinessLogic.Test
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
             var modificationRepository = new ModificationRepository(context);
-            var dependecies = new FolderLogicDependencies
+            var dependecies = new ElementLogicDependencies
             {
-                ElementValidator = new Mock<IValidator<Element>>().Object,
+                ElementValidator = new Mock<IElementValidator>().Object,
                 FileRepository = fileRepository,
                 FolderRepository = folderRepository,
                 ModificationRepository = modificationRepository
@@ -286,9 +286,9 @@ namespace TwoDrive.BusinessLogic.Test
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
             var modificationRepository = new ModificationRepository(context);
-            var dependecies = new FolderLogicDependencies
+            var dependecies = new ElementLogicDependencies
             {
-                ElementValidator = new Mock<IValidator<Element>>().Object,
+                ElementValidator = new Mock<IElementValidator>().Object,
                 FileRepository = fileRepository,
                 FolderRepository = folderRepository,
                 ModificationRepository = modificationRepository
@@ -338,9 +338,9 @@ namespace TwoDrive.BusinessLogic.Test
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
             var modificationRepository = new ModificationRepository(context);
-            var dependecies = new FolderLogicDependencies
+            var dependecies = new ElementLogicDependencies
             {
-                ElementValidator = new Mock<IValidator<Element>>().Object,
+                ElementValidator = new Mock<IElementValidator>().Object,
                 FileRepository = fileRepository,
                 FolderRepository = folderRepository,
                 ModificationRepository = modificationRepository
@@ -390,9 +390,9 @@ namespace TwoDrive.BusinessLogic.Test
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
             var modificationRepository = new ModificationRepository(context);
-            var dependecies = new FolderLogicDependencies
+            var dependecies = new ElementLogicDependencies
             {
-                ElementValidator = new Mock<IValidator<Element>>().Object,
+                ElementValidator = new Mock<IElementValidator>().Object,
                 FileRepository = fileRepository,
                 FolderRepository = folderRepository,
                 ModificationRepository = modificationRepository
@@ -449,11 +449,11 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void UpdateFolder()
         {
-            var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
-            var mockFolderValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
-            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            var mockFolderRepository = new Mock<IFolderRepository>(MockBehavior.Strict);
+            var mockFolderValidator = new Mock<IElementValidator>(MockBehavior.Strict);
+            var mockFileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
 
-            var folderLogicDependencies = new FolderLogicDependencies
+            var ElementLogicDependencies = new ElementLogicDependencies
             {
                 FolderRepository = mockFolderRepository.Object,
                 FileRepository = mockFileRepository.Object,
@@ -466,7 +466,7 @@ namespace TwoDrive.BusinessLogic.Test
             .Returns(true);
 
             root.Name = "Root 2.0";
-            var logic = new FolderLogic(folderLogicDependencies);
+            var logic = new FolderLogic(ElementLogicDependencies);
             logic.Update(root);
             mockFolderRepository.VerifyAll();
             mockFolderValidator.VerifyAll();
@@ -484,7 +484,7 @@ namespace TwoDrive.BusinessLogic.Test
             folderRepository.Insert(root);
             folderRepository.Save();
 
-            var folderLogicDependencies = new FolderLogicDependencies
+            var ElementLogicDependencies = new ElementLogicDependencies
             {
                 FolderRepository = folderRepository,
                 FileRepository = fileRepository,
@@ -495,7 +495,7 @@ namespace TwoDrive.BusinessLogic.Test
 
             var dateModified = root.DateModified;
             root.Owner = newOwner;
-            var logic = new FolderLogic(folderLogicDependencies);
+            var logic = new FolderLogic(ElementLogicDependencies);
             logic.Update(root);
 
             var folderInDb = folderRepository.Get(1);
@@ -508,11 +508,11 @@ namespace TwoDrive.BusinessLogic.Test
         public void GetAll()
         {
             var testList = new List<Folder>();
-            var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
+            var mockFolderRepository = new Mock<IFolderRepository>(MockBehavior.Strict);
             mockFolderRepository.Setup(m => m.GetAll())
             .Returns(testList);
 
-            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            var mockFileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
 
             var logic = new FolderLogic(mockFolderRepository.Object, mockFileRepository.Object);
             var elements = logic.GetAll();
@@ -551,8 +551,8 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void Get()
         {
-            var mockFolderRepository = new Mock<IRepository<Folder>>(MockBehavior.Strict);
-            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            var mockFolderRepository = new Mock<IFolderRepository>(MockBehavior.Strict);
+            var mockFileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
             mockFolderRepository.Setup(m => m.Get(It.IsAny<int>()))
                         .Returns(root);
 
@@ -582,11 +582,11 @@ namespace TwoDrive.BusinessLogic.Test
         public void ShowTreeOneFolder()
         {
             var context = ContextFactory.GetMemoryContext("Show One Tree");
-            var dependecies = new FolderLogicDependencies
+            var dependecies = new ElementLogicDependencies
             {
-                ElementValidator = new Mock<IValidator<Element>>().Object,
+                ElementValidator = new Mock<IElementValidator>().Object,
                 FolderRepository = new FolderRepository(context),
-                FileRepository = new Mock<IRepository<File>>().Object,
+                FileRepository = new Mock<IFileRepository>().Object,
             };
             dependecies.FolderRepository.Insert(root);
             dependecies.FolderRepository.Save();
@@ -600,11 +600,11 @@ namespace TwoDrive.BusinessLogic.Test
         public void ShowTreeTwoFolders()
         {
             var context = ContextFactory.GetMemoryContext("Show Two Folders Tree");
-            var dependecies = new FolderLogicDependencies
+            var dependecies = new ElementLogicDependencies
             {
-                ElementValidator = new Mock<IValidator<Element>>().Object,
+                ElementValidator = new Mock<IElementValidator>().Object,
                 FolderRepository = new FolderRepository(context),
-                FileRepository = new Mock<IRepository<File>>().Object,
+                FileRepository = new Mock<IFileRepository>().Object,
             };
             var logic = new FolderLogic(dependecies);
             var child = new Folder
@@ -635,9 +635,9 @@ namespace TwoDrive.BusinessLogic.Test
         public void ShowTreeFolderAndFile()
         {
             var context = ContextFactory.GetMemoryContext("Show Folder and Child Tree");
-            var dependecies = new FolderLogicDependencies
+            var dependecies = new ElementLogicDependencies
             {
-                ElementValidator = new Mock<IValidator<Element>>().Object,
+                ElementValidator = new Mock<IElementValidator>().Object,
                 FolderRepository = new FolderRepository(context),
                 FileRepository = new FileRepository(context),
             };
@@ -669,11 +669,11 @@ namespace TwoDrive.BusinessLogic.Test
         public void ShowTreeTwoChildFolders()
         {
             var context = ContextFactory.GetMemoryContext("Show Two Child Tree");
-            var dependecies = new FolderLogicDependencies
+            var dependecies = new ElementLogicDependencies
             {
-                ElementValidator = new Mock<IValidator<Element>>().Object,
+                ElementValidator = new Mock<IElementValidator>().Object,
                 FolderRepository = new FolderRepository(context),
-                FileRepository = new Mock<IRepository<File>>().Object,
+                FileRepository = new Mock<IFileRepository>().Object,
             };
             var logic = new FolderLogic(dependecies);
             var child = new Folder
@@ -717,7 +717,7 @@ namespace TwoDrive.BusinessLogic.Test
         public void ShowTreeOfThreeLevels()
         {
             var context = ContextFactory.GetMemoryContext("Show Three level Tree");
-            var dependecies = new FolderLogicDependencies
+            var dependecies = new ElementLogicDependencies
             {
                 ElementValidator = new FolderValidator(),
                 FolderRepository = new FolderRepository(context),
@@ -777,7 +777,7 @@ namespace TwoDrive.BusinessLogic.Test
         public void ShowComplexTree()
         {
             var context = ContextFactory.GetMemoryContext("Show Complex Tree");
-            var dependecies = new FolderLogicDependencies
+            var dependecies = new ElementLogicDependencies
             {
                 ElementValidator = new FolderValidator(),
                 FolderRepository = new FolderRepository(context),
@@ -947,7 +947,7 @@ namespace TwoDrive.BusinessLogic.Test
         public void DeleteNullFolder()
         {
             var context = ContextFactory.GetMemoryContext("Delete null");
-            var dependecies = new FolderLogicDependencies
+            var dependecies = new ElementLogicDependencies
             {
                 ElementValidator = new FolderValidator(),
                 FolderRepository = new FolderRepository(context),

@@ -1,12 +1,14 @@
 using System;
 using System.Linq;
 using TwoDrive.BusinessLogic.Exceptions;
+using TwoDrive.BusinessLogic.Interface;
 using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic.Validators
 {
-    public abstract class ElementValidator : IValidator<Element>
+    public abstract class ElementValidator : IElementValidator
     {
         public bool IsValid(Element element)
         {
@@ -52,6 +54,20 @@ namespace TwoDrive.BusinessLogic.Validators
             var earlyModifiedDate = element.CreationDate.CompareTo(element.DateModified);
             if (earlyModifiedDate > 0)
                 throw new ValidationException("The modified date should be later than the creation date");
+        }
+
+        public virtual bool ValidateDependenciesAreSet(IFolderRepository folderRepository, IFileRepository fileRepository)
+        {
+            if (!(fileRepository != null && folderRepository != null))
+            {
+                throw new ArgumentException("Dependencies are not set");
+            }
+            return true;
+        }
+
+        public virtual bool IsValidDestination(Element elementToTransfer, Element elementDestination)
+        {
+            throw new NotImplementedException();
         }
     }
 

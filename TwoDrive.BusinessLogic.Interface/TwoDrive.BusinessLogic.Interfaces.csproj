@@ -4,4 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TwoDrive.Domain\TwoDrive.Domain.csproj" />
+    <ProjectReference Include="..\TwoDrive.DataAccess.Interface\TwoDrive.DataAccess.Interface.csproj" />
+  </ItemGroup>
+
 </Project>

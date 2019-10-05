@@ -7,18 +7,18 @@ using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic
 {
-    public class FileLogic : ILogic<File>, IFileLogic
+    public class FileLogic : ElementLogic, ILogic<File>
     {
-        private IRepository<File> FileRepository;
+        private IFileRepository FileRepository;
 
-        private IValidator<Element> ElementValidator;
+        private IElementValidator ElementValidator;
 
-        public FileLogic(IRepository<File> repository)
+        public FileLogic(IFileRepository repository)
         {
             this.FileRepository = repository;
         }
 
-        public FileLogic(IRepository<File> repository, IValidator<Element> validator)
+        public FileLogic(IFileRepository repository, IElementValidator validator)
         {
             this.FileRepository = repository;
             this.ElementValidator = validator;

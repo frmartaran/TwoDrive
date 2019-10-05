@@ -3,30 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
-using TwoDrive.BusinessLogic.LogicInput;
+using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic.Logic
 {
-    public class FolderLogic : ILogic<Folder>, IFolderLogic
+    public class FolderLogic : ILogic<Folder>, IFolderLogic, ElementLogic
     {
-        private IRepository<Folder> FolderRepository { get; set; }
+        private IFolderRepository FolderRepository { get; set; }
 
-        private IValidator<Element> ElementValidator { get; set; }
+        private IElementValidator ElementValidator { get; set; }
 
-        private IRepository<File> FileRepository { get; set; }
+        private IFileRepository FileRepository { get; set; }
 
         private IRepository<Modification> ModificationRepository { get; set; }
+
         private const string Spaces = "      ";
-        public FolderLogic(IRepository<Folder> currentFolderRepository, IRepository<File> currentFileRepository)
+
+        public FolderLogic(IFolderRepository currentFolderRepository, IFileRepository currentFileRepository)
         {
             FolderRepository = currentFolderRepository;
             FileRepository = currentFileRepository;
         }
 
-        public FolderLogic(FolderLogicDependencies dependencies)
+        public FolderLogic(ElementLogicDependencies dependencies)
         {
             FolderRepository = dependencies.FolderRepository;
             ElementValidator = dependencies.ElementValidator;

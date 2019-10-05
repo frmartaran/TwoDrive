@@ -45,8 +45,8 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void CreateFile()
         {
-            var mockRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
-            var mockValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
+            var mockRepository = new Mock<IFileRepository>(MockBehavior.Strict);
+            var mockValidator = new Mock<IElementValidator>(MockBehavior.Strict);
             mockRepository
             .Setup(m => m.Insert(It.IsAny<File>()));
             mockRepository
@@ -81,7 +81,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void GetFileLogic()
         {
-            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            var mockFileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
             mockFileRepository.Setup(m => m.Get(It.IsAny<int>()))
                         .Returns(file);
 
@@ -112,7 +112,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void GetAllFileLogic()
         {
-            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            var mockFileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
             mockFileRepository.Setup(m => m.GetAll())
                         .Returns(new List<File> { file });
 
@@ -145,7 +145,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void DeleteFile()
         {
-            var mockRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
+            var mockRepository = new Mock<IFileRepository>(MockBehavior.Strict);
             mockRepository
             .Setup(m => m.Delete(It.IsAny<int>()));
             mockRepository.Setup(m => m.Save());
@@ -175,8 +175,8 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void UpdateFileLogic()
         {
-            var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
-            var mockFileValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
+            var mockFileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
+            var mockFileValidator = new Mock<IElementValidator>(MockBehavior.Strict);
 
             mockFileRepository.Setup(m => m.Update(It.IsAny<File>()));
             mockFileRepository.Setup(m => m.Save());
