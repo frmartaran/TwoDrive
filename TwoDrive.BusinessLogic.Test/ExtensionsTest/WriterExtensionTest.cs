@@ -165,8 +165,50 @@ namespace TwoDrive.BusinessLogic.Test
         public void AddCreatorClaimsToRootFolder()
         {
             writer.Claims = new List<Claim>();
-            
             writer.AddCreatorClaimsTo(root);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void AlreadyHasClaims()
+        {
+            var folder = new Folder
+            {
+                Owner = writer,
+                Name = "Folder",
+                ParentFolder = root
+            }
+            var read = new Claim
+            {
+                Element = folder,
+                Type = ClaimType.Read
+            };
+            var write = new Claim
+            {
+                Element = folder,
+                Type = ClaimType.Write
+            };
+            var share = new Claim
+            {
+                Element = folder,
+                Type = ClaimType.Share
+            };
+            var delete = new Claim
+            {
+                Element = folder,
+                Type = ClaimType.Delete
+            };
+            var defaultClaims = new List<Claim>{
+                write,
+                read,
+                share,
+                delete
+            };
+            writer.Claims.Add(read);
+            writer.Claims.Add(write);
+            writer.Claims.Add(share);
+            writer.Claims.Add(delete);
+            writer.AddCreatorClaimsTo(folder);
         }
     }
 }
