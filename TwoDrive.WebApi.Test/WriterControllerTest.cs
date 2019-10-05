@@ -145,15 +145,60 @@ namespace TwoDrive.WebApi.Test
         {
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
-                .Returns((Writer)null);
+                .Returns((Writer) null);
 
             var mockFolderLogic = new Mock<IFolderLogic>();
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object);
             var result = controller.Get(1);
-            
+
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
         }
+
+        [TestMethod]
+        public void GetAll()
+        {
+            var writer = new Writer
+            {
+                Role = Role.Writer,
+                UserName = "Valid Writer",
+                Password = "1234",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>()
+            };
+            var friend = new Writer
+            {
+                Role = Role.Administrator,
+                UserName = "Writer",
+                Password = "1234",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>()
+            };
+            var writers = new List<Writer>
+            {
+                writer,
+                friend
+            };
+            var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.GetAll())
+                .Returns(writers);
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object);
+            var result = controller.Get(1);
+            var asOk = result as OkObjectResult;
+            var writerModelResult = asOk.Value as List<WriterModel>;
+            var resultWriter = WriterModel.AllToEntity(writerModelResult);
+
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.IsTrue(resultWriter.Contains(writer));
+            Assert.IsTrue(resultWriter.Contains(friend));
+
+        }
+
+
     }
 }
