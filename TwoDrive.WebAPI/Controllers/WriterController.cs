@@ -33,5 +33,14 @@ namespace TwoDrive.WebApi.Controllers
                 return BadRequest(validationError.Message);
             }
         }
+
+        [HttpDelete("{id}")]
+        [AuthorizeFilter(Role.Administrator)]
+        public IActionResult Delete(int id)
+        {
+            var writer = Logic.Get(id);
+            Logic.Delete(id);
+            return Ok($"Writer: {writer.UserName} has been deleted");
+        }
     }
 }

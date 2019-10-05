@@ -65,8 +65,11 @@ namespace TwoDrive.WebApi.Test
         [TestMethod]
         public void DeleteWriter()
         {
+            var writer = new Writer();
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
-            mockLogic.Setup(m => m.Delete(It.IsAny<Writer>()));
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+            .Returns(writer);
+            mockLogic.Setup(m => m.Delete(It.IsAny<int>()));
             var controller = new WriterController(mockLogic.Object);
             var result = controller.Delete(1);
 
