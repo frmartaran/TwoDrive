@@ -37,12 +37,6 @@ namespace TwoDrive.DataAccess
             return base.SaveChanges();
         }
 
-        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            SoftDelete();
-            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-        }
-
         private void SoftDelete()
         {
             foreach (var entry in ChangeTracker.Entries())

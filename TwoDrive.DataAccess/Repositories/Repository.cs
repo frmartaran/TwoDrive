@@ -33,16 +33,7 @@ namespace TwoDrive.DataAccess
 
         public virtual T Get(int Id)
         {
-            try
-            {
-                return table.Find(Id);
-
-            }
-            catch (ArgumentNullException exception)
-            {
-                throw new DatabaseActionFailureException(exception.Message, exception);
-
-            }
+            return table.Find(Id);
         }
 
         public void Update(T objectToUpdate)
