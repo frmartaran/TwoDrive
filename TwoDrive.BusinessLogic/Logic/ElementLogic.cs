@@ -1,3 +1,4 @@
+using System.Linq;
 using TwoDrive.BusinessLogic.Interface;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Interfaces.LogicInput;
@@ -23,9 +24,28 @@ namespace TwoDrive.BusinessLogic
             FileRepository = dependencies.FileRepository;
         }
 
-        public virtual void MoveElement(Element elementToMove, Folder elementDestination)
+        public virtual void MoveElement(Element elementToMove, Element elementDestination)
         {
-            throw new System.NotImplementedException();
+            ElementValidator.ValidateDependenciesAreSet(FolderRepository, FileRepository);
+            if (ElementValidator.IsValidDestination(elementToMove, elementDestination))
+            {
+                var folderDestination = (Folder)elementDestination;
+                elementToMove.ParentFolder.FolderChildren = elementToMove.ParentFolder.FolderChildren.Where(fc => fc.Id != elementToMove.Id)
+                    .ToList();
+                elementToMove.ParentFolder = folderDestination;
+                elementToMove.ParentFolderId = folderDestination.Id;
+                FolderRepository.Update(elementToMove.ParentFolder);
+                if (elementDestination is Folder folder)
+                {
+                    FolderRepository.Update(folder);
+                }
+                else if (elementDestination is File file)
+                {
+                    FileRepository.Update(file);
+                }
+                FolderRepository.Save();
+                FileRepository.Save();
+            }
         }
     }
 }
