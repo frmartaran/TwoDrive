@@ -341,5 +341,17 @@ namespace TwoDrive.BusinessLogic.Test
             writer.RevokeFriendFrom(friend, root, ClaimType.Read);
 
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void RevokeFriendFromNoClaims()
+        {
+            var friend = new Writer
+            {
+                Claims = new List<Claim>()
+            };
+            writer.Friends.Add(friend);
+            writer.RevokeFriendFrom(friend, root, ClaimType.Read);
+        }
     }
 }
