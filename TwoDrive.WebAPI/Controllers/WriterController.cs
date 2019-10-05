@@ -85,6 +85,10 @@ namespace TwoDrive.WebApi.Controllers
         public IActionResult Get()
         {
             var writers = Logic.GetAll();
+            if (writers.Count == 0)
+            {
+                return NotFound("No writers found");
+            }
             var asModels = WriterModel.AllToModel(writers);
             return Ok(asModels);
         }
