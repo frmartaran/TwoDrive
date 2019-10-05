@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using TwoDrive.BusinessLogic;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.BusinessLogic.Interfaces;
@@ -17,10 +18,12 @@ namespace TwoDrive.WebApi.Controllers
     {
         private ILogic<Writer> Logic { get; set; }
         private IFolderLogic FolderLogic { get; set; }
-        public WriterController(ILogic<Writer> logic, IFolderLogic folderLogic) : base()
+        private ISessionLogic SessionLogic { get; set; }
+        public WriterController(ILogic<Writer> logic, IFolderLogic folderLogic, ISessionLogic sessions) : base()
         {
             Logic = logic;
             FolderLogic = folderLogic;
+            SessionLogic = sessions;
         }
 
         [HttpPost]
@@ -110,5 +113,6 @@ namespace TwoDrive.WebApi.Controllers
                 return BadRequest(exception.Message);
             }
         }
+
     }
 }
