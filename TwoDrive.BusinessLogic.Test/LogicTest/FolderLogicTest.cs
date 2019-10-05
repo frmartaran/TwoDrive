@@ -965,9 +965,10 @@ namespace TwoDrive.BusinessLogic.Test
         public void CreateNullFolder()
         {
             var context = ContextFactory.GetMemoryContext("Create null");
+            var folderRepository = new FolderRepository(context);
             var dependecies = new ElementLogicDependencies
             {
-                ElementValidator = new FolderValidator(),
+                ElementValidator = new FolderValidator(folderRepository),
                 FolderRepository = new FolderRepository(context),
                 FileRepository = new FileRepository(context),
             };
@@ -980,9 +981,10 @@ namespace TwoDrive.BusinessLogic.Test
         public void UpdateNullFolder()
         {
             var context = ContextFactory.GetMemoryContext("Create null");
+            var folderRepository = new FolderRepository(context);
             var dependecies = new ElementLogicDependencies
             {
-                ElementValidator = new FolderValidator(),
+                ElementValidator = new FolderValidator(folderRepository),
                 FolderRepository = new FolderRepository(context),
                 FileRepository = new FileRepository(context),
             };
