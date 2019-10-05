@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using System.Linq;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.Domain;
@@ -23,28 +24,15 @@ namespace TwoDrive.BusinessLogic.Extensions
 
         public static void AddRootClaims(this Writer writer, Folder root)
         {
-            bool isRoot = IsRoot(root);
-            if (!isRoot)
-                throw new LogicException("Can't add root claims to a child folder");
+            ValidateIsRoot(root);
+            var claims = CreateBasicClaims(root);
+            writer.Claims.AddRange(claims);
+        }
 
-            var read = new Claim
-            {
-                Element = root,
-                Type = ClaimType.Read
-            };
-            var write = new Claim
-            {
-                Element = root,
-                Type = ClaimType.Write
-            };
-            var share = new Claim
-            {
-                Element = root,
-                Type = ClaimType.Share
-            };
-            writer.Claims.Add(read);
-            writer.Claims.Add(write);
-            writer.Claims.Add(share);
+        private static void ValidateIsRoot(Folder root)
+        {
+            if (!IsRoot(root))
+                throw new LogicException("Can't add root claims to a child folder");
         }
 
         private static bool IsRoot(Element root)
@@ -54,34 +42,29 @@ namespace TwoDrive.BusinessLogic.Extensions
 
         public static void AddCreatorClaimsTo(this Writer writer, Element element)
         {
-            if (element.Owner != writer)
-                throw new LogicException("Can only add creator claims to it's owner");
-            if (IsRoot(element))
-                throw new LogicException("Can't add creator claims to root");
-            var canAlreadyRead = writer.Claims
-                .Where(c => c.Element == element)
-                .Where(c => !c.Element.IsDeleted)
-                .Where(c => c.Type == ClaimType.Read)
-                .Any();
-            var canAlreadyWriter = writer.Claims
-                .Where(c => c.Element == element)
-                .Where(c => !c.Element.IsDeleted)
-                .Where(c => c.Type == ClaimType.Write)
-                .Any();
-            var canAlreadyShare = writer.Claims
-                .Where(c => c.Element == element)
-                .Where(c => !c.Element.IsDeleted)
-                .Where(c => c.Type == ClaimType.Share)
-                .Any();
-            var canAlreadyDelete = writer.Claims
-                .Where(c => c.Element == element)
-                .Where(c => !c.Element.IsDeleted)
-                .Where(c => c.Type == ClaimType.Delete)
-                .Any();
+            writer.IsOwner(element);
+            ValidateIsNotRoot(element);
+            writer.AlreadyHasClaimsFor(element);
+            var claims = CreateBasicClaims(element);
+            var delete = new Claim
+            {
+                Element = element,
+                Type = ClaimType.Delete
+            };
+            writer.Claims.Add(delete);
+            writer.Claims.AddRange(claims);
+        }
 
-            if (canAlreadyRead && canAlreadyWriter && canAlreadyShare && canAlreadyDelete)
-                throw new LogicException("Writer already has creator claims for this element");
+        private static void AddRange(this ICollection<Claim> claims, List<Claim> claimsToAdd)
+        {
+            foreach (var claim in claimsToAdd)
+            {
+                claims.Add(claim);
+            }
+        }
 
+        private static List<Claim> CreateBasicClaims(Element element)
+        {
             var read = new Claim
             {
                 Element = element,
@@ -97,15 +80,35 @@ namespace TwoDrive.BusinessLogic.Extensions
                 Element = element,
                 Type = ClaimType.Share
             };
-            var delete = new Claim
+            return new List<Claim>
             {
-                Element = element,
-                Type = ClaimType.Delete
+                read,
+                write,
+                share
             };
-            writer.Claims.Add(read);
-            writer.Claims.Add(write);
-            writer.Claims.Add(share);
-            writer.Claims.Add(delete);
+        }
+
+        private static void AlreadyHasClaimsFor(this Writer writer, Element element)
+        {
+            var canAlreadyRead = writer.HasClaimsFor(element, ClaimType.Read);
+            var canAlreadyWrite = writer.HasClaimsFor(element, ClaimType.Write);
+            var canAlreadyShare = writer.HasClaimsFor(element, ClaimType.Share);
+            var canAlreadyDelete = writer.HasClaimsFor(element, ClaimType.Delete);
+
+            if (canAlreadyRead && canAlreadyWrite && canAlreadyShare && canAlreadyDelete)
+                throw new LogicException("Writer already has creator claims for this element");
+        }
+
+        private static void ValidateIsNotRoot(Element element)
+        {
+            if (IsRoot(element))
+                throw new LogicException("Can't add creator claims to root");
+        }
+
+        private static void IsOwner(this Writer writer, Element element)
+        {
+            if (element.Owner != writer)
+                throw new LogicException("Can only add creator claims to it's owner");
         }
     }
 }
