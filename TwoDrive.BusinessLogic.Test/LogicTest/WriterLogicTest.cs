@@ -248,10 +248,48 @@ namespace TwoDrive.BusinessLogic.Test
             var logic = new WriterLogic(repository);
             logic.Delete(writer.Id);
 
-            var currentWritersInDb = repository.GetAll(); 
+            var currentWritersInDb = repository.GetAll();
 
             Assert.IsFalse(currentWritersInDb.Contains(writer));
-            Assert.AreEqual(0, currentWritersInDb.Count());           
+            Assert.AreEqual(0, currentWritersInDb.Count());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void DeleteNullWriter()
+        {
+
+            var context = ContextFactory.GetMemoryContext("Delete Context 1");
+            var repository = new WriterRepository(context);
+
+            var logic = new WriterLogic(repository);
+            logic.Delete(1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ValidationException))]
+        public void UpdateNullWriter()
+        {
+
+            var context = ContextFactory.GetMemoryContext("Delete Context 2");
+            var repository = new WriterRepository(context);
+            var validator = new WriterValidator(repository);
+
+            var logic = new WriterLogic(repository, validator);
+            logic.Update(null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ValidationException))]
+        public void CreateNullWriter()
+        {
+
+            var context = ContextFactory.GetMemoryContext("Delete Context 3");
+            var repository = new WriterRepository(context);
+            var validator = new WriterValidator(repository);
+
+            var logic = new WriterLogic(repository, validator);
+            logic.Create(null);
         }
     }
 }

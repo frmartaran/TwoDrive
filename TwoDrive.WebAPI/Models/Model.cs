@@ -22,9 +22,20 @@ namespace TwoDrive.WebApi.Models
 
         public static M FromDomain(E entity)
         {
-            if(entity == null)
+            if (entity == null)
                 return null;
             return new M().ToModel(entity);
+        }
+
+        public static ICollection<E> AllToEntity(ICollection<M> models)
+        {
+            return models.Select(m => ToDomain(m))
+                    .ToList();
+        }
+
+        public static ICollection<M> AllToModel(ICollection<E> entities)
+        {
+            return entities.Select(e => FromDomain(e)).ToList();
         }
     }
 }

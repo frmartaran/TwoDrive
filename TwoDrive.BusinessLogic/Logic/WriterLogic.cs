@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
@@ -29,8 +30,15 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public void Delete(int id)
         {
-            Repository.Delete(id);
-            Repository.Save();
+            try
+            {
+                Repository.Delete(id);
+                Repository.Save();
+            }
+            catch (Exception exception)
+            {
+                throw new LogicException(exception.Message, exception);
+            }
         }
 
         public Writer Get(int Id)

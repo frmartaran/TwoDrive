@@ -12,6 +12,7 @@ namespace TwoDrive.BusinessLogic.Validators
     {
         public bool IsValid(Element element)
         {
+            ValidateIfNull(element);
             ValidateName(element);
             ValidateOwner(element);
             ValidateParentFolder(element);
@@ -20,6 +21,12 @@ namespace TwoDrive.BusinessLogic.Validators
             Hook(element);
 
             return true;
+        }
+
+        private static void ValidateIfNull(Element element)
+        {
+            if (element == null)
+                throw new ValidationException("The element can't be null");
         }
 
         protected virtual void Hook(Element element){}

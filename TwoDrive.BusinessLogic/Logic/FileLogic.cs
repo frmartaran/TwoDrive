@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
@@ -32,8 +33,15 @@ namespace TwoDrive.BusinessLogic
 
         public void Delete(int id)
         {
-            FileRepository.Delete(id);
-            FileRepository.Save();
+            try
+            {
+                FileRepository.Delete(id);
+                FileRepository.Save();
+            }
+            catch (Exception exception)
+            {
+                throw new LogicException(exception.Message, exception);
+            }
         }
 
         public File Get(int Id)

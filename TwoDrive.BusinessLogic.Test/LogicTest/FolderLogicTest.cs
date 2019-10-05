@@ -959,5 +959,35 @@ namespace TwoDrive.BusinessLogic.Test
             var logic = new FolderLogic(dependecies);
             logic.Delete(1);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ValidationException))]
+        public void CreateNullFolder()
+        {
+            var context = ContextFactory.GetMemoryContext("Create null");
+            var dependecies = new ElementLogicDependencies
+            {
+                ElementValidator = new FolderValidator(),
+                FolderRepository = new FolderRepository(context),
+                FileRepository = new FileRepository(context),
+            };
+            var logic = new FolderLogic(dependecies);
+            logic.Create(null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ValidationException))]
+        public void UpdateNullFolder()
+        {
+            var context = ContextFactory.GetMemoryContext("Create null");
+            var dependecies = new ElementLogicDependencies
+            {
+                ElementValidator = new FolderValidator(),
+                FolderRepository = new FolderRepository(context),
+                FileRepository = new FileRepository(context),
+            };
+            var logic = new FolderLogic(dependecies);
+            logic.Update(null);
+        }
     }
 }

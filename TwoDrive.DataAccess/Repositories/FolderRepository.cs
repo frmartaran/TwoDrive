@@ -38,6 +38,7 @@ namespace TwoDrive.DataAccess
         public Folder GetRoot(int ownerId)
         {
             return table.Where(e => e.ParentFolderId == null && e.OwnerId == ownerId)
+                        .Include(r => r.FolderChildren)
                         .FirstOrDefault();
         }
     }
