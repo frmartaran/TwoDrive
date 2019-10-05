@@ -1,5 +1,6 @@
 
 using System.Linq;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 
@@ -22,6 +23,10 @@ namespace TwoDrive.BusinessLogic.Extensions
 
         public static void AddRootClaims(this Writer writer, Folder root)
         {
+            var isRoot = root.ParentFolder == null && root.Name == "Root";
+            if(!isRoot)
+                throw new LogicException("Can't add root claims to a child folder");
+                
             var read = new Claim
             {
                 Element = root,

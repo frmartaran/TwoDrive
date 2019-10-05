@@ -115,7 +115,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(LogicException)]
+        [ExpectedException(typeof(LogicException))]
         public void AddRootClaimsToNonRoot()
         {
             var folder = new Folder
@@ -125,7 +125,7 @@ namespace TwoDrive.BusinessLogic.Test
                 ParentFolder = root
             };
             writer.Claims = new List<Claim>();
-            writer.AddRootClaims(root);
+            writer.AddRootClaims(folder);
         }
     }
 }
