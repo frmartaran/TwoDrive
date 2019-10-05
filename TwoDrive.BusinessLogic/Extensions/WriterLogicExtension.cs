@@ -19,5 +19,27 @@ namespace TwoDrive.BusinessLogic.Extensions
         {
             return writer.Friends.Contains(friend);
         }
+
+        public static void AddRootClaims(this Writer writer, Folder root)
+        {
+            var read = new Claim
+            {
+                Element = root,
+                Type = ClaimType.Read
+            };
+            var write = new Claim
+            {
+                Element = root,
+                Type = ClaimType.Write
+            };
+            var share = new Claim
+            {
+                Element = root,
+                Type = ClaimType.Share
+            };
+            writer.Claims.Add(read);
+            writer.Claims.Add(write);
+            writer.Claims.Add(share);
+        }
     }
 }

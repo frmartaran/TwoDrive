@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.Domain;
@@ -11,9 +12,6 @@ namespace TwoDrive.BusinessLogic.Test
     {
         private Writer writer;
         private Folder root;
-        private Claim read;
-        private Claim write;
-        private Claim share;
 
         [TestInitialize]
         public void SetUp()
@@ -23,17 +21,17 @@ namespace TwoDrive.BusinessLogic.Test
             {
                 Name = "Root"
             };
-            read = new Claim
+            var read = new Claim
             {
                 Element = root,
                 Type = ClaimType.Read
             };
-            write = new Claim
+            var write = new Claim
             {
                 Element = root,
                 Type = ClaimType.Write
             };
-            share = new Claim
+            var share = new Claim
             {
                 Element = root,
                 Type = ClaimType.Share
@@ -60,7 +58,6 @@ namespace TwoDrive.BusinessLogic.Test
             var canWrite = writer.HasClaimsFor(root, ClaimType.Write);
             var canRead = writer.HasClaimsFor(root, ClaimType.Read);
             var canShare = writer.HasClaimsFor(root, ClaimType.Share);
-            var canDelete = writer.HasClaimsFor(root, ClaimType.Delete);
 
             Assert.IsTrue(canWrite);
             Assert.IsTrue(canRead);
@@ -108,16 +105,11 @@ namespace TwoDrive.BusinessLogic.Test
         {
             writer.Claims = new List<Claim>();
             writer.AddRootClaims(root);
-            var delete = new Claim
-            {
-                Element = root,
-                Type = ClaimType.Delete
-            };
 
-            Assert.IsTrue(writer.Claims.Contains(read));
-            Assert.IsTrue(writer.Claims.Contains(write));
-            Assert.IsTrue(writer.Claims.Contains(share));
-            Assert.IsFalse(writer.Claims.Contains(delete));
+            Assert.IsTrue(writer.Claims.Any(c => c.Type == ClaimType.Read));
+            Assert.IsTrue(writer.Claims.Any(c => c.Type == ClaimType.Write));
+            Assert.IsTrue(writer.Claims.Any(c => c.Type == ClaimType.Share));
+            Assert.IsFalse(writer.Claims.Any(c => c.Type == ClaimType.Delete));
 
         }
     }
