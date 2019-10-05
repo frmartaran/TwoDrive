@@ -9,6 +9,7 @@ using TwoDrive.Domain.FileManagement;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.Domain;
+using TwoDrive.BusinessLogic.Exceptions;
 
 namespace TwoDrive.BusinessLogic.Test
 {
@@ -113,7 +114,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var mockFileRepository = new Mock<IRepository<File>>(MockBehavior.Strict);
             mockFileRepository.Setup(m => m.GetAll())
-                        .Returns(new List<File> {file} );
+                        .Returns(new List<File> { file });
 
             var logic = new FileLogic(mockFileRepository.Object);
             var allFilesReturned = logic.GetAll();
@@ -210,6 +211,16 @@ namespace TwoDrive.BusinessLogic.Test
             Assert.AreEqual(typeof(TxtFile), fileInDb.GetType());
             Assert.AreNotEqual(dateModified, fileInDb.DateModified);
             Assert.AreEqual(file.Content, txtFile.Content);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void DeleteNullFile()
+        {
+            var context = ContextFactory.GetMemoryContext("Delete null File");
+            var repository = new FileRepository(context);
+            var logic = new FileLogic(repository);
+            logic.Delete(1);
         }
     }
 }
