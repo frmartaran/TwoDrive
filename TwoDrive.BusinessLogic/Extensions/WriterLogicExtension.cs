@@ -110,5 +110,17 @@ namespace TwoDrive.BusinessLogic.Extensions
             if (element.Owner != writer)
                 throw new LogicException("Can only add creator claims to it's owner");
         }
+
+        public static void RemoveAllClaims(this Writer writer, Element element)
+        {
+            var allClaims = writer.Claims
+                .Where(c => c.Element == element)
+                .ToList();
+
+            foreach (var claim in allClaims)
+            {
+                writer.Claims.Remove(claim);
+            }
+        }
     }
 }
