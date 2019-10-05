@@ -97,11 +97,18 @@ namespace TwoDrive.WebApi.Controllers
         [AuthorizeFilter(Role.Administrator)]
         public IActionResult Update(int id)
         {
-            var writer = Logic.Get(id);
-            Logic.Update(writer);
-            var updatedWriter = Logic.Get(id);
-            var toModel = WriterModel.FromDomain(updatedWriter);
-            return Ok(toModel);
+            try
+            {
+                var writer = Logic.Get(id);
+                Logic.Update(writer);
+                var updatedWriter = Logic.Get(id);
+                var toModel = WriterModel.FromDomain(updatedWriter);
+                return Ok(toModel);
+            }
+            catch (ValidationException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
     }
 }
