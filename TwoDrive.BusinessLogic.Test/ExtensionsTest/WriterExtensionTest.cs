@@ -293,5 +293,18 @@ namespace TwoDrive.BusinessLogic.Test
             };
             writer.AllowFriendTo(friend, root, ClaimType.Read);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void IsAlraedyAllowToRead()
+        {
+            var friend = new Writer
+            {
+                Claims = new List<Claim>()
+            };
+            writer.Friends.Add(friend);
+            writer.AllowFriendTo(friend, root, ClaimType.Read);
+            writer.AllowFriendTo(friend, root, ClaimType.Read);
+        }
     }
 }
