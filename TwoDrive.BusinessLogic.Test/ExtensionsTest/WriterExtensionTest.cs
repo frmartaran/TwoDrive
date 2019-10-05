@@ -306,5 +306,19 @@ namespace TwoDrive.BusinessLogic.Test
             writer.AllowFriendTo(friend, root, ClaimType.Read);
             writer.AllowFriendTo(friend, root, ClaimType.Read);
         }
+
+        [TestMethod]
+        public void RevokeFriendFrom()
+        {
+            var friend = new Writer
+            {
+                Claims = new List<Claim>()
+            };
+            writer.Friends.Add(friend);
+            writer.AllowFriendTo(friend, root, ClaimType.Read);
+            writer.RevokeFriendFrom(friend, root, ClaimType.Read);
+
+            Assert.AreEqual(0, friend.Claims.Count);
+        }
     }
 }
