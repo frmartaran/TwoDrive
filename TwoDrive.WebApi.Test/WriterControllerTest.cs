@@ -302,8 +302,8 @@ namespace TwoDrive.WebApi.Test
             };
             writer.Friends.Add(friend);
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
-            mockLogic.Setup(m => m.GetAll())
-                .Returns(writer.Friends);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(writer);
 
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSessionLogic = new Mock<ISessionLogic>();
@@ -319,6 +319,35 @@ namespace TwoDrive.WebApi.Test
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             Assert.IsTrue(resultWriter.Contains(friend));
 
+        }
+
+        [TestMethod]
+        public void ShowEmptyFriendList()
+        {
+            var writer = new Writer
+            {
+                Role = Role.Writer,
+                UserName = "Valid Writer",
+                Password = "1234",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>()
+            };
+
+            var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(writer);
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSessionLogic = new Mock<ISessionLogic>();
+
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
+                mockSessionLogic.Object);
+            var result = controller.ShowFriends(1);
+            var asOk = result as OkObjectResult;
+
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.AreEqual("Writer has no friends", asOk.Value);
         }
 
     }
