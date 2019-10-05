@@ -145,5 +145,19 @@ namespace TwoDrive.BusinessLogic.Test
             Assert.IsTrue(writer.Claims.Any(c => c.Type == ClaimType.Share));
             Assert.IsTrue(writer.Claims.Any(c => c.Type == ClaimType.Delete));
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void AddCreatorClaimsToOtherWriter()
+        {
+            writer.Claims = new List<Claim>();
+            var folder = new Folder
+            {
+                Name = "Folder",
+                Owner = new Writer(),
+                ParentFolder = root
+            };
+            writer.AddCreatorClaimsTo(folder);
+        }
     }
 }
