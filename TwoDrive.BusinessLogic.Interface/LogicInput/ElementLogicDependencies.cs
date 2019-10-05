@@ -2,14 +2,14 @@ using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
 
-namespace TwoDrive.BusinessLogic.LogicInput
+namespace TwoDrive.BusinessLogic.Interfaces.LogicInput
 {
-    public class FolderLogicDependencies
+    public class ElementLogicDependencies
     {
         public IFolderRepository FolderRepository { get; set; }
 
         public IFileRepository FileRepository { get; set; }
 
-        public IValidator<Element> ElementValidator { get; set; }
+        public IElementValidator ElementValidator { get; set; }
     }
 }

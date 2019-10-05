@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TwoDrive.BusinessLogic.Interface;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
@@ -10,14 +11,14 @@ namespace TwoDrive.BusinessLogic
     {
         private IFileRepository FileRepository;
 
-        private IValidator<Element> ElementValidator;
+        private IElementValidator ElementValidator;
 
         public FileLogic(IFileRepository repository)
         {
             this.FileRepository = repository;
         }
 
-        public FileLogic(IFileRepository repository, IValidator<Element> validator)
+        public FileLogic(IFileRepository repository, IElementValidator validator)
         {
             this.FileRepository = repository;
             this.ElementValidator = validator;

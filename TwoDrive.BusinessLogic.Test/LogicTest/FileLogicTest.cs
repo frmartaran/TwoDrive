@@ -45,7 +45,7 @@ namespace TwoDrive.BusinessLogic.Test
         public void CreateFile()
         {
             var mockRepository = new Mock<IFileRepository>(MockBehavior.Strict);
-            var mockValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
+            var mockValidator = new Mock<IElementValidator>(MockBehavior.Strict);
             mockRepository
             .Setup(m => m.Insert(It.IsAny<File>()));
             mockRepository
@@ -175,7 +175,7 @@ namespace TwoDrive.BusinessLogic.Test
         public void UpdateFileLogic()
         {
             var mockFileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
-            var mockFileValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
+            var mockFileValidator = new Mock<IElementValidator>(MockBehavior.Strict);
 
             mockFileRepository.Setup(m => m.Update(It.IsAny<File>()));
             mockFileRepository.Setup(m => m.Save());

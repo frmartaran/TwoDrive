@@ -9,7 +9,7 @@ using TwoDrive.DataAccess;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
-using TwoDrive.BusinessLogic.LogicInput;
+using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 
 namespace TwoDrive.BusinessLogic.Test
 {
@@ -45,11 +45,11 @@ namespace TwoDrive.BusinessLogic.Test
             mockFileRepository.Setup(m => m.Insert(It.IsAny<File>()));
             mockFileRepository.Setup(m => m.Save());
 
-            var mockElementValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
+            var mockElementValidator = new Mock<IElementValidator>(MockBehavior.Strict);
             mockElementValidator.Setup(m => m.IsValid(It.IsAny<Element>()))
             .Returns(true);
 
-            var folderLogicDependencies = new FolderLogicDependencies
+            var folderLogicDependencies = new ElementLogicDependencies
             {
                 FolderRepository = mockFolderRepository.Object,
                 FileRepository = mockFileRepository.Object,
@@ -69,7 +69,7 @@ namespace TwoDrive.BusinessLogic.Test
             var context = ContextFactory.GetMemoryContext("Create Test");
             var folderRepository = new FolderRepository(context);
             var folderValidator = new FolderValidator();
-            var folderLogicDependencies = new FolderLogicDependencies
+            var folderLogicDependencies = new ElementLogicDependencies
             {
                 FolderRepository = folderRepository,
                 ElementValidator = folderValidator
@@ -385,10 +385,10 @@ namespace TwoDrive.BusinessLogic.Test
         public void UpdateFolder()
         {
             var mockFolderRepository = new Mock<IFolderRepository>(MockBehavior.Strict);
-            var mockFolderValidator = new Mock<IValidator<Element>>(MockBehavior.Strict);
+            var mockFolderValidator = new Mock<IElementValidator>(MockBehavior.Strict);
             var mockFileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
 
-            var folderLogicDependencies = new FolderLogicDependencies
+            var folderLogicDependencies = new ElementLogicDependencies
             {
                 FolderRepository = mockFolderRepository.Object,
                 FileRepository = mockFileRepository.Object,
@@ -419,7 +419,7 @@ namespace TwoDrive.BusinessLogic.Test
             folderRepository.Insert(root);
             folderRepository.Save();
 
-            var folderLogicDependencies = new FolderLogicDependencies
+            var folderLogicDependencies = new ElementLogicDependencies
             {
                 FolderRepository = folderRepository,
                 FileRepository = fileRepository,
@@ -516,7 +516,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void ShowTreeOneFolder()
         {
-            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
+            var mockDependecies = new Mock<ElementLogicDependencies>(MockBehavior.Strict);
             var logic = new FolderLogic(mockDependecies.Object);
             var tree = logic.ShowTree(root);
 
@@ -526,7 +526,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void ShowTreeTwoFolders()
         {
-            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
+            var mockDependecies = new Mock<ElementLogicDependencies>(MockBehavior.Strict);
             var logic = new FolderLogic(mockDependecies.Object);
             var child = new Folder
             {
@@ -552,7 +552,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void ShowTreeFolderAndFile()
         {
-            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
+            var mockDependecies = new Mock<ElementLogicDependencies>(MockBehavior.Strict);
             var logic = new FolderLogic(mockDependecies.Object);
             var file = new TxtFile
             {
@@ -577,7 +577,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void ShowTreeTwoChildFolders()
         {
-            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
+            var mockDependecies = new Mock<ElementLogicDependencies>(MockBehavior.Strict);
             var logic = new FolderLogic(mockDependecies.Object);
             var child = new Folder
             {
@@ -615,7 +615,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void ShowTreeOfThreeLevels()
         {
-            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
+            var mockDependecies = new Mock<ElementLogicDependencies>(MockBehavior.Strict);
             var logic = new FolderLogic(mockDependecies.Object);
             var child = new Folder
             {
@@ -664,7 +664,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void ShowComplexTree()
         {
-            var mockDependecies = new Mock<FolderLogicDependencies>(MockBehavior.Strict);
+            var mockDependecies = new Mock<ElementLogicDependencies>(MockBehavior.Strict);
             var logic = new FolderLogic(mockDependecies.Object);
             var child = new Folder
             {
