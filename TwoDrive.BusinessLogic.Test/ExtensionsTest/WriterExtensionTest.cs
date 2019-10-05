@@ -252,5 +252,19 @@ namespace TwoDrive.BusinessLogic.Test
             writer.RemoveAllClaims(folder);
             Assert.AreEqual(0, writer.Claims.Count);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void RemoveAllNonExistantClaims()
+        {
+            writer.Claims = new List<Claim>();
+            var folder = new Folder
+            {
+                Owner = writer,
+                Name = "Folder",
+                ParentFolder = root
+            };
+            writer.RemoveAllClaims(folder);
+        }
     }
 }
