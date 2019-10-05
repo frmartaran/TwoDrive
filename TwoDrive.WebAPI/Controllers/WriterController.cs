@@ -162,8 +162,16 @@ namespace TwoDrive.WebApi.Controllers
         public IActionResult ShowFriends(int id)
         {
             var writer = Logic.Get(id);
-            var toModel = WriterModel.AllToModel(writer.Friends);
-            return Ok(toModel);
+            if (writer.Friends.Count == 0)
+            {
+                return Ok("Writer has no friends");
+            }
+            else
+            {
+                var toModel = WriterModel.AllToModel(writer.Friends);
+                return Ok(toModel);
+
+            }
         }
 
     }
