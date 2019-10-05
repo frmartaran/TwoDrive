@@ -116,8 +116,14 @@ namespace TwoDrive.BusinessLogic.Extensions
             writer.Claims.RemoveRange(allClaims);
         }
 
-        public static void AllowFriendTo(this Writer owner, Writer friend, Element element)
+        public static void AllowFriendTo(this Writer owner, Writer friend, Element element, ClaimType type)
         {
+            var claim = new Claim
+            {
+                Element = element,
+                Type = type
+            };
+            friend.Claims.Add(claim);
 
         }
     }
