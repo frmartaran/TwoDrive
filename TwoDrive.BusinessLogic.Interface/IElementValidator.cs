@@ -5,8 +5,6 @@ namespace TwoDrive.BusinessLogic.Interfaces
 {
     public interface IElementValidator : IValidator<Element>
     {
-        bool ValidateDependenciesAreSet(IFolderRepository folderRepository, IFileRepository fileRepository);
-
-        bool IsValidDestination(Element elementToTransfer, Element elementDestination);
+        bool IsValidDestination(Element elementToTransfer, Folder folderDestination);
     }
 }
