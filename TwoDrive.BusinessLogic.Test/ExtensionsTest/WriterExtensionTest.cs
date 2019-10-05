@@ -279,7 +279,19 @@ namespace TwoDrive.BusinessLogic.Test
             var canFriendRead = friend.Claims
                 .Where(c => c.Element == root)
                 .FirstOrDefault();
+            Assert.AreEqual(ClaimType.Read, canFriendRead.Type);
 
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void DontAllowStrangerToRead()
+        {
+            var friend = new Writer
+            {
+                Claims = new List<Claim>()
+            };
+            writer.AllowFriendTo(friend, root, ClaimType.Read);
         }
     }
 }
