@@ -5,11 +5,12 @@ using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.LogicInput;
 using TwoDrive.DataAccess.Interface;
+using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic.Logic
 {
-    public class FolderLogic : ILogic<Folder>
+    public class FolderLogic : ILogic<Folder>, IFolderLogic
     {
         private IRepository<Folder> FolderRepository { get; set; }
 
@@ -116,7 +117,7 @@ namespace TwoDrive.BusinessLogic.Logic
             FolderRepository.Save();
         }
 
-        public object ShowTree(Folder root)
+        public string ShowTree(Folder root)
         {
             var tree = string.Format("{0} +- {1} \n", "", root.Name);
             ShowChildren(root, ref tree, Spaces);
@@ -124,7 +125,7 @@ namespace TwoDrive.BusinessLogic.Logic
             return tree;
         }
 
-        public void ShowChildren(Element element, ref string tree, string prefix)
+        private void ShowChildren(Element element, ref string tree, string prefix)
         {
             if (element is Folder folder)
             {
@@ -146,6 +147,11 @@ namespace TwoDrive.BusinessLogic.Logic
             {
                 return;
             }
+        }
+
+        public Folder GetRootFolder(Writer owner)
+        {
+            throw new NotImplementedException();
         }
     }
 }
