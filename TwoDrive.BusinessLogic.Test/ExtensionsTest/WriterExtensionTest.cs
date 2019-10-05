@@ -165,13 +165,8 @@ namespace TwoDrive.BusinessLogic.Test
         public void AddCreatorClaimsToRootFolder()
         {
             writer.Claims = new List<Claim>();
-            var folder = new Folder
-            {
-                Name = "Folder",
-                Owner = new Writer(),
-                ParentFolder = root
-            };
-            writer.AddCreatorClaimsTo(folder);
+            
+            writer.AddCreatorClaimsTo(root);
         }
     }
 }

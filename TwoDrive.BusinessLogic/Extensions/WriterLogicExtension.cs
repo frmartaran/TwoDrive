@@ -23,7 +23,7 @@ namespace TwoDrive.BusinessLogic.Extensions
 
         public static void AddRootClaims(this Writer writer, Folder root)
         {
-            var isRoot = root.ParentFolder == null && root.Name == "Root";
+            bool isRoot = IsRoot(root);
             if (!isRoot)
                 throw new LogicException("Can't add root claims to a child folder");
 
@@ -47,10 +47,18 @@ namespace TwoDrive.BusinessLogic.Extensions
             writer.Claims.Add(share);
         }
 
+        private static bool IsRoot(Element root)
+        {
+            return root.ParentFolder == null && root.Name == "Root";
+        }
+
         public static void AddCreatorClaimsTo(this Writer writer, Element element)
         {
             if (element.Owner != writer)
                 throw new LogicException("Can only add creator claims to it's owner");
+            if (IsRoot(element))
+                throw new LogicException("Can't add creator claims to root");
+
 
             var read = new Claim
             {
