@@ -50,7 +50,11 @@ namespace TwoDrive.BusinessLogic.Validators
 
         public virtual bool ValidateDependenciesAreSet(IFolderRepository folderRepository, IFileRepository fileRepository)
         {
-            throw new NotImplementedException();
+            if (!(fileRepository != null && folderRepository != null))
+            {
+                throw new ArgumentException("Dependencies are not set");
+            }
+            return true;
         }
 
         public virtual bool IsValidDestination(Element elementToTransfer, Element elementDestination)
