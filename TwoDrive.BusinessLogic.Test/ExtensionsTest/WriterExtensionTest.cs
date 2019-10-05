@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
@@ -111,6 +112,20 @@ namespace TwoDrive.BusinessLogic.Test
             Assert.IsTrue(writer.Claims.Any(c => c.Type == ClaimType.Share));
             Assert.IsFalse(writer.Claims.Any(c => c.Type == ClaimType.Delete));
 
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException)]
+        public void AddRootClaimsToNonRoot()
+        {
+            var folder = new Folder
+            {
+                Owner = writer,
+                Name = "Folder",
+                ParentFolder = root
+            };
+            writer.Claims = new List<Claim>();
+            writer.AddRootClaims(root);
         }
     }
 }
