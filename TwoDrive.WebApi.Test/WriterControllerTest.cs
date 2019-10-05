@@ -199,6 +199,23 @@ namespace TwoDrive.WebApi.Test
 
         }
 
+        [TestMethod]
+        public void GetAllEmpty()
+        {
+            var writers = new List<Writer>();
+            var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.GetAll())
+                .Returns(writers);
 
+            var mockFolderLogic = new Mock<IFolderLogic>();
+
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object);
+            var result = controller.Get();
+            var asOk = result as OkObjectResult;
+
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+
+        }
     }
 }
