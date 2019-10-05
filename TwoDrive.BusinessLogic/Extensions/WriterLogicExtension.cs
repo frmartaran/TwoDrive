@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TwoDrive.BusinessLogic.Exceptions;
+using TwoDrive.BusinessLogic.Helpers;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 
@@ -53,14 +54,6 @@ namespace TwoDrive.BusinessLogic.Extensions
             };
             writer.Claims.Add(delete);
             writer.Claims.AddRange(claims);
-        }
-
-        private static void AddRange(this ICollection<Claim> claims, List<Claim> claimsToAdd)
-        {
-            foreach (var claim in claimsToAdd)
-            {
-                claims.Add(claim);
-            }
         }
 
         private static List<Claim> CreateBasicClaims(Element element)
@@ -117,10 +110,7 @@ namespace TwoDrive.BusinessLogic.Extensions
                 .Where(c => c.Element == element)
                 .ToList();
 
-            foreach (var claim in allClaims)
-            {
-                writer.Claims.Remove(claim);
-            }
+            writer.Claims.RemoveRange(allClaims);
         }
     }
 }
