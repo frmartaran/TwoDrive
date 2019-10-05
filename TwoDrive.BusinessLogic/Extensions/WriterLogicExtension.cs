@@ -122,6 +122,10 @@ namespace TwoDrive.BusinessLogic.Extensions
             if (!areFriends)
                 throw new LogicException($"The owner is not friends with {friend.UserName}");
 
+            var canAlreardy = friend.HasClaimsFor(element, type);
+            if (canAlreardy)
+                throw new LogicException($"{friend.UserName} can already {type.ToString()} this element");
+            
             var claim = new Claim
             {
                 Element = element,
