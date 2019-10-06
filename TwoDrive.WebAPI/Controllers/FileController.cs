@@ -50,7 +50,7 @@ namespace TwoDrive.WebApi.Controllers
                     return NotFound("Parent folder doesn't exist");
                 if (loggedWriter != parentFolder.Owner)
                     return BadRequest("You are not owner of this folder");
-                
+
 
                 var file = model.ToDomain();
                 file.Owner = loggedWriter;
@@ -68,6 +68,12 @@ namespace TwoDrive.WebApi.Controllers
             {
                 return BadRequest(exception.Message);
             }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            return null;
         }
 
         private void CreateModification(TxtFile file, ModificationType action)

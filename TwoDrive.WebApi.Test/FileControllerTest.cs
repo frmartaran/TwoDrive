@@ -213,7 +213,7 @@ namespace TwoDrive.WebApi.Test
             var fileAsModel = new TxtModel().FromDomain(file);
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
-                .Returns((Writer) null);
+                .Returns<Writer>(null);
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(folder);
@@ -262,7 +262,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
-                .Returns((Folder) null);
+                .Returns<Folder>(null);
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
             var mockLogic = new Mock<ILogic<File>>();
@@ -279,6 +279,50 @@ namespace TwoDrive.WebApi.Test
             mockSession.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
             Assert.AreEqual("Parent folder doesn't exist", notFoundResult.Value);
+        }
+
+        [TestMethod]
+        public void Delete()
+        {
+            var writer = new Writer()
+            {
+                Id = 2,
+                UserName = "Writer",
+                Password = "132",
+                Role = Role.Writer,
+                Claims = new List<Claim>(),
+                Friends = new List<Writer>()
+            };
+            var file = new TxtFile
+            {
+                Id = 1,
+                Name = "New file",
+                Content = "Content",
+                ParentFolderId = 1,
+            };
+
+            var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns(writer);
+
+            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(file);
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockModification = new Mock<IModificationLogic>();
+            var mockFolderLogic = new Mock<IFolderLogic>();
+
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+            var result = controller.Delete(1);
+            var okResult = result as OkObjectResult;
+
+            mockLogic.VerifyAll();
+            mockSession.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.AreEqual($"{file.Name} has been deleted", okResult.Value);
         }
     }
 }
