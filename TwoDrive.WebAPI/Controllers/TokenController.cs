@@ -44,7 +44,7 @@ namespace TwoDrive.WebApi.Controllers
                 var session = logic.GetSession(token);
                 return Ok("Bye!");
             }
-            catch (LogicException exception)
+            catch (LogicException)
             {
                 return BadRequest("There was an error logging out");
             }
