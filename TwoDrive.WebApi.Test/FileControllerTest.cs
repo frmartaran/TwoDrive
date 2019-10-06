@@ -10,6 +10,7 @@ using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Controllers;
 using TwoDrive.WebApi.Interfaces;
+using TwoDrive.WebApi.Models;
 
 namespace TwoDrive.WebApi.Test
 {
@@ -23,10 +24,16 @@ namespace TwoDrive.WebApi.Test
 
             var writer = new Writer()
             {
-                UserName = "Writer"
+                Id = 2,
+                UserName = "Writer",
+                Password = "132",
+                Role = Role.Writer,
+                Claims = new List<Claim>(),
+                Friends = new List<Writer>()
             };
             var folder = new Folder
             {
+                Id = 3,
                 Name = "Root",
                 FolderChildren = new List<Element>(),
                 Owner = writer
@@ -39,6 +46,7 @@ namespace TwoDrive.WebApi.Test
                 ParentFolderId = 1,
             };
 
+            var fileAsModel = new TxtModel().FromDomain(file);
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
                 .Returns(writer);
@@ -49,12 +57,21 @@ namespace TwoDrive.WebApi.Test
             mockWriterLogic.Setup(m => m.Update(It.IsAny<Writer>()));
             var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Create(It.IsAny<File>()));
-            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object, 
-                mockWriterLogic.Object, mockSession.Object);
 
-            var result = controller.Create(1);
+            var mockModification = new Mock<IModificationLogic>(MockBehavior.Strict);
+            mockModification.Setup(m => m.Create(It.IsAny<Modification>()));
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object, 
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+
+            var result = controller.Create(1, fileAsModel);
             var okResult = result as OkObjectResult;
 
+            mockLogic.VerifyAll();
+            mockFolderLogic.VerifyAll();
+            mockWriterLogic.VerifyAll();
+            mockSession.VerifyAll();
+            mockModification.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
     }
