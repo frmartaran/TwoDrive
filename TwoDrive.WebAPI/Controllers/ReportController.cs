@@ -58,7 +58,21 @@ namespace TwoDrive.WebApi.Controllers
         [HttpGet]
         public IActionResult GetTopWriters()
         {
-            return null;
+            var allFiles = fileLogic.GetAll();
+            var filesGroupedByOwner = allFiles
+                    .GroupBy(g => g.Owner)
+                    .OrderByDescending(g => g.Count())
+                    .ToList();
+            var takeTopWriters = filesGroupedByOwner
+                .Take(TOP_WRITERS_COUNT)
+                .Select(r => new TopWriterModel
+                {
+                    Username = r.Key.UserName,
+                    fileCount = r.Count()
+
+                }).ToList();
+            return Ok(takeTopWriters);
+
         }
     }
 }
