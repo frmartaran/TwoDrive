@@ -73,10 +73,14 @@ namespace TwoDrive.WebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return null;
+            var writer = inSession.GetCurrentUser(HttpContext);
+            var file = fileLogic.Get(id);
+            CreateModification(file, ModificationType.Deleted);
+            fileLogic.Delete(id);
+            return Ok($"{file.Name} has been deleted");
         }
 
-        private void CreateModification(TxtFile file, ModificationType action)
+        private void CreateModification(File file, ModificationType action)
         {
             var modification = new Modification
             {

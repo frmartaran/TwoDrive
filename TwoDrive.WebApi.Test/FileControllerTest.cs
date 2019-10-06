@@ -308,9 +308,11 @@ namespace TwoDrive.WebApi.Test
             var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(file);
+            mockLogic.Setup(m => m.Delete(It.IsAny<int>()));
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
-            var mockModification = new Mock<IModificationLogic>();
+            var mockModification = new Mock<IModificationLogic>(MockBehavior.Strict);
+            mockModification.Setup(m => m.Create(It.IsAny<Modification>()));
             var mockFolderLogic = new Mock<IFolderLogic>();
 
 
@@ -321,6 +323,7 @@ namespace TwoDrive.WebApi.Test
 
             mockLogic.VerifyAll();
             mockSession.VerifyAll();
+            mockModification.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             Assert.AreEqual($"{file.Name} has been deleted", okResult.Value);
         }
