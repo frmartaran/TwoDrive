@@ -150,5 +150,21 @@ namespace TwoDrive.WebApi.Test
             Assert.AreEqual(writer.UserName, topWriter.Username);
             Assert.AreEqual(2, topWriter.FileCount);
         }
+
+        [TestMethod]
+        public void GetNoTopWriters()
+        {
+            var files = new List<File>();
+            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.GetAll())
+                .Returns(files);
+            var mockModificationLogic = new Mock<IModificationLogic>();
+            var controller = new ReportController(mockModificationLogic.Object, mockLogic.Object);
+            var result = controller.GetTopWriters();
+            var okResult = result as OkObjectResult;
+
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.AreEqual(okResult.Value, "There are no top writers yet");
+        }
     }
 }
