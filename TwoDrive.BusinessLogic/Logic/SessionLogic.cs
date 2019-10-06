@@ -97,9 +97,11 @@ namespace TwoDrive.BusinessLogic.Logic
             }
         }
 
-        public Session GetSession(Guid token)
+        public Session GetSession(string token)
         {
-            throw new NotImplementedException();
+            return Repository.GetAll()
+                 .Where(s => s.Token.ToString() == token)
+                 .FirstOrDefault();
         }
     }
 }

@@ -311,7 +311,7 @@ namespace TwoDrive.BusinessLogic.Test
             repository.Insert(session);
             repository.Save();
             var logic = new SessionLogic(repository);
-            var current = logic.GetSession(token);
+            var current = logic.GetSession(token.ToString());
 
             Assert.AreEqual(token, current.Token);
             Assert.AreEqual(session.Writer, current.Writer);
