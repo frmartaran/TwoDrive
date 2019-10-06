@@ -122,11 +122,8 @@ namespace TwoDrive.WebApi.Test
             var result = controller.Create(1, fileAsModel);
             var badRquestResult = result as BadRequestObjectResult;
 
-            mockLogic.VerifyAll();
             mockFolderLogic.VerifyAll();
-            mockWriterLogic.VerifyAll();
             mockSession.VerifyAll();
-            mockModification.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
             Assert.AreEqual("You are not owner of this folder", badRquestResult.Value);
         }
@@ -181,9 +178,7 @@ namespace TwoDrive.WebApi.Test
 
             mockLogic.VerifyAll();
             mockFolderLogic.VerifyAll();
-            mockWriterLogic.VerifyAll();
             mockSession.VerifyAll();
-            mockModification.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
         }
 
@@ -223,10 +218,8 @@ namespace TwoDrive.WebApi.Test
             mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(folder);
 
-            var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
-            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
-            mockLogic.Setup(m => m.Create(It.IsAny<File>()))
-                .Throws(new ValidationException(""));
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockLogic = new Mock<ILogic<File>>();
 
             var mockModification = new Mock<IModificationLogic>();
 
@@ -236,13 +229,10 @@ namespace TwoDrive.WebApi.Test
             var result = controller.Create(1, fileAsModel);
             var badRquestResult = result as BadRequestObjectResult;
 
-            mockLogic.VerifyAll();
             mockFolderLogic.VerifyAll();
-            mockWriterLogic.VerifyAll();
             mockSession.VerifyAll();
-            mockModification.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
-            Assert.AreEqual("You must login first", badRquestResult.Value);
+            Assert.AreEqual("You must log in first", badRquestResult.Value);
         }
     }
 }
