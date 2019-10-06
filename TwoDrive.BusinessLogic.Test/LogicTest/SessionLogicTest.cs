@@ -256,12 +256,31 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void InvalidStringToken()
         {
-         var context = ContextFactory.GetMemoryContext("Is valid");
+            var context = ContextFactory.GetMemoryContext("Is valid");
             var token = Guid.NewGuid();
             var repository = new SessionRepository(context);
             var logic = new SessionLogic(repository);
             var valid = logic.IsValidToken("InvalidToken");
             Assert.IsFalse(valid);
+        }
+
+        [TestMethod]
+        public void RemoveSession()
+        {
+            var context = ContextFactory.GetMemoryContext("remove session");
+            var repository = new SessionRepository(context);
+            var session = new Session
+            {
+                Token = Guid.NewGuid(),
+                Writer = new Writer()
+            };
+            repository.Insert(session);
+            repository.Save();
+            var logic = new SessionLogic(repository);
+            logic.RemoveSession(session);
+
+            var allSession = repository.GetAll();
+            Assert.AreEqual(0, allSession.Count);
         }
     }
 }
