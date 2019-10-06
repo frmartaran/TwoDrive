@@ -23,6 +23,7 @@ namespace TwoDrive.WebApi.Controllers
         [HttpPost]
         public IActionResult LogIn([FromBody] LogInModel model)
         {
+            
             var token = logic.Create(model.Username, model.Password);
             if (token == null)
             {
