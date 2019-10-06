@@ -96,15 +96,7 @@ namespace TwoDrive.WebApi.Test
                 FolderChildren = new List<Element>(),
                 Owner = new Writer()
             };
-            var file = new TxtFile
-            {
-                Id = 1,
-                Name = "New file",
-                Content = "Content",
-                ParentFolderId = 1,
-            };
 
-            var fileAsModel = new TxtModel().FromDomain(file);
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
                 .Returns(writer);
@@ -148,15 +140,7 @@ namespace TwoDrive.WebApi.Test
                 FolderChildren = new List<Element>(),
                 Owner = writer
             };
-            var file = new TxtFile
-            {
-                Id = 1,
-                Name = "New file",
-                Content = "Content",
-                ParentFolderId = 1,
-            };
 
-            var fileAsModel = new TxtModel().FromDomain(file);
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
                 .Returns(writer);
@@ -202,21 +186,51 @@ namespace TwoDrive.WebApi.Test
                 FolderChildren = new List<Element>(),
                 Owner = writer
             };
-            var file = new TxtFile
-            {
-                Id = 1,
-                Name = "New file",
-                Content = "Content",
-                ParentFolderId = 1,
-            };
 
-            var fileAsModel = new TxtModel().FromDomain(file);
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
                 .Returns((Writer) null);
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(folder);
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockLogic = new Mock<ILogic<File>>();
+
+            var mockModification = new Mock<IModificationLogic>();
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+
+            var result = controller.Create(1, fileAsModel);
+            var badRquestResult = result as BadRequestObjectResult;
+
+            mockFolderLogic.VerifyAll();
+            mockSession.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+            Assert.AreEqual("You must log in first", badRquestResult.Value);
+        }
+
+        [TestMethod]
+        public void CreateFileNullFolder()
+        {
+
+            var writer = new Writer()
+            {
+                Id = 2,
+                UserName = "Writer",
+                Password = "132",
+                Role = Role.Writer,
+                Claims = new List<Claim>(),
+                Friends = new List<Writer>()
+            };
+
+            var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns(writer);
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns((Folder) null);
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
             var mockLogic = new Mock<ILogic<File>>();
