@@ -12,12 +12,9 @@ namespace TwoDrive.WebApi.Controllers
     {
         private IFolderLogic FolderLogic { get; set; }
 
-        private ISessionLogic SessionLogic { get; set; }
-
         public FolderController(IFolderLogic folderLogic) : base()
         {
             FolderLogic = folderLogic;
-            SessionLogic = sessions;
         }
 
         [HttpDelete("{id}")]
