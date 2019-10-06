@@ -316,5 +316,16 @@ namespace TwoDrive.BusinessLogic.Test
             Assert.AreEqual(token, current.Token);
             Assert.AreEqual(session.Writer, current.Writer);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void GetNullSession()
+        {
+            var context = ContextFactory.GetMemoryContext("get session");
+            var repository = new SessionRepository(context);
+            var logic = new SessionLogic(repository);
+            var current = logic.GetSession(null);
+
+        }
     }
 }

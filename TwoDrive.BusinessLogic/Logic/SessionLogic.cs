@@ -101,7 +101,7 @@ namespace TwoDrive.BusinessLogic.Logic
         {
             return Repository.GetAll()
                  .Where(s => s.Token.ToString() == token)
-                 .FirstOrDefault();
+                 .First();
         }
     }
 }
