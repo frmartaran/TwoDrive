@@ -41,12 +41,7 @@ namespace TwoDrive.WebApi.Controllers
         {
             try
             {
-                var token = HttpContext.Request.Headers["Authorization"];
-                if (string.IsNullOrEmpty(token))
-                {
-                    return BadRequest("You are not logged in");
-                }
-                var session = logic.GetSession(token);
+                var session = currentSession.GetCurrentSession(HttpContext);
                 return Ok("Bye!");
             }
             catch (LogicException)
