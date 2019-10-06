@@ -7,9 +7,10 @@ using TwoDrive.WebApi.Interfaces;
 
 namespace TwoDrive.WebApi.Models
 {
-    public class FolderModel : ElementModel, IModel<Folder, FolderModel>
+    public class TxtModel : FileModel, IModel<TxtFile, TxtModel>
     {
-        public FolderModel FromDomain(Folder entity)
+        public string Content { get; set; }
+        public TxtModel FromDomain(TxtFile entity)
         {
             if (entity == null)
                 return null;
@@ -22,31 +23,33 @@ namespace TwoDrive.WebApi.Models
             ParentFolderId = entity.ParentFolderId;
             CreationDate = entity.CreationDate;
             DateModified = entity.DateModified;
+            Content = entity.Content;
             return this;
         }
 
-        public Folder ToDomain()
+        public TxtFile ToDomain()
         {
             if (this == null)
                 return null;
-            
-            var folder = new Folder
+
+            var file = new TxtFile
             {
                 Name = this.Name,
                 CreationDate = this.CreationDate,
-                DateModified = this.DateModified
+                DateModified = this.DateModified,
+                Content = this.Content
             };
 
             if (ParentFolder != null)
-                folder.ParentFolder = ParentFolder.ToDomain();
+                file.ParentFolder = ParentFolder.ToDomain();
 
             if (Owner != null)
-                folder.Owner = Owner.ToDomain();
+                file.Owner = Owner.ToDomain();
 
             if (Id.HasValue)
-                folder.Id = Id.Value;
+                file.Id = Id.Value;
 
-            return folder;
+            return file;
         }
     }
 }

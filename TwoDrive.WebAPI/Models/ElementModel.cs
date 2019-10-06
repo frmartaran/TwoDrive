@@ -7,7 +7,7 @@ namespace TwoDrive.WebApi.Models
 {
     public abstract class ElementModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         public string Name { get; set; }
 
@@ -24,21 +24,5 @@ namespace TwoDrive.WebApi.Models
         public DateTime DateModified { get; set; }
 
         public DateTime DeletedDate { get; set; }
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            var toElement = (ElementModel)obj;
-            return Id == toElement.Id;
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
     }
 }

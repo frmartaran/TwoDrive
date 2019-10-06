@@ -16,11 +16,16 @@ namespace TwoDrive.WebApi.Models
         public string UserName { get; set; }
 
         public string Password { get; set; }
+
         public ICollection<WriterModel> Friends { get; set; }
+
         public ICollection<ClaimModel> Claims { get; set; }
 
         public WriterModel FromDomain(Writer entity)
         {
+            if (entity == null)
+                return null;
+
             Id = entity.Id;
             Role = entity.Role;
             UserName = entity.UserName;
@@ -36,6 +41,9 @@ namespace TwoDrive.WebApi.Models
 
         public Writer ToDomain()
         {
+            if (this == null)
+                return null;
+
             var writer = new Writer
             {
                 Role = this.Role,
