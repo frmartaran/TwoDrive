@@ -20,14 +20,11 @@ namespace TwoDrive.WebApi.Controllers
     {
         private ILogic<Writer> Logic { get; set; }
         private IFolderLogic FolderLogic { get; set; }
-        private ISessionLogic SessionLogic { get; set; }
         private ICurrent CurrentSession { get; set; }
-        public WriterController(ILogic<Writer> logic, IFolderLogic folderLogic,
-            ISessionLogic sessions, ICurrent current) : base()
+        public WriterController(ILogic<Writer> logic, IFolderLogic folderLogic, ICurrent current) : base()
         {
             Logic = logic;
             FolderLogic = folderLogic;
-            SessionLogic = sessions;
             CurrentSession = current;
         }
 
@@ -192,6 +189,5 @@ namespace TwoDrive.WebApi.Controllers
 
             }
         }
-
     }
 }
