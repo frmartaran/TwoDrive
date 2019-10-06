@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TwoDrive.BusinessLogic;
 using TwoDrive.BusinessLogic.Exceptions;
+using TwoDrive.WebApi.Interfaces;
 using TwoDrive.WebApi.Models;
 
 namespace TwoDrive.WebApi.Controllers
@@ -15,9 +16,12 @@ namespace TwoDrive.WebApi.Controllers
     {
         private ISessionLogic logic;
 
-        public TokenController(ISessionLogic sessionLogic)
+        private ICurrent currentSession;
+
+        public TokenController(ISessionLogic sessionLogic, ICurrent session)
         {
             logic = sessionLogic;
+            currentSession = session;
         }
 
         [HttpPost]
