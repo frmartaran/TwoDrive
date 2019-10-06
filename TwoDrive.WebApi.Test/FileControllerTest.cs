@@ -62,7 +62,7 @@ namespace TwoDrive.WebApi.Test
             var mockModification = new Mock<IModificationLogic>(MockBehavior.Strict);
             mockModification.Setup(m => m.Create(It.IsAny<Modification>()));
 
-            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object, 
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
                 mockWriterLogic.Object, mockSession.Object, mockModification.Object);
 
             var result = controller.Create(1, fileAsModel);
@@ -178,6 +178,62 @@ namespace TwoDrive.WebApi.Test
                 mockWriterLogic.Object, mockSession.Object, mockModification.Object);
 
             var result = controller.Create(1, fileAsModel);
+
+            mockLogic.VerifyAll();
+            mockFolderLogic.VerifyAll();
+            mockWriterLogic.VerifyAll();
+            mockSession.VerifyAll();
+            mockModification.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        }
+
+        [TestMethod]
+        public void CreateFileWriterNull()
+        {
+
+            var writer = new Writer()
+            {
+                Id = 2,
+                UserName = "Writer",
+                Password = "132",
+                Role = Role.Writer,
+                Claims = new List<Claim>(),
+                Friends = new List<Writer>()
+            };
+            var folder = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChildren = new List<Element>(),
+                Owner = writer
+            };
+            var file = new TxtFile
+            {
+                Id = 1,
+                Name = "New file",
+                Content = "Content",
+                ParentFolderId = 1,
+            };
+
+            var fileAsModel = new TxtModel().FromDomain(file);
+            var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns((Writer) null);
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(folder);
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Create(It.IsAny<File>()))
+                .Throws(new ValidationException(""));
+
+            var mockModification = new Mock<IModificationLogic>();
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+
+            var result = controller.Create(1, fileAsModel);
             var badRquestResult = result as BadRequestObjectResult;
 
             mockLogic.VerifyAll();
@@ -186,6 +242,7 @@ namespace TwoDrive.WebApi.Test
             mockSession.VerifyAll();
             mockModification.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+            Assert.AreEqual("You must login first", badRquestResult.Value);
         }
     }
 }
