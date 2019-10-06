@@ -11,6 +11,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TwoDrive.DataAccess;
 using Microsoft.EntityFrameworkCore;
+using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.Domain;
+using TwoDrive.BusinessLogic.Logic;
+using TwoDrive.BusinessLogic;
+using TwoDrive.DataAccess.Interface;
+using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.WebApi
 {
@@ -23,14 +29,21 @@ namespace TwoDrive.WebApi
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDbContext<TwoDriveDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
+
+            services.AddScoped<ILogic<Writer>, WriterLogic>();
+            services.AddScoped<IFolderLogic, FolderLogic>();
+            services.AddScoped<ISessionLogic, SessionLogic>();
+            services.AddScoped<IFolderRepository, FolderRepository>();
+            services.AddScoped<IRepository<File>, FileRepository>();
+            services.AddScoped<IRepository<Writer>, WriterRepository>();
+            services.AddScoped<IRepository<Session>, SessionRepository>();
+            services.AddScoped<IRepository<Modification>, ModificationRepository>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
