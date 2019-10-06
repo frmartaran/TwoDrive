@@ -92,11 +92,11 @@ namespace TwoDrive.WebApi.Test
                 .Returns((Session) null);
             var controller = new TokenController(mockLogic.Object, mockSession.Object);
             var result = controller.LogOut();
-            var okResult = result as BadRequestObjectResult;
+            var badRequestResult = result as BadRequestObjectResult;
 
             mockSession.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
-            Assert.AreEqual("There was an error logging out", okResult.Value);
+            Assert.AreEqual("There was an error logging out", badRequestResult.Value);
         }
     }
 }
