@@ -166,7 +166,8 @@ namespace TwoDrive.WebApi.Test
 
             mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
             .Returns((Folder)null);
-            mockFolderLogic.Setup(m => m.Update(It.IsAny<Folder>()));
+            mockFolderLogic.Setup(m => m.Update(It.IsAny<Folder>()))
+            .Throws(new ValidationException(""));
 
             var controller = new FolderController(mockFolderLogic.Object, mockSessionLogic.Object,
                 mockElementRepository.Object, mockElementValidator.Object);
