@@ -7,6 +7,7 @@ using System.Text;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain.FileManagement;
+using TwoDrive.WebApi.Controllers;
 using TwoDrive.WebApi.Models;
 
 namespace TwoDrive.WebApi.Test

@@ -14,7 +14,7 @@ namespace TwoDrive.WebApi.Controllers
 
         private ISessionLogic SessionLogic { get; set; }
 
-        public FolderController(IFolderLogic folderLogic, ISessionLogic sessions) : base()
+        public FolderController(IFolderLogic folderLogic) : base()
         {
             FolderLogic = folderLogic;
             SessionLogic = sessions;
@@ -25,7 +25,7 @@ namespace TwoDrive.WebApi.Controllers
         public IActionResult Delete(int id)
         {
             try
-            {                
+            {            
                 var folder = FolderLogic.Get(id);
                 FolderLogic.Delete(id);
                 return Ok($"Folder: {folder.Name} has been deleted");
