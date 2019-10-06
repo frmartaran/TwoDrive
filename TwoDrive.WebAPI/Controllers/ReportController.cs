@@ -59,6 +59,10 @@ namespace TwoDrive.WebApi.Controllers
         public IActionResult GetTopWriters()
         {
             var allFiles = fileLogic.GetAll();
+            if (allFiles.Count() == 0)
+            {
+                return Ok("There are no top writers yet");
+            }
             var filesGroupedByOwner = allFiles
                     .GroupBy(g => g.Owner)
                     .OrderByDescending(g => g.Count())
