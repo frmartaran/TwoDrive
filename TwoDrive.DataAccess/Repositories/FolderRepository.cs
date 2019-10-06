@@ -41,5 +41,13 @@ namespace TwoDrive.DataAccess
                         .Include(r => r.FolderChildren)
                         .FirstOrDefault();
         }
+
+        public ICollection<Element> GetChildren(int parentId)
+        {
+            return table.Where(e => e.Id == parentId)
+                .Include(c => c.FolderChildren)
+                .FirstOrDefault()
+                .FolderChildren;
+        }
     }
 }

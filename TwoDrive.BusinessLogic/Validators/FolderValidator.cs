@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.DataAccess.Interface;
@@ -94,6 +95,7 @@ namespace TwoDrive.BusinessLogic.Validators
             }
             if (!result)
             {
+                containerFolder.FolderChildren = GetChildren(containerFolder);
                 foreach (var child in containerFolder.FolderChildren)
                 {
                     if (child is Folder folder)
@@ -105,6 +107,18 @@ namespace TwoDrive.BusinessLogic.Validators
                 }
             }
             return result;
+        }
+
+        private ICollection<Element> GetChildren(Folder containerFolder)
+        {
+            if(containerFolder.FolderChildren.Count > 0)
+            {
+                return containerFolder.FolderChildren;
+            }
+            else
+            {
+                return FolderRepository.GetChildren(containerFolder.Id);
+            }
         }
 
         private bool AreElementToTransferAndDestinationEmpty(Element elementToTransfer, Element elementDestination)
