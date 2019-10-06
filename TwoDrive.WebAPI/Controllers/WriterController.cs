@@ -98,11 +98,13 @@ namespace TwoDrive.WebApi.Controllers
 
         [HttpPut("{id}")]
         [AuthorizeFilter(Role.Administrator)]
-        public IActionResult Update(int id)
+        public IActionResult Update(int id, [FromBody] WriterModel model)
         {
             try
             {
                 var writer = Logic.Get(id);
+                var changedWriter = WriterModel.ToDomain(model);
+                writer = changedWriter;
                 Logic.Update(writer);
                 var updatedWriter = Logic.Get(id);
                 var toModel = WriterModel.FromDomain(updatedWriter);

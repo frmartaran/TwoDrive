@@ -243,6 +243,7 @@ namespace TwoDrive.WebApi.Test
                 Friends = new List<Writer>(),
                 Claims = new List<Claim>()
             };
+            var toModel = WriterModel.FromDomain(writer);
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Update(It.IsAny<Writer>()));
             mockLogic.Setup(m => m.Get(It.IsAny<int>())).Returns(writer);
@@ -251,7 +252,7 @@ namespace TwoDrive.WebApi.Test
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
                 mockSessionLogic.Object);
-            var result = controller.Update(1);
+            var result = controller.Update(1, toModel);
             var asOk = result as OkObjectResult;
             var writerModelResult = asOk.Value as WriterModel;
             var resultWriter = WriterModel.ToDomain(writerModelResult);
@@ -265,6 +266,7 @@ namespace TwoDrive.WebApi.Test
         [TestMethod]
         public void UpdateNullWriter()
         {
+            var model = new WriterModel();
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Update(It.IsAny<Writer>()))
                 .Throws(new ValidationException(""));
@@ -274,7 +276,7 @@ namespace TwoDrive.WebApi.Test
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
                 mockSessionLogic.Object);
-            var result = controller.Update(1);
+            var result = controller.Update(1, model);
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
