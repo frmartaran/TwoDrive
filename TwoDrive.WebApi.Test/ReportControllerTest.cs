@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.Domain.FileManagement;
@@ -60,6 +61,21 @@ namespace TwoDrive.WebApi.Test
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+        }
+
+        [TestMethod]
+        public void GetModificationReportWrongRange()
+        {
+            var mockLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.GetAllFromDateRange(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Throws(new LogicException(""));
+            var controller = new ReportController(mockLogic.Object);
+            var start = new DateTime(2019, 3, 23);
+            var end = new DateTime(2019, 5, 10);
+            var result = controller.GetModificationReport(end, start);
+
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
         }
     }
 }
