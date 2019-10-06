@@ -9,6 +9,6 @@ namespace TwoDrive.WebApi.Models
     {
         public string Username { get; set; }
 
-        public int fileCount { get; set; }
+        public int FileCount { get; set; }
     }
 }

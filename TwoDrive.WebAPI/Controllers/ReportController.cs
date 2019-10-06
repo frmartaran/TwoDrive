@@ -68,7 +68,7 @@ namespace TwoDrive.WebApi.Controllers
                 .Select(r => new TopWriterModel
                 {
                     Username = r.Key.UserName,
-                    fileCount = r.Count()
+                    FileCount = r.Count()
 
                 }).ToList();
             return Ok(takeTopWriters);

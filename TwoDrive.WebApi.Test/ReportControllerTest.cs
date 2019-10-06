@@ -128,7 +128,7 @@ namespace TwoDrive.WebApi.Test
             var fileThree = new TxtFile
             {
                 Name = "File Three",
-                Owner = writer
+                Owner = friend
             };
             var files = new List<File>
             {
@@ -148,6 +148,7 @@ namespace TwoDrive.WebApi.Test
             var topWriter = topWriters.FirstOrDefault();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             Assert.AreEqual(writer.UserName, topWriter.Username);
+            Assert.AreEqual(2, topWriter.FileCount);
         }
     }
 }
