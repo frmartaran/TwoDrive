@@ -30,6 +30,10 @@ namespace TwoDrive.WebApi.Controllers
             try
             {
                 var groups = logic.GetAllFromDateRange(start, end);
+                if (groups.Count == 0)
+                {
+                    return Ok("There haven't been any modfications to files yet");
+                }
                 var report = groups
                     .Where(g => g.Key.GetType().IsSubclassOf(typeof(File)))
                     .Select(r => new ModificationReportModel
