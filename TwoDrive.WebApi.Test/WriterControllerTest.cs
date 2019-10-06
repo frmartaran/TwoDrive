@@ -478,7 +478,7 @@ namespace TwoDrive.WebApi.Test
 
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
-                .Returns((Writer)null);
+                .Returns((Writer) null);
             mockLogic.Setup(m => m.Update(It.IsAny<Writer>()));
 
             var mockFolderLogic = new Mock<IFolderLogic>();
@@ -524,6 +524,231 @@ namespace TwoDrive.WebApi.Test
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
 
         }
+
+        [TestMethod]
+        public void AddFriendThrowsException()
+        {
+            var writer = new Writer
+            {
+                Role = Role.Writer,
+                Password = "1234",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>()
+            };
+            var friend = new Writer
+            {
+                Role = Role.Administrator,
+                UserName = "Writer",
+                Password = "1234",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>()
+            };
+            var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockCurrentSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns(writer);
+
+            var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(friend);
+            mockLogic.Setup(m => m.Update(It.IsAny<Writer>()))
+                .Throws(new ValidationException(""));
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSessionLogic = new Mock<ISessionLogic>();
+
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
+                mockSessionLogic.Object, mockCurrentSession.Object);
+            var result = controller.AddFriend(1);
+
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+
+        }
+
+        [TestMethod]
+        public void RemoveFriend()
+        {
+            var writer = new Writer
+            {
+                Role = Role.Writer,
+                UserName = "Valid Writer",
+                Password = "1234",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>()
+            };
+            var friend = new Writer
+            {
+                Role = Role.Administrator,
+                UserName = "Writer",
+                Password = "1234",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>()
+            };
+            writer.Friends.Add(friend);
+            var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockCurrentSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns(writer);
+
+            var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(friend);
+            mockLogic.Setup(m => m.Update(It.IsAny<Writer>()));
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSessionLogic = new Mock<ISessionLogic>();
+
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
+                mockSessionLogic.Object, mockCurrentSession.Object);
+            var result = controller.RemoveFriend(1);
+            var okResult = result as OkObjectResult;
+
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.AreEqual($"You are not friends with {friend.UserName} anymore", okResult.Value);
+
+        }
+
+        [TestMethod]
+        public void RemoveNonExistantFriend()
+        {
+            var writer = new Writer
+            {
+                Role = Role.Writer,
+                UserName = "Valid Writer",
+                Password = "1234",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>()
+            };
+            var friend = new Writer
+            {
+                Role = Role.Administrator,
+                UserName = "Writer",
+                Password = "1234",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>()
+            };
+            var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockCurrentSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns(writer);
+
+            var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(friend);
+            mockLogic.Setup(m => m.Update(It.IsAny<Writer>()));
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSessionLogic = new Mock<ISessionLogic>();
+
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
+                mockSessionLogic.Object, mockCurrentSession.Object);
+            var result = controller.RemoveFriend(1);
+            var badRequestResult = result as BadRequestObjectResult;
+
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+            Assert.AreEqual("Can't remove friend since you aren't friends", badRequestResult.Value);
+
+        }
+
+        [TestMethod]
+        public void RemoveFriendThrowException()
+        {
+            var writer = new Writer
+            {
+                Role = Role.Writer,
+                Password = "1234",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>()
+            };
+            var friend = new Writer
+            {
+                Role = Role.Administrator,
+                UserName = "Writer",
+                Password = "1234",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>()
+            };
+            writer.Friends.Add(friend);
+            var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockCurrentSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns(writer);
+
+            var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(friend);
+            mockLogic.Setup(m => m.Update(It.IsAny<Writer>()))
+                .Throws(new ValidationException(""));
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSessionLogic = new Mock<ISessionLogic>();
+
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
+                mockSessionLogic.Object, mockCurrentSession.Object);
+            var result = controller.RemoveFriend(1);
+
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+
+        }
+
+
+        [TestMethod]
+        public void RemoveNullFriend()
+        {
+            var writer = new Writer
+            {
+                Role = Role.Writer,
+                Password = "1234",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>()
+            };
+            var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockCurrentSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns(writer);
+
+            var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns((Writer) null);
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSessionLogic = new Mock<ISessionLogic>();
+
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
+                mockSessionLogic.Object, mockCurrentSession.Object);
+            var result = controller.RemoveFriend(1);
+
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+
+        }
+
+        [TestMethod]
+        public void RemoveNullWriter()
+        {
+            var writer = new Writer
+            {
+                Role = Role.Writer,
+                Password = "1234",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>()
+            };
+            var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockCurrentSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns((Writer) null);
+
+            var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(writer);
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSessionLogic = new Mock<ISessionLogic>();
+
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
+                mockSessionLogic.Object, mockCurrentSession.Object);
+            var result = controller.RemoveFriend(1);
+
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+
+        }
+
+
+
+
 
     }
 }

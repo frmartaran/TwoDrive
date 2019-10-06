@@ -155,8 +155,7 @@ namespace TwoDrive.WebApi.Controllers
         {
             try
             {
-                var token = HttpContext.Request.Headers["Authorization"];
-                var writer = SessionLogic.GetWriter(token);
+                var writer = CurrentSession.GetCurrentUser(HttpContext);
                 var friend = Logic.Get(id);
                 if (!writer.IsFriendsWith(friend))
                 {
