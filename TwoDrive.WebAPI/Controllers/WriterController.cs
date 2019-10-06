@@ -94,7 +94,9 @@ namespace TwoDrive.WebApi.Controllers
             {
                 return NotFound("No writers found");
             }
-            var asModels = writers.Select(w => new WriterModel().FromDomain(w));
+            var asModels = writers
+                .Select(w => new WriterModel().FromDomain(w))
+                .ToList();
             return Ok(asModels);
         }
 
@@ -172,7 +174,9 @@ namespace TwoDrive.WebApi.Controllers
             }
             else
             {
-                var toModel = writer.Friends.Select(f => new WriterModel().FromDomain(f));
+                var toModel = writer.Friends
+                    .Select(f => new WriterModel().FromDomain(f))
+                    .ToList();
                 return Ok(toModel);
 
             }

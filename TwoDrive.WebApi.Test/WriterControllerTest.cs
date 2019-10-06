@@ -203,7 +203,9 @@ namespace TwoDrive.WebApi.Test
             var result = controller.Get();
             var asOk = result as OkObjectResult;
             var writerModelResult = asOk.Value as List<WriterModel>;
-            var resultWriter = writerModelResult.Select(wm => wm.ToDomain());
+            var resultWriter = writerModelResult
+                .Select(wm => wm.ToDomain())
+                .ToList();
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
@@ -323,7 +325,9 @@ namespace TwoDrive.WebApi.Test
             var result = controller.ShowFriends(1);
             var asOk = result as OkObjectResult;
             var writerModelResult = asOk.Value as List<WriterModel>;
-            var resultWriter = writerModelResult.Select(wm => wm.ToDomain());
+            var resultWriter = writerModelResult
+                .Select(wm => wm.ToDomain())
+                .ToList();
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));

@@ -18,10 +18,15 @@ namespace TwoDrive.WebApi.Controllers
     [AuthorizeFilter(Role.Administrator)]
     public class ReportController : ControllerBase
     {
-        private IModificationLogic logic;
-        public ReportController(IModificationLogic aLogic)
+        private IModificationLogic modificationLogic;
+
+        private ILogic<File> fileLogic;
+
+        private const int TOP_WRITERS_COUNT = 10;
+        public ReportController(IModificationLogic logic, ILogic<File> currentfileLogic)
         {
-            logic = aLogic;
+            modificationLogic = logic;
+            fileLogic = currentfileLogic;
         }
 
         [HttpGet]
@@ -29,7 +34,7 @@ namespace TwoDrive.WebApi.Controllers
         {
             try
             {
-                var groups = logic.GetAllFromDateRange(start, end);
+                var groups = modificationLogic.GetAllFromDateRange(start, end);
                 if (groups.Count == 0)
                 {
                     return Ok("There haven't been any modfications to files yet");
@@ -48,6 +53,12 @@ namespace TwoDrive.WebApi.Controllers
             {
                 return BadRequest(exception.Message);
             }
+        }
+
+        [HttpGet]
+        public IActionResult GetTopWriters()
+        {
+            return null;
         }
     }
 }
