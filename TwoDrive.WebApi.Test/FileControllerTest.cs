@@ -347,8 +347,7 @@ namespace TwoDrive.WebApi.Test
                 .Throws(new LogicException(""));
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
-            var mockModification = new Mock<IModificationLogic>(MockBehavior.Strict);
-            mockModification.Setup(m => m.Create(It.IsAny<Modification>()));
+            var mockModification = new Mock<IModificationLogic>();
             var mockFolderLogic = new Mock<IFolderLogic>();
 
 
@@ -357,7 +356,6 @@ namespace TwoDrive.WebApi.Test
             var result = controller.Delete(1);
 
             mockLogic.VerifyAll();
-            mockModification.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
         }
     }

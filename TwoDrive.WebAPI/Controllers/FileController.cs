@@ -75,10 +75,17 @@ namespace TwoDrive.WebApi.Controllers
         [ClaimFilter(ClaimType.Delete)]
         public IActionResult Delete(int id)
         {
-            var file = fileLogic.Get(id);
-            CreateModification(file, ModificationType.Deleted);
-            fileLogic.Delete(id);
-            return Ok($"{file.Name} has been deleted");
+            try
+            {
+                var file = fileLogic.Get(id);
+                fileLogic.Delete(id);
+                CreateModification(file, ModificationType.Deleted);
+                return Ok($"{file.Name} has been deleted");
+            }
+            catch (LogicException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         private void CreateModification(File file, ModificationType action)
