@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using TwoDrive.BusinessLogic;
 using TwoDrive.BusinessLogic.Exceptions;
@@ -32,7 +33,7 @@ namespace TwoDrive.WebApi.Controllers
         {
             try
             {
-                var writer = WriterModel.ToDomain(model);
+                var writer = model.ToDomain();
                 var root = new Folder
                 {
                     Name = "Root",
@@ -79,20 +80,21 @@ namespace TwoDrive.WebApi.Controllers
             {
                 return NotFound("User not found");
             }
-            var model = WriterModel.FromDomain(writer);
-            return Ok(model);
+            var model = new WriterModel();
+            return Ok(model.FromDomain(writer));
         }
 
         [HttpGet]
         [AuthorizeFilter(Role.Administrator)]
         public IActionResult Get()
         {
-            var writers = Logic.GetAll();
+            var writers = Logic.GetAll()
+                .ToList();
             if (writers.Count == 0)
             {
                 return NotFound("No writers found");
             }
-            var asModels = WriterModel.AllToModel(writers);
+            var asModels = writers.Select(w => new WriterModel().FromDomain(w));
             return Ok(asModels);
         }
 
@@ -105,8 +107,8 @@ namespace TwoDrive.WebApi.Controllers
                 var writer = Logic.Get(id);
                 Logic.Update(writer);
                 var updatedWriter = Logic.Get(id);
-                var toModel = WriterModel.FromDomain(updatedWriter);
-                return Ok(toModel);
+                var toModel = new WriterModel();
+                return Ok(toModel.FromDomain(writer));
             }
             catch (ValidationException exception)
             {
@@ -168,7 +170,7 @@ namespace TwoDrive.WebApi.Controllers
             }
             else
             {
-                var toModel = WriterModel.AllToModel(writer.Friends);
+                var toModel = writer.Friends.Select(f => new WriterModel().FromDomain(f));
                 return Ok(toModel);
 
             }

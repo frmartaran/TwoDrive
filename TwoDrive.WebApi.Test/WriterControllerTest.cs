@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -141,7 +142,7 @@ namespace TwoDrive.WebApi.Test
             var result = controller.Get(1);
             var asOk = result as OkObjectResult;
             var writerModelResult = asOk.Value as WriterModel;
-            var resultWriter = WriterModel.ToDomain(writerModelResult);
+            var resultWriter = writerModelResult.ToDomain();
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
@@ -202,7 +203,7 @@ namespace TwoDrive.WebApi.Test
             var result = controller.Get();
             var asOk = result as OkObjectResult;
             var writerModelResult = asOk.Value as List<WriterModel>;
-            var resultWriter = WriterModel.AllToEntity(writerModelResult);
+            var resultWriter = writerModelResult.Select(wm => wm.ToDomain());
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
@@ -254,7 +255,7 @@ namespace TwoDrive.WebApi.Test
             var result = controller.Update(1);
             var asOk = result as OkObjectResult;
             var writerModelResult = asOk.Value as WriterModel;
-            var resultWriter = WriterModel.ToDomain(writerModelResult);
+            var resultWriter = writerModelResult.ToDomain();
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
@@ -313,7 +314,7 @@ namespace TwoDrive.WebApi.Test
             var result = controller.ShowFriends(1);
             var asOk = result as OkObjectResult;
             var writerModelResult = asOk.Value as List<WriterModel>;
-            var resultWriter = WriterModel.AllToEntity(writerModelResult);
+            var resultWriter = writerModelResult.Select(wm => wm.ToDomain());
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
