@@ -131,6 +131,11 @@ namespace TwoDrive.WebApi.Controllers
             {
                 var writer = CurrentSession.GetCurrentUser(HttpContext);
                 var friend = Logic.Get(id);
+                if (friend == null)
+                {
+                    return BadRequest("The friend doesn't exist");
+
+                }
                 if (writer.IsFriendsWith(friend))
                 {
                     return BadRequest($"You're already friend with {friend.UserName}");
