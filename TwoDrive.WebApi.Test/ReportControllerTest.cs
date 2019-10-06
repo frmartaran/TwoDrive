@@ -77,5 +77,24 @@ namespace TwoDrive.WebApi.Test
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
         }
+
+        [TestMethod]
+        public void GetEmptyModificationReport()
+        {
+            var allModifications = new List<Modification>();
+            var groupedList = allModifications
+                .GroupBy(g => g.ElementModified)
+                .ToList();
+            var mockLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.GetAllFromDateRange(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(groupedList);
+            var controller = new ReportController(mockLogic.Object);
+            var start = new DateTime(2019, 3, 23);
+            var end = new DateTime(2019, 5, 10);
+            var result = controller.GetModificationReport(start, end);
+
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+        }
     }
 }
