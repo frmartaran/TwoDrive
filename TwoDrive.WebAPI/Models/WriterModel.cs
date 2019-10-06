@@ -25,7 +25,8 @@ namespace TwoDrive.WebApi.Models
             Role = entity.Role;
             UserName = entity.UserName;
             Password = entity.Password;
-            Friends = entity.Friends.Select(e => new WriterModel().FromDomain(e))
+            Friends = entity.Friends
+                .Select(e => new WriterModel().FromDomain(e))
                 .ToList();
             Claims = entity.Claims
                 .Select(c => new ClaimModel().FromDomain(c))
