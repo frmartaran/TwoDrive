@@ -15,6 +15,8 @@ namespace TwoDrive.BusinessLogic
 
         Session GetSession(string token);
 
+        void RemoveSession(Session session);
+
 
     }
 }

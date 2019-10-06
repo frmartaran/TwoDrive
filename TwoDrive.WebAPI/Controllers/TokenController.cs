@@ -42,6 +42,7 @@ namespace TwoDrive.WebApi.Controllers
             try
             {
                 var session = currentSession.GetCurrentSession(HttpContext);
+                logic.RemoveSession(session);
                 return Ok("Bye!");
             }
             catch (LogicException)

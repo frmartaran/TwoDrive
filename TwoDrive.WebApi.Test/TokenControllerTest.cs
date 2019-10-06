@@ -65,7 +65,8 @@ namespace TwoDrive.WebApi.Test
                 Token = token,
                 Writer = new Writer()
             };
-            var mockLogic = new Mock<ISessionLogic>();
+            var mockLogic = new Mock<ISessionLogic>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.RemoveSession(It.IsAny<Session>()));
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentSession(It.IsAny<HttpContext>()))
                 .Returns(session);
@@ -73,6 +74,8 @@ namespace TwoDrive.WebApi.Test
             var result = controller.LogOut();
             var okResult = result as OkObjectResult;
 
+            mockLogic.VerifyAll();
+            mockSession.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             Assert.AreEqual("Bye!", okResult.Value);
         }
