@@ -9,6 +9,7 @@ using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
+using TwoDrive.WebApi.Filters;
 using TwoDrive.WebApi.Interfaces;
 using TwoDrive.WebApi.Models;
 
@@ -71,9 +72,9 @@ namespace TwoDrive.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ClaimFilter(ClaimType.Delete)]
         public IActionResult Delete(int id)
         {
-            var writer = inSession.GetCurrentUser(HttpContext);
             var file = fileLogic.Get(id);
             CreateModification(file, ModificationType.Deleted);
             fileLogic.Delete(id);

@@ -301,9 +301,7 @@ namespace TwoDrive.WebApi.Test
                 ParentFolderId = 1,
             };
 
-            var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
-            mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
-                .Returns(writer);
+            var mockSession = new Mock<ICurrent>();
 
             var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
@@ -322,10 +320,45 @@ namespace TwoDrive.WebApi.Test
             var okResult = result as OkObjectResult;
 
             mockLogic.VerifyAll();
-            mockSession.VerifyAll();
             mockModification.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             Assert.AreEqual($"{file.Name} has been deleted", okResult.Value);
+        }
+
+        [TestMethod]
+        public void DeleteNull()
+        {
+            var writer = new Writer()
+            {
+                Id = 2,
+                UserName = "Writer",
+                Password = "132",
+                Role = Role.Writer,
+                Claims = new List<Claim>(),
+                Friends = new List<Writer>()
+            };
+
+            var mockSession = new Mock<ICurrent>();
+
+            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns<File>(null);
+            mockLogic.Setup(m => m.Delete(It.IsAny<int>()))
+                .Throws(new LogicException(""));
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockModification = new Mock<IModificationLogic>(MockBehavior.Strict);
+            mockModification.Setup(m => m.Create(It.IsAny<Modification>()));
+            var mockFolderLogic = new Mock<IFolderLogic>();
+
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+            var result = controller.Delete(1);
+
+            mockLogic.VerifyAll();
+            mockModification.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
         }
     }
 }
