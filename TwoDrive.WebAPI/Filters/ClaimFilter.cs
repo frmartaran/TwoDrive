@@ -12,12 +12,10 @@ namespace TwoDrive.WebApi.Filters
 {
     public class ClaimFilter : Attribute, IActionFilter
     {
-        protected int ElementId { get; set; }
         protected ClaimType Action { get; set; }
 
-        public ClaimFilter(int elementId, ClaimType type)
+        public ClaimFilter(ClaimType type)
         {
-            ElementId = elementId;
             Action = type;
         }
         public void OnActionExecuted(ActionExecutedContext context)
@@ -72,10 +70,16 @@ namespace TwoDrive.WebApi.Filters
 
         private Element GetElement(ActionExecutedContext context)
         {
+            var elementId = context.RouteData.Values["Id"];
+            if (elementId == null)
+            {
+                return null;
+            }
+
             var ElementRepository = (IRepository<Element>)context.HttpContext.RequestServices
                             .GetService(typeof(IRepository<Element>));
 
-            var element = ElementRepository.Get(ElementId);
+            var element = ElementRepository.Get((int) elementId);
             return element;
         }
 
