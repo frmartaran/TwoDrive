@@ -32,5 +32,24 @@ namespace TwoDrive.WebApi.Test
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
+
+        [TestMethod]
+        public void CantLogin()
+        {
+            var logInModel = new LogInModel
+            {
+                Username = "Writer",
+                Password = "1234"
+            };
+            var token = Guid.NewGuid();
+            var mockLogic = new Mock<ISessionLogic>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Create(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns((Guid?)null);
+            var controller = new TokenController(mockLogic.Object);
+            var result = controller.LogIn(logInModel);
+
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        }
     }
 }
