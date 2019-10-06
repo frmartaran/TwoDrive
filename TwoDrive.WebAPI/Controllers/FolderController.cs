@@ -8,6 +8,8 @@ using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Filters;
+using TwoDrive.WebApi.Interfaces;
+using TwoDrive.WebApi.Models;
 
 namespace TwoDrive.WebApi.Controllers
 {
@@ -16,13 +18,13 @@ namespace TwoDrive.WebApi.Controllers
     {
         private IFolderLogic FolderLogic { get; set; }
 
-        private ISessionLogic Session { get; set; }
+        private ICurrent Session { get; set; }
 
         private IRepository<Element> ElementRepository { get; set; }
 
         private IElementValidator Validator { get; set; }
 
-        public FolderController(IFolderLogic folderLogic, ISessionLogic session, 
+        public FolderController(IFolderLogic folderLogic, ICurrent session, 
             IRepository<Element> elementRepository, IElementValidator validator) : base()
         {
             FolderLogic = folderLogic;
@@ -48,13 +50,11 @@ namespace TwoDrive.WebApi.Controllers
         }
 
         [HttpPost]
-        [ClaimFilter(ClaimType.Write)]
         public IActionResult MoveFolder(int folderToMoveId, int folderDestinationId)
         {
             try
             {
-                var token = HttpContext.Request.Headers["Authorization"];
-                var writer = Session.GetWriter(token);
+                var writer = Session.GetCurrentUser(HttpContext);
                 var folderToMove = FolderLogic.Get(folderToMoveId);
                 var folderDestination = FolderLogic.Get(folderDestinationId);
                 if (FolderLogicExtension.IsWriterOwnerOfOriginAndDestination(writer, folderToMove, folderDestination))
@@ -69,6 +69,26 @@ namespace TwoDrive.WebApi.Controllers
                 return Ok($"Folder with id {folderToMoveId} was moved to destination with id {folderDestinationId}");
             }
             catch (LogicException exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        [ClaimFilter(ClaimType.Write)]
+        public IActionResult Update(int id, [FromBody] FolderModel model)
+        {
+            try
+            {
+                var folder = FolderLogic.Get(id);
+                var updatedFolder = model.ToDomain();
+                folder = updatedFolder;
+                FolderLogic.Update(folder);
+                var updatedWriter = FolderLogic.Get(id);
+                var toModel = new FolderModel();
+                return Ok(toModel.FromDomain(folder));
+            }
+            catch (ValidationException exception)
             {
                 return BadRequest(exception.Message);
             }
