@@ -244,7 +244,7 @@ namespace TwoDrive.WebApi.Test
                 Friends = new List<Writer>(),
                 Claims = new List<Claim>()
             };
-            var toModel = WriterModel.FromDomain(writer);
+            var toModel = new WriterModel().FromDomain(writer);
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Update(It.IsAny<Writer>()));
             mockLogic.Setup(m => m.Get(It.IsAny<int>())).Returns(writer);
