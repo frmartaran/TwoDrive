@@ -1,6 +1,7 @@
 
 using System;
 using System.Linq;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 
@@ -73,20 +74,27 @@ namespace TwoDrive.BusinessLogic.Logic
         {
             Guid realToken;
 
-            if(!Guid.TryParse(token, out realToken))
+            if (!Guid.TryParse(token, out realToken))
                 return false;
-                                
+
             var auxSession = new Session
             {
-                Token = realToken   
+                Token = realToken
             };
             return Repository.Exists(auxSession);
         }
 
         public void RemoveSession(Session session)
         {
-            Repository.Delete(session.Id);
-            Repository.Save();
+            try
+            {
+                Repository.Delete(session.Id);
+                Repository.Save();
+            }
+            catch (NullReferenceException exception)
+            {
+                throw new LogicException(exception.Message, exception);
+            }
         }
     }
 }
