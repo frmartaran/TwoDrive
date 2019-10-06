@@ -156,7 +156,11 @@ namespace TwoDrive.WebApi.Controllers
             try
             {
                 var writer = CurrentSession.GetCurrentUser(HttpContext);
+                if (writer == null)
+                    return BadRequest("You must log in first"); 
                 var friend = Logic.Get(id);
+                if (friend == null)
+                    return BadRequest("The writer doesn't exist");
                 if (!writer.IsFriendsWith(friend))
                 {
                     return BadRequest("Can't remove friend since you aren't friends");
