@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TwoDrive.BusinessLogic;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.Domain;
 using TwoDrive.WebApi.Controllers;
 using TwoDrive.WebApi.Interfaces;
@@ -78,6 +79,24 @@ namespace TwoDrive.WebApi.Test
             mockSession.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             Assert.AreEqual("Bye!", okResult.Value);
+        }
+
+        [TestMethod]
+        public void CantLogOut()
+        {
+            var mockLogic = new Mock<ISessionLogic>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.RemoveSession(It.IsAny<Session>()))
+                .Throws(new LogicException(""));
+            var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockSession.Setup(m => m.GetCurrentSession(It.IsAny<HttpContext>()))
+                .Returns((Session) null);
+            var controller = new TokenController(mockLogic.Object, mockSession.Object);
+            var result = controller.LogOut();
+            var okResult = result as BadRequestObjectResult;
+
+            mockSession.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+            Assert.AreEqual("There was an error logging out", okResult.Value);
         }
     }
 }
