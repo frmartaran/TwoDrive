@@ -22,10 +22,20 @@ namespace TwoDrive.WebApi.Controllers
 
         private ILogic<Writer> writerLogic;
 
-        [HttpPost("{id}")]
-        public IActionResult Create(int id)
+        public FileController(ILogic<File> logicFile, IFolderLogic logicFolder,
+            ILogic<Writer> logicWriter, ICurrent session)
         {
-            return null;
+            inSession = session;
+            folderLogic = logicFolder;
+            fileLogic = logicFile;
+            writerLogic = logicWriter;
+        }
+
+        [HttpPost("{id}")]
+        public IActionResult Create(int folderId)
+        {
+            var loggedWriter = inSession.GetCurrentUser(HttpContext);
+            var parentFolder = folderLogic.Get(folderId);
         }
 
 
