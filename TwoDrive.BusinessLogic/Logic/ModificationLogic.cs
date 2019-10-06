@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TwoDrive.BusinessLogic.Exceptions;
+using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic.Logic
 {
-    public class ModificationLogic
+    public class ModificationLogic : IModificationLogic
     {
         private IRepository<Modification> Repository { get; set; }
 
@@ -22,7 +23,7 @@ namespace TwoDrive.BusinessLogic.Logic
             Repository.Save();
         }
 
-        public ICollection<IGrouping<int,Modification>> GetAllFromDateRange(DateTime startDate, DateTime endDate)
+        public ICollection<IGrouping<Element,Modification>> GetAllFromDateRange(DateTime startDate, DateTime endDate)
         {
             var beforeStart = startDate.CompareTo(endDate);
             if(beforeStart > 0)
@@ -31,7 +32,7 @@ namespace TwoDrive.BusinessLogic.Logic
             return Repository.GetAll()
                 .Where(m => m.Date >= startDate)
                 .Where(m => m.Date < endDate)
-                .GroupBy(m => m.ElementId)
+                .GroupBy(m => m.ElementModified)
                 .ToList();
         }
     }

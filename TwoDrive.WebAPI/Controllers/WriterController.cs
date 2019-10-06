@@ -10,6 +10,7 @@ using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Filters;
+using TwoDrive.WebApi.Interfaces;
 using TwoDrive.WebApi.Models;
 
 namespace TwoDrive.WebApi.Controllers
@@ -19,12 +20,12 @@ namespace TwoDrive.WebApi.Controllers
     {
         private ILogic<Writer> Logic { get; set; }
         private IFolderLogic FolderLogic { get; set; }
-        private ISessionLogic SessionLogic { get; set; }
-        public WriterController(ILogic<Writer> logic, IFolderLogic folderLogic, ISessionLogic sessions) : base()
+        private ICurrent CurrentSession { get; set; }
+        public WriterController(ILogic<Writer> logic, IFolderLogic folderLogic, ICurrent current) : base()
         {
             Logic = logic;
             FolderLogic = folderLogic;
-            SessionLogic = sessions;
+            CurrentSession = current;
         }
 
         [HttpPost]
@@ -94,17 +95,21 @@ namespace TwoDrive.WebApi.Controllers
             {
                 return NotFound("No writers found");
             }
-            var asModels = writers.Select(w => new WriterModel().FromDomain(w));
+            var asModels = writers
+                .Select(w => new WriterModel().FromDomain(w))
+                .ToList();
             return Ok(asModels);
         }
 
         [HttpPut("{id}")]
         [AuthorizeFilter(Role.Administrator)]
-        public IActionResult Update(int id)
+        public IActionResult Update(int id, [FromBody] WriterModel model)
         {
             try
             {
                 var writer = Logic.Get(id);
+                var changedWriter = model.ToDomain();
+                writer = changedWriter;
                 Logic.Update(writer);
                 var updatedWriter = Logic.Get(id);
                 var toModel = new WriterModel();
@@ -121,9 +126,13 @@ namespace TwoDrive.WebApi.Controllers
         {
             try
             {
-                var token = HttpContext.Request.Headers["Authorization"];
-                var writer = SessionLogic.GetWriter(token);
+                var writer = CurrentSession.GetCurrentUser(HttpContext);
+                if (writer == null)
+                    return BadRequest("You need to login first");
                 var friend = Logic.Get(id);
+                if (friend == null)
+                    return BadRequest("The friend doesn't exist");
+
                 if (writer.IsFriendsWith(friend))
                 {
                     return BadRequest($"You're already friend with {friend.UserName}");
@@ -143,9 +152,12 @@ namespace TwoDrive.WebApi.Controllers
         {
             try
             {
-                var token = HttpContext.Request.Headers["Authorization"];
-                var writer = SessionLogic.GetWriter(token);
+                var writer = CurrentSession.GetCurrentUser(HttpContext);
+                if (writer == null)
+                    return BadRequest("You must log in first"); 
                 var friend = Logic.Get(id);
+                if (friend == null)
+                    return BadRequest("The writer doesn't exist");
                 if (!writer.IsFriendsWith(friend))
                 {
                     return BadRequest("Can't remove friend since you aren't friends");
@@ -170,11 +182,12 @@ namespace TwoDrive.WebApi.Controllers
             }
             else
             {
-                var toModel = writer.Friends.Select(f => new WriterModel().FromDomain(f));
+                var toModel = writer.Friends
+                    .Select(f => new WriterModel().FromDomain(f))
+                    .ToList();
                 return Ok(toModel);
 
             }
         }
-
     }
 }

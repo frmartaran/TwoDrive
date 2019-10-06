@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TwoDrive.BusinessLogic;
 using TwoDrive.BusinessLogic.Exceptions;
+using TwoDrive.WebApi.Interfaces;
 using TwoDrive.WebApi.Models;
 
 namespace TwoDrive.WebApi.Controllers
@@ -15,14 +16,18 @@ namespace TwoDrive.WebApi.Controllers
     {
         private ISessionLogic logic;
 
-        public TokenController(ISessionLogic sessionLogic)
+        private ICurrent currentSession;
+
+        public TokenController(ISessionLogic sessionLogic, ICurrent session)
         {
             logic = sessionLogic;
+            currentSession = session;
         }
 
         [HttpPost]
         public IActionResult LogIn([FromBody] LogInModel model)
         {
+            
             var token = logic.Create(model.Username, model.Password);
             if (token == null)
             {
@@ -36,12 +41,8 @@ namespace TwoDrive.WebApi.Controllers
         {
             try
             {
-                var token = HttpContext.Request.Headers["Authorization"];
-                if (string.IsNullOrEmpty(token))
-                {
-                    return BadRequest("You are not logged in");
-                }
-                var session = logic.GetSession(token);
+                var session = currentSession.GetCurrentSession(HttpContext);
+                logic.RemoveSession(session);
                 return Ok("Bye!");
             }
             catch (LogicException)
