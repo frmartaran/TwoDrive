@@ -271,6 +271,7 @@ namespace TwoDrive.BusinessLogic.Test
             var repository = new SessionRepository(context);
             var session = new Session
             {
+                Id = 1,
                 Token = Guid.NewGuid(),
                 Writer = new Writer()
             };

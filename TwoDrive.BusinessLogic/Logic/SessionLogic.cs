@@ -85,7 +85,8 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public void RemoveSession(Session session)
         {
-            throw new NotImplementedException();
+            Repository.Delete(session.Id);
+            Repository.Save();
         }
     }
 }
