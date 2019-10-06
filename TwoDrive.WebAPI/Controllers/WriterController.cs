@@ -22,7 +22,7 @@ namespace TwoDrive.WebApi.Controllers
         private IFolderLogic FolderLogic { get; set; }
         private ISessionLogic SessionLogic { get; set; }
         private ICurrent CurrentSession { get; set; }
-        public WriterController(ILogic<Writer> logic, IFolderLogic folderLogic, 
+        public WriterController(ILogic<Writer> logic, IFolderLogic folderLogic,
             ISessionLogic sessions, ICurrent current) : base()
         {
             Logic = logic;
@@ -130,12 +130,12 @@ namespace TwoDrive.WebApi.Controllers
             try
             {
                 var writer = CurrentSession.GetCurrentUser(HttpContext);
+                if (writer == null)
+                    return BadRequest("You need to login first");
                 var friend = Logic.Get(id);
                 if (friend == null)
-                {
                     return BadRequest("The friend doesn't exist");
 
-                }
                 if (writer.IsFriendsWith(friend))
                 {
                     return BadRequest($"You're already friend with {friend.UserName}");
