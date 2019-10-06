@@ -100,6 +100,8 @@ namespace TwoDrive.BusinessLogic.Validators
                     {
                         result = IsElementInsideFolder(folder, elementInFolder);
                     }
+                    if (result)
+                        break;
                 }
             }
             return result;
