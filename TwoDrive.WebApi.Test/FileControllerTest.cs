@@ -149,7 +149,7 @@ namespace TwoDrive.WebApi.Test
                 Id = 3,
                 Name = "Root",
                 FolderChildren = new List<Element>(),
-                Owner = new Writer()
+                Owner = writer
             };
             var file = new TxtFile
             {
@@ -168,8 +168,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns(folder);
 
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
-            var mockLogic = new Mock<ILogic<File>>();
-            mockLogic.Setup(m => m.Update(It.IsAny<TxtFile>()))
+            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Create(It.IsAny<File>()))
                 .Throws(new ValidationException(""));
 
             var mockModification = new Mock<IModificationLogic>();

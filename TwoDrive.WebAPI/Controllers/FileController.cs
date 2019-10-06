@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
@@ -39,22 +40,29 @@ namespace TwoDrive.WebApi.Controllers
         [HttpPost("{id}")]
         public IActionResult Create(int folderId, [FromBody] TxtModel model)
         {
-            var loggedWriter = inSession.GetCurrentUser(HttpContext);
-            var parentFolder = folderLogic.Get(folderId);
-            if (loggedWriter != parentFolder.Owner)
-                return BadRequest("You are not owner of this folder");
+            try
+            {
+                var loggedWriter = inSession.GetCurrentUser(HttpContext);
+                var parentFolder = folderLogic.Get(folderId);
+                if (loggedWriter != parentFolder.Owner)
+                    return BadRequest("You are not owner of this folder");
 
-            var file = model.ToDomain();
-            file.Owner = loggedWriter;
-            file.ParentFolder = parentFolder;
-            file.CreationDate = DateTime.Now;
-            file.DateModified = DateTime.Now;
-            fileLogic.Create(file);
-            loggedWriter.AddCreatorClaimsTo(file);
-            writerLogic.Update(loggedWriter);
+                var file = model.ToDomain();
+                file.Owner = loggedWriter;
+                file.ParentFolder = parentFolder;
+                file.CreationDate = DateTime.Now;
+                file.DateModified = DateTime.Now;
+                fileLogic.Create(file);
+                loggedWriter.AddCreatorClaimsTo(file);
+                writerLogic.Update(loggedWriter);
 
-            CreateModification(file, ModificationType.Added);
-            return Ok(new TxtModel().FromDomain(file));
+                CreateModification(file, ModificationType.Added);
+                return Ok(new TxtModel().FromDomain(file));
+            }
+            catch (ValidationException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         private void CreateModification(TxtFile file, ModificationType action)
