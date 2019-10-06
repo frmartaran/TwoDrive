@@ -4,14 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
+using TwoDrive.WebApi.Interfaces;
 
 namespace TwoDrive.WebApi.Models
 {
-    public class ClaimModel : Model<Claim, ClaimModel>
+    public class ClaimModel : IModel<Claim, ClaimModel>
     {
         public ClaimType Type { get; set; }
         public Element Element { get; set; }
-        protected override Claim ToEntity(ClaimModel model)
+        public Claim ToDomain()
         {
             return new Claim
             {
@@ -20,7 +21,7 @@ namespace TwoDrive.WebApi.Models
             };
         }
 
-        protected override ClaimModel ToModel(Claim entity)
+        public ClaimModel FromDomain(Claim entity)
         {
             Type = entity.Type;
             Element = entity.Element;
