@@ -29,5 +29,13 @@ namespace TwoDrive.WebApi.Controllers
             }
             return Ok(token);
         }
+
+        [HttpDelete]
+        public IActionResult LogOut()
+        {
+            var token = HttpContext.Request.Headers["Authorization"];
+            //var session = logic.
+            return Ok("Bye!");
+        }
     }
 }

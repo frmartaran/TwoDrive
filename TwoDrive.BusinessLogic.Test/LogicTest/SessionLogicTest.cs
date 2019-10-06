@@ -289,11 +289,32 @@ namespace TwoDrive.BusinessLogic.Test
         [ExpectedException(typeof(LogicException))]
         public void RemoveNullSession()
         {
-            var context = ContextFactory.GetMemoryContext("remove session");
+            var context = ContextFactory.GetMemoryContext("remove null session");
             var repository = new SessionRepository(context);
 
             var logic = new SessionLogic(repository);
             logic.RemoveSession(null);
+        }
+
+        [TestMethod]
+        public void GetCurrentSession()
+        {
+            var context = ContextFactory.GetMemoryContext("get session");
+            var repository = new SessionRepository(context);
+            var token = Guid.NewGuid();
+            var session = new Session
+            {
+                Id = 1,
+                Token = token,
+                Writer = new Writer()
+            };
+            repository.Insert(session);
+            repository.Save();
+            var logic = new SessionLogic(repository);
+            var current = logic.GetSession(token);
+
+            Assert.AreEqual(token, current.Token);
+            Assert.AreEqual(session.Writer, current.Writer);
         }
     }
 }

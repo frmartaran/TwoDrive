@@ -96,5 +96,10 @@ namespace TwoDrive.BusinessLogic.Logic
                 throw new LogicException(exception.Message, exception);
             }
         }
+
+        public Session GetSession(Guid token)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
