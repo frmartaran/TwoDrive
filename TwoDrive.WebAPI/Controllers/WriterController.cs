@@ -10,6 +10,7 @@ using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Filters;
+using TwoDrive.WebApi.Interfaces;
 using TwoDrive.WebApi.Models;
 
 namespace TwoDrive.WebApi.Controllers
@@ -20,11 +21,14 @@ namespace TwoDrive.WebApi.Controllers
         private ILogic<Writer> Logic { get; set; }
         private IFolderLogic FolderLogic { get; set; }
         private ISessionLogic SessionLogic { get; set; }
-        public WriterController(ILogic<Writer> logic, IFolderLogic folderLogic, ISessionLogic sessions) : base()
+        private ICurrent CurrentSession { get; set; }
+        public WriterController(ILogic<Writer> logic, IFolderLogic folderLogic, 
+            ISessionLogic sessions, ICurrent current) : base()
         {
             Logic = logic;
             FolderLogic = folderLogic;
             SessionLogic = sessions;
+            CurrentSession = current;
         }
 
         [HttpPost]
@@ -125,8 +129,7 @@ namespace TwoDrive.WebApi.Controllers
         {
             try
             {
-                var token = HttpContext.Request.Headers["Authorization"];
-                var writer = SessionLogic.GetWriter(token);
+                var writer = CurrentSession.GetCurrentUser(HttpContext);
                 var friend = Logic.Get(id);
                 if (writer.IsFriendsWith(friend))
                 {

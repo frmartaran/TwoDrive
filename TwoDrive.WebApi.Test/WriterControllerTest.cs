@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -9,6 +10,7 @@ using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Controllers;
+using TwoDrive.WebApi.Interfaces;
 using TwoDrive.WebApi.Models;
 
 namespace TwoDrive.WebApi.Test
@@ -34,9 +36,10 @@ namespace TwoDrive.WebApi.Test
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             mockFolderLogic.Setup(m => m.Create(It.IsAny<Folder>()));
             var mockSessionLogic = new Mock<ISessionLogic>();
+            var mockCurrentSession = new Mock<ICurrent>();
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
-                mockSessionLogic.Object);
+                mockSessionLogic.Object, mockCurrentSession.Object);
             var result = controller.Create(writerModel);
 
             mockLogic.VerifyAll();
@@ -61,9 +64,10 @@ namespace TwoDrive.WebApi.Test
             .Throws(new ValidationException(""));
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             var mockSessionLogic = new Mock<ISessionLogic>();
+            var mockCurrentSession = new Mock<ICurrent>();
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
-                mockSessionLogic.Object);
+                mockSessionLogic.Object, mockCurrentSession.Object);
             var result = controller.Create(writerModel);
 
             mockLogic.VerifyAll();
@@ -85,9 +89,10 @@ namespace TwoDrive.WebApi.Test
                 .Returns(root);
             mockFolderLogic.Setup(m => m.Delete(It.IsAny<int>()));
             var mockSessionLogic = new Mock<ISessionLogic>();
+            var mockCurrentSession = new Mock<ICurrent>();
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
-                mockSessionLogic.Object);
+                mockSessionLogic.Object, mockCurrentSession.Object);
             var result = controller.Delete(1);
 
             mockLogic.VerifyAll();
@@ -111,9 +116,10 @@ namespace TwoDrive.WebApi.Test
                 .Returns(root);
             mockFolderLogic.Setup(m => m.Delete(It.IsAny<int>()));
             var mockSessionLogic = new Mock<ISessionLogic>();
+            var mockCurrentSession = new Mock<ICurrent>();
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
-                mockSessionLogic.Object);
+                mockSessionLogic.Object, mockCurrentSession.Object);
             var result = controller.Delete(1);
 
             mockLogic.VerifyAll();
@@ -136,9 +142,10 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSessionLogic = new Mock<ISessionLogic>();
+            var mockCurrentSession = new Mock<ICurrent>();
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
-                mockSessionLogic.Object);
+                mockSessionLogic.Object, mockCurrentSession.Object);
             var result = controller.Get(1);
             var asOk = result as OkObjectResult;
             var writerModelResult = asOk.Value as WriterModel;
@@ -158,9 +165,10 @@ namespace TwoDrive.WebApi.Test
 
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSessionLogic = new Mock<ISessionLogic>();
+            var mockCurrentSession = new Mock<ICurrent>();
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
-                mockSessionLogic.Object);
+                mockSessionLogic.Object, mockCurrentSession.Object);
             var result = controller.Get(1);
 
             mockLogic.VerifyAll();
@@ -197,9 +205,10 @@ namespace TwoDrive.WebApi.Test
 
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSessionLogic = new Mock<ISessionLogic>();
+            var mockCurrentSession = new Mock<ICurrent>();
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
-                mockSessionLogic.Object);
+                mockSessionLogic.Object, mockCurrentSession.Object);
             var result = controller.Get();
             var asOk = result as OkObjectResult;
             var writerModelResult = asOk.Value as List<WriterModel>;
@@ -224,9 +233,10 @@ namespace TwoDrive.WebApi.Test
 
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSessionLogic = new Mock<ISessionLogic>();
+            var mockCurrentSession = new Mock<ICurrent>();
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
-                mockSessionLogic.Object);
+                mockSessionLogic.Object, mockCurrentSession.Object);
             var result = controller.Get();
             var asOk = result as OkObjectResult;
 
@@ -252,9 +262,10 @@ namespace TwoDrive.WebApi.Test
             mockLogic.Setup(m => m.Get(It.IsAny<int>())).Returns(writer);
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSessionLogic = new Mock<ISessionLogic>();
+            var mockCurrentSession = new Mock<ICurrent>();
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
-                mockSessionLogic.Object);
+                mockSessionLogic.Object, mockCurrentSession.Object);
             var result = controller.Update(1, toModel);
             var asOk = result as OkObjectResult;
             var writerModelResult = asOk.Value as WriterModel;
@@ -283,9 +294,10 @@ namespace TwoDrive.WebApi.Test
             mockLogic.Setup(m => m.Get(It.IsAny<int>())).Returns((Writer) null);
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSessionLogic = new Mock<ISessionLogic>();
+            var mockCurrentSession = new Mock<ICurrent>();
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
-                mockSessionLogic.Object);
+                mockSessionLogic.Object, mockCurrentSession.Object);
             var result = controller.Update(1, model);
 
             mockLogic.VerifyAll();
@@ -319,9 +331,10 @@ namespace TwoDrive.WebApi.Test
 
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSessionLogic = new Mock<ISessionLogic>();
+            var mockCurrentSession = new Mock<ICurrent>();
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
-                mockSessionLogic.Object);
+                mockSessionLogic.Object, mockCurrentSession.Object);
             var result = controller.ShowFriends(1);
             var asOk = result as OkObjectResult;
             var writerModelResult = asOk.Value as List<WriterModel>;
@@ -353,15 +366,56 @@ namespace TwoDrive.WebApi.Test
 
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSessionLogic = new Mock<ISessionLogic>();
+            var mockCurrentSession = new Mock<ICurrent>();
 
             var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
-                mockSessionLogic.Object);
+                mockSessionLogic.Object, mockCurrentSession.Object);
             var result = controller.ShowFriends(1);
             var asOk = result as OkObjectResult;
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             Assert.AreEqual("Writer has no friends", asOk.Value);
+        }
+
+        [TestMethod]
+        public void AddFriend()
+        {
+            var writer = new Writer
+            {
+                Role = Role.Writer,
+                UserName = "Valid Writer",
+                Password = "1234",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>()
+            };
+            var friend = new Writer
+            {
+                Role = Role.Administrator,
+                UserName = "Writer",
+                Password = "1234",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>()
+            };
+            var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockCurrentSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns(writer);
+
+            var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(friend);
+            mockLogic.Setup(m => m.Update(It.IsAny<Writer>()));
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSessionLogic = new Mock<ISessionLogic>();
+
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
+                mockSessionLogic.Object, mockCurrentSession.Object);
+            var result = controller.AddFriend(1);
+            var okResult = result as OkObjectResult;
+
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+
         }
 
     }
