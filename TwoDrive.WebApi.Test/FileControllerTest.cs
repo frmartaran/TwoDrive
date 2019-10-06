@@ -93,7 +93,7 @@ namespace TwoDrive.WebApi.Test
                 Id = 3,
                 Name = "Root",
                 FolderChildren = new List<Element>(),
-                Owner = writer
+                Owner = new Writer()
             };
             var file = new TxtFile
             {

@@ -41,6 +41,9 @@ namespace TwoDrive.WebApi.Controllers
         {
             var loggedWriter = inSession.GetCurrentUser(HttpContext);
             var parentFolder = folderLogic.Get(folderId);
+            if (loggedWriter != parentFolder.Owner)
+                return BadRequest("You are not owner of this folder");
+
             var file = model.ToDomain();
             file.Owner = loggedWriter;
             file.ParentFolder = parentFolder;
