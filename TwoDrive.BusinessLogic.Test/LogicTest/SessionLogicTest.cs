@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.DataAccess;
 using TwoDrive.DataAccess.Interface;
@@ -282,6 +283,17 @@ namespace TwoDrive.BusinessLogic.Test
 
             var allSession = repository.GetAll();
             Assert.AreEqual(0, allSession.Count);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void RemoveNullSession()
+        {
+            var context = ContextFactory.GetMemoryContext("remove session");
+            var repository = new SessionRepository(context);
+
+            var logic = new SessionLogic(repository);
+            logic.RemoveSession(null);
         }
     }
 }
