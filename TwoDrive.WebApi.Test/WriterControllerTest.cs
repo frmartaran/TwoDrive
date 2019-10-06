@@ -493,5 +493,37 @@ namespace TwoDrive.WebApi.Test
 
         }
 
+        [TestMethod]
+        public void AddNullWriter()
+        {
+            var friend = new Writer
+            {
+                Role = Role.Administrator,
+                UserName = "Writer",
+                Password = "1234",
+                Friends = new List<Writer>(),
+                Claims = new List<Claim>()
+            };
+            var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockCurrentSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns((Writer) null);
+
+            var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(friend);
+            mockLogic.Setup(m => m.Update(It.IsAny<Writer>()));
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSessionLogic = new Mock<ISessionLogic>();
+
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
+                mockSessionLogic.Object, mockCurrentSession.Object);
+            var result = controller.AddFriend(1);
+            var badRequest = result as BadRequestObjectResult;
+
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+
+        }
+
     }
 }
