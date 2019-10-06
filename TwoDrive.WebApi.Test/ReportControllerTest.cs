@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Controllers;
@@ -47,9 +48,9 @@ namespace TwoDrive.WebApi.Test
                 thirdModification
             };
             var groupedList = allModifications
-                .GroupBy(g => g.ElementId)
+                .GroupBy(g => g.ElementModified)
                 .ToList();
-            var mockLogic = new Mock<ModificationLogic>(MockBehavior.Strict);
+            var mockLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
             mockLogic.Setup(m => m.GetAllFromDateRange(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .Returns(groupedList);
             var controller = new ReportController(mockLogic.Object);
