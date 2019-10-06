@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TwoDrive.BusinessLogic;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.WebApi.Models;
 
 namespace TwoDrive.WebApi.Controllers
@@ -33,9 +34,20 @@ namespace TwoDrive.WebApi.Controllers
         [HttpDelete]
         public IActionResult LogOut()
         {
-            var token = HttpContext.Request.Headers["Authorization"];
-            //var session = logic.
-            return Ok("Bye!");
+            try
+            {
+                var token = HttpContext.Request.Headers["Authorization"];
+                if (string.IsNullOrEmpty(token))
+                {
+                    return BadRequest("You are not logged in");
+                }
+                var session = logic.GetSession(token);
+                return Ok("Bye!");
+            }
+            catch (LogicException exception)
+            {
+                return BadRequest("There was an error logging out");
+            }
         }
     }
 }

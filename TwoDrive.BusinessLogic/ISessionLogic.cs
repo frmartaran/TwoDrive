@@ -13,6 +13,8 @@ namespace TwoDrive.BusinessLogic
 
         bool IsValidToken(string token);
 
+        Session GetSession(string token);
+
 
     }
 }
