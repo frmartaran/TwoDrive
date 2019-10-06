@@ -325,7 +325,6 @@ namespace TwoDrive.BusinessLogic.Test
             var repository = new SessionRepository(context);
             var logic = new SessionLogic(repository);
             var current = logic.GetSession(null);
-
         }
     }
 }

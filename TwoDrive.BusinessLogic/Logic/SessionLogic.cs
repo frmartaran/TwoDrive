@@ -99,9 +99,16 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public Session GetSession(string token)
         {
-            return Repository.GetAll()
-                 .Where(s => s.Token.ToString() == token)
-                 .First();
+            try
+            {
+                return Repository.GetAll()
+                     .Where(s => s.Token.ToString() == token)
+                     .First();
+            }
+            catch (InvalidOperationException exception)
+            {
+                throw new LogicException(exception.Message, exception);
+            }
         }
     }
 }
