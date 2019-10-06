@@ -5,6 +5,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
@@ -128,6 +129,63 @@ namespace TwoDrive.WebApi.Test
             mockModification.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
             Assert.AreEqual("You are not owner of this folder", badRquestResult.Value);
+        }
+
+        [TestMethod]
+        public void CreateFileValidationError()
+        {
+
+            var writer = new Writer()
+            {
+                Id = 2,
+                UserName = "Writer",
+                Password = "132",
+                Role = Role.Writer,
+                Claims = new List<Claim>(),
+                Friends = new List<Writer>()
+            };
+            var folder = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChildren = new List<Element>(),
+                Owner = new Writer()
+            };
+            var file = new TxtFile
+            {
+                Id = 1,
+                Name = "New file",
+                Content = "Content",
+                ParentFolderId = 1,
+            };
+
+            var fileAsModel = new TxtModel().FromDomain(file);
+            var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns(writer);
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(folder);
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            var mockLogic = new Mock<ILogic<File>>();
+            mockLogic.Setup(m => m.Update(It.IsAny<TxtFile>()))
+                .Throws(new ValidationException(""));
+
+            var mockModification = new Mock<IModificationLogic>();
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+
+            var result = controller.Create(1, fileAsModel);
+            var badRquestResult = result as BadRequestObjectResult;
+
+            mockLogic.VerifyAll();
+            mockFolderLogic.VerifyAll();
+            mockWriterLogic.VerifyAll();
+            mockSession.VerifyAll();
+            mockModification.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
         }
     }
 }
