@@ -46,6 +46,8 @@ namespace TwoDrive.WebApi.Controllers
                 var parentFolder = folderLogic.Get(folderId);
                 if (loggedWriter == null)
                     return BadRequest("You must log in first");
+                if (parentFolder == null)
+                    return NotFound("Parent folder doesn't exist");
                 if (loggedWriter != parentFolder.Owner)
                     return BadRequest("You are not owner of this folder");
                 

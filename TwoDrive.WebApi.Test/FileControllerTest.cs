@@ -96,7 +96,15 @@ namespace TwoDrive.WebApi.Test
                 FolderChildren = new List<Element>(),
                 Owner = new Writer()
             };
+            var file = new TxtFile
+            {
+                Id = 1,
+                Name = "New file",
+                Content = "Content",
+                ParentFolderId = 1,
+            };
 
+            var fileAsModel = new TxtModel().FromDomain(file);
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
                 .Returns(writer);
@@ -140,7 +148,15 @@ namespace TwoDrive.WebApi.Test
                 FolderChildren = new List<Element>(),
                 Owner = writer
             };
+            var file = new TxtFile
+            {
+                Id = 1,
+                Name = "New file",
+                Content = "Content",
+                ParentFolderId = 1,
+            };
 
+            var fileAsModel = new TxtModel().FromDomain(file);
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
                 .Returns(writer);
@@ -186,7 +202,15 @@ namespace TwoDrive.WebApi.Test
                 FolderChildren = new List<Element>(),
                 Owner = writer
             };
+            var file = new TxtFile
+            {
+                Id = 1,
+                Name = "New file",
+                Content = "Content",
+                ParentFolderId = 1,
+            };
 
+            var fileAsModel = new TxtModel().FromDomain(file);
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
                 .Returns((Writer) null);
@@ -224,7 +248,15 @@ namespace TwoDrive.WebApi.Test
                 Claims = new List<Claim>(),
                 Friends = new List<Writer>()
             };
+            var file = new TxtFile
+            {
+                Id = 1,
+                Name = "New file",
+                Content = "Content",
+                ParentFolderId = 1,
+            };
 
+            var fileAsModel = new TxtModel().FromDomain(file);
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
                 .Returns(writer);
@@ -241,12 +273,12 @@ namespace TwoDrive.WebApi.Test
                 mockWriterLogic.Object, mockSession.Object, mockModification.Object);
 
             var result = controller.Create(1, fileAsModel);
-            var badRquestResult = result as BadRequestObjectResult;
+            var notFoundResult = result as NotFoundObjectResult;
 
             mockFolderLogic.VerifyAll();
             mockSession.VerifyAll();
-            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
-            Assert.AreEqual("You must log in first", badRquestResult.Value);
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+            Assert.AreEqual("Parent folder doesn't exist", notFoundResult.Value);
         }
     }
 }
