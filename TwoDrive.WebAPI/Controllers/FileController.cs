@@ -52,16 +52,20 @@ namespace TwoDrive.WebApi.Controllers
             fileLogic.Create(file);
             loggedWriter.AddCreatorClaimsTo(file);
             writerLogic.Update(loggedWriter);
-            var modification = new Modification
-            {
-                ElementModified = file,
-                type = ModificationType.Added,
-                Date = file.CreationDate
-            };
-            modificationLogic.Create(modification);
+
+            CreateModification(file, ModificationType.Added);
             return Ok(new TxtModel().FromDomain(file));
         }
 
-
+        private void CreateModification(TxtFile file, ModificationType action)
+        {
+            var modification = new Modification
+            {
+                ElementModified = file,
+                type = action,
+                Date = file.CreationDate
+            };
+            modificationLogic.Create(modification);
+        }
     }
 }
