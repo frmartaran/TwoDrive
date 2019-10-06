@@ -24,8 +24,8 @@ namespace TwoDrive.WebApi.Test
                 Role = Role.Writer,
                 UserName = "Valid Writer",
                 Password = "1234",
-                Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Friends = new List<WriterModel>(),
+                Claims = new List<ClaimModel>()
             };
 
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
@@ -51,8 +51,8 @@ namespace TwoDrive.WebApi.Test
             {
                 Role = Role.Writer,
                 Password = "1234",
-                Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Friends = new List<WriterModel>(),
+                Claims = new List<ClaimModel>()
             };
 
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
@@ -266,7 +266,14 @@ namespace TwoDrive.WebApi.Test
         [TestMethod]
         public void UpdateNullWriter()
         {
-            var model = new WriterModel();
+            var model = new WriterModel
+            {
+                Role = Role.Writer,
+                UserName = "Valid Writer",
+                Password = "1234",
+                Friends = new List<WriterModel>(),
+                Claims = new List<ClaimModel>()
+            };
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Update(It.IsAny<Writer>()))
                 .Throws(new ValidationException(""));

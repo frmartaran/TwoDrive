@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using TwoDrive.Domain;
 
@@ -11,8 +12,8 @@ namespace TwoDrive.WebApi.Models
         public Role Role { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
-        public ICollection<Writer> Friends { get; set; }
-        public ICollection<Claim> Claims { get; set; }
+        public ICollection<WriterModel> Friends { get; set; }
+        public ICollection<ClaimModel> Claims { get; set; }
         protected override Writer ToEntity(WriterModel model)
         {
             var writer = new Writer
@@ -20,8 +21,8 @@ namespace TwoDrive.WebApi.Models
                 Role = this.Role,
                 UserName = this.UserName,
                 Password = this.Password,
-                Friends = this.Friends,
-                Claims = this.Claims
+                Friends = AllToEntity(model.Friends),
+                Claims = ClaimModel.AllToEntity(model.Claims)
             };
 
             if (Id.HasValue)
@@ -35,8 +36,8 @@ namespace TwoDrive.WebApi.Models
             Role = entity.Role;
             UserName = entity.UserName;
             Password = entity.Password;
-            Friends = entity.Friends;
-            Claims = entity.Claims;
+            Friends = AllToModel(entity.Friends);
+            Claims = ClaimModel.AllToModel(entity.Claims);
             return this;
         }
     }
