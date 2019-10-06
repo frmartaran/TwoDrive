@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.Domain;
@@ -26,16 +27,23 @@ namespace TwoDrive.WebApi.Controllers
         [HttpGet]
         public IActionResult GetModificationReport(DateTime start, DateTime end)
         {
-            var groups = logic.GetAllFromDateRange(start, end);
-            var report = groups
-                .Where(g => g.Key.GetType().IsSubclassOf(typeof(File)))
-                .Select(r => new ModificationReportModel
-                {
-                    FileName = r.Key.Name,
-                    Amount = r.Count()
+            try
+            {
+                var groups = logic.GetAllFromDateRange(start, end);
+                var report = groups
+                    .Where(g => g.Key.GetType().IsSubclassOf(typeof(File)))
+                    .Select(r => new ModificationReportModel
+                    {
+                        FileName = r.Key.Name,
+                        Amount = r.Count()
 
-                }).ToList();
-            return Ok(report);
+                    }).ToList();
+                return Ok(report);
+            }
+            catch (LogicException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
     }
 }
