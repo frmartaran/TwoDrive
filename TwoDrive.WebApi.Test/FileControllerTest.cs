@@ -436,5 +436,29 @@ namespace TwoDrive.WebApi.Test
             Assert.IsTrue(filesResult.Contains(secondfile));
 
         }
+
+        [TestMethod]
+        public void GetNotFoundAdmin()
+        {
+            var files = new List<File>();
+            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.GetAll())
+                .Returns(files);
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockModification = new Mock<IModificationLogic>();
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSession = new Mock<ICurrent>();
+
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+            var result = controller.GetAll(1);
+            var okResult = result as NotFoundObjectResult;
+
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+
+        }
     }
 }
