@@ -185,23 +185,30 @@ namespace TwoDrive.WebApi.Controllers
         [ClaimFilter(ClaimType.Share)]
         public IActionResult StopShare(int id, int friendId)
         {
-            var writer = inSession.GetCurrentUser(HttpContext);
-            if (writer == null)
-                return NotFound("You must log in first");
+            try
+            {
+                var writer = inSession.GetCurrentUser(HttpContext);
+                if (writer == null)
+                    return NotFound("You must log in first");
 
-            var friend = writerLogic.Get(friendId);
-            if (friend == null)
-                return NotFound("Friend not found");
+                var friend = writerLogic.Get(friendId);
+                if (friend == null)
+                    return NotFound("Friend not found");
 
-            var file = fileLogic.Get(id);
-            if (file == null)
-                return NotFound("File not found");
-            if (!writer.IsFriendsWith(friend))
-                return BadRequest($"You must be friends with {friend.UserName} to revoke");
+                var file = fileLogic.Get(id);
+                if (file == null)
+                    return NotFound("File not found");
+                if (!writer.IsFriendsWith(friend))
+                    return BadRequest($"You must be friends with {friend.UserName} to revoke");
 
-            writer.RevokeFriendFrom(friend, file, ClaimType.Read);
-            writerLogic.Update(friend);
-            return Ok($"Stop sharing file: {file.Name} with {friend.UserName}");
+                writer.RevokeFriendFrom(friend, file, ClaimType.Read);
+                writerLogic.Update(friend);
+                return Ok($"Stop sharing file: {file.Name} with {friend.UserName}");
+            }
+            catch (LogicException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         private void CreateModification(File file, ModificationType action)
