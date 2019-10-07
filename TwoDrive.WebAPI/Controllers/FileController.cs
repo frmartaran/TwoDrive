@@ -241,6 +241,9 @@ namespace TwoDrive.WebApi.Controllers
                 return NotFound("File not found");
 
             var folder = folderLogic.Get(folderId);
+            if (folder == null)
+                return NotFound("Folder not found");
+
             var dependencies = new MoveElementDependencies
             {
                 ElementRepository = elementRepository,
