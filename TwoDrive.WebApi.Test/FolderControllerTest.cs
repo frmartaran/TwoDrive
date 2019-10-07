@@ -421,15 +421,16 @@ namespace TwoDrive.WebApi.Test
             mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(root);
 
-            var mockSessionLogic = new Mock<ICurrent>();
+            var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
             mockSessionLogic.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
                 .Returns(writer);
 
             var mockElementRepository = new Mock<IRepository<Element>>();
             var mockElementValidator = new Mock<IElementValidator>();
-            var mockLogicWriter = new Mock<ILogic<Writer>>();
+            var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogicWriter.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(friend);
+            mockLogicWriter.Setup(m => m.Update(It.IsAny<Writer>()));
 
             var mockModificationLogic = new Mock<IModificationLogic>();
 
@@ -445,5 +446,32 @@ namespace TwoDrive.WebApi.Test
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             Assert.AreEqual(1, friend.Claims.Count);
         }
+
+        [TestMethod]
+        public void ShareNullWriter()
+        {
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+
+            var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
+            mockSessionLogic.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns<Writer>(null);
+
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
+            var mockLogicWriter = new Mock<ILogic<Writer>>();
+
+            var mockModificationLogic = new Mock<IModificationLogic>();
+
+            var controller = new FolderController(mockFolderLogic.Object, mockSessionLogic.Object,
+               mockElementRepository.Object, mockElementValidator.Object, mockLogicWriter.Object,
+               mockModificationLogic.Object);
+
+            var result = controller.Share(3, 4);
+
+            mockSessionLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        }
+
     }
 }
