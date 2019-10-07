@@ -141,12 +141,19 @@ namespace TwoDrive.WebApi.Controllers
         [ClaimFilter(ClaimType.Write)]
         public IActionResult Update(int id, [FromBody] TxtModel model)
         {
-            var file = fileLogic.Get(id);
-            var updatedFile = model.ToDomain();
-            file = updatedFile;
-            fileLogic.Update(file);
-            CreateModification(file, ModificationType.Changed);
-            return Ok("File Updated");
+            try
+            {
+                var file = fileLogic.Get(id);
+                var updatedFile = model.ToDomain();
+                file = updatedFile;
+                fileLogic.Update(file);
+                CreateModification(file, ModificationType.Changed);
+                return Ok("File Updated");
+            }
+            catch (ValidationException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         private void CreateModification(File file, ModificationType action)
