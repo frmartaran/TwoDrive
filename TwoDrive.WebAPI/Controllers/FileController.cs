@@ -100,6 +100,13 @@ namespace TwoDrive.WebApi.Controllers
             return Ok(model);
         }
 
+        [HttpGet]
+        [Route("api/[controller]/Admin/{id}")]
+        [AuthorizeFilter(Role.Administrator)]
+        public IActionResult GetAll(int writerId)
+        {
+            return null;
+        }
         private void CreateModification(File file, ModificationType action)
         {
             var modification = new Modification

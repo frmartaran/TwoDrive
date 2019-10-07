@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
@@ -369,6 +370,68 @@ namespace TwoDrive.WebApi.Test
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        }
+
+        [TestMethod]
+        public void GetAllAdmin()
+        {
+            var folder = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChildren = new List<Element>(),
+                Owner = new Writer()
+            };
+            var file = new TxtFile
+            {
+                Id = 1,
+                Name = "New file",
+                Content = "Content",
+                Owner = writer,
+                ParentFolder = folder,
+                ParentFolderId = 1,
+                CreationDate = new DateTime(2019, 6, 10),
+                DateModified = new DateTime(2019, 6, 10),
+            };
+            var secondfile = new TxtFile
+            {
+                Id = 1,
+                Name = "New second file",
+                Content = "Content",
+                Owner = writer,
+                ParentFolder = folder,
+                ParentFolderId = 1,
+                CreationDate = new DateTime(2019, 6, 10),
+                DateModified = new DateTime(2019, 6, 10),
+            };
+            var files = new List<File>
+            {
+                file,
+                secondfile
+            };
+
+            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.GetAll())
+                .Returns(files);
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockModification = new Mock<IModificationLogic>();
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSession = new Mock<ICurrent>();
+
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+            var result = controller.GetAll(1);
+            var okResult = result as OkObjectResult;
+            var models = okResult.Value as List<FileModel>;
+            var filesResult = models.Select(m => m.ToDomain()).ToList();
+
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.IsTrue(filesResult.Contains(file));
+            Assert.IsTrue(filesResult.Contains(secondfile));
+
         }
     }
 }
