@@ -192,24 +192,31 @@ namespace TwoDrive.WebApi.Controllers
         [ClaimFilter(ClaimType.Share)]
         public IActionResult StopShare(int id, int friendId)
         {
-            var writer = Session.GetCurrentUser(HttpContext);
-            if (writer == null)
-                return NotFound("You must log in first");
+            try
+            {
+                var writer = Session.GetCurrentUser(HttpContext);
+                if (writer == null)
+                    return NotFound("You must log in first");
 
-            var friend = WriterLogic.Get(friendId);
-            if (friend == null)
-                return NotFound("Friend not found");
+                var friend = WriterLogic.Get(friendId);
+                if (friend == null)
+                    return NotFound("Friend not found");
 
-            var folder = FolderLogic.Get(id);
-            if (folder == null)
-                return NotFound("Folder not found");
+                var folder = FolderLogic.Get(id);
+                if (folder == null)
+                    return NotFound("Folder not found");
 
-            if (!writer.IsFriendsWith(friend))
-                return BadRequest($"You must be friends with {friend.UserName}");
+                if (!writer.IsFriendsWith(friend))
+                    return BadRequest($"You must be friends with {friend.UserName}");
 
-            writer.RevokeFriendFrom(friend, folder, ClaimType.Read);
-            WriterLogic.Update(friend);
-            return Ok($"Stopped sharing {folder.Name} with {friend.UserName}");
+                writer.RevokeFriendFrom(friend, folder, ClaimType.Read);
+                WriterLogic.Update(friend);
+                return Ok($"Stopped sharing {folder.Name} with {friend.UserName}");
+            }
+            catch (LogicException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
     }
 }
