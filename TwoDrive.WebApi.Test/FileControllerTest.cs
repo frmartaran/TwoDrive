@@ -1073,7 +1073,6 @@ namespace TwoDrive.WebApi.Test
         [TestMethod]
         public void StopSharingFriendHasNoClaim()
         {
-
             var friend = new Writer
             {
                 Id = 3,
