@@ -908,7 +908,7 @@ namespace TwoDrive.WebApi.Test
             mockFolderLogic.VerifyAll();
             mockSessionLogic.VerifyAll();
             mockLogicWriter.VerifyAll();
-            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
         }
 
 
