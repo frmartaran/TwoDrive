@@ -740,5 +740,31 @@ namespace TwoDrive.WebApi.Test
             Assert.AreEqual(0, friend.Claims.Count);
         }
 
+        [TestMethod]
+        public void StopSharingNullWriter()
+        {
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+
+            var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
+            mockSessionLogic.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns<Writer>(null);
+
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
+            var mockLogicWriter = new Mock<ILogic<Writer>>();
+
+            var mockModificationLogic = new Mock<IModificationLogic>();
+
+            var controller = new FolderController(mockFolderLogic.Object, mockSessionLogic.Object,
+               mockElementRepository.Object, mockElementValidator.Object, mockLogicWriter.Object,
+               mockModificationLogic.Object);
+
+            var result = controller.StopShare(3, 4);
+
+            mockSessionLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        }
+
     }
 }
