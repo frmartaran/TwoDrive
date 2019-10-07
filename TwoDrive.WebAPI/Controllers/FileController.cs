@@ -165,6 +165,9 @@ namespace TwoDrive.WebApi.Controllers
                 return NotFound("You must log in first");
 
             var friend = writerLogic.Get(friendId);
+            if (friend == null)
+                return NotFound("Friend not found");
+
             var file = fileLogic.Get(id);
             writer.AllowFriendTo(friend, file, ClaimType.Read);
             writerLogic.Update(friend);
