@@ -110,8 +110,7 @@ namespace TwoDrive.WebApi.Controllers
             return Ok(model);
         }
 
-        [HttpGet]
-        [Route("api/[controller]/Admin/{id}")]
+        [HttpGet("Admin/{id}")]
         [AuthorizeFilter(Role.Administrator)]
         public IActionResult GetAll(int writerId)
         {
@@ -166,7 +165,7 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpPut("Share/{id}/{friendId}")]
+        [HttpPut("{id}/{friendId}")]
         [ClaimFilter(ClaimType.Share)]
         public IActionResult Share(int id, int friendId)
         {
@@ -196,8 +195,7 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpPut("{id}/{friendId}")]
-        [Route("api/[controller]/StopShare")]
+        [HttpDelete("{id}/{friendId}")]
         [ClaimFilter(ClaimType.Share)]
         public IActionResult StopShare(int id, int friendId)
         {
@@ -227,8 +225,7 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpPut("{id}/{folderId}")]
-        [Route("api/[controller]/Move")]
+        [HttpPost("{id}/{folderId}")]
         [ClaimFilter(ClaimType.Write)]
         public IActionResult Move(int id, int folderId)
         {

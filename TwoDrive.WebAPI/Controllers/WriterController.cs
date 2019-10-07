@@ -121,7 +121,7 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("Add/{id}")]
         public IActionResult AddFriend(int id)
         {
             try
@@ -147,7 +147,7 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpDelete("Delete/{id}")]
         public IActionResult RemoveFriend(int id)
         {
             try
@@ -172,7 +172,7 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("Show/{id}")]
         public IActionResult ShowFriends(int id)
         {
             var writer = Logic.Get(id);

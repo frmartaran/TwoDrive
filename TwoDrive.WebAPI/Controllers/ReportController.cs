@@ -30,7 +30,7 @@ namespace TwoDrive.WebApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetModificationReport(DateTime start, DateTime end)
+        public IActionResult GetModificationReport([FromBody] DateTime start, [FromBody] DateTime end)
         {
             try
             {

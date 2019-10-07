@@ -56,7 +56,7 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("{folderToMoveId}/{folderDestinationId}")]
         public IActionResult MoveFolder(int folderToMoveId, int folderDestinationId)
         {
             try
@@ -146,12 +146,10 @@ namespace TwoDrive.WebApi.Controllers
             return Ok(new FolderModel().FromDomain(folder));
         }
 
-        [HttpGet("{id}")]
-        [Route("api/[controller]/ShowTree")]
         [ClaimFilter(ClaimType.Read)]
-        public IActionResult ShowTree(int id)
+        public IActionResult ShowTree([FromBody] int folderId)
         {
-            var folder = FolderLogic.Get(id);
+            var folder = FolderLogic.Get(folderId);
             if (folder == null)
                 return NotFound("Folder not found");
 
@@ -187,8 +185,7 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpPut("{id}/{friendId}")]
-        [Route("api/[controller]/Stop")]
+        [HttpDelete("{id}/{friendId}")]
         [ClaimFilter(ClaimType.Share)]
         public IActionResult StopShare(int id, int friendId)
         {
