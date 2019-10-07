@@ -56,7 +56,7 @@ namespace TwoDrive.WebApi.Controllers
                 var writer = Session.GetCurrentUser(HttpContext);
                 var folderToMove = FolderLogic.Get(folderToMoveId);
                 var folderDestination = FolderLogic.Get(folderDestinationId);
-                if (FolderLogicExtension.IsWriterOwnerOfOriginAndDestination(writer, folderToMove, folderDestination))
+                if (writer.IsOwnerOfOriginAndDestination(folderToMove, folderDestination))
                 {
                     var moveElementDependencies = new MoveElementDependencies
                     {

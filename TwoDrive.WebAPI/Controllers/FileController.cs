@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
@@ -29,13 +30,13 @@ namespace TwoDrive.WebApi.Controllers
 
         private IModificationLogic modificationLogic;
 
-        private IValidator<Element> elementValidator;
+        private IElementValidator elementValidator;
 
         private IRepository<Element> elementRepository;
 
         public FileController(ILogic<File> logicFile, IFolderLogic logicFolder,
             ILogic<Writer> logicWriter, ICurrent session, IModificationLogic logic,
-            IValidator<Element> validator, IRepository<Element> repository)
+            IElementValidator validator, IRepository<Element> repository)
         {
             inSession = session;
             folderLogic = logicFolder;
@@ -231,7 +232,17 @@ namespace TwoDrive.WebApi.Controllers
         [ClaimFilter(ClaimType.Write)]
         public IActionResult Move(int id, int folderId)
         {
-            return null;
+            var writer = inSession.GetCurrentUser(HttpContext);
+            var file = fileLogic.Get(id);
+            var folder = folderLogic.Get(folderId);
+            var dependencies = new MoveElementDependencies
+            {
+                ElementRepository = elementRepository,
+                ElementValidator = elementValidator
+            };
+            folderLogic.MoveElement(file, folder, dependencies);
+            CreateModification(file, ModificationType.Changed);
+            return Ok($"File: {file.Name} moved to {folder.Name}");
         }
 
         private void CreateModification(File file, ModificationType action)
