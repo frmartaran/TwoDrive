@@ -237,6 +237,9 @@ namespace TwoDrive.WebApi.Controllers
                 return NotFound("You must log in first");
 
             var file = fileLogic.Get(id);
+            if (file == null)
+                return NotFound("File not found");
+
             var folder = folderLogic.Get(folderId);
             var dependencies = new MoveElementDependencies
             {
