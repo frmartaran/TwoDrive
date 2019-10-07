@@ -30,6 +30,7 @@ namespace TwoDrive.WebApi.Models
             Role = entity.Role;
             UserName = entity.UserName;
             Password = entity.Password;
+
             if(Friends != null)
             {
                 Friends = entity.Friends
@@ -42,6 +43,7 @@ namespace TwoDrive.WebApi.Models
                 .Select(c => new ClaimModel().FromDomain(c))
                 .ToList();
             }
+
             return this;
         }
 
