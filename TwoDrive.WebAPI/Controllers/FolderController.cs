@@ -151,6 +151,9 @@ namespace TwoDrive.WebApi.Controllers
         public IActionResult ShowTree(int id)
         {
             var folder = FolderLogic.Get(id);
+            if (folder == null)
+                return NotFound("Folder not found");
+
             var tree = FolderLogic.ShowTree(folder);
             return Ok(tree);
         }
