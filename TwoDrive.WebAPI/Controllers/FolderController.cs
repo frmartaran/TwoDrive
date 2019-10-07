@@ -159,11 +159,15 @@ namespace TwoDrive.WebApi.Controllers
             return Ok(tree);
         }
 
-        [HttpPut]
+        [HttpPut("{id}/{friendId}")]
         [ClaimFilter(ClaimType.Share)]
-        public IActionResult Share(int id)
+        public IActionResult Share(int id, int friendId)
         {
-            return null;
+            var writer = Session.GetCurrentUser(HttpContext);
+            var friend = WriterLogic.Get(friendId);
+            var folder = FolderLogic.Get(id);
+            writer.AllowFriendTo(friend, folder, ClaimType.Read);
+            return Ok($"{folder.Name} has been shared with {friend.UserName}");
         }
     }
 }

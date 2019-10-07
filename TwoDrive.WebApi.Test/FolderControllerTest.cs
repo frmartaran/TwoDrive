@@ -429,7 +429,7 @@ namespace TwoDrive.WebApi.Test
             var mockElementValidator = new Mock<IElementValidator>();
             var mockLogicWriter = new Mock<ILogic<Writer>>();
             mockLogicWriter.Setup(m => m.Get(It.IsAny<int>()))
-                .Returns(writer);
+                .Returns(friend);
 
             var mockModificationLogic = new Mock<IModificationLogic>();
 
@@ -437,12 +437,13 @@ namespace TwoDrive.WebApi.Test
                mockElementRepository.Object, mockElementValidator.Object, mockLogicWriter.Object,
                mockModificationLogic.Object);
 
-            var result = controller.Share(3);
+            var result = controller.Share(3, 4);
 
             mockFolderLogic.VerifyAll();
             mockSessionLogic.VerifyAll();
             mockLogicWriter.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.AreEqual(1, friend.Claims.Count);
         }
     }
 }
