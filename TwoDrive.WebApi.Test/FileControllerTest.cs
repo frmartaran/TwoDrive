@@ -777,5 +777,44 @@ namespace TwoDrive.WebApi.Test
             mockSession.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
         }
+
+        [TestMethod]
+        public void ShareNullFile()
+        {
+            var friend = new Writer
+            {
+                Id = 3,
+                UserName = "Friend",
+                Password = "132",
+                Role = Role.Writer,
+                Claims = new List<Claim>(),
+                Friends = new List<Writer>()
+            };
+            writer.Friends.Add(friend);
+            var mockLogic = new Mock<ILogic<File>>();
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns<File>(null);
+
+            var mockModification = new Mock<IModificationLogic>();
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockWriterLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(friend);
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns(writer);
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+
+            var result = controller.Share(1, 3);
+
+            mockLogic.VerifyAll();
+            mockWriterLogic.VerifyAll();
+            mockSession.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        }
     }
 }
