@@ -428,7 +428,9 @@ namespace TwoDrive.WebApi.Test
             var okResult = result as OkObjectResult;
             var models = okResult.Value as List<FileModel>;
             var asTxtModels = models.Select(m => m as TxtModel);
-            var filesResult = asTxtModels.Select(m => m.ToDomain()).ToList();
+            var filesResult = asTxtModels
+                .Select(m => m.ToDomain())
+                .ToList();
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
@@ -458,6 +460,77 @@ namespace TwoDrive.WebApi.Test
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+
+        }
+
+        [TestMethod]
+        public void GetAllSessionWriter()
+        {
+            var folder = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChildren = new List<Element>(),
+                Owner = new Writer()
+            };
+            var file = new TxtFile
+            {
+                Id = 1,
+                Name = "New file",
+                Content = "Content",
+                Owner = writer,
+                OwnerId = 1,
+                ParentFolder = folder,
+                ParentFolderId = 1,
+                CreationDate = new DateTime(2019, 6, 10),
+                DateModified = new DateTime(2019, 6, 10),
+            };
+            var secondfile = new TxtFile
+            {
+                Id = 1,
+                Name = "New second file",
+                Content = "Content",
+                Owner = writer,
+                OwnerId = 1,
+                ParentFolder = folder,
+                ParentFolderId = 1,
+                CreationDate = new DateTime(2019, 6, 10),
+                DateModified = new DateTime(2019, 6, 10),
+            };
+            var files = new List<File>
+            {
+                file,
+                secondfile
+            };
+
+            var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns(writer);
+
+            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.GetAll())
+                .Returns(files);
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockModification = new Mock<IModificationLogic>();
+            var mockFolderLogic = new Mock<IFolderLogic>();
+
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+            var result = controller.GetAll();
+            var okResult = result as OkObjectResult;
+            var models = okResult.Value as List<FileModel>;
+            var asTxtModels = models.Select(m => m as TxtModel);
+            var filesResult = asTxtModels
+                .Select(m => m.ToDomain())
+                .ToList();
+
+            mockLogic.VerifyAll();
+            mockSession.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.IsTrue(filesResult.Contains(file));
+            Assert.IsTrue(filesResult.Contains(secondfile));
 
         }
     }
