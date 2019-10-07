@@ -897,7 +897,7 @@ namespace TwoDrive.WebApi.Test
             writer.Friends.Add(friend);
             writer.AllowFriendTo(friend, file, ClaimType.Read);
 
-            var mockLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(file);
 
@@ -923,6 +923,30 @@ namespace TwoDrive.WebApi.Test
             mockSession.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             Assert.AreEqual(0, friend.Claims.Count);
+        }
+
+        [TestMethod]
+        public void StopSharingNullWriter()
+        {
+
+            var mockLogic = new Mock<ILogic<File>>();
+
+            var mockModification = new Mock<IModificationLogic>();
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns<Writer>(null);
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+
+            var result = controller.StopShare(1, 3);
+
+            mockSession.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
         }
     }
 }
