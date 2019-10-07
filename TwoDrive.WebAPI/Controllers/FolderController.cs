@@ -186,5 +186,13 @@ namespace TwoDrive.WebApi.Controllers
                 return BadRequest(exception);
             }
         }
+
+        [HttpPut("{id}/{friendId}")]
+        [Route("api/[controller]/Stop")]
+        [ClaimFilter(ClaimType.Share)]
+        public IActionResult StopShare(int id, int friendId)
+        {
+            return null;
+        }
     }
 }
