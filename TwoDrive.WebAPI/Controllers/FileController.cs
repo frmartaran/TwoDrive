@@ -93,6 +93,9 @@ namespace TwoDrive.WebApi.Controllers
         public IActionResult Get(int id)
         {
             var file = fileLogic.Get(id);
+            if (file == null)
+                return NotFound("File not found");
+
             var model = new TxtModel().FromDomain(file);
             return Ok(model);
         }
