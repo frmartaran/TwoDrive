@@ -194,6 +194,9 @@ namespace TwoDrive.WebApi.Controllers
                 return NotFound("Friend not found");
 
             var file = fileLogic.Get(id);
+            if (file == null)
+                return NotFound("File not found");
+
             writer.RevokeFriendFrom(friend, file, ClaimType.Read);
             writerLogic.Update(friend);
             return Ok($"Stop sharing file: {file.Name} with {friend.UserName}");
