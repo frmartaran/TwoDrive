@@ -1318,5 +1318,33 @@ namespace TwoDrive.WebApi.Test
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
 
         }
+
+        [TestMethod]
+        public void MoveNullOwner()
+        {
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockLogic = new Mock<ILogic<File>>();
+
+            var mockModification = new Mock<IModificationLogic>();
+
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
+
+            var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+            .Returns<Writer>(null);
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
+
+            var result = controller.Move(1, 2);
+            mockSession.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+
+        }
     }
 }
