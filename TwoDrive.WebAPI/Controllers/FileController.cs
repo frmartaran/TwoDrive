@@ -105,8 +105,15 @@ namespace TwoDrive.WebApi.Controllers
         [AuthorizeFilter(Role.Administrator)]
         public IActionResult GetAll(int writerId)
         {
-            return null;
+            var files = fileLogic.GetAll();
+            var writerfiles = files
+                .Where(f => f.OwnerId == writerId)
+                .Select(f => new TxtModel().FromDomain(f))
+                .ToList();
+            return Ok(writerfiles);
+
         }
+
         private void CreateModification(File file, ModificationType action)
         {
             var modification = new Modification

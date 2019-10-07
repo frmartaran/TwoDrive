@@ -388,6 +388,7 @@ namespace TwoDrive.WebApi.Test
                 Name = "New file",
                 Content = "Content",
                 Owner = writer,
+                OwnerId = 1,
                 ParentFolder = folder,
                 ParentFolderId = 1,
                 CreationDate = new DateTime(2019, 6, 10),
@@ -399,6 +400,7 @@ namespace TwoDrive.WebApi.Test
                 Name = "New second file",
                 Content = "Content",
                 Owner = writer,
+                OwnerId = 1,
                 ParentFolder = folder,
                 ParentFolderId = 1,
                 CreationDate = new DateTime(2019, 6, 10),
@@ -425,7 +427,8 @@ namespace TwoDrive.WebApi.Test
             var result = controller.GetAll(1);
             var okResult = result as OkObjectResult;
             var models = okResult.Value as List<FileModel>;
-            var filesResult = models.Select(m => m.ToDomain()).ToList();
+            var asTxtModels = models.Select(m => m as TxtModel);
+            var filesResult = asTxtModels.Select(m => m.ToDomain()).ToList();
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
