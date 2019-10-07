@@ -52,7 +52,7 @@ namespace TwoDrive.WebApi.Test
                 ParentFolderId = 1,
             };
 
-            var fileAsModel = new TxtModel().FromDomain(file);
+            var fileAsModel = new TxtModel().FromDomain(file) as TxtModel;
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
                 .Returns(writer);
@@ -99,7 +99,7 @@ namespace TwoDrive.WebApi.Test
                 ParentFolderId = 1,
             };
 
-            var fileAsModel = new TxtModel().FromDomain(file);
+            var fileAsModel = new TxtModel().FromDomain(file) as TxtModel;
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
                 .Returns(writer);
@@ -141,7 +141,7 @@ namespace TwoDrive.WebApi.Test
                 ParentFolderId = 1,
             };
 
-            var fileAsModel = new TxtModel().FromDomain(file);
+            var fileAsModel = new TxtModel().FromDomain(file) as TxtModel;
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
                 .Returns(writer);
@@ -185,7 +185,7 @@ namespace TwoDrive.WebApi.Test
                 ParentFolderId = 1,
             };
 
-            var fileAsModel = new TxtModel().FromDomain(file);
+            var fileAsModel = new TxtModel().FromDomain(file) as TxtModel;
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
                 .Returns<Writer>(null);
@@ -221,7 +221,7 @@ namespace TwoDrive.WebApi.Test
                 ParentFolderId = 1,
             };
 
-            var fileAsModel = new TxtModel().FromDomain(file);
+            var fileAsModel = new TxtModel().FromDomain(file) as TxtModel;
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
                 .Returns(writer);
@@ -607,7 +607,7 @@ namespace TwoDrive.WebApi.Test
                 CreationDate = new DateTime(2019, 6, 10),
                 DateModified = new DateTime(2019, 6, 10),
             };
-            var model = new TxtModel().FromDomain(file);
+            var model = new TxtModel().FromDomain(file) as TxtModel;
 
             var mockLogic = new Mock<ILogic<File>>();
             mockLogic.Setup(m => m.Update(It.IsAny<File>()));
@@ -623,16 +623,13 @@ namespace TwoDrive.WebApi.Test
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
                 mockWriterLogic.Object, mockSession.Object, mockModification.Object);
-            var result = controller.Upadte(1);
+            var result = controller.Update(1, model);
             var okResult = result as OkObjectResult;
-            var modelResult = okResult.Value as FileModel;
-            var txtFileModel = modelResult as TxtModel;
-            var fileResult = txtFileModel.ToDomain();
 
             mockLogic.VerifyAll();
             mockModification.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
-            Assert.AreEqual(file, fileResult);
+            Assert.AreEqual("File Updated", okResult.Value);
         }
     }
 }

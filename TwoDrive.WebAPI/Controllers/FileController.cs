@@ -39,7 +39,7 @@ namespace TwoDrive.WebApi.Controllers
         }
 
         [HttpPost("{id}")]
-        public IActionResult Create(int folderId, [FromBody] FileModel model)
+        public IActionResult Create(int folderId, [FromBody] TxtModel model)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace TwoDrive.WebApi.Controllers
                     return BadRequest("You are not owner of this folder");
 
 
-                var file = model.ToDomain();
+                var file = model.ToDomain() as File;
                 file.Owner = loggedWriter;
                 file.ParentFolder = parentFolder;
                 file.CreationDate = DateTime.Now;
@@ -139,9 +139,14 @@ namespace TwoDrive.WebApi.Controllers
 
         [HttpPut("{id}")]
         [ClaimFilter(ClaimType.Write)]
-        public IActionResult Update(int id)
+        public IActionResult Update(int id, [FromBody] TxtModel model)
         {
-            return null;
+            var file = fileLogic.Get(id);
+            var updatedFile = model.ToDomain();
+            file = updatedFile;
+            fileLogic.Update(file);
+            CreateModification(file, ModificationType.Changed);
+            return Ok("File Updated");
         }
 
         private void CreateModification(File file, ModificationType action)
