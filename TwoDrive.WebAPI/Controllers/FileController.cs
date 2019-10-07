@@ -121,7 +121,14 @@ namespace TwoDrive.WebApi.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            return null;
+            var writer = inSession.GetCurrentUser(HttpContext);
+            var files = fileLogic.GetAll();
+            var writerfiles = files
+                .Where(f => f.OwnerId == writer.Id)
+                .Select(f => new TxtModel().FromDomain(f))
+                .ToList();
+
+            return Ok(writerfiles);
         }
 
         private void CreateModification(File file, ModificationType action)
