@@ -137,6 +137,13 @@ namespace TwoDrive.WebApi.Controllers
             return Ok(writerfiles);
         }
 
+        [HttpPut("{id}")]
+        [ClaimFilter(ClaimType.Write)]
+        public IActionResult Update(int id)
+        {
+            return null;
+        }
+
         private void CreateModification(File file, ModificationType action)
         {
             var modification = new Modification

@@ -584,5 +584,55 @@ namespace TwoDrive.WebApi.Test
             Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
 
         }
+
+        [TestMethod]
+        public void Update()
+        {
+            var folder = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChildren = new List<Element>(),
+                Owner = new Writer()
+            };
+            var file = new TxtFile
+            {
+                Id = 1,
+                Name = "New file",
+                Content = "Content",
+                Owner = writer,
+                OwnerId = 2,
+                ParentFolder = folder,
+                ParentFolderId = 1,
+                CreationDate = new DateTime(2019, 6, 10),
+                DateModified = new DateTime(2019, 6, 10),
+            };
+            var model = new TxtModel().FromDomain(file);
+
+            var mockLogic = new Mock<ILogic<File>>();
+            mockLogic.Setup(m => m.Update(It.IsAny<File>()));
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(file);
+
+            var mockModification = new Mock<IModificationLogic>(MockBehavior.Strict);
+            mockModification.Setup(m => m.Create(It.IsAny<Modification>()));
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSession = new Mock<ICurrent>();
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+            var result = controller.Upadte(1);
+            var okResult = result as OkObjectResult;
+            var modelResult = okResult.Value as FileModel;
+            var txtFileModel = modelResult as TxtModel;
+            var fileResult = txtFileModel.ToDomain();
+
+            mockLogic.VerifyAll();
+            mockModification.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.AreEqual(file, fileResult);
+        }
     }
 }
