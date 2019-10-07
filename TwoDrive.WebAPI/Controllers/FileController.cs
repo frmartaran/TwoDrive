@@ -244,6 +244,10 @@ namespace TwoDrive.WebApi.Controllers
             if (folder == null)
                 return NotFound("Folder not found");
 
+            if (!writer.IsOwnerOfOriginAndDestination(file, folder))
+                return BadRequest("Writer is not owner of both the origin " +
+                    "element and destiny folder");
+
             var dependencies = new MoveElementDependencies
             {
                 ElementRepository = elementRepository,
