@@ -161,6 +161,9 @@ namespace TwoDrive.WebApi.Controllers
         public IActionResult Share(int id, int friendId)
         {
             var writer = inSession.GetCurrentUser(HttpContext);
+            if (writer == null)
+                return NotFound("You must log in first");
+
             var friend = writerLogic.Get(friendId);
             var file = fileLogic.Get(id);
             writer.AllowFriendTo(friend, file, ClaimType.Read);
