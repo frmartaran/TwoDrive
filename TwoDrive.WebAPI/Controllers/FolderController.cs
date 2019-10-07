@@ -192,7 +192,12 @@ namespace TwoDrive.WebApi.Controllers
         [ClaimFilter(ClaimType.Share)]
         public IActionResult StopShare(int id, int friendId)
         {
-            return null;
+            var writer = Session.GetCurrentUser(HttpContext);
+            var friend = WriterLogic.Get(friendId);
+            var folder = FolderLogic.Get(id);
+            writer.RevokeFriendFrom(friend, folder, ClaimType.Read);
+            WriterLogic.Update(friend);
+            return Ok($"Stopped sharing {folder.Name} with {friend.UserName}");
         }
     }
 }
