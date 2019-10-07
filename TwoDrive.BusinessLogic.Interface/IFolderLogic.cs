@@ -6,7 +6,7 @@ using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic.Interfaces
 {
-    public interface IFolderLogic : ILogic<Folder>
+    public interface IFolderLogic : ILogic<Folder>, IElementLogic
     {
         Folder GetRootFolder(Writer owner);
 

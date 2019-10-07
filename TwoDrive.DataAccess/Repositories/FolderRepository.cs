@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using TwoDrive.DataAccess.Exceptions;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
 
@@ -40,6 +42,21 @@ namespace TwoDrive.DataAccess
             return table.Where(e => e.ParentFolderId == null && e.OwnerId == ownerId)
                         .Include(r => r.FolderChildren)
                         .FirstOrDefault();
+        }
+
+        public ICollection<Element> GetChildren(int parentId)
+        {
+            try
+            {
+                return table.Where(e => e.Id == parentId)
+                    .Include(c => c.FolderChildren)
+                    .FirstOrDefault()
+                    .FolderChildren;
+            }
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException($"There is no parent with id {parentId} in the database.");
+            }
         }
     }
 }

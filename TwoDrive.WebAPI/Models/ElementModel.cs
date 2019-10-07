@@ -23,8 +23,6 @@ namespace TwoDrive.WebApi.Models
 
         public DateTime DateModified { get; set; }
 
-        public bool IsDeleted { get; set; }
-
         public DateTime DeletedDate { get; set; }
     }
 }
