@@ -32,6 +32,7 @@ namespace TwoDrive.WebApi.Test
                 Friends = new List<Writer>()
             };
         }
+
         [TestMethod]
         public void CreateFile()
         {
@@ -347,6 +348,27 @@ namespace TwoDrive.WebApi.Test
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             Assert.AreEqual(file, fileResult);
+        }
+
+        [TestMethod]
+        public void GetNotFound()
+        {
+            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns<File>(null);
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockModification = new Mock<IModificationLogic>();
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSession = new Mock<ICurrent>();
+
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+            var result = controller.Get(1);
+
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
         }
     }
 }
