@@ -193,6 +193,9 @@ namespace TwoDrive.WebApi.Controllers
         public IActionResult StopShare(int id, int friendId)
         {
             var writer = Session.GetCurrentUser(HttpContext);
+            if (writer == null)
+                return NotFound("You must log in first");
+
             var friend = WriterLogic.Get(friendId);
             var folder = FolderLogic.Get(id);
             writer.RevokeFriendFrom(friend, folder, ClaimType.Read);
