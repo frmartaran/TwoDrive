@@ -52,7 +52,7 @@ namespace TwoDrive.BusinessLogic.Validators
             }
             else
             {
-                throw new ArgumentException("Dependencies must be set to validate destination");
+                throw new ValidationException("Dependencies must be set to validate destination");
             }
         }
 
@@ -62,7 +62,7 @@ namespace TwoDrive.BusinessLogic.Validators
             var isDestinationMyRootChild = IsElementInsideFolder(ownerRootFolder, folderDestination);
             if (!isDestinationMyRootChild)
             {
-                throw new ArgumentException("Destination must be my root's child");
+                throw new ValidationException("Destination must be my root's child");
             }
         }
 
@@ -71,7 +71,7 @@ namespace TwoDrive.BusinessLogic.Validators
             var isDestinationInDB = FolderRepository.Get(folderDestination.Id) != null;
             if (!isDestinationInDB)
             {
-                throw new ArgumentException("Destination doesnt exists");
+                throw new ValidationException("Destination doesnt exists");
             }
         }
 
@@ -81,7 +81,7 @@ namespace TwoDrive.BusinessLogic.Validators
             {
                 if (IsElementInsideFolder(folder, folderDestination))
                 {
-                    throw new ArgumentException("Destination is child of element to transfer");
+                    throw new ValidationException("Destination is child of element to transfer");
                 }
             }
         }
