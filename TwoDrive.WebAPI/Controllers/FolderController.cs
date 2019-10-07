@@ -164,9 +164,13 @@ namespace TwoDrive.WebApi.Controllers
         public IActionResult Share(int id, int friendId)
         {
             var writer = Session.GetCurrentUser(HttpContext);
+            if (writer == null)
+                return NotFound("You must log in first");
+
             var friend = WriterLogic.Get(friendId);
             var folder = FolderLogic.Get(id);
             writer.AllowFriendTo(friend, folder, ClaimType.Read);
+            WriterLogic.Update(friend);
             return Ok($"{folder.Name} has been shared with {friend.UserName}");
         }
     }
