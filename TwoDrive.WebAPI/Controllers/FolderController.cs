@@ -172,6 +172,9 @@ namespace TwoDrive.WebApi.Controllers
                 return NotFound("Friend not found");
 
             var folder = FolderLogic.Get(id);
+            if (folder == null)
+                return NotFound("Folder not found");
+
             writer.AllowFriendTo(friend, folder, ClaimType.Read);
             WriterLogic.Update(friend);
             return Ok($"{folder.Name} has been shared with {friend.UserName}");
