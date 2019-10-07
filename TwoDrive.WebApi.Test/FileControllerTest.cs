@@ -948,5 +948,33 @@ namespace TwoDrive.WebApi.Test
             mockSession.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
         }
+
+        [TestMethod]
+        public void StopSharingNullFriend()
+        {
+
+            var mockLogic = new Mock<ILogic<File>>();
+
+            var mockModification = new Mock<IModificationLogic>();
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockWriterLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns<Writer>(null);
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns(writer);
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+
+            var result = controller.StopShare(1, 3);
+
+            mockLogic.VerifyAll();
+            mockWriterLogic.VerifyAll();
+            mockSession.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        }
     }
 }
