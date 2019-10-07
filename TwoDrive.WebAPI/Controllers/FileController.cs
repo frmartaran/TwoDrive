@@ -161,23 +161,30 @@ namespace TwoDrive.WebApi.Controllers
         [ClaimFilter(ClaimType.Share)]
         public IActionResult Share(int id, int friendId)
         {
-            var writer = inSession.GetCurrentUser(HttpContext);
-            if (writer == null)
-                return NotFound("You must log in first");
+            try
+            {
+                var writer = inSession.GetCurrentUser(HttpContext);
+                if (writer == null)
+                    return NotFound("You must log in first");
 
-            var friend = writerLogic.Get(friendId);
-            if (friend == null)
-                return NotFound("Friend not found");
+                var friend = writerLogic.Get(friendId);
+                if (friend == null)
+                    return NotFound("Friend not found");
 
-            var file = fileLogic.Get(id);
-            if (file == null)
-                return NotFound("File not found");
-            if (!writer.IsFriendsWith(friend))
-                return BadRequest($"You are not friends with {friend.UserName}");
+                var file = fileLogic.Get(id);
+                if (file == null)
+                    return NotFound("File not found");
+                if (!writer.IsFriendsWith(friend))
+                    return BadRequest($"You are not friends with {friend.UserName}");
 
-            writer.AllowFriendTo(friend, file, ClaimType.Read);
-            writerLogic.Update(friend);
-            return Ok($"{file.Name} shared with {friend.UserName}");
+                writer.AllowFriendTo(friend, file, ClaimType.Read);
+                writerLogic.Update(friend);
+                return Ok($"{file.Name} shared with {friend.UserName}");
+            }
+            catch (LogicException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         [HttpPut("{id}/{friendId}")]
