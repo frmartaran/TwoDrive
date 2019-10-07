@@ -911,6 +911,65 @@ namespace TwoDrive.WebApi.Test
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
         }
 
+        [TestMethod]
+        public void AlreadyRevoked()
+        {
+            var writer = new Writer()
+            {
+                Id = 2,
+                UserName = "Writer",
+                Password = "132",
+                Role = Role.Writer,
+                Claims = new List<Claim>(),
+                Friends = new List<Writer>()
+            };
+            var friend = new Writer()
+            {
+                Id = 4,
+                UserName = "Friend",
+                Password = "1324",
+                Role = Role.Writer,
+                Claims = new List<Claim>(),
+                Friends = new List<Writer>()
+            };
+            var root = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChildren = new List<Element>(),
+                Owner = writer
+            };
+
+            writer.Friends.Add(friend);
+            
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(root);
+
+            var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
+            mockSessionLogic.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns(writer);
+
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
+            var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockLogicWriter.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(friend);
+
+            var mockModificationLogic = new Mock<IModificationLogic>();
+
+            var controller = new FolderController(mockFolderLogic.Object, mockSessionLogic.Object,
+               mockElementRepository.Object, mockElementValidator.Object, mockLogicWriter.Object,
+               mockModificationLogic.Object);
+
+            var result = controller.StopShare(3, 4);
+
+            mockFolderLogic.VerifyAll();
+            mockSessionLogic.VerifyAll();
+            mockLogicWriter.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        }
+
 
     }
 }
