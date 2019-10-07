@@ -17,6 +17,8 @@ using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.BusinessLogic;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
+using TwoDrive.WebApi.Interfaces;
+using TwoDrive.WebApi.Helpers;
 
 namespace TwoDrive.WebApi
 {
@@ -36,6 +38,7 @@ namespace TwoDrive.WebApi
 
             services.AddScoped<ILogic<Writer>, WriterLogic>();
             services.AddScoped<IFolderLogic, FolderLogic>();
+            services.AddScoped<ICurrent, CurrentSession>();
             services.AddScoped<ISessionLogic, SessionLogic>();
             services.AddScoped<IFolderRepository, FolderRepository>();
             services.AddScoped<IRepository<File>, FileRepository>();

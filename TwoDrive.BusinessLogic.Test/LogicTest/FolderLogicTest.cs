@@ -513,8 +513,14 @@ namespace TwoDrive.BusinessLogic.Test
             .Returns(testList);
 
             var mockFileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
+            var dependencies = new ElementLogicDependencies
+            {
+                ElementValidator = new Mock<IElementValidator>().Object,
+                FolderRepository = mockFolderRepository.Object,
+                FileRepository = mockFileRepository.Object
+            };
 
-            var logic = new FolderLogic(mockFolderRepository.Object, mockFileRepository.Object);
+            var logic = new FolderLogic(dependencies);
             var elements = logic.GetAll();
 
             mockFolderRepository.VerifyAll();
@@ -526,7 +532,11 @@ namespace TwoDrive.BusinessLogic.Test
             var context = ContextFactory.GetMemoryContext("Get All test");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
-
+            var dependencies = new ElementLogicDependencies
+            {
+                FileRepository = fileRepository,
+                FolderRepository = folderRepository
+            };
             var newFolder = new Folder
             {
                 Id = 2
@@ -540,7 +550,7 @@ namespace TwoDrive.BusinessLogic.Test
             fileRepository.Insert(file);
             folderRepository.Save();
 
-            var logic = new FolderLogic(folderRepository, fileRepository);
+            var logic = new FolderLogic(dependencies);
             var allFoldersInDb = logic.GetAll();
             Assert.IsTrue(allFoldersInDb.Contains(root));
             Assert.IsTrue(allFoldersInDb.Contains(newFolder));
@@ -555,8 +565,12 @@ namespace TwoDrive.BusinessLogic.Test
             var mockFileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
             mockFolderRepository.Setup(m => m.Get(It.IsAny<int>()))
                         .Returns(root);
-
-            var logic = new FolderLogic(mockFolderRepository.Object, mockFileRepository.Object);
+            var dependencies = new ElementLogicDependencies
+            {
+                FileRepository = mockFileRepository.Object,
+                FolderRepository = mockFolderRepository.Object
+            };
+            var logic = new FolderLogic(dependencies);
             var folder = logic.Get(1);
 
             mockFolderRepository.VerifyAll();
@@ -568,11 +582,15 @@ namespace TwoDrive.BusinessLogic.Test
             var context = ContextFactory.GetMemoryContext("Get Folder");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
-
+            var dependencies = new ElementLogicDependencies
+            {
+                FolderRepository = folderRepository,
+                FileRepository = fileRepository
+            };
             folderRepository.Insert(root);
             folderRepository.Save();
 
-            var logic = new FolderLogic(folderRepository, fileRepository);
+            var logic = new FolderLogic(dependencies);
             var folderinDb = logic.Get(1);
 
             Assert.AreEqual(root, folderinDb);

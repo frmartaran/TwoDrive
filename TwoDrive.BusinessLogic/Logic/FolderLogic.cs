@@ -22,12 +22,6 @@ namespace TwoDrive.BusinessLogic.Logic
 
         private const string Spaces = "      ";
 
-        public FolderLogic(IFolderRepository currentFolderRepository, IFileRepository currentFileRepository)
-        {
-            FolderRepository = currentFolderRepository;
-            FileRepository = currentFileRepository;
-        }
-
         public FolderLogic(ElementLogicDependencies dependencies)
         {
             FolderRepository = dependencies.FolderRepository;

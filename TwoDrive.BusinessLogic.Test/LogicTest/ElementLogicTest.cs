@@ -74,6 +74,13 @@ namespace TwoDrive.BusinessLogic.Test
             var elementRepository = new Repository<Element>(context);
             var folderValidator = new FolderValidator(folderRepository);
 
+            var dependencies = new ElementLogicDependencies
+            {
+                ElementValidator = new FolderValidator(folderRepository),
+                FolderRepository = new FolderRepository(context),
+                FileRepository = new FileRepository(context),
+            };
+
             folderRepository.Insert(root);
             folderRepository.Insert(parentFolderOrigin);
             folderRepository.Insert(parentFolderDestination);
@@ -86,7 +93,7 @@ namespace TwoDrive.BusinessLogic.Test
                 ElementRepository = elementRepository,
                 ElementValidator = folderValidator
             };
-            var folderLogic = new FolderLogic(folderRepository, fileRepository);
+            var folderLogic = new FolderLogic(dependencies);
             folderLogic.MoveElement(fileToMove, parentFolderDestination, moveElementDependencies);
 
             var parentFolderDestinationChild = parentFolderDestination.FolderChildren.FirstOrDefault();
@@ -249,8 +256,7 @@ namespace TwoDrive.BusinessLogic.Test
                 ElementRepository = elementRepository,
                 ElementValidator = folderValidator
             };
-            var folderLogic = new FolderLogic(folderRepository, fileRepository);
-            folderLogic.MoveElement(fileThree, child, moveElementDependencies);
+            logic.MoveElement(fileThree, child, moveElementDependencies);
 
             var isFileThreeInNewDestination = child.FolderChildren.Where(c => c.Id == 12)
                 .FirstOrDefault() != null;

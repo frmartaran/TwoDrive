@@ -107,7 +107,8 @@ namespace TwoDrive.BusinessLogic.Test
             var mockRepository = new Mock<IRepository<Writer>>(MockBehavior.Strict);
             mockRepository.Setup(m => m.Get(It.IsAny<int>()))
             .Returns(writer);
-            var logic = new WriterLogic(mockRepository.Object);
+            var validator = new Mock<IValidator<Writer>>();
+            var logic = new WriterLogic(mockRepository.Object, validator.Object);
             var writerGotten = logic.Get(1);
 
             mockRepository.VerifyAll();
@@ -120,7 +121,8 @@ namespace TwoDrive.BusinessLogic.Test
             var context = ContextFactory.GetMemoryContext("TwoDriveContext");
             context.Set<Writer>().Add(writer);
             var repository = new Repository<Writer>(context);
-            var logic = new WriterLogic(repository);
+            var validator = new Mock<IValidator<Writer>>();
+            var logic = new WriterLogic(repository, validator.Object);
             var writerInDb = logic.Get(1);
 
             Assert.AreEqual(writer, writerInDb);
@@ -203,7 +205,8 @@ namespace TwoDrive.BusinessLogic.Test
             var mockRepository = new Mock<IRepository<Writer>>(MockBehavior.Strict);
             mockRepository.Setup(m => m.GetAll())
             .Returns(writers);
-            var logic = new WriterLogic(mockRepository.Object);
+            var validator = new Mock<IValidator<Writer>>();
+            var logic = new WriterLogic(mockRepository.Object, validator.Object);
             var list = logic.GetAll();
             mockRepository.VerifyAll();
         }
@@ -215,7 +218,8 @@ namespace TwoDrive.BusinessLogic.Test
             var repository = new WriterRepository(context);
             repository.Insert(writer);
             repository.Save();
-            var logic = new WriterLogic(repository);
+            var validator = new Mock<IValidator<Writer>>();
+            var logic = new WriterLogic(repository, validator.Object );
             var allWriters = logic.GetAll();
             Assert.AreEqual(1, allWriters.Count());
             Assert.IsTrue(allWriters.Contains(writer));
@@ -227,7 +231,8 @@ namespace TwoDrive.BusinessLogic.Test
             var mockRepository = new Mock<IRepository<Writer>>(MockBehavior.Strict);
             mockRepository.Setup(m => m.Delete(It.IsAny<int>()));
             mockRepository.Setup(m => m.Save());
-            var logic = new WriterLogic(mockRepository.Object);
+            var validator = new Mock<IValidator<Writer>>();
+            var logic = new WriterLogic(mockRepository.Object, validator.Object);
             logic.Delete(writer.Id);
 
             mockRepository.VerifyAll();
@@ -245,7 +250,8 @@ namespace TwoDrive.BusinessLogic.Test
             Assert.IsTrue(allWritersInDb.Contains(writer));
             Assert.AreEqual(1, allWritersInDb.Count());
 
-            var logic = new WriterLogic(repository);
+            var validator = new Mock<IValidator<Writer>>();
+            var logic = new WriterLogic(repository, validator.Object);
             logic.Delete(writer.Id);
 
             var currentWritersInDb = repository.GetAll();
@@ -262,7 +268,8 @@ namespace TwoDrive.BusinessLogic.Test
             var context = ContextFactory.GetMemoryContext("Delete Context 1");
             var repository = new WriterRepository(context);
 
-            var logic = new WriterLogic(repository);
+            var validator = new Mock<IValidator<Writer>>();
+            var logic = new WriterLogic(repository, validator.Object);
             logic.Delete(1);
         }
 

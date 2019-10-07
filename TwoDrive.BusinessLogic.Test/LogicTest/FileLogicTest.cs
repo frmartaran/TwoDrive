@@ -84,8 +84,8 @@ namespace TwoDrive.BusinessLogic.Test
             var mockFileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
             mockFileRepository.Setup(m => m.Get(It.IsAny<int>()))
                         .Returns(file);
-
-            var logic = new FileLogic(mockFileRepository.Object);
+            var mockValidator = new Mock<IElementValidator>();
+            var logic = new FileLogic(mockFileRepository.Object, mockValidator.Object);
             var fileReturned = logic.Get(1);
 
             mockFileRepository.VerifyAll();
@@ -97,13 +97,13 @@ namespace TwoDrive.BusinessLogic.Test
             var context = ContextFactory.GetMemoryContext("Get fileTests");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
-
+            var validator = new Mock<IElementValidator>();
             folderRepository.Insert(root);
             folderRepository.Save();
             fileRepository.Insert(file);
             fileRepository.Save();
 
-            var logic = new FileLogic(fileRepository);
+            var logic = new FileLogic(fileRepository, validator.Object);
             var fileInDb = logic.Get(2);
 
             Assert.AreEqual(file.Id, fileInDb.Id);
@@ -116,7 +116,8 @@ namespace TwoDrive.BusinessLogic.Test
             mockFileRepository.Setup(m => m.GetAll())
                         .Returns(new List<File> { file });
 
-            var logic = new FileLogic(mockFileRepository.Object);
+            var validator = new Mock<IElementValidator>();
+            var logic = new FileLogic(mockFileRepository.Object, validator.Object);
             var allFilesReturned = logic.GetAll();
 
             mockFileRepository.VerifyAll();
@@ -134,7 +135,8 @@ namespace TwoDrive.BusinessLogic.Test
             fileRepository.Insert(file);
             fileRepository.Save();
 
-            var logic = new FileLogic(fileRepository);
+            var validator = new Mock<IElementValidator>();
+            var logic = new FileLogic(fileRepository, validator.Object);
             var allFilesReturned = logic.GetAll();
             var firstFileReturned = allFilesReturned.FirstOrDefault();
 
@@ -150,7 +152,8 @@ namespace TwoDrive.BusinessLogic.Test
             .Setup(m => m.Delete(It.IsAny<int>()));
             mockRepository.Setup(m => m.Save());
 
-            var logic = new FileLogic(mockRepository.Object);
+            var validator = new Mock<IElementValidator>();
+            var logic = new FileLogic(mockRepository.Object, validator.Object);
             logic.Delete(file.Id);
 
             mockRepository.VerifyAll();
@@ -166,7 +169,8 @@ namespace TwoDrive.BusinessLogic.Test
             folderRepository.Insert(root);
             fileRepository.Insert(file);
 
-            var logic = new FileLogic(fileRepository);
+            var validator = new Mock<IElementValidator>();
+            var logic = new FileLogic(fileRepository, validator.Object);
             logic.Delete(file.Id);
 
             Assert.IsNull(fileRepository.Get(file.Id));
@@ -219,7 +223,9 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var context = ContextFactory.GetMemoryContext("Delete null File");
             var repository = new FileRepository(context);
-            var logic = new FileLogic(repository);
+
+            var validator = new Mock<IElementValidator>();
+            var logic = new FileLogic(repository, validator.Object);
             logic.Delete(1);
         }
     }

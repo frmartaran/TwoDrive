@@ -166,8 +166,7 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpPut("{id}/{friendId}")]
-        [Route("api/[controller]/Share")]
+        [HttpPut("Share/{id}/{friendId}")]
         [ClaimFilter(ClaimType.Share)]
         public IActionResult Share(int id, int friendId)
         {
