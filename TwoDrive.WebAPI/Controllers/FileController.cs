@@ -157,6 +157,7 @@ namespace TwoDrive.WebApi.Controllers
         }
 
         [HttpPut("{id}/{friendId}")]
+        [Route("api/[controller]/Share")]
         [ClaimFilter(ClaimType.Share)]
         public IActionResult Share(int id, int friendId)
         {
@@ -177,6 +178,14 @@ namespace TwoDrive.WebApi.Controllers
             writer.AllowFriendTo(friend, file, ClaimType.Read);
             writerLogic.Update(friend);
             return Ok($"{file.Name} shared with {friend.UserName}");
+        }
+
+        [HttpPut("{id}/{friendId}")]
+        [Route("api/[controller]/StopShare")]
+        [ClaimFilter(ClaimType.Share)]
+        public IActionResult StopShare(int id, int friendId)
+        {
+            return null;
         }
 
         private void CreateModification(File file, ModificationType action)
