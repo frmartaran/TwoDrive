@@ -363,5 +363,28 @@ namespace TwoDrive.WebApi.Test
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             Assert.AreEqual(tree, okResult.Value);
         }
+
+        [TestMethod]
+        public void ShowTreeNotFound()
+        {
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns<Folder>(null);
+
+            var mockSessionLogic = new Mock<ICurrent>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
+            var mockLogicWriter = new Mock<ILogic<Writer>>();
+            var mockModificationLogic = new Mock<IModificationLogic>();
+
+            var controller = new FolderController(mockFolderLogic.Object, mockSessionLogic.Object,
+               mockElementRepository.Object, mockElementValidator.Object, mockLogicWriter.Object,
+               mockModificationLogic.Object);
+
+            var result = controller.ShowTree(3);
+
+            mockFolderLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        }
     }
 }
