@@ -47,13 +47,14 @@ namespace TwoDrive.WebApi.Controllers
             elementRepository = repository;
         }
 
-        [HttpPost("{id}")]
-        public IActionResult Create(int folderId, [FromBody] TxtModel model)
+        [HttpPost("{Id}")]
+        [ClaimFilter(ClaimType.Write)]
+        public IActionResult Create(int Id, [FromBody] TxtModel model)
         {
             try
             {
                 var loggedWriter = inSession.GetCurrentUser(HttpContext);
-                var parentFolder = folderLogic.Get(folderId);
+                var parentFolder = folderLogic.Get(Id);
                 if (loggedWriter == null)
                     return BadRequest("You must log in first");
                 if (parentFolder == null)

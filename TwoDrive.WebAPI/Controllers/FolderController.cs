@@ -40,7 +40,7 @@ namespace TwoDrive.WebApi.Controllers
             ModificationLogic = modificationLogic;
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{Id}")]
         [ClaimFilter(ClaimType.Delete)]
         public IActionResult Delete(int Id)
         {
@@ -81,7 +81,7 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{Id}")]
         [ClaimFilter(ClaimType.Write)]
         public IActionResult Update(int Id, [FromBody] FolderModel model)
         {
@@ -101,7 +101,7 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{Id}")]
         [ClaimFilter(ClaimType.Read)]
         public IActionResult Get(int Id)
         {
@@ -114,12 +114,20 @@ namespace TwoDrive.WebApi.Controllers
             return Ok(folderModel.FromDomain(folder));
         }
 
-        [HttpPost("{id}")]
+        [HttpPost("{Id}")]
         [ClaimFilter(ClaimType.Write)]
         public IActionResult Create(int Id, [FromBody] FolderModel model)
         {
             var loggedWriter = Session.GetCurrentUser(HttpContext);
             var parentFolder = FolderLogic.Get(Id);
+
+            if (loggedWriter == null)
+                return BadRequest("You must log in first");
+            if (parentFolder == null)
+                return NotFound("Parent folder doesn't exist");
+            if (loggedWriter != parentFolder.Owner)
+                return BadRequest("You are not owner of this folder");
+
             var folder = model.ToDomain();
             folder.Owner = loggedWriter;
             folder.ParentFolder = parentFolder;
