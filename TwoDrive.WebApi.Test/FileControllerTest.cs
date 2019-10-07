@@ -9,6 +9,8 @@ using System.Text;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.BusinessLogic.Interfaces.LogicInput;
+using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Controllers;
@@ -68,8 +70,12 @@ namespace TwoDrive.WebApi.Test
             var mockModification = new Mock<IModificationLogic>(MockBehavior.Strict);
             mockModification.Setup(m => m.Create(It.IsAny<Modification>()));
 
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
+
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
 
             var result = controller.Create(1, fileAsModel);
             var okResult = result as OkObjectResult;
@@ -111,9 +117,12 @@ namespace TwoDrive.WebApi.Test
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             var mockLogic = new Mock<ILogic<File>>();
             var mockModification = new Mock<IModificationLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
 
             var result = controller.Create(1, fileAsModel);
             var badRquestResult = result as BadRequestObjectResult;
@@ -156,9 +165,12 @@ namespace TwoDrive.WebApi.Test
                 .Throws(new ValidationException(""));
 
             var mockModification = new Mock<IModificationLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
 
             var result = controller.Create(1, fileAsModel);
 
@@ -198,9 +210,12 @@ namespace TwoDrive.WebApi.Test
             var mockLogic = new Mock<ILogic<File>>();
 
             var mockModification = new Mock<IModificationLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
 
             var result = controller.Create(1, fileAsModel);
             var badRquestResult = result as BadRequestObjectResult;
@@ -234,9 +249,12 @@ namespace TwoDrive.WebApi.Test
             var mockLogic = new Mock<ILogic<File>>();
 
             var mockModification = new Mock<IModificationLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
 
             var result = controller.Create(1, fileAsModel);
             var notFoundResult = result as NotFoundObjectResult;
@@ -269,10 +287,13 @@ namespace TwoDrive.WebApi.Test
             var mockModification = new Mock<IModificationLogic>(MockBehavior.Strict);
             mockModification.Setup(m => m.Create(It.IsAny<Modification>()));
             var mockFolderLogic = new Mock<IFolderLogic>();
-
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
+
             var result = controller.Delete(1);
             var okResult = result as OkObjectResult;
 
@@ -296,10 +317,14 @@ namespace TwoDrive.WebApi.Test
             var mockWriterLogic = new Mock<ILogic<Writer>>();
             var mockModification = new Mock<IModificationLogic>();
             var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
+
             var result = controller.Delete(1);
 
             mockLogic.VerifyAll();
@@ -338,10 +363,13 @@ namespace TwoDrive.WebApi.Test
             var mockModification = new Mock<IModificationLogic>();
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSession = new Mock<ICurrent>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
             var result = controller.Get(1);
             var okResult = result as OkObjectResult;
             var modelResult = okResult.Value as TxtModel;
@@ -363,10 +391,13 @@ namespace TwoDrive.WebApi.Test
             var mockModification = new Mock<IModificationLogic>();
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSession = new Mock<ICurrent>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
             var result = controller.Get(1);
 
             mockLogic.VerifyAll();
@@ -421,10 +452,13 @@ namespace TwoDrive.WebApi.Test
             var mockModification = new Mock<IModificationLogic>();
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSession = new Mock<ICurrent>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
             var result = controller.GetAll(1);
             var okResult = result as OkObjectResult;
             var models = okResult.Value as List<FileModel>;
@@ -452,10 +486,13 @@ namespace TwoDrive.WebApi.Test
             var mockModification = new Mock<IModificationLogic>();
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSession = new Mock<ICurrent>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
             var result = controller.GetAll(1);
             var okResult = result as NotFoundObjectResult;
 
@@ -515,10 +552,13 @@ namespace TwoDrive.WebApi.Test
             var mockWriterLogic = new Mock<ILogic<Writer>>();
             var mockModification = new Mock<IModificationLogic>();
             var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
             var result = controller.GetAll();
             var okResult = result as OkObjectResult;
             var models = okResult.Value as List<FileModel>;
@@ -547,10 +587,13 @@ namespace TwoDrive.WebApi.Test
             var mockWriterLogic = new Mock<ILogic<Writer>>();
             var mockModification = new Mock<IModificationLogic>();
             var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
             var result = controller.GetAll();
 
             mockLogic.VerifyAll();
@@ -574,10 +617,13 @@ namespace TwoDrive.WebApi.Test
             var mockWriterLogic = new Mock<ILogic<Writer>>();
             var mockModification = new Mock<IModificationLogic>();
             var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
             var result = controller.GetAll();
 
             mockLogic.VerifyAll();
@@ -621,9 +667,12 @@ namespace TwoDrive.WebApi.Test
             var mockWriterLogic = new Mock<ILogic<Writer>>();
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSession = new Mock<ICurrent>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
             var result = controller.Update(1, model);
             var okResult = result as OkObjectResult;
 
@@ -663,13 +712,16 @@ namespace TwoDrive.WebApi.Test
                 .Returns<File>(null);
 
             var mockModification = new Mock<IModificationLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSession = new Mock<ICurrent>();
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
             var result = controller.Update(1, model);
             var okResult = result as BadRequestObjectResult;
 
@@ -707,6 +759,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns(file);
 
             var mockModification = new Mock<IModificationLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockWriterLogic.Setup(m => m.Update(It.IsAny<Writer>()));
@@ -719,7 +773,9 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
+
 
             var result = controller.Share(1, 3);
 
@@ -736,6 +792,8 @@ namespace TwoDrive.WebApi.Test
             var mockLogic = new Mock<ILogic<File>>();
 
             var mockModification = new Mock<IModificationLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
 
@@ -745,7 +803,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns<Writer>(null);
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
 
             var result = controller.Share(1, 3);
 
@@ -759,6 +818,8 @@ namespace TwoDrive.WebApi.Test
             var mockLogic = new Mock<ILogic<File>>();
 
             var mockModification = new Mock<IModificationLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockWriterLogic.Setup(m => m.Get(It.IsAny<int>()))
@@ -770,7 +831,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
 
             var result = controller.Share(1, 3);
 
@@ -797,6 +859,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns<File>(null);
 
             var mockModification = new Mock<IModificationLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockWriterLogic.Setup(m => m.Get(It.IsAny<int>()))
@@ -808,7 +872,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
 
             var result = controller.Share(1, 3);
 
@@ -848,6 +913,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns(file);
 
             var mockModification = new Mock<IModificationLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockWriterLogic.Setup(m => m.Get(It.IsAny<int>()))
@@ -859,7 +926,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
 
             var result = controller.Share(1, 3);
 
@@ -902,6 +970,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns(file);
 
             var mockModification = new Mock<IModificationLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockWriterLogic.Setup(m => m.Update(It.IsAny<Writer>()));
@@ -914,7 +984,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
 
             var result = controller.StopShare(1, 3);
 
@@ -932,6 +1003,8 @@ namespace TwoDrive.WebApi.Test
             var mockLogic = new Mock<ILogic<File>>();
 
             var mockModification = new Mock<IModificationLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
 
@@ -941,7 +1014,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns<Writer>(null);
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
 
             var result = controller.StopShare(1, 3);
 
@@ -956,6 +1030,8 @@ namespace TwoDrive.WebApi.Test
             var mockLogic = new Mock<ILogic<File>>();
 
             var mockModification = new Mock<IModificationLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockWriterLogic.Setup(m => m.Get(It.IsAny<int>()))
@@ -967,7 +1043,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
 
             var result = controller.StopShare(1, 3);
 
@@ -997,6 +1074,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns<File>(null);
 
             var mockModification = new Mock<IModificationLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockWriterLogic.Setup(m => m.Get(It.IsAny<int>()))
@@ -1008,7 +1087,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
 
             var result = controller.StopShare(1, 3);
 
@@ -1049,6 +1129,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns(file);
 
             var mockModification = new Mock<IModificationLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockWriterLogic.Setup(m => m.Get(It.IsAny<int>()))
@@ -1060,7 +1142,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
 
             var result = controller.StopShare(1, 3);
 
@@ -1101,6 +1184,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns(file);
 
             var mockModification = new Mock<IModificationLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockWriterLogic.Setup(m => m.Get(It.IsAny<int>()))
@@ -1112,7 +1197,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
 
             var result = controller.StopShare(1, 3);
 
@@ -1153,6 +1239,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns(file);
 
             var mockModification = new Mock<IModificationLogic>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
 
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockWriterLogic.Setup(m => m.Get(It.IsAny<int>()))
@@ -1164,7 +1252,8 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
 
             var result = controller.Share(1, 3);
 
@@ -1172,6 +1261,62 @@ namespace TwoDrive.WebApi.Test
             mockWriterLogic.VerifyAll();
             mockSession.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        }
+
+        [TestMethod]
+        public void Move()
+        {
+            var file = new TxtFile
+            {
+                Id = 1,
+                Name = "New file",
+                Content = "Content",
+                Owner = writer,
+                OwnerId = 2,
+                ParentFolder = new Folder(),
+                ParentFolderId = 1,
+                CreationDate = new DateTime(2019, 6, 10),
+                DateModified = new DateTime(2019, 6, 10),
+            };
+            var folderDestination = new Folder
+            {
+                Id = 2,
+                Owner = writer,
+                OwnerId = writer.Id
+            };
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(file);
+
+            var mockModification = new Mock<IModificationLogic>(MockBehavior.Strict);
+            mockModification.Setup(m => m.Create(It.IsAny<Modification>()));
+
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
+
+            var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+            .Returns(writer);
+
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
+            .Returns(folderDestination);
+            mockFolderLogic.Setup(m => m.MoveElement(It.IsAny<Element>(), It.IsAny<Folder>(),
+                It.IsAny<MoveElementDependencies>()));
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
+
+            var result = controller.Move(1, 2);
+            mockFolderLogic.VerifyAll();
+            mockLogic.VerifyAll();
+            mockModification.VerifyAll();
+            mockSession.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+
         }
     }
 }

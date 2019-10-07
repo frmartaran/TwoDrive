@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Filters;
@@ -28,14 +29,21 @@ namespace TwoDrive.WebApi.Controllers
 
         private IModificationLogic modificationLogic;
 
+        private IValidator<Element> elementValidator;
+
+        private IRepository<Element> elementRepository;
+
         public FileController(ILogic<File> logicFile, IFolderLogic logicFolder,
-            ILogic<Writer> logicWriter, ICurrent session, IModificationLogic logic)
+            ILogic<Writer> logicWriter, ICurrent session, IModificationLogic logic,
+            IValidator<Element> validator, IRepository<Element> repository)
         {
             inSession = session;
             folderLogic = logicFolder;
             fileLogic = logicFile;
             writerLogic = logicWriter;
             modificationLogic = logic;
+            elementValidator = validator;
+            elementRepository = repository;
         }
 
         [HttpPost("{id}")]
@@ -216,6 +224,14 @@ namespace TwoDrive.WebApi.Controllers
             {
                 return BadRequest(exception.Message);
             }
+        }
+
+        [HttpPut("{id}/{folderId}")]
+        [Route("api/[controller]/Move")]
+        [ClaimFilter(ClaimType.Write)]
+        public IActionResult Move(int id, int folderId)
+        {
+            return null;
         }
 
         private void CreateModification(File file, ModificationType action)
