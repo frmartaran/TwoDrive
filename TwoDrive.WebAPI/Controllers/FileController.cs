@@ -171,6 +171,8 @@ namespace TwoDrive.WebApi.Controllers
             var file = fileLogic.Get(id);
             if (file == null)
                 return NotFound("File not found");
+            if (!writer.IsFriendsWith(friend))
+                return BadRequest($"You are not friends with {friend.UserName}");
 
             writer.AllowFriendTo(friend, file, ClaimType.Read);
             writerLogic.Update(friend);
