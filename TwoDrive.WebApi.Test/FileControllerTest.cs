@@ -728,5 +728,28 @@ namespace TwoDrive.WebApi.Test
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             Assert.AreEqual(1, friend.Claims.Count);
         }
+
+        [TestMethod]
+        public void ShareNullWriter()
+        {
+            var mockLogic = new Mock<ILogic<File>>();
+
+            var mockModification = new Mock<IModificationLogic>();
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns<Writer>(null);
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+
+            var result = controller.Share(1, 3);
+
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        }
     }
 }
