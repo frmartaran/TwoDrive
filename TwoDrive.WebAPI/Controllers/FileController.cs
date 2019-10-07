@@ -39,7 +39,7 @@ namespace TwoDrive.WebApi.Controllers
         }
 
         [HttpPost("{id}")]
-        public IActionResult Create(int folderId, [FromBody] TxtModel model)
+        public IActionResult Create(int folderId, [FromBody] FileModel model)
         {
             try
             {
@@ -89,9 +89,12 @@ namespace TwoDrive.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [ClaimFilter(ClaimType.Read)]
         public IActionResult Get(int id)
         {
-            return null;
+            var file = fileLogic.Get(id);
+            var model = new TxtModel().FromDomain(file);
+            return Ok(model);
         }
 
         private void CreateModification(File file, ModificationType action)
