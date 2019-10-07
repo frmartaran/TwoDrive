@@ -122,6 +122,9 @@ namespace TwoDrive.WebApi.Controllers
         public IActionResult GetAll()
         {
             var writer = inSession.GetCurrentUser(HttpContext);
+            if (writer == null)
+                return NotFound("You need to log in first");
+
             var files = fileLogic.GetAll();
             var writerfiles = files
                 .Where(f => f.OwnerId == writer.Id)

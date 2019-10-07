@@ -578,9 +578,7 @@ namespace TwoDrive.WebApi.Test
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
                 .Returns<Writer>(null);
 
-            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
-            mockLogic.Setup(m => m.GetAll())
-                .Returns(files);
+            var mockLogic = new Mock<ILogic<File>>();
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
             var mockModification = new Mock<IModificationLogic>();
