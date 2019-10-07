@@ -318,7 +318,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void ElementDestinationDoesntExist()
         {
             var context = ContextFactory.GetMemoryContext("Element destination doesnt exist");
@@ -355,7 +355,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void ElementDestinationIsNotMyRootsChild()
         {
             var context = ContextFactory.GetMemoryContext("Element Destination Is Not my root's child");
@@ -415,7 +415,7 @@ namespace TwoDrive.BusinessLogic.Test
 
         
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void ElementDestinationIsChildOfElementToTransfer()
         {
             var context = ContextFactory.GetMemoryContext("Element Destination Is Child Of Owner Parent Folder");
@@ -455,7 +455,7 @@ namespace TwoDrive.BusinessLogic.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ValidationException))]
         public void ElementToTransferAndDestinationAreEmpty()
         {
             var context = ContextFactory.GetMemoryContext("Element To Transfer And Destination Are Empty");

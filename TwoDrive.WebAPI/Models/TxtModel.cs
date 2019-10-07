@@ -7,27 +7,17 @@ using TwoDrive.WebApi.Interfaces;
 
 namespace TwoDrive.WebApi.Models
 {
-    public class TxtModel : FileModel, IModel<TxtFile, TxtModel>
+    public class TxtModel : FileModel
     {
         public string Content { get; set; }
-        public TxtModel FromDomain(TxtFile entity)
+        public override FileModel FromDomain(File entity)
         {
-            if (entity == null)
-                return null;
-
-            Id = entity.Id;
-            Name = entity.Name;
-            Owner = new WriterModel().FromDomain(entity.Owner);
-            OwnerId = entity.OwnerId;
-            ParentFolder = new FolderModel().FromDomain(entity.ParentFolder);
-            ParentFolderId = entity.ParentFolderId;
-            CreationDate = entity.CreationDate;
-            DateModified = entity.DateModified;
-            Content = entity.Content;
-            return this;
+            var file = entity as TxtFile;
+            Content = file.Content;
+            return base.FromDomain(file);
         }
 
-        public TxtFile ToDomain()
+        public override File ToDomain()
         {
             if (this == null)
                 return null;
