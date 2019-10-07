@@ -156,6 +156,18 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
+        [HttpPut("{id}/{friendId}")]
+        [ClaimFilter(ClaimType.Share)]
+        public IActionResult Share(int id, int friendId)
+        {
+            var writer = inSession.GetCurrentUser(HttpContext);
+            var friend = writerLogic.Get(friendId);
+            var file = fileLogic.Get(id);
+            writer.AllowFriendTo(friend, file, ClaimType.Read);
+            writerLogic.Update(friend);
+            return Ok($"{file.Name} shared with {friend.UserName}");
+        }
+
         private void CreateModification(File file, ModificationType action)
         {
             var modification = new Modification

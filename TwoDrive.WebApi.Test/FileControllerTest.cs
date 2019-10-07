@@ -726,6 +726,7 @@ namespace TwoDrive.WebApi.Test
             mockWriterLogic.VerifyAll();
             mockSession.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.AreEqual(1, friend.Claims.Count);
         }
     }
 }
