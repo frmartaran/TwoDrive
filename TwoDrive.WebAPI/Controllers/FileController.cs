@@ -196,6 +196,8 @@ namespace TwoDrive.WebApi.Controllers
             var file = fileLogic.Get(id);
             if (file == null)
                 return NotFound("File not found");
+            if (!writer.IsFriendsWith(friend))
+                return BadRequest($"You must be friends with {friend.UserName} to revoke");
 
             writer.RevokeFriendFrom(friend, file, ClaimType.Read);
             writerLogic.Update(friend);

@@ -1051,7 +1051,6 @@ namespace TwoDrive.WebApi.Test
             var mockModification = new Mock<IModificationLogic>();
 
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
-            mockWriterLogic.Setup(m => m.Update(It.IsAny<Writer>()));
             mockWriterLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(friend);
 
@@ -1068,7 +1067,7 @@ namespace TwoDrive.WebApi.Test
             mockLogic.VerifyAll();
             mockWriterLogic.VerifyAll();
             mockSession.VerifyAll();
-            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
         }
     }
 }
