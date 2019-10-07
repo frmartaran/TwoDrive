@@ -110,6 +110,10 @@ namespace TwoDrive.WebApi.Controllers
                 .Where(f => f.OwnerId == writerId)
                 .Select(f => new TxtModel().FromDomain(f))
                 .ToList();
+
+            if (writerfiles.Count == 0)
+                return NotFound("No files found");
+
             return Ok(writerfiles);
 
         }
