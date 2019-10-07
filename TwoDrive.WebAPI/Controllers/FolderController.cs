@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TwoDrive.BusinessLogic;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.BusinessLogic.Interfaces;
@@ -92,6 +91,19 @@ namespace TwoDrive.WebApi.Controllers
             {
                 return BadRequest(exception.Message);
             }
+        }
+
+        [HttpGet("{id}")]
+        [ClaimFilter(ClaimType.Read)]
+        public IActionResult Get(int id)
+        {
+            var folder = FolderLogic.Get(id);
+            if (folder == null)
+            {
+                return NotFound("Folder not found");
+            }
+            var folderModel = new FolderModel();
+            return Ok(folderModel.FromDomain(folder));
         }
     }
 }
