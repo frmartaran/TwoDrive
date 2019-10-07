@@ -88,6 +88,12 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            return null;
+        }
+
         private void CreateModification(File file, ModificationType action)
         {
             var modification = new Modification

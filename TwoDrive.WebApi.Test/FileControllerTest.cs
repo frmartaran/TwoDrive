@@ -18,12 +18,11 @@ namespace TwoDrive.WebApi.Test
     [TestClass]
     public class FileControllerTest
     {
-
-        [TestMethod]
-        public void CreateFile()
+        private Writer writer;
+        [TestInitialize]
+        public void SetUp()
         {
-
-            var writer = new Writer()
+            writer = new Writer()
             {
                 Id = 2,
                 UserName = "Writer",
@@ -32,6 +31,10 @@ namespace TwoDrive.WebApi.Test
                 Claims = new List<Claim>(),
                 Friends = new List<Writer>()
             };
+        }
+        [TestMethod]
+        public void CreateFile()
+        {
             var folder = new Folder
             {
                 Id = 3,
@@ -79,16 +82,6 @@ namespace TwoDrive.WebApi.Test
         [TestMethod]
         public void CreateFileIsNotOwner()
         {
-
-            var writer = new Writer()
-            {
-                Id = 2,
-                UserName = "Writer",
-                Password = "132",
-                Role = Role.Writer,
-                Claims = new List<Claim>(),
-                Friends = new List<Writer>()
-            };
             var folder = new Folder
             {
                 Id = 3,
@@ -131,16 +124,6 @@ namespace TwoDrive.WebApi.Test
         [TestMethod]
         public void CreateFileValidationError()
         {
-
-            var writer = new Writer()
-            {
-                Id = 2,
-                UserName = "Writer",
-                Password = "132",
-                Role = Role.Writer,
-                Claims = new List<Claim>(),
-                Friends = new List<Writer>()
-            };
             var folder = new Folder
             {
                 Id = 3,
@@ -185,16 +168,6 @@ namespace TwoDrive.WebApi.Test
         [TestMethod]
         public void CreateFileWriterNull()
         {
-
-            var writer = new Writer()
-            {
-                Id = 2,
-                UserName = "Writer",
-                Password = "132",
-                Role = Role.Writer,
-                Claims = new List<Claim>(),
-                Friends = new List<Writer>()
-            };
             var folder = new Folder
             {
                 Id = 3,
@@ -238,16 +211,6 @@ namespace TwoDrive.WebApi.Test
         [TestMethod]
         public void CreateFileNullFolder()
         {
-
-            var writer = new Writer()
-            {
-                Id = 2,
-                UserName = "Writer",
-                Password = "132",
-                Role = Role.Writer,
-                Claims = new List<Claim>(),
-                Friends = new List<Writer>()
-            };
             var file = new TxtFile
             {
                 Id = 1,
@@ -284,15 +247,6 @@ namespace TwoDrive.WebApi.Test
         [TestMethod]
         public void Delete()
         {
-            var writer = new Writer()
-            {
-                Id = 2,
-                UserName = "Writer",
-                Password = "132",
-                Role = Role.Writer,
-                Claims = new List<Claim>(),
-                Friends = new List<Writer>()
-            };
             var file = new TxtFile
             {
                 Id = 1,
@@ -328,16 +282,6 @@ namespace TwoDrive.WebApi.Test
         [TestMethod]
         public void DeleteNull()
         {
-            var writer = new Writer()
-            {
-                Id = 2,
-                UserName = "Writer",
-                Password = "132",
-                Role = Role.Writer,
-                Claims = new List<Claim>(),
-                Friends = new List<Writer>()
-            };
-
             var mockSession = new Mock<ICurrent>();
 
             var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
@@ -357,6 +301,52 @@ namespace TwoDrive.WebApi.Test
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        }
+
+        [TestMethod]
+        public void Get()
+        {
+            var folder = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChildren = new List<Element>(),
+                Owner = new Writer()
+            };
+            var file = new TxtFile
+            {
+                Id = 1,
+                Name = "New file",
+                Content = "Content",
+                Owner = writer,
+                ParentFolder = folder,
+                ParentFolderId = 1,
+                CreationDate = new DateTime(2019, 6, 10),
+                DateModified = new DateTime(2019, 6, 10),
+            };
+
+            var fileAsModel = new TxtModel().FromDomain(file);
+
+            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(file);
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockModification = new Mock<IModificationLogic>();
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSession = new Mock<ICurrent>();
+
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object);
+            var result = controller.Get(1);
+            var okResult = result as OkObjectResult;
+            var modelResult = okResult.Value as TxtModel;
+            var fileResult = modelResult.ToDomain();
+
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.AreEqual(file, fileResult);
         }
     }
 }
