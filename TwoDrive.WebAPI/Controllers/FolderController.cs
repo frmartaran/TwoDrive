@@ -150,7 +150,9 @@ namespace TwoDrive.WebApi.Controllers
         [ClaimFilter(ClaimType.Read)]
         public IActionResult ShowTree(int id)
         {
-            return null;
+            var folder = FolderLogic.Get(id);
+            var tree = FolderLogic.ShowTree(folder);
+            return Ok(tree);
         }
     }
 }
