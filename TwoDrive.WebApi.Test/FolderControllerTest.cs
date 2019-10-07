@@ -339,10 +339,13 @@ namespace TwoDrive.WebApi.Test
                 FolderChildren = new List<Element>(),
                 Owner = writer
             };
-
+            var tree = "+- Root";
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(root);
+            mockFolderLogic.Setup(m => m.ShowTree(It.IsAny<Folder>()))
+                .Returns(tree);
+
             var mockSessionLogic = new Mock<ICurrent>();
             var mockElementRepository = new Mock<IRepository<Element>>();
             var mockElementValidator = new Mock<IElementValidator>();
@@ -354,9 +357,11 @@ namespace TwoDrive.WebApi.Test
                mockModificationLogic.Object);
 
             var result = controller.ShowTree(3);
+            var okResult = result as OkObjectResult;
 
             mockFolderLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.AreEqual(tree, okResult.Value);
         }
     }
 }
