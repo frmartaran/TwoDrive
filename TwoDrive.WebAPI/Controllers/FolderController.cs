@@ -146,7 +146,8 @@ namespace TwoDrive.WebApi.Controllers
             return Ok(new FolderModel().FromDomain(folder));
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
+        [Route("api/[controller]/ShowTree")]
         [ClaimFilter(ClaimType.Read)]
         public IActionResult ShowTree(int id)
         {
@@ -156,6 +157,13 @@ namespace TwoDrive.WebApi.Controllers
 
             var tree = FolderLogic.ShowTree(folder);
             return Ok(tree);
+        }
+
+        [HttpPut]
+        [ClaimFilter(ClaimType.Share)]
+        public IActionResult Share(int id)
+        {
+            return null;
         }
     }
 }
