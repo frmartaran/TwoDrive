@@ -26,7 +26,7 @@ namespace TwoDrive.WebApi.Test
         {
             var folder = new Folder
             {
-                Id =1
+                Id = 1
             };
 
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
@@ -82,9 +82,9 @@ namespace TwoDrive.WebApi.Test
         [TestMethod]
         public void MoveFolder()
         {
-            var writer = new Writer 
-            { 
-                Id =3
+            var writer = new Writer
+            {
+                Id = 3
             };
             var folderToMove = new Folder
             {
@@ -180,7 +180,7 @@ namespace TwoDrive.WebApi.Test
             var mockModificationLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
 
             mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
-            .Returns((Folder)null);
+            .Returns((Folder) null);
             mockFolderLogic.Setup(m => m.Update(It.IsAny<Folder>()))
             .Throws(new ValidationException(""));
 
@@ -248,7 +248,7 @@ namespace TwoDrive.WebApi.Test
             var mockModificationLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
 
             mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
-            .Returns((Folder)null);
+            .Returns((Folder) null);
 
             var controller = new FolderController(mockFolderLogic.Object, mockSessionLogic.Object,
                 mockElementRepository.Object, mockElementValidator.Object, mockLogicWriter.Object,
@@ -317,6 +317,45 @@ namespace TwoDrive.WebApi.Test
             mockLogicWriter.VerifyAll();
             mockSessionLogic.VerifyAll();
             mockModificationLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+        }
+
+        [TestMethod]
+        public void ShowTree()
+        {
+            var writer = new Writer()
+            {
+                Id = 2,
+                UserName = "Writer",
+                Password = "132",
+                Role = Role.Writer,
+                Claims = new List<Claim>(),
+                Friends = new List<Writer>()
+            };
+            var root = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChildren = new List<Element>(),
+                Owner = writer
+            };
+
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(root);
+            var mockSessionLogic = new Mock<ICurrent>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
+            var mockLogicWriter = new Mock<ILogic<Writer>>();
+            var mockModificationLogic = new Mock<IModificationLogic>();
+
+            var controller = new FolderController(mockFolderLogic.Object, mockSessionLogic.Object,
+               mockElementRepository.Object, mockElementValidator.Object, mockLogicWriter.Object, 
+               mockModificationLogic.Object);
+
+            var result = controller.ShowTree(3);
+
+            mockFolderLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
     }

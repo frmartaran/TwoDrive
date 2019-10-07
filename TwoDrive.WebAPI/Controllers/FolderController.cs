@@ -28,7 +28,7 @@ namespace TwoDrive.WebApi.Controllers
 
         private IModificationLogic ModificationLogic { get; set; }
 
-        public FolderController(IFolderLogic folderLogic, ICurrent session, 
+        public FolderController(IFolderLogic folderLogic, ICurrent session,
             IRepository<Element> elementRepository, IElementValidator validator,
             ILogic<Writer> writerLogic, IModificationLogic modificationLogic) : base()
         {
@@ -45,7 +45,7 @@ namespace TwoDrive.WebApi.Controllers
         public IActionResult Delete(int Id)
         {
             try
-            {            
+            {
                 var folder = FolderLogic.Get(Id);
                 FolderLogic.Delete(Id);
                 return Ok($"Folder: {folder.Name} has been deleted");
@@ -144,6 +144,13 @@ namespace TwoDrive.WebApi.Controllers
             };
             ModificationLogic.Create(modification);
             return Ok(new FolderModel().FromDomain(folder));
+        }
+
+        [HttpGet]
+        [ClaimFilter(ClaimType.Read)]
+        public IActionResult ShowTree(int id)
+        {
+            return null;
         }
     }
 }
