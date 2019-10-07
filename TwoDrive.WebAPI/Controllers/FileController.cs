@@ -233,6 +233,9 @@ namespace TwoDrive.WebApi.Controllers
         public IActionResult Move(int id, int folderId)
         {
             var writer = inSession.GetCurrentUser(HttpContext);
+            if (writer == null)
+                return NotFound("You must log in first");
+
             var file = fileLogic.Get(id);
             var folder = folderLogic.Get(folderId);
             var dependencies = new MoveElementDependencies
