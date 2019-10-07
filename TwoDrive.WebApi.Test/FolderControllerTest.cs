@@ -176,5 +176,65 @@ namespace TwoDrive.WebApi.Test
             mockFolderLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
         }
+
+        [TestMethod]
+        public void GetFolder()
+        {
+            var writer = new Writer
+            {
+                Id = 1
+            };
+            var folder = new Folder
+            {
+                Id = 1,
+                CreationDate = DateTime.Now,
+                DateModified = DateTime.Now,
+                FolderChildren = new List<Element>(),
+                Name = "root",
+                Owner = writer,
+                OwnerId = writer.Id,
+                ParentFolder = null,
+                ParentFolderId = null
+            };
+
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
+            var mockElementRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
+            var mockElementValidator = new Mock<IElementValidator>(MockBehavior.Strict);
+
+            mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
+            .Returns(folder);
+
+            var controller = new FolderController(mockFolderLogic.Object, mockSessionLogic.Object,
+                mockElementRepository.Object, mockElementValidator.Object);
+
+            var result = controller.Get(1);
+            var asOk = result as OkObjectResult;
+            var folderModelResult = asOk.Value as FolderModel;
+            var resultModel = folderModelResult.ToDomain();
+
+            mockFolderLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.AreEqual(folder.Id, resultModel.Id);
+        }
+
+        [TestMethod]
+        public void GetNonExistantFolder()
+        {
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
+            var mockElementRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
+            var mockElementValidator = new Mock<IElementValidator>(MockBehavior.Strict);
+            
+            mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
+            .Returns((Folder)null);
+
+            var controller = new FolderController(mockFolderLogic.Object, mockSessionLogic.Object,
+                mockElementRepository.Object, mockElementValidator.Object);
+            var result = controller.Get(1);
+
+            mockFolderLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        }
     }
 }
