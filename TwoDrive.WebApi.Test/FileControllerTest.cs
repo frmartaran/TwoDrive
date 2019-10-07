@@ -1422,5 +1422,57 @@ namespace TwoDrive.WebApi.Test
             Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
 
         }
+
+        [TestMethod]
+        public void MoveNotOwner()
+        {
+            var file = new TxtFile
+            {
+                Id = 1,
+                Name = "New file",
+                Content = "Content",
+                Owner = new Writer(),
+                OwnerId = 2,
+                ParentFolder = new Folder(),
+                ParentFolderId = 1,
+                CreationDate = new DateTime(2019, 6, 10),
+                DateModified = new DateTime(2019, 6, 10),
+            };
+            var folderDestination = new Folder
+            {
+                Id = 2,
+                Owner = writer,
+                OwnerId = writer.Id
+            };
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(file);
+
+            var mockModification = new Mock<IModificationLogic>();
+
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IElementValidator>();
+
+            var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+            .Returns(writer);
+
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
+            .Returns(folderDestination);
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
+
+            var result = controller.Move(1, 2);
+            mockFolderLogic.VerifyAll();
+            mockLogic.VerifyAll();
+            mockSession.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+
+        }
     }
 }
