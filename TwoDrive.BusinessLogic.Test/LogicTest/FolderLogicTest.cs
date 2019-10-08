@@ -959,8 +959,8 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var context = ContextFactory.GetMemoryContext("Create null");
 
-            var elementValidator = new Mock<IFolderValidator>().Object;
             var folderRepository = new FolderRepository(context);
+            var elementValidator = new FolderValidator(folderRepository);
             var fileRepository = new FileRepository(context);
             var modificationRepostory = new Mock<IRepository<Modification>>().Object;
             var dependecies = new ElementLogicDependencies(folderRepository,
@@ -975,8 +975,8 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var context = ContextFactory.GetMemoryContext("Create null");
 
-            var elementValidator = new Mock<IFolderValidator>().Object;
             var folderRepository = new FolderRepository(context);
+            var elementValidator = new FolderValidator(folderRepository);
             var fileRepository = new FileRepository(context);
             var modificationRepostory = new Mock<IRepository<Modification>>().Object;
             var dependecies = new ElementLogicDependencies(folderRepository,

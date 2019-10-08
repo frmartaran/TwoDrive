@@ -43,9 +43,9 @@ namespace TwoDrive.WebApi.Controllers
                     Owner = writer,
                     FolderChildren = new List<Element>()
                 };
-                writer.AddRootClaims(root);
                 Logic.Create(writer);
                 FolderLogic.Create(root);
+                writer.AddRootClaims(root);
                 return Ok("Writer Created");
             }
             catch (ValidationException validationError)
