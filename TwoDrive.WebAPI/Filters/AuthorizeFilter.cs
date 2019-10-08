@@ -2,6 +2,7 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using TwoDrive.BusinessLogic;
 using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.Domain;
 
@@ -17,6 +18,10 @@ namespace TwoDrive.WebApi.Filters
         }
         public void OnActionExecuted(ActionExecutedContext context)
         {
+        }
+
+        public void OnActionExecuting(ActionExecutingContext context)
+        {
             var token = context.HttpContext.Request.Headers["Authorization"];
             if (string.IsNullOrEmpty(token))
             {
@@ -27,7 +32,7 @@ namespace TwoDrive.WebApi.Filters
                 };
                 return;
             }
-            var sessionLogic = (SessionLogic)context.HttpContext.RequestServices.GetService(typeof(SessionLogic));
+            var sessionLogic = (ISessionLogic) context.HttpContext.RequestServices.GetService(typeof(ISessionLogic));
             if (!sessionLogic.IsValidToken(token))
             {
                 context.Result = new ContentResult
@@ -46,10 +51,6 @@ namespace TwoDrive.WebApi.Filters
                 };
                 return;
             }
-        }
-
-        public void OnActionExecuting(ActionExecutingContext context)
-        {
         }
     }
 }

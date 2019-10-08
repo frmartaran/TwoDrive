@@ -20,7 +20,7 @@ namespace TwoDrive.WebApi.Filters
         }
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            
+
             var token = context.HttpContext.Request.Headers["Authorization"];
             if (string.IsNullOrEmpty(token))
             {
@@ -31,7 +31,7 @@ namespace TwoDrive.WebApi.Filters
                 };
                 return;
             }
-            var sessionLogic = (SessionLogic)context.HttpContext.RequestServices.GetService(typeof(SessionLogic));
+            var sessionLogic = (SessionLogic) context.HttpContext.RequestServices.GetService(typeof(SessionLogic));
             if (!sessionLogic.IsValidToken(token))
             {
                 context.Result = new ContentResult
@@ -41,30 +41,29 @@ namespace TwoDrive.WebApi.Filters
                 };
                 return;
             }
-            if (sessionLogic.HasLevel(token) && IsAdministratorAllowedAction())
+            if (!(sessionLogic.HasLevel(token) && IsAdministratorAllowedAction()))
             {
-                return;
-            }
-            var element = GetElement(context);
-            if (element == null)
-            {
-                context.Result = new ContentResult
+                var element = GetElement(context);
+                if (element == null)
                 {
-                    StatusCode = 400,
-                    Content = "Invalid Element"
-                };
-                return;
-            }
-            var writer = sessionLogic.GetWriter(token);
-            var hasClaim = writer.HasClaimsFor(element, Action);
-            if (!hasClaim)
-            {
-                context.Result = new ContentResult
+                    context.Result = new ContentResult
+                    {
+                        StatusCode = 400,
+                        Content = "Invalid Element"
+                    };
+                    return;
+                }
+                var writer = sessionLogic.GetWriter(token);
+                var hasClaim = writer.HasClaimsFor(element, Action);
+                if (!hasClaim)
                 {
-                    StatusCode = 400,
-                    Content = $"This user is not allow to {Action.ToString()} this element"
-                };
-                return;
+                    context.Result = new ContentResult
+                    {
+                        StatusCode = 400,
+                        Content = $"This user is not allow to {Action.ToString()} this element"
+                    };
+                    return;
+                }
             }
         }
 
@@ -76,7 +75,7 @@ namespace TwoDrive.WebApi.Filters
                 return null;
             }
 
-            var ElementRepository = (IRepository<Element>)context.HttpContext.RequestServices
+            var ElementRepository = (IRepository<Element>) context.HttpContext.RequestServices
                             .GetService(typeof(IRepository<Element>));
 
             var element = ElementRepository.Get((int) elementId);

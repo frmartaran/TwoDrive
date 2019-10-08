@@ -29,7 +29,7 @@ namespace TwoDrive.WebApi.Controllers
         }
 
         [HttpPost]
-        //[AuthorizeFilter(Role.Administrator)]
+        [AuthorizeFilter(Role.Administrator)]
         public IActionResult Create([FromBody] WriterModel model)
         {
             try
