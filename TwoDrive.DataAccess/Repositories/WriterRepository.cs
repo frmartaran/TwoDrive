@@ -15,7 +15,8 @@ namespace TwoDrive.DataAccess
         }
         public override bool Exists(Writer writer)
         {
-            return table.Where(w => w.UserName.Equals(writer.UserName))
+            return table.Where(w => w.UserName == writer.UserName)
+                        .Where(w => w.Id != writer.Id)
                         .Any();
         }
 

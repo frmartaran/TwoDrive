@@ -48,5 +48,26 @@ namespace TwoDrive.WebApi.Models
 
             return folder;
         }
+
+        public Folder ToDomain(Folder folder)
+        {
+            if (this == null)
+                return null;
+
+            folder.Name = this.Name;
+            folder.CreationDate = this.CreationDate;
+            folder.DateModified = this.DateModified;
+
+            if (ParentFolder != null)
+                folder.ParentFolder = ParentFolder.ToDomain();
+
+            if (Owner != null)
+                folder.Owner = Owner.ToDomain();
+
+            if (Id.HasValue)
+                folder.Id = Id.Value;
+
+            return folder;
+        }
     }
 }

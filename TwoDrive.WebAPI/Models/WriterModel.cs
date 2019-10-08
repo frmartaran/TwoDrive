@@ -31,13 +31,13 @@ namespace TwoDrive.WebApi.Models
             UserName = entity.UserName;
             Password = entity.Password;
 
-            if(Friends != null)
+            if (Friends != null)
             {
                 Friends = entity.Friends
                 .Select(e => new WriterModel().FromDomain(e))
                 .ToList();
             }
-            if(Claims != null)
+            if (Claims != null)
             {
                 Claims = entity.Claims
                 .Select(c => new ClaimModel().FromDomain(c))
@@ -45,6 +45,27 @@ namespace TwoDrive.WebApi.Models
             }
 
             return this;
+        }
+
+        public Writer ToDomain(Writer writer)
+        {
+            if (this == null)
+                return null;
+
+            writer.Role = this.Role;
+            writer.UserName = this.UserName;
+            writer.Password = this.Password;
+            writer.Friends = this.Friends?
+                        .Select(f => f.ToDomain())
+                        .ToList() ?? null;
+            writer.Claims = this.Claims?
+                    .Select(c => c.ToDomain())
+                    .ToList() ?? null;
+
+            if (Id.HasValue)
+                writer.Id = Id.Value;
+
+            return writer;
         }
 
         public Writer ToDomain()
@@ -58,11 +79,11 @@ namespace TwoDrive.WebApi.Models
                 UserName = this.UserName,
                 Password = this.Password,
                 Friends = this.Friends?
-                            .Select(f => f.ToDomain())
-                            .ToList() ?? null,
+                        .Select(f => f.ToDomain())
+                        .ToList() ?? null,
                 Claims = this.Claims?
-                        .Select(c => c.ToDomain())
-                        .ToList() ?? null
+                    .Select(c => c.ToDomain())
+                    .ToList() ?? null
             };
 
             if (Id.HasValue)

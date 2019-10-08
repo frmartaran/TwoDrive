@@ -88,8 +88,7 @@ namespace TwoDrive.WebApi.Controllers
             try
             {
                 var folder = FolderLogic.Get(Id);
-                var updatedFolder = model.ToDomain();
-                folder = updatedFolder;
+                folder = model.ToDomain(folder);
                 FolderLogic.Update(folder);
                 var updatedWriter = FolderLogic.Get(Id);
                 var toModel = new FolderModel();

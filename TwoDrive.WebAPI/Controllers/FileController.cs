@@ -149,8 +149,7 @@ namespace TwoDrive.WebApi.Controllers
             try
             {
                 var file = fileLogic.Get(id);
-                var updatedFile = model.ToDomain();
-                file = updatedFile;
+                file = model.ToDomain(file as TxtFile);
                 fileLogic.Update(file);
                 CreateModification(file, ModificationType.Changed);
                 return Ok("File Updated");

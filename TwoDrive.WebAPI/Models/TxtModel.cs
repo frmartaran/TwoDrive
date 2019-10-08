@@ -16,7 +16,27 @@ namespace TwoDrive.WebApi.Models
             Content = file.Content;
             return base.FromDomain(file);
         }
+        public File ToDomain(TxtFile file)
+        {
+            if (this == null)
+                return null;
 
+            file.Name = this.Name;
+            file.CreationDate = this.CreationDate;
+            file.DateModified = this.DateModified;
+            file.Content = this.Content;
+
+            if (ParentFolder != null)
+                file.ParentFolder = ParentFolder.ToDomain();
+
+            if (Owner != null)
+                file.Owner = Owner.ToDomain();
+
+            if (Id.HasValue)
+                file.Id = Id.Value;
+
+            return file;
+        }
         public override File ToDomain()
         {
             if (this == null)

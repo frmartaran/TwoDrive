@@ -108,8 +108,7 @@ namespace TwoDrive.WebApi.Controllers
             try
             {
                 var writer = Logic.Get(id);
-                var changedWriter = model.ToDomain();
-                writer = changedWriter;
+                writer = model.ToDomain(writer);
                 Logic.Update(writer);
                 var updatedWriter = Logic.Get(id);
                 var toModel = new WriterModel();
