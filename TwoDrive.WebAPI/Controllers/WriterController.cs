@@ -35,15 +35,15 @@ namespace TwoDrive.WebApi.Controllers
             try
             {
                 var writer = model.ToDomain();
+                Logic.Create(writer);
                 var root = new Folder
                 {
                     Name = "Root",
+                    Owner = writer,
                     CreationDate = DateTime.Now,
                     DateModified = DateTime.Now,
-                    Owner = writer,
                     FolderChildren = new List<Element>()
                 };
-                Logic.Create(writer);
                 FolderLogic.Create(root);
                 writer.AddRootClaims(root);
                 return Ok("Writer Created");
