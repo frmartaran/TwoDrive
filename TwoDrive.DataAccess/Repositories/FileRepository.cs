@@ -23,7 +23,6 @@ namespace TwoDrive.DataAccess
 
         public ICollection<File> GetAll(FileFilter filter)
         {
-            var filesToReturn = new List<File>();
             var filesFilteredByName = filter.Id.HasValue
                 ? table.Where(e => e.Name.Contains(filter.Name) && e.Owner.Id == filter.Id.Value)
                 : table.Where(e => e.Name.Contains(filter.Name));
