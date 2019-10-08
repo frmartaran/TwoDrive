@@ -1,10 +1,12 @@
+﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using TwoDrive.DataAccess.Interface.LogicInput;
 using TwoDrive.Domain.FileManagement;
 
-namespace TwoDrive.DataAccess.Interface
+namespace TwoDrive.BusinessLogic.Interfaces
 {
-    public interface IFileRepository : IRepository<File>
+    public interface IFileLogic : ILogic<File>, IElementLogic
     {
         ICollection<File> GetAll(FileFilter filter);
     }

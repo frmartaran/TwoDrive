@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.DataAccess.Interface;
+using TwoDrive.DataAccess.Interface.LogicInput;
 using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic
 {
-    public class FileLogic : ElementLogic, ILogic<File>
+    public class FileLogic : ElementLogic, ILogic<File>, IFileLogic
     {
         private IFileRepository FileRepository;
 
@@ -47,6 +48,11 @@ namespace TwoDrive.BusinessLogic
         public File Get(int Id)
         {
             return FileRepository.Get(Id);
+        }
+
+        public ICollection<File> GetAll(FileFilter filter)
+        {
+            return FileRepository.GetAll(filter);
         }
 
         public ICollection<File> GetAll()
