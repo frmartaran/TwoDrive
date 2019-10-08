@@ -19,6 +19,8 @@ using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Interfaces;
 using TwoDrive.WebApi.Helpers;
+using TwoDrive.BusinessLogic.Validators;
+using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 
 namespace TwoDrive.WebApi
 {
@@ -40,6 +42,14 @@ namespace TwoDrive.WebApi
             services.AddScoped<IFolderLogic, FolderLogic>();
             services.AddScoped<ICurrent, CurrentSession>();
             services.AddScoped<ISessionLogic, SessionLogic>();
+            services.AddScoped<ILogic<File>, FileLogic>();
+            services.AddScoped<IModificationLogic, ModificationLogic>();
+
+            services.AddScoped<IFolderValidator, FolderValidator>();
+            services.AddScoped<IValidator<Element>, FileValidator>();
+            services.AddScoped<IValidator<Writer>, WriterValidator>();
+            services.AddScoped<ElementLogicDependencies, ElementLogicDependencies>();
+
             services.AddScoped<IFolderRepository, FolderRepository>();
             services.AddScoped<IRepository<File>, FileRepository>();
             services.AddScoped<IRepository<Writer>, WriterRepository>();

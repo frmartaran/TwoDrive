@@ -8,6 +8,8 @@ using TwoDrive.DataAccess;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.BusinessLogic.Logic;
+using TwoDrive.DataAccess.Interface;
+using Moq;
 
 namespace TwoDrive.BusinessLogic.Test
 {
@@ -73,13 +75,9 @@ namespace TwoDrive.BusinessLogic.Test
             var fileRepository = new FileRepository(context);
             var elementRepository = new Repository<Element>(context);
             var folderValidator = new FolderValidator(folderRepository);
-
-            var dependencies = new ElementLogicDependencies
-            {
-                ElementValidator = new FolderValidator(folderRepository),
-                FolderRepository = new FolderRepository(context),
-                FileRepository = new FileRepository(context),
-            };
+            var modificationRepostitory = new Mock<IRepository<Modification>>().Object;
+            var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
+                folderValidator, modificationRepostitory);
 
             folderRepository.Insert(root);
             folderRepository.Insert(parentFolderOrigin);
@@ -108,13 +106,10 @@ namespace TwoDrive.BusinessLogic.Test
             var fileRepository = new FileRepository(context);
             var elementRepository = new Repository<Element>(context);
             var folderValidator = new FolderValidator(folderRepository);
+            var modificationRepostitory = new Mock<IRepository<Modification>>().Object;
+            var dependecies = new ElementLogicDependencies(folderRepository, fileRepository,
+                folderValidator, modificationRepostitory);
 
-            var dependecies = new ElementLogicDependencies
-            {
-                ElementValidator = new FolderValidator(folderRepository),
-                FolderRepository = new FolderRepository(context),
-                FileRepository = new FileRepository(context),
-            };
             var logic = new FolderLogic(dependecies);
             var child = new Folder
             {

@@ -47,7 +47,7 @@ namespace TwoDrive.BusinessLogic.Extensions
             ValidateIsNotRoot(element);
             writer.AlreadyHasClaimsFor(element);
             var claims = CreateBasicClaims(element);
-            var delete = new Claim
+            var delete = new CustomClaim
             {
                 Element = element,
                 Type = ClaimType.Delete
@@ -56,24 +56,24 @@ namespace TwoDrive.BusinessLogic.Extensions
             writer.Claims.AddRange(claims);
         }
 
-        private static List<Claim> CreateBasicClaims(Element element)
+        private static List<CustomClaim> CreateBasicClaims(Element element)
         {
-            var read = new Claim
+            var read = new CustomClaim
             {
                 Element = element,
                 Type = ClaimType.Read
             };
-            var write = new Claim
+            var write = new CustomClaim
             {
                 Element = element,
                 Type = ClaimType.Write
             };
-            var share = new Claim
+            var share = new CustomClaim
             {
                 Element = element,
                 Type = ClaimType.Share
             };
-            return new List<Claim>
+            return new List<CustomClaim>
             {
                 read,
                 write,
@@ -121,7 +121,7 @@ namespace TwoDrive.BusinessLogic.Extensions
             ValidateIfFriends(owner, friend);
             ValidateIfFriendCan(friend, element, type);
 
-            var claim = new Claim
+            var claim = new CustomClaim
             {
                 Element = element,
                 Type = type
@@ -158,7 +158,7 @@ namespace TwoDrive.BusinessLogic.Extensions
             friend.Claims.Remove(claim);
         }
 
-        private static void ValidateIfFriendCan(Claim claim)
+        private static void ValidateIfFriendCan(CustomClaim claim)
         {
             if (claim == null)
                 throw new LogicException("There are no claims to remove");

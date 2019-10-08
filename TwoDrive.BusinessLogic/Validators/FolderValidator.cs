@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TwoDrive.BusinessLogic.Exceptions;
+using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
@@ -9,7 +10,7 @@ using TwoDrive.Domain.FileManagement;
 namespace TwoDrive.BusinessLogic.Validators
 {
 
-    public class FolderValidator : ElementValidator
+    public class FolderValidator : ElementValidator, IFolderValidator
     {
         private const string rootName = "Root";
 
@@ -22,7 +23,7 @@ namespace TwoDrive.BusinessLogic.Validators
 
         protected override void ValidateNamesAtSameLevel(Element element)
         {
-            if (!isRoot(element))
+            if (!IsRoot(element))
             {
                 var ParentFolder = element.ParentFolder;
                 var hasSameName = ParentFolder.FolderChildren
@@ -37,11 +38,11 @@ namespace TwoDrive.BusinessLogic.Validators
         protected override void ValidateParentFolder(Element element)
         {
             var hasParentFolder = element.ParentFolder != null;
-            if (!isRoot(element) && !hasParentFolder)
+            if (!IsRoot(element) && !hasParentFolder)
                 throw new ValidationException("A child folder must have a parent folder");
         }
 
-        public override bool IsValidDestination(Element elementToTransfer, Folder folderDestination)
+        public bool IsValidDestination(Element elementToTransfer, Folder folderDestination)
         {
             if (!AreElementToTransferAndDestinationEmpty(elementToTransfer, folderDestination))
             {
@@ -126,7 +127,7 @@ namespace TwoDrive.BusinessLogic.Validators
             return elementToTransfer == null && elementDestination == null; 
         }
 
-        private bool isRoot(Element folder)
+        private bool IsRoot(Element folder)
         {
             return folder.Name == rootName;
         }

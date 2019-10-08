@@ -8,20 +8,20 @@ using TwoDrive.WebApi.Interfaces;
 
 namespace TwoDrive.WebApi.Models
 {
-    public class ClaimModel : IModel<Claim, ClaimModel>
+    public class ClaimModel : IModel<CustomClaim, ClaimModel>
     {
         public ClaimType Type { get; set; }
         public Element Element { get; set; }
-        public Claim ToDomain()
+        public CustomClaim ToDomain()
         {
-            return new Claim
+            return new CustomClaim
             {
                 Type = this.Type,
                 Element = this.Element
             };
         }
 
-        public ClaimModel FromDomain(Claim entity)
+        public ClaimModel FromDomain(CustomClaim entity)
         {
             Type = entity.Type;
             Element = entity.Element;

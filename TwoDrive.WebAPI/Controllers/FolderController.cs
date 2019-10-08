@@ -22,14 +22,14 @@ namespace TwoDrive.WebApi.Controllers
 
         private IRepository<Element> ElementRepository { get; set; }
 
-        private IElementValidator Validator { get; set; }
+        private IFolderValidator Validator { get; set; }
 
         private ILogic<Writer> WriterLogic { get; set; }
 
         private IModificationLogic ModificationLogic { get; set; }
 
         public FolderController(IFolderLogic folderLogic, ICurrent session,
-            IRepository<Element> elementRepository, IElementValidator validator,
+            IRepository<Element> elementRepository, IFolderValidator validator,
             ILogic<Writer> writerLogic, IModificationLogic modificationLogic) : base()
         {
             FolderLogic = folderLogic;

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TwoDrive.DataAccess.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class test : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -41,6 +41,8 @@ namespace TwoDrive.DataAccess.Migrations
                     OwnerId = table.Column<int>(nullable: true),
                     CreationDate = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeletedDate = table.Column<DateTime>(nullable: false),
                     Discriminator = table.Column<string>(nullable: false),
                     Content = table.Column<string>(nullable: true)
                 },
@@ -62,7 +64,27 @@ namespace TwoDrive.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Claims",
+                name: "Sessions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Token = table.Column<Guid>(nullable: false),
+                    WriterId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sessions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Sessions_Writers_WriterId",
+                        column: x => x.WriterId,
+                        principalTable: "Writers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CustomClaim",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -73,15 +95,15 @@ namespace TwoDrive.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Claims", x => x.Id);
+                    table.PrimaryKey("PK_CustomClaim", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Claims_Elements_ElementId",
+                        name: "FK_CustomClaim_Elements_ElementId",
                         column: x => x.ElementId,
                         principalTable: "Elements",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Claims_Writers_WriterId",
+                        name: "FK_CustomClaim_Writers_WriterId",
                         column: x => x.WriterId,
                         principalTable: "Writers",
                         principalColumn: "Id",
@@ -110,13 +132,13 @@ namespace TwoDrive.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Claims_ElementId",
-                table: "Claims",
+                name: "IX_CustomClaim_ElementId",
+                table: "CustomClaim",
                 column: "ElementId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Claims_WriterId",
-                table: "Claims",
+                name: "IX_CustomClaim_WriterId",
+                table: "CustomClaim",
                 column: "WriterId");
 
             migrationBuilder.CreateIndex(
@@ -135,6 +157,11 @@ namespace TwoDrive.DataAccess.Migrations
                 column: "ElementId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Sessions_WriterId",
+                table: "Sessions",
+                column: "WriterId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Writers_FriendId",
                 table: "Writers",
                 column: "FriendId");
@@ -143,10 +170,13 @@ namespace TwoDrive.DataAccess.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Claims");
+                name: "CustomClaim");
 
             migrationBuilder.DropTable(
                 name: "Modifications");
+
+            migrationBuilder.DropTable(
+                name: "Sessions");
 
             migrationBuilder.DropTable(
                 name: "Elements");

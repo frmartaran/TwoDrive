@@ -26,22 +26,22 @@ namespace TwoDrive.BusinessLogic.Test
             {
                 Name = "Root"
             };
-            var read = new Claim
+            var read = new CustomClaim
             {
                 Element = root,
                 Type = ClaimType.Read
             };
-            var write = new Claim
+            var write = new CustomClaim
             {
                 Element = root,
                 Type = ClaimType.Write
             };
-            var share = new Claim
+            var share = new CustomClaim
             {
                 Element = root,
                 Type = ClaimType.Share
             };
-            var defaultClaims = new List<Claim>{
+            var defaultClaims = new List<CustomClaim>{
                 write,
                 read,
                 share
@@ -185,7 +185,7 @@ namespace TwoDrive.BusinessLogic.Test
                 FolderChildren = new List<Element>()
             };
 
-            var claim = new Claim
+            var claim = new CustomClaim
             {
                 Element = newFolder,
                 Type = ClaimType.Read

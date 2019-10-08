@@ -7,7 +7,7 @@ using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic.Validators
 {
-    public abstract class ElementValidator : IElementValidator
+    public abstract class ElementValidator : IValidator<Element>
     {
         public bool IsValid(Element element)
         {
@@ -53,11 +53,6 @@ namespace TwoDrive.BusinessLogic.Validators
             var earlyModifiedDate = element.CreationDate.CompareTo(element.DateModified);
             if (earlyModifiedDate > 0)
                 throw new ValidationException("The modified date should be later than the creation date");
-        }
-
-        public virtual bool IsValidDestination(Element elementToTransfer, Folder folderDestination)
-        {
-            throw new NotImplementedException();
         }
     }
 }

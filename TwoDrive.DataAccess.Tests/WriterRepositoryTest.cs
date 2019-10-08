@@ -19,7 +19,7 @@ namespace TwoDrive.DataAccess.Tests
                 Id = 1,
                 UserName = "WRiter",
                 Password = "Pass",
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
 
@@ -40,7 +40,7 @@ namespace TwoDrive.DataAccess.Tests
                 Id = 1,
                 UserName = "WRiter",
                 Password = "Pass",
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
 
@@ -61,7 +61,7 @@ namespace TwoDrive.DataAccess.Tests
                 Id = 1,
                 UserName = "WRiter",
                 Password = "Pass",
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var repository = new WriterRepository(memoryDb);
@@ -88,7 +88,7 @@ namespace TwoDrive.DataAccess.Tests
                 Id = 1,
                 UserName = "WRiter",
                 Password = "Pass",
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var repository = new WriterRepository(memoryDb);
@@ -114,7 +114,7 @@ namespace TwoDrive.DataAccess.Tests
                 Id = 1,
                 UserName = "WRiter",
                 Password = "Pass",
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var anotherWriter = new Writer
@@ -122,7 +122,7 @@ namespace TwoDrive.DataAccess.Tests
                 Id = 2,
                 UserName = "WRiter",
                 Password = "Pass",
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var repository = new WriterRepository(memoryDb);

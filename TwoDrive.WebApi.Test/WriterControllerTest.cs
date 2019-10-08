@@ -131,7 +131,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Valid Writer",
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
@@ -178,7 +178,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Valid Writer",
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             var friend = new Writer
             {
@@ -186,7 +186,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             var writers = new List<Writer>
             {
@@ -246,7 +246,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Valid Writer",
                 Password = "12345",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             var toModel = new WriterModel().FromDomain(writer);
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
@@ -304,7 +304,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Valid Writer",
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             var friend = new Writer
             {
@@ -312,7 +312,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             writer.Friends.Add(friend);
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
@@ -346,7 +346,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Valid Writer",
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
 
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
@@ -375,7 +375,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Valid Writer",
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             var friend = new Writer
             {
@@ -383,7 +383,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockCurrentSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
@@ -415,7 +415,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Valid Writer",
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             var friend = new Writer
             {
@@ -423,7 +423,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             writer.Friends.Add(friend);
             var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
@@ -456,7 +456,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Valid Writer",
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockCurrentSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
@@ -487,7 +487,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockCurrentSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
@@ -517,7 +517,7 @@ namespace TwoDrive.WebApi.Test
                 Role = Role.Writer,
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             var friend = new Writer
             {
@@ -525,7 +525,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockCurrentSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
@@ -556,7 +556,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Valid Writer",
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             var friend = new Writer
             {
@@ -564,7 +564,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             writer.Friends.Add(friend);
             var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
@@ -597,7 +597,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Valid Writer",
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             var friend = new Writer
             {
@@ -605,7 +605,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockCurrentSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
@@ -636,7 +636,7 @@ namespace TwoDrive.WebApi.Test
                 Role = Role.Writer,
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             var friend = new Writer
             {
@@ -644,7 +644,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             writer.Friends.Add(friend);
             var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
@@ -676,7 +676,7 @@ namespace TwoDrive.WebApi.Test
                 Role = Role.Writer,
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockCurrentSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
@@ -704,7 +704,7 @@ namespace TwoDrive.WebApi.Test
                 Role = Role.Writer,
                 Password = "1234",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockCurrentSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))

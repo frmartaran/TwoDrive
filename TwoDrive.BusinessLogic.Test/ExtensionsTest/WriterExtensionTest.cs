@@ -22,22 +22,22 @@ namespace TwoDrive.BusinessLogic.Test
             {
                 Name = "Root"
             };
-            var read = new Claim
+            var read = new CustomClaim
             {
                 Element = root,
                 Type = ClaimType.Read
             };
-            var write = new Claim
+            var write = new CustomClaim
             {
                 Element = root,
                 Type = ClaimType.Write
             };
-            var share = new Claim
+            var share = new CustomClaim
             {
                 Element = root,
                 Type = ClaimType.Share
             };
-            var defaultClaims = new List<Claim>{
+            var defaultClaims = new List<CustomClaim>{
                 write,
                 read,
                 share
@@ -104,7 +104,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void AddRootClaims()
         {
-            writer.Claims = new List<Claim>();
+            writer.Claims = new List<CustomClaim>();
             writer.AddRootClaims(root);
 
             Assert.IsTrue(writer.Claims.Any(c => c.Type == ClaimType.Read));
@@ -124,14 +124,14 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "Folder",
                 ParentFolder = root
             };
-            writer.Claims = new List<Claim>();
+            writer.Claims = new List<CustomClaim>();
             writer.AddRootClaims(folder);
         }
 
         [TestMethod]
         public void AddCreatorClaimsTo()
         {
-            writer.Claims = new List<Claim>();
+            writer.Claims = new List<CustomClaim>();
             var folder = new Folder
             {
                 Name = "Folder",
@@ -150,7 +150,7 @@ namespace TwoDrive.BusinessLogic.Test
         [ExpectedException(typeof(LogicException))]
         public void AddCreatorClaimsToOtherWriter()
         {
-            writer.Claims = new List<Claim>();
+            writer.Claims = new List<CustomClaim>();
             var folder = new Folder
             {
                 Name = "Folder",
@@ -164,7 +164,7 @@ namespace TwoDrive.BusinessLogic.Test
         [ExpectedException(typeof(LogicException))]
         public void AddCreatorClaimsToRootFolder()
         {
-            writer.Claims = new List<Claim>();
+            writer.Claims = new List<CustomClaim>();
             writer.AddCreatorClaimsTo(root);
         }
 
@@ -178,27 +178,27 @@ namespace TwoDrive.BusinessLogic.Test
                 Name = "Folder",
                 ParentFolder = root
             };
-            var read = new Claim
+            var read = new CustomClaim
             {
                 Element = folder,
                 Type = ClaimType.Read
             };
-            var write = new Claim
+            var write = new CustomClaim
             {
                 Element = folder,
                 Type = ClaimType.Write
             };
-            var share = new Claim
+            var share = new CustomClaim
             {
                 Element = folder,
                 Type = ClaimType.Share
             };
-            var delete = new Claim
+            var delete = new CustomClaim
             {
                 Element = folder,
                 Type = ClaimType.Delete
             };
-            var defaultClaims = new List<Claim>{
+            var defaultClaims = new List<CustomClaim>{
                 write,
                 read,
                 share,
@@ -215,34 +215,34 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void RemoveClaim()
         {
-            writer.Claims = new List<Claim>();
+            writer.Claims = new List<CustomClaim>();
             var folder = new Folder
             {
                 Owner = writer,
                 Name = "Folder",
                 ParentFolder = root
             };
-            var read = new Claim
+            var read = new CustomClaim
             {
                 Element = folder,
                 Type = ClaimType.Read
             };
-            var write = new Claim
+            var write = new CustomClaim
             {
                 Element = folder,
                 Type = ClaimType.Write
             };
-            var share = new Claim
+            var share = new CustomClaim
             {
                 Element = folder,
                 Type = ClaimType.Share
             };
-            var delete = new Claim
+            var delete = new CustomClaim
             {
                 Element = folder,
                 Type = ClaimType.Delete
             };
-            var defaultClaims = new List<Claim>{
+            var defaultClaims = new List<CustomClaim>{
                 write,
                 read,
                 share,
@@ -257,7 +257,7 @@ namespace TwoDrive.BusinessLogic.Test
         [ExpectedException(typeof(LogicException))]
         public void RemoveAllNonExistantClaims()
         {
-            writer.Claims = new List<Claim>();
+            writer.Claims = new List<CustomClaim>();
             var folder = new Folder
             {
                 Owner = writer,
@@ -272,7 +272,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var friend = new Writer
             {
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             writer.Friends.Add(friend);
             writer.AllowFriendTo(friend, root, ClaimType.Read);
@@ -289,7 +289,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var friend = new Writer
             {
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             writer.AllowFriendTo(friend, root, ClaimType.Read);
         }
@@ -300,7 +300,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var friend = new Writer
             {
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             writer.Friends.Add(friend);
             writer.AllowFriendTo(friend, root, ClaimType.Read);
@@ -312,7 +312,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var friend = new Writer
             {
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             writer.Friends.Add(friend);
             writer.AllowFriendTo(friend, root, ClaimType.Read);
@@ -328,9 +328,9 @@ namespace TwoDrive.BusinessLogic.Test
             var folder = root;
             var friend = new Writer
             {
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
-            var read = new Claim
+            var read = new CustomClaim
             {
                 Element = folder,
                 Type = ClaimType.Read
@@ -348,7 +348,7 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var friend = new Writer
             {
-                Claims = new List<Claim>()
+                Claims = new List<CustomClaim>()
             };
             writer.Friends.Add(friend);
             writer.RevokeFriendFrom(friend, root, ClaimType.Read);

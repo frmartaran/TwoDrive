@@ -30,13 +30,13 @@ namespace TwoDrive.WebApi.Controllers
 
         private IModificationLogic modificationLogic;
 
-        private IElementValidator elementValidator;
+        private IFolderValidator elementValidator;
 
         private IRepository<Element> elementRepository;
 
         public FileController(ILogic<File> logicFile, IFolderLogic logicFolder,
             ILogic<Writer> logicWriter, ICurrent session, IModificationLogic logic,
-            IElementValidator validator, IRepository<Element> repository)
+            IFolderValidator validator, IRepository<Element> repository)
         {
             inSession = session;
             folderLogic = logicFolder;

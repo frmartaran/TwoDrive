@@ -14,7 +14,7 @@ namespace TwoDrive.BusinessLogic.Logic
     {
         private IFolderRepository FolderRepository { get; set; }
 
-        private IElementValidator ElementValidator { get; set; }
+        private IFolderValidator ElementValidator { get; set; }
 
         private IFileRepository FileRepository { get; set; }
 

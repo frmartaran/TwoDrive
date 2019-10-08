@@ -60,7 +60,7 @@ namespace TwoDrive.BusinessLogic.Validators
                 throw new ValidationException("A writer must be able to read/write/share their root");
         }
 
-        private List<Claim> GetRootClaims(Writer writer)
+        private List<CustomClaim> GetRootClaims(Writer writer)
         {
             return writer.Claims
                         .Where(c => c.Element.Name == "Root")

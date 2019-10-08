@@ -29,7 +29,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 UserName = "Writer",
                 Password = "132",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
         }
@@ -69,7 +69,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSession = new Mock<ICurrent>();
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
                 mockWriterLogic.Object, mockSession.Object, mockModification.Object,
@@ -114,7 +114,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
 
             var mockModification = new Mock<IModificationLogic>();
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
             var mockFolderLogic = new Mock<IFolderLogic>();

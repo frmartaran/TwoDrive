@@ -13,7 +13,7 @@ namespace TwoDrive.BusinessLogic.Test
     [TestClass]
     public class WriterValidatorTest
     {
-        private List<Claim> defaultClaims;
+        private List<CustomClaim> defaultClaims;
         private Folder root;
         private WriterRepository repository;
 
@@ -27,22 +27,22 @@ namespace TwoDrive.BusinessLogic.Test
             {
                 Name = "Root"
             };
-            var read = new Claim
+            var read = new CustomClaim
             {
                 Element = root,
                 Type = ClaimType.Read
             };
-            var write = new Claim
+            var write = new CustomClaim
             {
                 Element = root,
                 Type = ClaimType.Write
             };
-            var share = new Claim
+            var share = new CustomClaim
             {
                 Element = root,
                 Type = ClaimType.Share
             };
-            defaultClaims = new List<Claim>{
+            defaultClaims = new List<CustomClaim>{
                 write,
                 read,
                 share
@@ -123,7 +123,7 @@ namespace TwoDrive.BusinessLogic.Test
                 UserName = "Frined",
                 Password = "A password",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
             };
 
             root.Owner = writer;
@@ -145,7 +145,7 @@ namespace TwoDrive.BusinessLogic.Test
                 UserName = "Writer",
                 Password = "A password",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
             };
 
             root.Owner = writer;
@@ -186,7 +186,7 @@ namespace TwoDrive.BusinessLogic.Test
             };
 
             root.Owner = writer;
-            var delete = new Claim
+            var delete = new CustomClaim
             {
                 Element = root,
                 Type = ClaimType.Delete

@@ -3,7 +3,7 @@ using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.Domain
 {
-    public class Claim
+    public class CustomClaim
     {
         public int Id { get; set;}
         public Element Element { get; set; }
