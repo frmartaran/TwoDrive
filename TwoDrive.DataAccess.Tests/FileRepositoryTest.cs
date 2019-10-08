@@ -12,6 +12,129 @@ namespace TwoDrive.DataAccess.Tests
     [TestClass]
     public class FileRepositoryTest
     {
+        private Folder root1;
+
+        private Folder root2;
+
+        private TxtFile fileRoot1;
+
+        private TxtFile fileRoot2;
+
+        private TxtFile fileRoot3;
+
+        private TxtFile fileRoot4;
+
+        private TxtFile fileRoot5;
+
+        private TxtFile fileRoot6;
+
+        private Writer firstWriter;
+
+        private Writer secondWriter;
+
+        [TestInitialize]
+        public void SetUp()
+        {
+            firstWriter = new Writer
+            {
+                Id = 6
+            };
+
+            secondWriter = new Writer
+            {
+                Id = 7
+            };
+
+            root1 = new Folder
+            {
+                Id = 2,
+                Name = "Root",
+                FolderChildren = new List<Element>(),
+                Owner = firstWriter,
+                OwnerId = firstWriter.Id
+            };
+
+            root2 = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChildren = new List<Element>(),
+                Owner = secondWriter,
+                OwnerId = secondWriter.Id
+            };
+
+            fileRoot1 = new TxtFile
+            {
+                Id = 4,
+                Name = "File1",
+                Content = "",
+                ParentFolder = root1,
+                ParentFolderId = root1.Id,
+                DateModified = new DateTime(2019, 1, 1),
+                CreationDate = new DateTime(2019, 1, 1),
+                Owner = firstWriter,
+                OwnerId = firstWriter.Id
+            };
+
+            fileRoot2 = new TxtFile
+            {
+                Id = 5,
+                Name = "File2",
+                Content = "",
+                ParentFolder = root2,
+                ParentFolderId = root2.Id,
+                DateModified = new DateTime(2019, 1, 2),
+                CreationDate = new DateTime(2019, 1, 2),
+                Owner = secondWriter,
+                OwnerId = secondWriter.Id
+            };
+
+            fileRoot3 = new TxtFile
+            {
+                Id = 6,
+                Name = "File3",
+                Content = "",
+                ParentFolder = root1,
+                ParentFolderId = root1.Id,
+                DateModified = new DateTime(2019, 1, 1),
+                CreationDate = new DateTime(2019, 1, 1)
+            };
+
+            fileRoot4 = new TxtFile
+            {
+                Id = 7,
+                Name = "File3",
+                Content = "",
+                ParentFolder = root2,
+                ParentFolderId = root2.Id,
+                DateModified = new DateTime(2019, 1, 2),
+                CreationDate = new DateTime(2019, 1, 1)
+            };
+
+            fileRoot5 = new TxtFile
+            {
+                Id = 8,
+                Name = "File5",
+                Content = "",
+                ParentFolder = root1,
+                ParentFolderId = root1.Id,
+                DateModified = new DateTime(2019, 1, 1),
+                CreationDate = new DateTime(2019, 1, 1)
+            };
+
+            fileRoot6 = new TxtFile
+            {
+                Id = 9,
+                Name = "File5",
+                Content = "",
+                ParentFolder = root2,
+                ParentFolderId = root2.Id,
+                DateModified = new DateTime(2019, 1, 1),
+                CreationDate = new DateTime(2019, 1, 2)
+            };
+
+        }
+
         [TestMethod]
         public void AddAFile()
         {
@@ -173,34 +296,6 @@ namespace TwoDrive.DataAccess.Tests
             var context = ContextFactory.GetMemoryContext("Get All Is Admin");
             var fileRepository = new FileRepository(context);
             var folderRepository = new FolderRepository(context);
-            var root1 = new Folder
-            {
-                Id = 2,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var root2 = new Folder
-            {
-                Id = 3,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var fileRoot1 = new TxtFile
-            {
-                Id = 4,
-                Name = "File",
-                Content = "",
-                ParentFolder = root1,
-                ParentFolderId = root1.Id
-            };
-            var fileRoot2 = new TxtFile
-            {
-                Id = 5,
-                Name = "File",
-                Content = "",
-                ParentFolder = root2,
-                ParentFolderId = root2.Id
-            };
             folderRepository.Insert(root1);
             folderRepository.Insert(root2);
             fileRepository.Insert(fileRoot1);
@@ -221,50 +316,6 @@ namespace TwoDrive.DataAccess.Tests
             var context = ContextFactory.GetMemoryContext("Get All Is Not Admin");
             var fileRepository = new FileRepository(context);
             var folderRepository = new FolderRepository(context);
-            var firstWriter = new Writer
-            {
-                Id = 6
-            };
-            var secondWriter = new Writer
-            {
-                Id = 7
-            };
-            var root1 = new Folder
-            {
-                Id = 2,
-                Name = "Root",
-                FolderChildren = new List<Element>(),
-                Owner = firstWriter,
-                OwnerId = firstWriter.Id
-            };
-            var root2 = new Folder
-            {
-                Id = 3,
-                Name = "Root",
-                FolderChildren = new List<Element>(),
-                Owner = secondWriter,
-                OwnerId = secondWriter.Id
-            };
-            var fileRoot1 = new TxtFile
-            {
-                Id = 4,
-                Name = "File",
-                Content = "",
-                ParentFolder = root1,
-                ParentFolderId = root1.Id,
-                Owner = firstWriter,
-                OwnerId = firstWriter.Id
-            };
-            var fileRoot2 = new TxtFile
-            {
-                Id = 5,
-                Name = "File",
-                Content = "",
-                ParentFolder = root2,
-                ParentFolderId = root2.Id,
-                Owner = secondWriter,
-                OwnerId = secondWriter.Id
-            };
             folderRepository.Insert(root1);
             folderRepository.Insert(root2);
             fileRepository.Insert(fileRoot1);
@@ -287,34 +338,6 @@ namespace TwoDrive.DataAccess.Tests
             var context = ContextFactory.GetMemoryContext("Get All Order By Descending Name");
             var fileRepository = new FileRepository(context);
             var folderRepository = new FolderRepository(context);
-            var root1 = new Folder
-            {
-                Id = 2,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var root2 = new Folder
-            {
-                Id = 3,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var fileRoot1 = new TxtFile
-            {
-                Id = 4,
-                Name = "File1",
-                Content = "",
-                ParentFolder = root1,
-                ParentFolderId = root1.Id
-            };
-            var fileRoot2 = new TxtFile
-            {
-                Id = 5,
-                Name = "File2",
-                Content = "",
-                ParentFolder = root2,
-                ParentFolderId = root2.Id
-            };
             folderRepository.Insert(root1);
             folderRepository.Insert(root2);
             fileRepository.Insert(fileRoot1);
@@ -338,36 +361,6 @@ namespace TwoDrive.DataAccess.Tests
             var context = ContextFactory.GetMemoryContext("Get All Order By Descending Date Modified");
             var fileRepository = new FileRepository(context);
             var folderRepository = new FolderRepository(context);
-            var root1 = new Folder
-            {
-                Id = 2,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var root2 = new Folder
-            {
-                Id = 3,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var fileRoot1 = new TxtFile
-            {
-                Id = 4,
-                Name = "File1",
-                Content = "",
-                ParentFolder = root1,
-                ParentFolderId = root1.Id,
-                DateModified = new DateTime(2019, 1, 2)
-            };
-            var fileRoot2 = new TxtFile
-            {
-                Id = 5,
-                Name = "File2",
-                Content = "",
-                ParentFolder = root2,
-                ParentFolderId = root2.Id,
-                DateModified = new DateTime(2019, 1, 1)
-            };
             folderRepository.Insert(root1);
             folderRepository.Insert(root2);
             fileRepository.Insert(fileRoot1);
@@ -393,38 +386,6 @@ namespace TwoDrive.DataAccess.Tests
             var context = ContextFactory.GetMemoryContext("Get All Order By Descending Creation Date");
             var fileRepository = new FileRepository(context);
             var folderRepository = new FolderRepository(context);
-            var root1 = new Folder
-            {
-                Id = 2,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var root2 = new Folder
-            {
-                Id = 3,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var fileRoot1 = new TxtFile
-            {
-                Id = 4,
-                Name = "File1",
-                Content = "",
-                ParentFolder = root1,
-                ParentFolderId = root1.Id,
-                DateModified = new DateTime(2019, 1, 1),
-                CreationDate = new DateTime(2019, 1, 1)
-            };
-            var fileRoot2 = new TxtFile
-            {
-                Id = 5,
-                Name = "File2",
-                Content = "",
-                ParentFolder = root2,
-                ParentFolderId = root2.Id,
-                DateModified = new DateTime(2019, 1, 2),
-                CreationDate = new DateTime(2019, 1, 2)
-            };
             folderRepository.Insert(root1);
             folderRepository.Insert(root2);
             fileRepository.Insert(fileRoot1);
@@ -450,38 +411,6 @@ namespace TwoDrive.DataAccess.Tests
             var context = ContextFactory.GetMemoryContext("Get All Order By Name");
             var fileRepository = new FileRepository(context);
             var folderRepository = new FolderRepository(context);
-            var root1 = new Folder
-            {
-                Id = 2,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var root2 = new Folder
-            {
-                Id = 3,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var fileRoot1 = new TxtFile
-            {
-                Id = 4,
-                Name = "File1",
-                Content = "",
-                ParentFolder = root1,
-                ParentFolderId = root1.Id,
-                DateModified = new DateTime(2019, 1, 1),
-                CreationDate = new DateTime(2019, 1, 1)
-            };
-            var fileRoot2 = new TxtFile
-            {
-                Id = 5,
-                Name = "File2",
-                Content = "",
-                ParentFolder = root2,
-                ParentFolderId = root2.Id,
-                DateModified = new DateTime(2019, 1, 2),
-                CreationDate = new DateTime(2019, 1, 2)
-            };
             folderRepository.Insert(root1);
             folderRepository.Insert(root2);
             fileRepository.Insert(fileRoot1);
@@ -504,38 +433,6 @@ namespace TwoDrive.DataAccess.Tests
             var context = ContextFactory.GetMemoryContext("Get All Order By Date Modified");
             var fileRepository = new FileRepository(context);
             var folderRepository = new FolderRepository(context);
-            var root1 = new Folder
-            {
-                Id = 2,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var root2 = new Folder
-            {
-                Id = 3,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var fileRoot1 = new TxtFile
-            {
-                Id = 4,
-                Name = "File1",
-                Content = "",
-                ParentFolder = root1,
-                ParentFolderId = root1.Id,
-                DateModified = new DateTime(2019, 1, 1),
-                CreationDate = new DateTime(2019, 1, 1)
-            };
-            var fileRoot2 = new TxtFile
-            {
-                Id = 5,
-                Name = "File2",
-                Content = "",
-                ParentFolder = root2,
-                ParentFolderId = root2.Id,
-                DateModified = new DateTime(2019, 1, 2),
-                CreationDate = new DateTime(2019, 1, 2)
-            };
             folderRepository.Insert(root1);
             folderRepository.Insert(root2);
             fileRepository.Insert(fileRoot1);
@@ -560,38 +457,6 @@ namespace TwoDrive.DataAccess.Tests
             var context = ContextFactory.GetMemoryContext("Get All Order By Creation Date");
             var fileRepository = new FileRepository(context);
             var folderRepository = new FolderRepository(context);
-            var root1 = new Folder
-            {
-                Id = 2,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var root2 = new Folder
-            {
-                Id = 3,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var fileRoot1 = new TxtFile
-            {
-                Id = 4,
-                Name = "File1",
-                Content = "",
-                ParentFolder = root1,
-                ParentFolderId = root1.Id,
-                DateModified = new DateTime(2019, 1, 1),
-                CreationDate = new DateTime(2019, 1, 1)
-            };
-            var fileRoot2 = new TxtFile
-            {
-                Id = 5,
-                Name = "File2",
-                Content = "",
-                ParentFolder = root2,
-                ParentFolderId = root2.Id,
-                DateModified = new DateTime(2019, 1, 2),
-                CreationDate = new DateTime(2019, 1, 2)
-            };
             folderRepository.Insert(root1);
             folderRepository.Insert(root2);
             fileRepository.Insert(fileRoot1);
@@ -616,78 +481,6 @@ namespace TwoDrive.DataAccess.Tests
             var context = ContextFactory.GetMemoryContext("Get All Order By Descending All Parameters");
             var fileRepository = new FileRepository(context);
             var folderRepository = new FolderRepository(context);
-            var root1 = new Folder
-            {
-                Id = 2,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var root2 = new Folder
-            {
-                Id = 3,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var fileRoot1 = new TxtFile
-            {
-                Id = 4,
-                Name = "File1",
-                Content = "",
-                ParentFolder = root1,
-                ParentFolderId = root1.Id,
-                DateModified = new DateTime(2019, 1, 1),
-                CreationDate = new DateTime(2019, 1, 1)
-            };
-            var fileRoot2 = new TxtFile
-            {
-                Id = 5,
-                Name = "File2",
-                Content = "",
-                ParentFolder = root2,
-                ParentFolderId = root2.Id,
-                DateModified = new DateTime(2019, 1, 2),
-                CreationDate = new DateTime(2019, 1, 2)
-            };
-            var fileRoot3 = new TxtFile
-            {
-                Id = 6,
-                Name = "File3",
-                Content = "",
-                ParentFolder = root1,
-                ParentFolderId = root1.Id,
-                DateModified = new DateTime(2019, 1, 1),
-                CreationDate = new DateTime(2019, 1, 1)
-            };
-            var fileRoot4 = new TxtFile
-            {
-                Id = 7,
-                Name = "File3",
-                Content = "",
-                ParentFolder = root2,
-                ParentFolderId = root2.Id,
-                DateModified = new DateTime(2019, 1, 2),
-                CreationDate = new DateTime(2019, 1, 1)
-            };
-            var fileRoot5 = new TxtFile
-            {
-                Id = 8,
-                Name = "File5",
-                Content = "",
-                ParentFolder = root1,
-                ParentFolderId = root1.Id,
-                DateModified = new DateTime(2019, 1, 1),
-                CreationDate = new DateTime(2019, 1, 1)
-            };
-            var fileRoot6 = new TxtFile
-            {
-                Id = 9,
-                Name = "File5",
-                Content = "",
-                ParentFolder = root2,
-                ParentFolderId = root2.Id,
-                DateModified = new DateTime(2019, 1, 1),
-                CreationDate = new DateTime(2019, 1, 2)
-            };
             folderRepository.Insert(root1);
             folderRepository.Insert(root2);
             fileRepository.Insert(fileRoot1);
@@ -723,78 +516,6 @@ namespace TwoDrive.DataAccess.Tests
             var context = ContextFactory.GetMemoryContext("Get All Order By All Parameters");
             var fileRepository = new FileRepository(context);
             var folderRepository = new FolderRepository(context);
-            var root1 = new Folder
-            {
-                Id = 2,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var root2 = new Folder
-            {
-                Id = 3,
-                Name = "Root",
-                FolderChildren = new List<Element>()
-            };
-            var fileRoot1 = new TxtFile
-            {
-                Id = 4,
-                Name = "File1",
-                Content = "",
-                ParentFolder = root1,
-                ParentFolderId = root1.Id,
-                DateModified = new DateTime(2019, 1, 1),
-                CreationDate = new DateTime(2019, 1, 1)
-            };
-            var fileRoot2 = new TxtFile
-            {
-                Id = 5,
-                Name = "File2",
-                Content = "",
-                ParentFolder = root2,
-                ParentFolderId = root2.Id,
-                DateModified = new DateTime(2019, 1, 2),
-                CreationDate = new DateTime(2019, 1, 2)
-            };
-            var fileRoot3 = new TxtFile
-            {
-                Id = 6,
-                Name = "File3",
-                Content = "",
-                ParentFolder = root1,
-                ParentFolderId = root1.Id,
-                DateModified = new DateTime(2019, 1, 1),
-                CreationDate = new DateTime(2019, 1, 1)
-            };
-            var fileRoot4 = new TxtFile
-            {
-                Id = 7,
-                Name = "File3",
-                Content = "",
-                ParentFolder = root2,
-                ParentFolderId = root2.Id,
-                DateModified = new DateTime(2019, 1, 2),
-                CreationDate = new DateTime(2019, 1, 1)
-            };
-            var fileRoot5 = new TxtFile
-            {
-                Id = 8,
-                Name = "File5",
-                Content = "",
-                ParentFolder = root1,
-                ParentFolderId = root1.Id,
-                DateModified = new DateTime(2019, 1, 1),
-                CreationDate = new DateTime(2019, 1, 1)
-            };
-            var fileRoot6 = new TxtFile
-            {
-                Id = 9,
-                Name = "File5",
-                Content = "",
-                ParentFolder = root2,
-                ParentFolderId = root2.Id,
-                DateModified = new DateTime(2019, 1, 1),
-                CreationDate = new DateTime(2019, 1, 2)
-            };
             folderRepository.Insert(root1);
             folderRepository.Insert(root2);
             fileRepository.Insert(fileRoot1);
