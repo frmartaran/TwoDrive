@@ -61,7 +61,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 .Returns(folder);
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockWriterLogic.Setup(m => m.Update(It.IsAny<Writer>()));
-            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Create(It.IsAny<File>()));
 
             var mockModification = new Mock<IModificationLogic>(MockBehavior.Strict);
@@ -112,7 +112,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 .Returns(folder);
 
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
-            var mockLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<IFileLogic>();
             var mockModification = new Mock<IModificationLogic>();
             var mockElementRepository = new Mock<IRepository<Element>>();
             var mockElementValidator = new Mock<IElementValidator>();
@@ -157,7 +157,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 .Returns(folder);
 
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
-            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Create(It.IsAny<File>()))
                 .Throws(new ValidationException(""));
 
@@ -204,7 +204,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 .Returns(folder);
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
-            var mockLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<IFileLogic>();
 
             var mockModification = new Mock<IModificationLogic>();
             var mockElementRepository = new Mock<IRepository<Element>>();
@@ -243,7 +243,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 .Returns<Folder>(null);
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
-            var mockLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<IFileLogic>();
 
             var mockModification = new Mock<IModificationLogic>();
             var mockElementRepository = new Mock<IRepository<Element>>();

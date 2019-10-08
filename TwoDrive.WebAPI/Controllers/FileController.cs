@@ -9,6 +9,7 @@ using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using TwoDrive.DataAccess.Interface;
+using TwoDrive.DataAccess.Interface.LogicInput;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Filters;
@@ -24,7 +25,7 @@ namespace TwoDrive.WebApi.Controllers
 
         private IFolderLogic folderLogic;
 
-        private ILogic<File> fileLogic;
+        private IFileLogic fileLogic;
 
         private ILogic<Writer> writerLogic;
 
@@ -34,7 +35,7 @@ namespace TwoDrive.WebApi.Controllers
 
         private IRepository<Element> elementRepository;
 
-        public FileController(ILogic<File> logicFile, IFolderLogic logicFolder,
+        public FileController(IFileLogic logicFile, IFolderLogic logicFolder,
             ILogic<Writer> logicWriter, ICurrent session, IModificationLogic logic,
             IElementValidator validator, IRepository<Element> repository)
         {
@@ -111,33 +112,27 @@ namespace TwoDrive.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("api/[controller]/Admin/{id}")]
-        [AuthorizeFilter(Role.Administrator)]
-        public IActionResult GetAll(int writerId)
-        {
-            var files = fileLogic.GetAll();
-            var writerfiles = files
-                .Where(f => f.OwnerId == writerId)
-                .Select(f => new TxtModel().FromDomain(f))
-                .ToList();
-
-            if (writerfiles.Count == 0)
-                return NotFound("No files found");
-
-            return Ok(writerfiles);
-
-        }
-
-        [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetAll(string name = "", bool isOrderDescending = false, bool isOrderByName = false, 
+            bool isOrderByCreationDate = false, bool IsOrderByModificationDate = false)
         {
             var writer = inSession.GetCurrentUser(HttpContext);
             if (writer == null)
                 return NotFound("You need to log in first");
 
-            var files = fileLogic.GetAll();
+            var fileFilter = new FileFilter
+            {
+                Name = name,
+                IsOrderDescending = isOrderDescending,
+                IsOrderByName = isOrderByName,
+                IsOrderByCreationDate = isOrderByCreationDate,
+                IsOrderByModificationDate = IsOrderByModificationDate,
+                Id = writer.Role == Role.Writer
+                    ? writer.Id
+                    : (int?)null
+            };
+
+            var files = fileLogic.GetAll(fileFilter);
             var writerfiles = files
-                .Where(f => f.OwnerId == writer.Id)
                 .Select(f => new TxtModel().FromDomain(f))
                 .ToList();
 

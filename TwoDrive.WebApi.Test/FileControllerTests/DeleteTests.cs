@@ -47,7 +47,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
 
             var mockSession = new Mock<ICurrent>();
 
-            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(file);
             mockLogic.Setup(m => m.Delete(It.IsAny<int>()));
@@ -77,7 +77,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
         {
             var mockSession = new Mock<ICurrent>();
 
-            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns<File>(null);
             mockLogic.Setup(m => m.Delete(It.IsAny<int>()))

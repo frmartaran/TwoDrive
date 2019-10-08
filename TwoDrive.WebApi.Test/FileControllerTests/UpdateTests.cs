@@ -57,7 +57,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             };
             var model = new TxtModel().FromDomain(file) as TxtModel;
 
-            var mockLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<IFileLogic>();
             mockLogic.Setup(m => m.Update(It.IsAny<File>()));
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(file);
@@ -106,7 +106,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 DateModified = new DateTime(2019, 6, 10),
             };
             var model = new TxtModel().FromDomain(file) as TxtModel;
-            var mockLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<IFileLogic>();
             mockLogic.Setup(m => m.Update(It.IsAny<File>()))
                 .Throws(new ValidationException(""));
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.DataAccess.Interface;
+using TwoDrive.DataAccess.Interface.LogicInput;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Controllers;
@@ -59,7 +60,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
 
             var fileAsModel = new TxtModel().FromDomain(file);
 
-            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(file);
 
@@ -87,7 +88,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
         [TestMethod]
         public void GetNotFound()
         {
-            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns<File>(null);
 
@@ -148,14 +149,16 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 secondfile
             };
 
-            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
-            mockLogic.Setup(m => m.GetAll())
+            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.GetAll(It.IsAny<FileFilter>()))
                 .Returns(files);
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
             var mockModification = new Mock<IModificationLogic>();
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSession = new Mock<ICurrent>();
+            mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns(writer);
             var mockElementRepository = new Mock<IRepository<Element>>();
             var mockElementValidator = new Mock<IElementValidator>();
 
@@ -163,7 +166,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
                 mockWriterLogic.Object, mockSession.Object, mockModification.Object,
                 mockElementValidator.Object, mockElementRepository.Object);
-            var result = controller.GetAll(1);
+            var result = controller.GetAll("", true);
             var okResult = result as OkObjectResult;
             var models = okResult.Value as List<FileModel>;
             var asTxtModels = models.Select(m => m as TxtModel);
@@ -182,14 +185,16 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
         public void GetNotFoundAdmin()
         {
             var files = new List<File>();
-            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
-            mockLogic.Setup(m => m.GetAll())
+            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.GetAll(It.IsAny<FileFilter>()))
                 .Returns(files);
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
             var mockModification = new Mock<IModificationLogic>();
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockSession = new Mock<ICurrent>();
+            mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns(writer);
             var mockElementRepository = new Mock<IRepository<Element>>();
             var mockElementValidator = new Mock<IElementValidator>();
 
@@ -197,7 +202,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
                 mockWriterLogic.Object, mockSession.Object, mockModification.Object,
                 mockElementValidator.Object, mockElementRepository.Object);
-            var result = controller.GetAll(1);
+            var result = controller.GetAll("", true);
             var okResult = result as NotFoundObjectResult;
 
             mockLogic.VerifyAll();
@@ -249,8 +254,8 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
                 .Returns(writer);
 
-            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
-            mockLogic.Setup(m => m.GetAll())
+            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.GetAll(It.IsAny<FileFilter>()))
                 .Returns(files);
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
@@ -286,7 +291,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
                 .Returns<Writer>(null);
 
-            var mockLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<IFileLogic>();
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
             var mockModification = new Mock<IModificationLogic>();
@@ -314,8 +319,8 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 .Returns(writer);
 
             var files = new List<File>();
-            var mockLogic = new Mock<ILogic<File>>();
-            mockLogic.Setup(m => m.GetAll())
+            var mockLogic = new Mock<IFileLogic>();
+            mockLogic.Setup(m => m.GetAll(It.IsAny<FileFilter>()))
                 .Returns(files);
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();

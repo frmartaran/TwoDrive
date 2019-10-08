@@ -55,7 +55,7 @@ namespace TwoDrive.WebApi.Test
             };
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
-            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(file);
 
@@ -93,7 +93,7 @@ namespace TwoDrive.WebApi.Test
         {
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
-            var mockLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<IFileLogic>();
 
             var mockModification = new Mock<IModificationLogic>();
 
@@ -121,7 +121,7 @@ namespace TwoDrive.WebApi.Test
         {
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
-            var mockLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<IFileLogic>();
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns<File>(null);
 
@@ -164,7 +164,7 @@ namespace TwoDrive.WebApi.Test
             };
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
-            var mockLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<IFileLogic>();
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(file);
 
@@ -215,7 +215,7 @@ namespace TwoDrive.WebApi.Test
             };
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
-            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(file);
 

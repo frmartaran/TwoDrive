@@ -59,7 +59,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 DateModified = new DateTime(2019, 6, 10),
             };
             writer.Friends.Add(friend);
-            var mockLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<IFileLogic>();
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(file);
 
@@ -94,7 +94,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
         [TestMethod]
         public void ShareNullWriter()
         {
-            var mockLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<IFileLogic>();
 
             var mockModification = new Mock<IModificationLogic>();
             var mockElementRepository = new Mock<IRepository<Element>>();
@@ -120,7 +120,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
         [TestMethod]
         public void ShareNullFriend()
         {
-            var mockLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<IFileLogic>();
 
             var mockModification = new Mock<IModificationLogic>();
             var mockElementRepository = new Mock<IRepository<Element>>();
@@ -159,7 +159,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 Friends = new List<Writer>()
             };
             writer.Friends.Add(friend);
-            var mockLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<IFileLogic>();
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns<File>(null);
 
@@ -213,7 +213,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 DateModified = new DateTime(2019, 6, 10),
             };
 
-            var mockLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<IFileLogic>();
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(file);
 
@@ -270,7 +270,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             writer.Friends.Add(friend);
             writer.AllowFriendTo(friend, file, ClaimType.Read);
 
-            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(file);
 
@@ -305,7 +305,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
         public void StopSharingNullWriter()
         {
 
-            var mockLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<IFileLogic>();
 
             var mockModification = new Mock<IModificationLogic>();
             var mockElementRepository = new Mock<IRepository<Element>>();
@@ -332,7 +332,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
         public void StopSharingNullFriend()
         {
 
-            var mockLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<IFileLogic>();
 
             var mockModification = new Mock<IModificationLogic>();
             var mockElementRepository = new Mock<IRepository<Element>>();
@@ -374,7 +374,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
 
             writer.Friends.Add(friend);
 
-            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns<File>(null);
 
@@ -429,7 +429,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 DateModified = new DateTime(2019, 6, 10),
             };
 
-            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(file);
 
@@ -484,7 +484,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             };
             writer.Friends.Add(friend);
 
-            var mockLogic = new Mock<ILogic<File>>(MockBehavior.Strict);
+            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(file);
 
@@ -539,7 +539,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             };
             writer.Friends.Add(friend);
             writer.AllowFriendTo(friend, file, ClaimType.Read);
-            var mockLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<IFileLogic>();
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(file);
 
