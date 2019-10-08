@@ -19,7 +19,7 @@ namespace TwoDrive.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("TwoDrive.Domain.Claim", b =>
+            modelBuilder.Entity("TwoDrive.Domain.CustomClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -37,7 +37,7 @@ namespace TwoDrive.DataAccess.Migrations
 
                     b.HasIndex("WriterId");
 
-                    b.ToTable("Claim");
+                    b.ToTable("CustomClaim");
                 });
 
             modelBuilder.Entity("TwoDrive.Domain.FileManagement.Element", b =>
@@ -154,7 +154,7 @@ namespace TwoDrive.DataAccess.Migrations
                     b.HasDiscriminator().HasValue("TxtFile");
                 });
 
-            modelBuilder.Entity("TwoDrive.Domain.Claim", b =>
+            modelBuilder.Entity("TwoDrive.Domain.CustomClaim", b =>
                 {
                     b.HasOne("TwoDrive.Domain.FileManagement.Element", "Element")
                         .WithMany()

@@ -17,11 +17,6 @@ namespace TwoDrive.BusinessLogic.Logic
             WriterRepository = writerRepository;
         }
 
-        public SessionLogic(IRepository<Session> repository)
-        {
-            Repository = repository;
-        }
-
         public Guid? Create(string username, string password)
         {
             var user = FetchWriter(username, password);

@@ -90,10 +90,11 @@ namespace TwoDrive.BusinessLogic.Test
         public void GetWriterByTokenMock()
         {
             var mockRepository = new Mock<IRepository<Session>>(MockBehavior.Strict);
+            var mockWriterRepository = new Mock<IRepository<Writer>>();
             var testList = new List<Session>();
             mockRepository.Setup(m => m.GetAll())
                             .Returns(testList);
-            var logic = new SessionLogic(mockRepository.Object);
+            var logic = new SessionLogic(mockRepository.Object, mockWriterRepository.Object);
             Writer writer = logic.GetWriter(Guid.NewGuid().ToString());
             mockRepository.VerifyAll();
         }
@@ -103,7 +104,9 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var context = ContextFactory.GetMemoryContext("Get Writer By Token");
             var repository = new SessionRepository(context);
-            var logic = new SessionLogic(repository);
+            var mockWriterRepository = new Mock<IRepository<Writer>>();
+
+            var logic = new SessionLogic(repository, mockWriterRepository.Object);
             var writer = new Writer
             {
                 Id = 1,
@@ -129,7 +132,8 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var context = ContextFactory.GetMemoryContext("No Writer With Token");
             var repository = new SessionRepository(context);
-            var logic = new SessionLogic(repository);
+            var mockWriterRepository = new Mock<IRepository<Writer>>();
+            var logic = new SessionLogic(repository, mockWriterRepository.Object);
             var token = Guid.NewGuid();
 
             var writerInDb = logic.GetWriter(token.ToString());
@@ -157,7 +161,8 @@ namespace TwoDrive.BusinessLogic.Test
             };
             context.Sessions.Add(session);
             context.SaveChanges();
-            var logic = new SessionLogic(repository);
+            var mockWriterRepository = new Mock<IRepository<Writer>>();
+            var logic = new SessionLogic(repository, mockWriterRepository.Object);
             var hasLevel = logic.HasLevel(token.ToString());
             Assert.IsTrue(hasLevel);
 
@@ -184,7 +189,8 @@ namespace TwoDrive.BusinessLogic.Test
             };
             context.Sessions.Add(session);
             context.SaveChanges();
-            var logic = new SessionLogic(repository);
+            var mockWriterRepository = new Mock<IRepository<Writer>>();
+            var logic = new SessionLogic(repository, mockWriterRepository.Object);
             var hasLevel = logic.HasLevel(token.ToString());
             Assert.IsFalse(hasLevel);
 
@@ -196,7 +202,8 @@ namespace TwoDrive.BusinessLogic.Test
             var context = ContextFactory.GetMemoryContext("Doesn't have test");
             var repository = new SessionRepository(context);
             var token = Guid.NewGuid();
-            var logic = new SessionLogic(repository);
+            var mockWriterRepository = new Mock<IRepository<Writer>>();
+            var logic = new SessionLogic(repository, mockWriterRepository.Object);
             var hasLevel = logic.HasLevel(token.ToString());
             Assert.IsFalse(hasLevel);
         }
@@ -207,7 +214,8 @@ namespace TwoDrive.BusinessLogic.Test
             var mockRepository = new Mock<IRepository<Session>>(MockBehavior.Strict);
             mockRepository.Setup(m => m.Exists(It.IsAny<Session>()))
             .Returns(true);
-            var logic = new SessionLogic(mockRepository.Object);
+            var mockWriterRepository = new Mock<IRepository<Writer>>();
+            var logic = new SessionLogic(mockRepository.Object, mockWriterRepository.Object);
             logic.IsValidToken(Guid.NewGuid().ToString());
             mockRepository.VerifyAll();
         }
@@ -218,7 +226,8 @@ namespace TwoDrive.BusinessLogic.Test
             var mockRepository = new Mock<IRepository<Session>>(MockBehavior.Strict);
             mockRepository.Setup(m => m.Exists(It.IsAny<Session>()))
             .Returns(false);
-            var logic = new SessionLogic(mockRepository.Object);
+            var mockWriterRepository = new Mock<IRepository<Writer>>();
+            var logic = new SessionLogic(mockRepository.Object, mockWriterRepository.Object);
             logic.IsValidToken(Guid.NewGuid().ToString());
             mockRepository.VerifyAll();
         }
@@ -236,7 +245,8 @@ namespace TwoDrive.BusinessLogic.Test
             var repository = new SessionRepository(context);
             repository.Insert(session);
             repository.Save();
-            var logic = new SessionLogic(repository);
+            var mockWriterRepository = new Mock<IRepository<Writer>>();
+            var logic = new SessionLogic(repository, mockWriterRepository.Object);
             var valid = logic.IsValidToken(token.ToString());
             Assert.IsTrue(valid);
 
@@ -248,7 +258,8 @@ namespace TwoDrive.BusinessLogic.Test
             var context = ContextFactory.GetMemoryContext("Is valid");
             var token = Guid.NewGuid();
             var repository = new SessionRepository(context);
-            var logic = new SessionLogic(repository);
+            var mockWriterRepository = new Mock<IRepository<Writer>>();
+            var logic = new SessionLogic(repository, mockWriterRepository.Object);
             var valid = logic.IsValidToken(token.ToString());
             Assert.IsFalse(valid);
 
@@ -260,7 +271,8 @@ namespace TwoDrive.BusinessLogic.Test
             var context = ContextFactory.GetMemoryContext("Is valid");
             var token = Guid.NewGuid();
             var repository = new SessionRepository(context);
-            var logic = new SessionLogic(repository);
+            var mockWriterRepository = new Mock<IRepository<Writer>>();
+            var logic = new SessionLogic(repository, mockWriterRepository.Object);
             var valid = logic.IsValidToken("InvalidToken");
             Assert.IsFalse(valid);
         }
@@ -278,7 +290,9 @@ namespace TwoDrive.BusinessLogic.Test
             };
             repository.Insert(session);
             repository.Save();
-            var logic = new SessionLogic(repository);
+
+            var mockWriterRepository = new Mock<IRepository<Writer>>();
+            var logic = new SessionLogic(repository, mockWriterRepository.Object);
             logic.RemoveSession(session);
 
             var allSession = repository.GetAll();
@@ -292,7 +306,8 @@ namespace TwoDrive.BusinessLogic.Test
             var context = ContextFactory.GetMemoryContext("remove null session");
             var repository = new SessionRepository(context);
 
-            var logic = new SessionLogic(repository);
+            var mockWriterRepository = new Mock<IRepository<Writer>>();
+            var logic = new SessionLogic(repository, mockWriterRepository.Object);
             logic.RemoveSession(null);
         }
 
@@ -310,7 +325,8 @@ namespace TwoDrive.BusinessLogic.Test
             };
             repository.Insert(session);
             repository.Save();
-            var logic = new SessionLogic(repository);
+            var mockWriterRepository = new Mock<IRepository<Writer>>();
+            var logic = new SessionLogic(repository, mockWriterRepository.Object);
             var current = logic.GetSession(token.ToString());
 
             Assert.AreEqual(token, current.Token);
@@ -323,7 +339,8 @@ namespace TwoDrive.BusinessLogic.Test
         {
             var context = ContextFactory.GetMemoryContext("get session");
             var repository = new SessionRepository(context);
-            var logic = new SessionLogic(repository);
+            var mockWriterRepository = new Mock<IRepository<Writer>>();
+            var logic = new SessionLogic(repository, mockWriterRepository.Object);
             var current = logic.GetSession(null);
         }
     }

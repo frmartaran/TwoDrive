@@ -33,7 +33,7 @@ namespace TwoDrive.WebApi.Test
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
             var mockElementRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
-            var mockElementValidator = new Mock<IElementValidator>(MockBehavior.Strict);
+            var mockElementValidator = new Mock<IFolderValidator>(MockBehavior.Strict);
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             var mockModificationLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
 
@@ -62,7 +62,7 @@ namespace TwoDrive.WebApi.Test
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
             var mockElementRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
-            var mockElementValidator = new Mock<IElementValidator>(MockBehavior.Strict);
+            var mockElementValidator = new Mock<IFolderValidator>(MockBehavior.Strict);
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             var mockModificationLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
 
@@ -103,7 +103,7 @@ namespace TwoDrive.WebApi.Test
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
             var mockElementRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
-            var mockElementValidator = new Mock<IElementValidator>(MockBehavior.Strict);
+            var mockElementValidator = new Mock<IFolderValidator>(MockBehavior.Strict);
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             var mockModificationLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
 
@@ -135,7 +135,7 @@ namespace TwoDrive.WebApi.Test
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
             var mockElementRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
-            var mockElementValidator = new Mock<IElementValidator>(MockBehavior.Strict);
+            var mockElementValidator = new Mock<IFolderValidator>(MockBehavior.Strict);
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             var mockModificationLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
 
@@ -176,7 +176,7 @@ namespace TwoDrive.WebApi.Test
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
             var mockElementRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
-            var mockElementValidator = new Mock<IElementValidator>(MockBehavior.Strict);
+            var mockElementValidator = new Mock<IFolderValidator>(MockBehavior.Strict);
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             var mockModificationLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
 
@@ -217,7 +217,7 @@ namespace TwoDrive.WebApi.Test
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
             var mockElementRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
-            var mockElementValidator = new Mock<IElementValidator>(MockBehavior.Strict);
+            var mockElementValidator = new Mock<IFolderValidator>(MockBehavior.Strict);
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             var mockModificationLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
 
@@ -244,7 +244,7 @@ namespace TwoDrive.WebApi.Test
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
             var mockElementRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
-            var mockElementValidator = new Mock<IElementValidator>(MockBehavior.Strict);
+            var mockElementValidator = new Mock<IFolderValidator>(MockBehavior.Strict);
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             var mockModificationLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
 
@@ -270,7 +270,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "132",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var root = new Folder
@@ -295,7 +295,7 @@ namespace TwoDrive.WebApi.Test
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
             var mockElementRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
-            var mockElementValidator = new Mock<IElementValidator>(MockBehavior.Strict);
+            var mockElementValidator = new Mock<IFolderValidator>(MockBehavior.Strict);
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             var mockModificationLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
 
@@ -330,7 +330,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "132",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var root = new Folder
@@ -349,7 +349,7 @@ namespace TwoDrive.WebApi.Test
 
             var mockSessionLogic = new Mock<ICurrent>();
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
             var mockLogicWriter = new Mock<ILogic<Writer>>();
             var mockModificationLogic = new Mock<IModificationLogic>();
 
@@ -374,7 +374,7 @@ namespace TwoDrive.WebApi.Test
 
             var mockSessionLogic = new Mock<ICurrent>();
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
             var mockLogicWriter = new Mock<ILogic<Writer>>();
             var mockModificationLogic = new Mock<IModificationLogic>();
 
@@ -397,7 +397,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "132",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var friend = new Writer()
@@ -406,7 +406,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Friend",
                 Password = "1324",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var root = new Folder
@@ -427,7 +427,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogicWriter.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(friend);
@@ -459,7 +459,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns<Writer>(null);
 
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
             var mockLogicWriter = new Mock<ILogic<Writer>>();
 
             var mockModificationLogic = new Mock<IModificationLogic>();
@@ -483,7 +483,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "132",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
 
@@ -494,7 +494,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogicWriter.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns<Writer>(null);
@@ -521,7 +521,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "132",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var friend = new Writer()
@@ -530,7 +530,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Friend",
                 Password = "1324",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             writer.Friends.Add(friend);
@@ -544,7 +544,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogicWriter.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(friend);
@@ -572,7 +572,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "132",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var friend = new Writer()
@@ -581,7 +581,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Friend",
                 Password = "1324",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var root = new Folder
@@ -601,7 +601,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogicWriter.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(friend);
@@ -629,7 +629,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "132",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var friend = new Writer()
@@ -638,7 +638,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Friend",
                 Password = "1324",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var root = new Folder
@@ -660,7 +660,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogicWriter.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(friend);
@@ -688,7 +688,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "132",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var friend = new Writer()
@@ -697,7 +697,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Friend",
                 Password = "1324",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var root = new Folder
@@ -719,7 +719,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogicWriter.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(friend);
@@ -751,7 +751,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns<Writer>(null);
 
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
             var mockLogicWriter = new Mock<ILogic<Writer>>();
 
             var mockModificationLogic = new Mock<IModificationLogic>();
@@ -775,7 +775,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "132",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var mockFolderLogic = new Mock<IFolderLogic>();
@@ -785,7 +785,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogicWriter.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns<Writer>(null);
@@ -812,7 +812,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "132",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var friend = new Writer()
@@ -821,7 +821,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Friend",
                 Password = "1324",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
 
@@ -834,7 +834,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogicWriter.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(friend);
@@ -863,7 +863,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "132",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var friend = new Writer()
@@ -872,7 +872,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Friend",
                 Password = "1324",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var root = new Folder
@@ -892,7 +892,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogicWriter.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(friend);
@@ -920,7 +920,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "132",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var friend = new Writer()
@@ -929,7 +929,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Friend",
                 Password = "1324",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
             var root = new Folder
@@ -951,7 +951,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogicWriter.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(friend);

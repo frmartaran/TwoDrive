@@ -22,8 +22,6 @@ namespace TwoDrive.BusinessLogic.Validators
             ValidateIfNull(writer);
             ValidateUserName(writer);
             ValidatePassword(writer);
-            ValidateClaims(writer);
-
             return true;
         }
 
@@ -32,59 +30,7 @@ namespace TwoDrive.BusinessLogic.Validators
             if (writer == null)
                 throw new ValidationException("Can't add or update null value");
         }
-
-        private void ValidateClaims(Writer writer)
-        {
-            ValidateClaimsListNotEmpty(writer);
-            ValidateDeleteClaimOverRoot(writer);
-            ValidateClaimsOverRoot(writer);
-        }
-
-        private void ValidateClaimsOverRoot(Writer writer)
-        {
-            var rootClaims = GetRootClaims(writer);
-
-            var canReadRoot = rootClaims
-            .Where(c => c.Type == ClaimType.Read)
-            .Any();
-
-            var canwriteRoot = rootClaims
-            .Where(c => c.Type == ClaimType.Write)
-            .Any();
-
-            var canShareRoot = rootClaims
-            .Where(c => c.Type == ClaimType.Share)
-            .Any();
-
-            if (!canReadRoot || !canwriteRoot || !canShareRoot)
-                throw new ValidationException("A writer must be able to read/write/share their root");
-        }
-
-        private List<Claim> GetRootClaims(Writer writer)
-        {
-            return writer.Claims
-                        .Where(c => c.Element.Name == "Root")
-                        .Where(c => c.Element.Owner.Id == writer.Id)
-                        .ToList();
-        }
-
-        private void ValidateDeleteClaimOverRoot(Writer writer)
-        {
-            var canDeleteRoot = writer.Claims
-                        .Where(c => c.Type == ClaimType.Delete)
-                        .Where(c => c.Element.Name == "Root")
-                        .Where(c => c.Element.Owner.Id == writer.Id).
-                        Any();
-            if (canDeleteRoot)
-                throw new ValidationException("A writer can't delete their root folder");
-        }
-
-        private void ValidateClaimsListNotEmpty(Writer writer)
-        {
-            var isListNull = writer.Claims == null;
-            if (isListNull || writer.Claims.Count() == 0)
-                throw new ValidationException("The list of claims is empty");
-        }
+        
         private void ValidatePassword(Writer writer)
         {
             var hasPassword = !string.IsNullOrWhiteSpace(writer.Password);

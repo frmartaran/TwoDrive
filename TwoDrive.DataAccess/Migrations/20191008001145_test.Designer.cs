@@ -10,8 +10,8 @@ using TwoDrive.DataAccess;
 namespace TwoDrive.DataAccess.Migrations
 {
     [DbContext(typeof(TwoDriveDbContext))]
-    [Migration("20190929204036_NameRefractor")]
-    partial class AddSessions
+    [Migration("20191008001145_test")]
+    partial class test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace TwoDrive.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("TwoDrive.Domain.Claim", b =>
+            modelBuilder.Entity("TwoDrive.Domain.CustomClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -39,7 +39,7 @@ namespace TwoDrive.DataAccess.Migrations
 
                     b.HasIndex("WriterId");
 
-                    b.ToTable("Claim");
+                    b.ToTable("CustomClaim");
                 });
 
             modelBuilder.Entity("TwoDrive.Domain.FileManagement.Element", b =>
@@ -52,8 +52,12 @@ namespace TwoDrive.DataAccess.Migrations
 
                     b.Property<DateTime>("DateModified");
 
+                    b.Property<DateTime>("DeletedDate");
+
                     b.Property<string>("Discriminator")
                         .IsRequired();
+
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("Name");
 
@@ -152,7 +156,7 @@ namespace TwoDrive.DataAccess.Migrations
                     b.HasDiscriminator().HasValue("TxtFile");
                 });
 
-            modelBuilder.Entity("TwoDrive.Domain.Claim", b =>
+            modelBuilder.Entity("TwoDrive.Domain.CustomClaim", b =>
                 {
                     b.HasOne("TwoDrive.Domain.FileManagement.Element", "Element")
                         .WithMany()

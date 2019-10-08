@@ -12,7 +12,7 @@ namespace TwoDrive.Domain
         public int? FriendId { get; set; }
         public Writer Friend { get; set; }
         public ICollection<Writer> Friends { get; set; }
-        public ICollection<Claim> Claims { get; set; }
+        public ICollection<CustomClaim> Claims { get; set; }
 
         public override bool Equals(object obj)
         {

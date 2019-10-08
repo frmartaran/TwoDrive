@@ -31,13 +31,13 @@ namespace TwoDrive.WebApi.Controllers
 
         private IModificationLogic modificationLogic;
 
-        private IElementValidator elementValidator;
+        private IFolderValidator elementValidator;
 
         private IRepository<Element> elementRepository;
 
         public FileController(IFileLogic logicFile, IFolderLogic logicFolder,
             ILogic<Writer> logicWriter, ICurrent session, IModificationLogic logic,
-            IElementValidator validator, IRepository<Element> repository)
+            IFolderValidator validator, IRepository<Element> repository)
         {
             inSession = session;
             folderLogic = logicFolder;
@@ -162,7 +162,6 @@ namespace TwoDrive.WebApi.Controllers
         }
 
         [HttpPut("{id}/{friendId}")]
-        [Route("api/[controller]/Share")]
         [ClaimFilter(ClaimType.Share)]
         public IActionResult Share(int id, int friendId)
         {
@@ -192,8 +191,7 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpPut("{id}/{friendId}")]
-        [Route("api/[controller]/StopShare")]
+        [HttpDelete("{id}/{friendId}")]
         [ClaimFilter(ClaimType.Share)]
         public IActionResult StopShare(int id, int friendId)
         {
@@ -223,8 +221,7 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpPut("{id}/{folderId}")]
-        [Route("api/[controller]/Move")]
+        [HttpPost("{id}/{folderId}")]
         [ClaimFilter(ClaimType.Write)]
         public IActionResult Move(int id, int folderId)
         {

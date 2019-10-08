@@ -27,7 +27,7 @@ namespace TwoDrive.WebApi.Test
                 UserName = "Writer",
                 Password = "132",
                 Role = Role.Writer,
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
                 Friends = new List<Writer>()
             };
         }
@@ -63,7 +63,7 @@ namespace TwoDrive.WebApi.Test
             mockModification.Setup(m => m.Create(It.IsAny<Modification>()));
 
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
 
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
@@ -98,7 +98,7 @@ namespace TwoDrive.WebApi.Test
             var mockModification = new Mock<IModificationLogic>();
 
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
 
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
@@ -128,7 +128,7 @@ namespace TwoDrive.WebApi.Test
             var mockModification = new Mock<IModificationLogic>();
 
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
 
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
@@ -171,7 +171,7 @@ namespace TwoDrive.WebApi.Test
             var mockModification = new Mock<IModificationLogic>();
 
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
 
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
@@ -222,7 +222,7 @@ namespace TwoDrive.WebApi.Test
             var mockModification = new Mock<IModificationLogic>();
 
             var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IElementValidator>();
+            var mockElementValidator = new Mock<IFolderValidator>();
 
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))

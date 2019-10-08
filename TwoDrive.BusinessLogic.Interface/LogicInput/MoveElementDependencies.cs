@@ -7,6 +7,6 @@ namespace TwoDrive.BusinessLogic.Interfaces.LogicInput
     {
         public IRepository<Element> ElementRepository { get; set; }
 
-        public IElementValidator ElementValidator { get; set; }
+        public IFolderValidator ElementValidator { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace TwoDrive.BusinessLogic.Test
     [TestClass]
     public class WriterValidatorTest
     {
-        private List<Claim> defaultClaims;
+        private List<CustomClaim> defaultClaims;
         private Folder root;
         private WriterRepository repository;
 
@@ -27,22 +27,22 @@ namespace TwoDrive.BusinessLogic.Test
             {
                 Name = "Root"
             };
-            var read = new Claim
+            var read = new CustomClaim
             {
                 Element = root,
                 Type = ClaimType.Read
             };
-            var write = new Claim
+            var write = new CustomClaim
             {
                 Element = root,
                 Type = ClaimType.Write
             };
-            var share = new Claim
+            var share = new CustomClaim
             {
                 Element = root,
                 Type = ClaimType.Share
             };
-            defaultClaims = new List<Claim>{
+            defaultClaims = new List<CustomClaim>{
                 write,
                 read,
                 share
@@ -123,7 +123,7 @@ namespace TwoDrive.BusinessLogic.Test
                 UserName = "Frined",
                 Password = "A password",
                 Friends = new List<Writer>(),
-                Claims = new List<Claim>(),
+                Claims = new List<CustomClaim>(),
             };
 
             root.Owner = writer;
@@ -133,133 +133,6 @@ namespace TwoDrive.BusinessLogic.Test
 
             Assert.IsTrue(isValid);
 
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ValidationException))]
-        public void InvalidWriterHasNoClaims()
-        {
-            var writer = new Writer
-            {
-                Id = 1,
-                UserName = "Writer",
-                Password = "A password",
-                Friends = new List<Writer>(),
-                Claims = new List<Claim>(),
-            };
-
-            root.Owner = writer;
-            var validator = new WriterValidator(repository);
-            bool isValid = validator.IsValid(writer);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ValidationException))]
-        public void InvalidWriterClaimsListIsNull()
-        {
-            var writer = new Writer
-            {
-                Id = 1,
-                UserName = "Writer",
-                Password = "A password",
-                Friends = new List<Writer>(),
-                Claims = null,
-            };
-
-
-            root.Owner = writer;
-            var validator = new WriterValidator(repository);
-            bool isValid = validator.IsValid(writer);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ValidationException))]
-        public void InvalidWriterHasDeleteClaim()
-        {
-            var writer = new Writer
-            {
-                Id = 1,
-                UserName = "Writer",
-                Password = "A password",
-                Friends = new List<Writer>(),
-                Claims = defaultClaims,
-            };
-
-            root.Owner = writer;
-            var delete = new Claim
-            {
-                Element = root,
-                Type = ClaimType.Delete
-            };
-
-            root.Owner = writer;
-            writer.Claims.Add(delete);
-
-            var validator = new WriterValidator(repository);
-            bool isValid = validator.IsValid(writer);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ValidationException))]
-        public void InvalidWriterMissingReadClaim()
-        {
-            var writer = new Writer
-            {
-                Id = 1,
-                UserName = "Writer",
-                Password = "A password",
-                Friends = new List<Writer>(),
-                Claims = defaultClaims,
-            };
-
-            root.Owner = writer;
-            var read = writer.Claims.FirstOrDefault(c => c.Type == ClaimType.Read);
-            writer.Claims.Remove(read);
-
-            var validator = new WriterValidator(repository);
-            bool isValid = validator.IsValid(writer);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ValidationException))]
-        public void InvalidWriterMissingWriteClaim()
-        {
-            var writer = new Writer
-            {
-                Id = 1,
-                UserName = "Writer",
-                Password = "A password",
-                Friends = new List<Writer>(),
-                Claims = defaultClaims,
-            };
-
-            root.Owner = writer;
-            var write = writer.Claims.FirstOrDefault(c => c.Type == ClaimType.Write);
-            writer.Claims.Remove(write);
-
-            var validator = new WriterValidator(repository);
-            bool isValid = validator.IsValid(writer);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ValidationException))]
-        public void InvalidWriterMissingShareClaim()
-        {
-            var writer = new Writer
-            {
-                Id = 1,
-                UserName = "Writer",
-                Password = "A password",
-                Friends = new List<Writer>(),
-                Claims = defaultClaims,
-            };
-
-            root.Owner = writer;
-            var share = writer.Claims.FirstOrDefault(c => c.Type == ClaimType.Share);
-            writer.Claims.Remove(share);
-
-            var validator = new WriterValidator(repository);
-            bool isValid = validator.IsValid(writer);
         }
 
         [TestMethod]

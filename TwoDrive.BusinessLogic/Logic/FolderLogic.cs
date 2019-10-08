@@ -14,19 +14,13 @@ namespace TwoDrive.BusinessLogic.Logic
     {
         private IFolderRepository FolderRepository { get; set; }
 
-        private IElementValidator ElementValidator { get; set; }
+        private IFolderValidator ElementValidator { get; set; }
 
         private IFileRepository FileRepository { get; set; }
 
         private IRepository<Modification> ModificationRepository { get; set; }
 
         private const string Spaces = "      ";
-
-        public FolderLogic(IFolderRepository currentFolderRepository, IFileRepository currentFileRepository)
-        {
-            FolderRepository = currentFolderRepository;
-            FileRepository = currentFileRepository;
-        }
 
         public FolderLogic(ElementLogicDependencies dependencies)
         {

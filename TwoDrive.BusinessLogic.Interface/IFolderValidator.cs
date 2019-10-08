@@ -3,7 +3,7 @@ using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic.Interfaces
 {
-    public interface IElementValidator : IValidator<Element>
+    public interface IFolderValidator : IValidator<Element>
     {
         bool IsValidDestination(Element elementToTransfer, Folder folderDestination);
     }

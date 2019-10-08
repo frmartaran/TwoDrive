@@ -12,10 +12,6 @@ namespace TwoDrive.BusinessLogic.Logic
         private IRepository<Writer> Repository { get; set; }
         private IValidator<Writer> Validator { get; set; }
 
-        public WriterLogic(IRepository<Writer> currentRepository)
-        {
-            Repository = currentRepository;
-        }
         public WriterLogic(IRepository<Writer> currentRepository, IValidator<Writer> CurrentValidator)
         {
             Repository = currentRepository;

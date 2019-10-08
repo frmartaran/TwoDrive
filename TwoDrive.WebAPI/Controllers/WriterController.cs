@@ -29,23 +29,23 @@ namespace TwoDrive.WebApi.Controllers
         }
 
         [HttpPost]
-        [AuthorizeFilter(Role.Administrator)]
+        //[AuthorizeFilter(Role.Administrator)]
         public IActionResult Create([FromBody] WriterModel model)
         {
             try
             {
                 var writer = model.ToDomain();
+                Logic.Create(writer);
                 var root = new Folder
                 {
                     Name = "Root",
+                    Owner = writer,
                     CreationDate = DateTime.Now,
                     DateModified = DateTime.Now,
-                    Owner = writer,
                     FolderChildren = new List<Element>()
                 };
-                writer.AddRootClaims(root);
-                Logic.Create(writer);
                 FolderLogic.Create(root);
+                writer.AddRootClaims(root);
                 return Ok("Writer Created");
             }
             catch (ValidationException validationError)
@@ -121,7 +121,7 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("Add/{id}")]
         public IActionResult AddFriend(int id)
         {
             try
@@ -147,7 +147,7 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpDelete("Delete/{id}")]
         public IActionResult RemoveFriend(int id)
         {
             try
@@ -172,7 +172,7 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("Show/{id}")]
         public IActionResult ShowFriends(int id)
         {
             var writer = Logic.Get(id);
