@@ -145,10 +145,11 @@ namespace TwoDrive.WebApi.Controllers
             return Ok(new FolderModel().FromDomain(folder));
         }
 
+        [HttpGet("{id}/Tree")]
         [ClaimFilter(ClaimType.Read)]
-        public IActionResult ShowTree([FromBody] int folderId)
+        public IActionResult ShowTree(int id)
         {
-            var folder = FolderLogic.Get(folderId);
+            var folder = FolderLogic.Get(id);
             if (folder == null)
                 return NotFound("Folder not found");
 

@@ -117,7 +117,6 @@ namespace TwoDrive.BusinessLogic.Logic
         {
             var tree = string.Format("{0} +- {1} \n", "", root.Name);
             ShowChildren(root, ref tree, Spaces);
-            Console.Write(tree);
             return tree;
         }
 
