@@ -43,6 +43,7 @@ namespace TwoDrive.WebApi
             services.AddScoped<ICurrent, CurrentSession>();
             services.AddScoped<ISessionLogic, SessionLogic>();
             services.AddScoped<ILogic<File>, FileLogic>();
+            services.AddScoped<IFileLogic, FileLogic>();
             services.AddScoped<IModificationLogic, ModificationLogic>();
 
             services.AddScoped<IFolderValidator, FolderValidator>();

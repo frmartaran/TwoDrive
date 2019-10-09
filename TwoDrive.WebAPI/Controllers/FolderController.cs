@@ -40,14 +40,14 @@ namespace TwoDrive.WebApi.Controllers
             ModificationLogic = modificationLogic;
         }
 
-        [HttpDelete("{Id}")]
+        [HttpDelete("{id}")]
         [ClaimFilter(ClaimType.Delete)]
-        public IActionResult Delete(int Id)
+        public IActionResult Delete(int id)
         {
             try
             {
-                var folder = FolderLogic.Get(Id);
-                FolderLogic.Delete(Id);
+                var folder = FolderLogic.Get(id);
+                FolderLogic.Delete(id);
                 return Ok($"Folder: {folder.Name} has been deleted");
             }
             catch (LogicException exception)
@@ -81,16 +81,16 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpPut("{Id}")]
+        [HttpPut("{id}")]
         [ClaimFilter(ClaimType.Write)]
-        public IActionResult Update(int Id, [FromBody] FolderModel model)
+        public IActionResult Update(int id, [FromBody] FolderModel model)
         {
             try
             {
                 var folder = FolderLogic.Get(Id);
                 folder = model.ToDomain(folder);
                 FolderLogic.Update(folder);
-                var updatedWriter = FolderLogic.Get(Id);
+                var updatedWriter = FolderLogic.Get(id);
                 var toModel = new FolderModel();
                 return Ok(toModel.FromDomain(folder));
             }
@@ -100,11 +100,11 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpGet("{Id}")]
+        [HttpGet("{id}")]
         [ClaimFilter(ClaimType.Read)]
-        public IActionResult Get(int Id)
+        public IActionResult Get(int id)
         {
-            var folder = FolderLogic.Get(Id);
+            var folder = FolderLogic.Get(id);
             if (folder == null)
             {
                 return NotFound("Folder not found");
@@ -113,12 +113,12 @@ namespace TwoDrive.WebApi.Controllers
             return Ok(folderModel.FromDomain(folder));
         }
 
-        [HttpPost("{Id}")]
+        [HttpPost("{id}")]
         [ClaimFilter(ClaimType.Write)]
-        public IActionResult Create(int Id, [FromBody] FolderModel model)
+        public IActionResult Create(int id, [FromBody] FolderModel model)
         {
             var loggedWriter = Session.GetCurrentUser(HttpContext);
-            var parentFolder = FolderLogic.Get(Id);
+            var parentFolder = FolderLogic.Get(id);
 
             if (loggedWriter == null)
                 return BadRequest("You must log in first");
