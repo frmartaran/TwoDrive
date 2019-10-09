@@ -32,6 +32,9 @@ namespace TwoDrive.WebApi.Controllers
         [AuthorizeFilter(Role.Administrator)]
         public IActionResult Create([FromBody] WriterModel model)
         {
+            if (model == null)
+                return BadRequest("Something's went wrong in the request body");
+
             try
             {
                 var writer = model.ToDomain();
@@ -105,6 +108,9 @@ namespace TwoDrive.WebApi.Controllers
         [AuthorizeFilter(Role.Administrator)]
         public IActionResult Update(int id, [FromBody] WriterModel model)
         {
+            if (model == null)
+                return BadRequest("There's an error in the request");
+
             try
             {
                 var writer = Logic.Get(id);
@@ -120,7 +126,7 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpPut("Add/{id}")]
+        [HttpPut("Friend/{id}")]
         public IActionResult AddFriend(int id)
         {
             try
@@ -146,14 +152,14 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("Unfriend/{id}")]
         public IActionResult RemoveFriend(int id)
         {
             try
             {
                 var writer = CurrentSession.GetCurrentUser(HttpContext);
                 if (writer == null)
-                    return BadRequest("You must log in first"); 
+                    return BadRequest("You must log in first");
                 var friend = Logic.Get(id);
                 if (friend == null)
                     return BadRequest("The writer doesn't exist");
@@ -171,22 +177,29 @@ namespace TwoDrive.WebApi.Controllers
             }
         }
 
-        [HttpGet("Show/{id}")]
+        [HttpGet("Friends/{id}")]
         public IActionResult ShowFriends(int id)
         {
-            var writer = Logic.Get(id);
-            if (writer.Friends.Count == 0)
+            try
             {
-                return Ok("Writer has no friends");
+                var writer = Logic.Get(id);
+                if (writer.Friends.Count == 0)
+                {
+                    return Ok("Writer has no friends");
+                }
+                else
+                {
+                    var toModel = writer.Friends
+                        .Select(f => new WriterModel().FromDomain(f))
+                        .ToList();
+                    return Ok(toModel);
+                }
             }
-            else
+            catch (NullReferenceException)
             {
-                var toModel = writer.Friends
-                    .Select(f => new WriterModel().FromDomain(f))
-                    .ToList();
-                return Ok(toModel);
+                return BadRequest("Writer not found");
+            }
 
-            }
         }
     }
 }

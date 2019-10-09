@@ -51,6 +51,7 @@ namespace TwoDrive.BusinessLogic.Logic
         {
             Validator.IsValid(writer);
             Repository.Update(writer);
+            Repository.Save();
         }
     }
 }

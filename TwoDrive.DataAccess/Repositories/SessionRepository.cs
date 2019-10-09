@@ -15,7 +15,8 @@ namespace TwoDrive.DataAccess
         public override ICollection<Session> GetAll()
         {
             return context.Sessions
-                .Include(s => s.Writer)
+                .Include(s => s.Writer.Friends)
+                .Include(s => s.Writer.Claims)
                 .ToList();
         }
 
