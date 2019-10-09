@@ -52,6 +52,7 @@ namespace TwoDrive.WebApi
 
             services.AddScoped<IFolderRepository, FolderRepository>();
             services.AddScoped<IFileRepository, FileRepository>();
+            services.AddScoped<IRepository<Element>, Repository<Element>>();
             services.AddScoped<IRepository<Writer>, WriterRepository>();
             services.AddScoped<IRepository<Session>, SessionRepository>();
             services.AddScoped<IRepository<Modification>, ModificationRepository>();
