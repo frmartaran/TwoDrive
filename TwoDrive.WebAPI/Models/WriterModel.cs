@@ -51,6 +51,8 @@ namespace TwoDrive.WebApi.Models
         {
             if (this == null)
                 return null;
+            if (writer == null)
+                return null;
 
             writer.Role = this.Role;
             writer.UserName = this.UserName;

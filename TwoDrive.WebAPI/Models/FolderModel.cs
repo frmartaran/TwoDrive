@@ -54,6 +54,9 @@ namespace TwoDrive.WebApi.Models
             if (this == null)
                 return null;
 
+            if (folder == null)
+                return null;
+
             folder.Name = this.Name;
             folder.CreationDate = this.CreationDate;
             folder.DateModified = this.DateModified;

@@ -21,6 +21,9 @@ namespace TwoDrive.WebApi.Models
             if (this == null)
                 return null;
 
+            if (file == null)
+                return null;
+
             file.Name = this.Name;
             file.CreationDate = this.CreationDate;
             file.DateModified = this.DateModified;
