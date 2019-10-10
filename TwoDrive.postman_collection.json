@@ -1,0 +1,2851 @@
+{
+	"info": {
+		"_postman_id": "e8615e3c-2f44-4120-aa50-17e2b56de8e6",
+		"name": "TwoDrive",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "TokenController",
+			"item": [
+				{
+					"name": "Log In",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c172a97d-5f82-4e45-a7cd-71288e640bc3",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "91a30a7c-9185-4be8-8c62-f079ee311bfc",
+								"exec": [
+									"",
+									"pm.environment.set(\"token\", JSON.parse(responseBody));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Username\": \"Julie Admin\",\n\t\"Password\": \"1234\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/Token",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Token"
+							]
+						},
+						"description": "Insert Username and password"
+					},
+					"response": [
+						{
+							"name": "Log In (Wrong )",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"Username\": \"Fran8\",\n\t\"Password\": \"1234\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/api/Token",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"Token"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Server",
+									"value": "Microsoft-IIS/10.0"
+								},
+								{
+									"key": "X-SourceFiles",
+									"value": "=?UTF-8?B?QzpcVXNlcnNcVXN1YXJpb1xEZXNrdG9wXDIzMzEyNi0yMDM5NDJcVHdvRHJpdmUuV2ViQXBpXGFwaVxUb2tlbg==?="
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "ASP.NET"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2019 01:23:00 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "Incorrect username or password"
+						},
+						{
+							"name": "Log In Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"Username\": \"Julie\",\n\t\"Password\": \"1234\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/api/Token",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"Token"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Server",
+									"value": "Microsoft-IIS/10.0"
+								},
+								{
+									"key": "X-SourceFiles",
+									"value": "=?UTF-8?B?QzpcVXNlcnNcVXN1YXJpb1xEZXNrdG9wXDIzMzEyNi0yMDM5NDJcVHdvRHJpdmUuV2ViQXBpXGFwaVxUb2tlbg==?="
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "ASP.NET"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 08 Oct 2019 20:01:03 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "\"05991798-1092-462c-80a4-5717a22a5c42\""
+						}
+					]
+				},
+				{
+					"name": "Log out",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Token",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/Token",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Token"
+							]
+						},
+						"description": "Deletes session of current user\n"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "WriterController",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Username\": \"User1\",\n\t\"Password\": \"1234\",\n\t\"Role\": \"Administrator\",\n\t\"Friends\": [],\n\t\"Claims\": []\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/Writer",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Writer"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Writer Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"Username\": \"Normal\",\n\t\"Password\": \"1234\",\n\t\"Role\": \"Writer\",\n\t\"Friends\": [],\n\t\"Claims\": []\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/api/Writer",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"Writer"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Server",
+									"value": "Microsoft-IIS/10.0"
+								},
+								{
+									"key": "X-SourceFiles",
+									"value": "=?UTF-8?B?QzpcVXNlcnNcVXN1YXJpb1xEZXNrdG9wXDIzMzEyNi0yMDM5NDJcVHdvRHJpdmUuV2ViQXBpXGFwaVxXcml0ZXI=?="
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "ASP.NET"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2019 01:17:00 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "Writer Created"
+						},
+						{
+							"name": "Validation Error (Same name)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"Username\": \"Normal\",\n\t\"Password\": \"1234\",\n\t\"Role\": \"Writer\",\n\t\"Friends\": [],\n\t\"Claims\": []\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/api/Writer",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"Writer"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Server",
+									"value": "Microsoft-IIS/10.0"
+								},
+								{
+									"key": "X-SourceFiles",
+									"value": "=?UTF-8?B?QzpcVXNlcnNcVXN1YXJpb1xEZXNrdG9wXDIzMzEyNi0yMDM5NDJcVHdvRHJpdmUuV2ViQXBpXGFwaVxXcml0ZXI=?="
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "ASP.NET"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2019 01:17:38 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "The username must be unique"
+						},
+						{
+							"name": "Validation Error (No password)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"Username\": \"Namjoon\",\n\t\"Role\": \"Writer\",\n\t\"Friends\": [],\n\t\"Claims\": []\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/api/Writer",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"Writer"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Server",
+									"value": "Microsoft-IIS/10.0"
+								},
+								{
+									"key": "X-SourceFiles",
+									"value": "=?UTF-8?B?QzpcVXNlcnNcVXN1YXJpb1xEZXNrdG9wXDIzMzEyNi0yMDM5NDJcVHdvRHJpdmUuV2ViQXBpXGFwaVxXcml0ZXI=?="
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "ASP.NET"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2019 01:19:09 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "Writer has no password"
+						},
+						{
+							"name": "Create Administrator Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"Username\": \"Julie\",\n\t\"Password\": \"1234\",\n\t\"Role\": \"Administrator\",\n\t\"Friends\": [],\n\t\"Claims\": []\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/api/Writer",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"Writer"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Server",
+									"value": "Microsoft-IIS/10.0"
+								},
+								{
+									"key": "X-SourceFiles",
+									"value": "=?UTF-8?B?QzpcVXNlcnNcVXN1YXJpb1xEZXNrdG9wXDIzMzEyNi0yMDM5NDJcVHdvRHJpdmUuV2ViQXBpXGFwaVxXcml0ZXI=?="
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "ASP.NET"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 08 Oct 2019 02:47:59 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "Writer Created"
+						}
+					]
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ccb41920-844d-46f2-a290-b569b7e74556",
+								"exec": [
+									"pm.environment.set(\"id\", \"5\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "ad5496fe-be29-4820-a45f-b1bf88279ce5",
+								"exec": [
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "key",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "value",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/Writer/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Writer",
+								"{{id}}"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Writer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "f8562054-778e-4767-b965-f28ba02a50da",
+								"exec": [
+									"pm.environment.set(\"id\", 3);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/Writer/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Writer",
+								"{{id}}"
+							]
+						},
+						"description": "Gets the specified writer by the Id in the url"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "66f8ad3c-849f-42cf-9c30-a36ec81d57d4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/Writer",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Writer"
+							]
+						},
+						"description": "Get all writers in the database"
+					},
+					"response": [
+						{
+							"name": "Get All",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url}}/api/Writer",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"Writer"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Server",
+									"value": "Microsoft-IIS/10.0"
+								},
+								{
+									"key": "X-SourceFiles",
+									"value": "=?UTF-8?B?QzpcVXNlcnNcVXN1YXJpb1xEZXNrdG9wXDIzMzEyNi0yMDM5NDJcVHdvRHJpdmUuV2ViQXBpXGFwaVxXcml0ZXI=?="
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "ASP.NET"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2019 00:45:21 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "256"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 9,\n        \"role\": 1,\n        \"userName\": \"Julie\",\n        \"password\": \"1234\",\n        \"friends\": null,\n        \"claims\": null\n    },\n    {\n        \"id\": 10,\n        \"role\": 1,\n        \"userName\": \"Fran\",\n        \"password\": \"1234\",\n        \"friends\": null,\n        \"claims\": null\n    },\n    {\n        \"id\": 12,\n        \"role\": 0,\n        \"userName\": \"Joaquin\",\n        \"password\": \"1234\",\n        \"friends\": null,\n        \"claims\": null\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Update writer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "940f0e2e-71fb-4cc6-a2e9-50457a316e08",
+								"exec": [
+									"pm.environment.set(\"id\", 3);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"UserName\": \"Seokjin\",\n\t\"Password\": \"1234\",\n\t\"Role\": \"Writer\",\n\t\"Friends\": [],\n\t\"Claims\": []\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/Writer/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Writer",
+								"{{id}}"
+							]
+						},
+						"description": "Allows you to modify the a writer's values in the database. The writer modified is the one with the id sent in the url"
+					},
+					"response": [
+						{
+							"name": "Update writer",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"UserName\": \"Seokjin\",\n\t\"Password\": \"1234\",\n\t\"Role\": \"Writer\",\n\t\"Friends\": [],\n\t\"Claims\": []\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/api/Writer/{{Id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"Writer",
+										"{{Id}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Server",
+									"value": "Microsoft-IIS/10.0"
+								},
+								{
+									"key": "X-SourceFiles",
+									"value": "=?UTF-8?B?QzpcVXNlcnNcVXN1YXJpb1xEZXNrdG9wXDIzMzEyNi0yMDM5NDJcVHdvRHJpdmUuV2ViQXBpXGFwaVxXcml0ZXJcMTI=?="
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "ASP.NET"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2019 01:20:32 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 12,\n    \"role\": 0,\n    \"userName\": \"Seokjin\",\n    \"password\": \"1234\",\n    \"friends\": null,\n    \"claims\": null\n}"
+						},
+						{
+							"name": "Validation error (No password)",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"UserName\": \"Seokjin\",\n\t\"Password\": \"\",\n\t\"Role\": \"Writer\",\n\t\"Friends\": [],\n\t\"Claims\": []\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/api/Writer/{{Id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"Writer",
+										"{{Id}}"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Server",
+									"value": "Microsoft-IIS/10.0"
+								},
+								{
+									"key": "X-SourceFiles",
+									"value": "=?UTF-8?B?QzpcVXNlcnNcVXN1YXJpb1xEZXNrdG9wXDIzMzEyNi0yMDM5NDJcVHdvRHJpdmUuV2ViQXBpXGFwaVxXcml0ZXJcMTI=?="
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "ASP.NET"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2019 01:21:09 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "Writer has no password"
+						}
+					]
+				},
+				{
+					"name": "Add Friend",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8a841d13-9de0-4afd-8447-bad85efb37bd",
+								"exec": [
+									"pm.environment.set(\"id\", 4)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/Writer/Friend/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Writer",
+								"Friend",
+								"{{id}}"
+							]
+						},
+						"description": "Adds the user of Id in url to add as friend of the user currently logged in. The one the token belongs to."
+					},
+					"response": [
+						{
+							"name": "Add Friend (Who's already your friend)",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url}}/api/Writer/Friend/{{Id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"Writer",
+										"Friend",
+										"{{Id}}"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Server",
+									"value": "Microsoft-IIS/10.0"
+								},
+								{
+									"key": "X-SourceFiles",
+									"value": "=?UTF-8?B?QzpcVXNlcnNcVXN1YXJpb1xEZXNrdG9wXDIzMzEyNi0yMDM5NDJcVHdvRHJpdmUuV2ViQXBpXGFwaVxXcml0ZXJcRnJpZW5kXDEw?="
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "ASP.NET"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2019 01:00:14 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "You're already friend with Fran"
+						},
+						{
+							"name": "Add Friend (You are not logged in)",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/Writer/Friend/{{Id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"Writer",
+										"Friend",
+										"{{Id}}"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Server",
+									"value": "Microsoft-IIS/10.0"
+								},
+								{
+									"key": "X-SourceFiles",
+									"value": "=?UTF-8?B?QzpcVXNlcnNcVXN1YXJpb1xEZXNrdG9wXDIzMzEyNi0yMDM5NDJcVHdvRHJpdmUuV2ViQXBpXGFwaVxXcml0ZXJcRnJpZW5kXDEy?="
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "ASP.NET"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2019 00:52:44 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "You need to login first"
+						}
+					]
+				},
+				{
+					"name": "Unfriend",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "bf74c8b8-ac09-4b7e-84be-825aeab66620",
+								"exec": [
+									"pm.environment.set(\"id\", 4);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/Writer/Unfriend/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Writer",
+								"Unfriend",
+								"{{id}}"
+							]
+						},
+						"description": "Unfriends the user that belongs to the url id from the user logged in. The current user is the one who's token is being used"
+					},
+					"response": [
+						{
+							"name": "Unfriend",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url}}/api/Writer/Unfriend/{{Id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"Writer",
+										"Unfriend",
+										"{{Id}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Server",
+									"value": "Microsoft-IIS/10.0"
+								},
+								{
+									"key": "X-SourceFiles",
+									"value": "=?UTF-8?B?QzpcVXNlcnNcVXN1YXJpb1xEZXNrdG9wXDIzMzEyNi0yMDM5NDJcVHdvRHJpdmUuV2ViQXBpXGFwaVxXcml0ZXJcVW5mcmllbmRcMTI=?="
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "ASP.NET"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2019 01:04:37 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "You are not friends with Joaquin anymore"
+						},
+						{
+							"name": "Unfriend (When you aren't friends)",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url}}/api/Writer/Unfriend/{{Id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"Writer",
+										"Unfriend",
+										"{{Id}}"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Server",
+									"value": "Microsoft-IIS/10.0"
+								},
+								{
+									"key": "X-SourceFiles",
+									"value": "=?UTF-8?B?QzpcVXNlcnNcVXN1YXJpb1xEZXNrdG9wXDIzMzEyNi0yMDM5NDJcVHdvRHJpdmUuV2ViQXBpXGFwaVxXcml0ZXJcVW5mcmllbmRcMTI=?="
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "ASP.NET"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2019 01:05:06 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "Can't remove friend since you aren't friends"
+						}
+					]
+				},
+				{
+					"name": "Show Friends",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "400fb847-0c45-4e44-a197-6c16459c8704",
+								"exec": [
+									"pm.environment.set(\"id\", 2);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/Writer/Friends/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Writer",
+								"Friends",
+								"{{id}}"
+							]
+						},
+						"description": "Shows all the friends for the user identified in the url by the id"
+					},
+					"response": [
+						{
+							"name": "Show Friends",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/Writer/Friends/{{Id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"Writer",
+										"Friends",
+										"{{Id}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Server",
+									"value": "Microsoft-IIS/10.0"
+								},
+								{
+									"key": "X-SourceFiles",
+									"value": "=?UTF-8?B?QzpcVXNlcnNcVXN1YXJpb1xEZXNrdG9wXDIzMzEyNi0yMDM5NDJcVHdvRHJpdmUuV2ViQXBpXGFwaVxXcml0ZXJcRnJpZW5kc1w5?="
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "ASP.NET"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2019 01:08:58 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 10,\n        \"role\": 1,\n        \"userName\": \"Fran\",\n        \"password\": \"1234\",\n        \"friends\": null,\n        \"claims\": null\n    }\n]"
+						}
+					]
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "FileController",
+			"item": [
+				{
+					"name": "Create ",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "f114794b-c6c9-4af9-a3f5-d1d2260be916",
+								"exec": [
+									"pm.environment.set(\"id\", 2);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Name\": \"File7\",\n\t\"Content\": \"Primer test\",\n\t\"DateModified\" : \"2019-09-01\",\n\t\"CreationDate\" : \"2019-09-01\"\n}\n\n"
+						},
+						"url": {
+							"raw": "{{url}}/api/File/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"File",
+								"{{id}}"
+							]
+						},
+						"description": "Creates a file with the values from the request body for the folder identified by the url Id"
+					},
+					"response": [
+						{
+							"name": "Create (A file in a folder that you don't own)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"Name\": \"Test\",\n\t\"Content\": \"Primer test\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/api/File/{{Id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"File",
+										"{{Id}}"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Server",
+									"value": "Microsoft-IIS/10.0"
+								},
+								{
+									"key": "X-SourceFiles",
+									"value": "=?UTF-8?B?QzpcVXNlcnNcVXN1YXJpb1xEZXNrdG9wXDIzMzEyNi0yMDM5NDJcVHdvRHJpdmUuV2ViQXBpXGFwaVxGaWxlXDk=?="
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "ASP.NET"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 10 Oct 2019 02:36:38 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "You are not owner of this folder"
+						},
+						{
+							"name": "Create (When you try to create a file in a folder that is not yours)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"Name\": \"Test\",\n\t\"Content\": \"Primer test\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/api/File/{{Id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"File",
+										"{{Id}}"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Content-Length",
+									"value": "44"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Server",
+									"value": "Microsoft-IIS/10.0"
+								},
+								{
+									"key": "X-SourceFiles",
+									"value": "=?UTF-8?B?QzpcVXNlcnNcVXN1YXJpb1xEZXNrdG9wXDIzMzEyNi0yMDM5NDJcVHdvRHJpdmUuV2ViQXBpXGFwaVxGaWxlXDEw?="
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "ASP.NET"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 10 Oct 2019 02:52:14 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "This user is not allow to Write this element"
+						},
+						{
+							"name": "Create ",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"Name\": \"Test\",\n\t\"Content\": \"Primer test\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/api/File/{{Id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"File",
+										"{{Id}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Server",
+									"value": "Microsoft-IIS/10.0"
+								},
+								{
+									"key": "X-SourceFiles",
+									"value": "=?UTF-8?B?QzpcVXNlcnNcVXN1YXJpb1xEZXNrdG9wXDIzMzEyNi0yMDM5NDJcVHdvRHJpdmUuV2ViQXBpXGFwaVxGaWxlXDEw?="
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "ASP.NET"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 10 Oct 2019 02:38:22 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"content\": \"Primer test\",\n    \"id\": 14,\n    \"name\": \"Test\",\n    \"parentFolderId\": 10,\n    \"parentFolder\": {\n        \"id\": 10,\n        \"name\": \"Root\",\n        \"parentFolderId\": null,\n        \"parentFolder\": null,\n        \"ownerId\": 10,\n        \"owner\": {\n            \"id\": 10,\n            \"role\": 1,\n            \"userName\": \"Fran\",\n            \"password\": \"1234\",\n            \"friends\": null,\n            \"claims\": null\n        },\n        \"creationDate\": \"2019-10-08T17:53:38.789977\",\n        \"dateModified\": \"2019-10-08T17:53:38.797377\"\n    },\n    \"ownerId\": 10,\n    \"owner\": {\n        \"id\": 10,\n        \"role\": 1,\n        \"userName\": \"Fran\",\n        \"password\": \"1234\",\n        \"friends\": null,\n        \"claims\": null\n    },\n    \"creationDate\": \"2019-10-09T23:38:06.7287856-03:00\",\n    \"dateModified\": \"2019-10-09T23:38:07.8372705-03:00\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "9b0f8d1e-ac3a-45ee-8dfe-8fabd47dc255",
+								"exec": [
+									"pm.environment.set(\"id\", 20);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/File/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"File",
+								"{{id}}"
+							]
+						},
+						"description": "This end point will delete the file identified by the url Id"
+					},
+					"response": []
+				},
+				{
+					"name": "MoveFileNoEntryParameters",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "26da3a80-756f-487f-a89d-8b8cdccb1eb4",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/File/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"File",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MoveFileNonExistantFileToSend",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "aaa3fa65-6693-4f65-8180-82cf5a9c4aa7",
+								"exec": [
+									"pm.environment.set(\"idFile\", 25);",
+									"pm.environment.set(\"idFolder\", 2);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "0d2c428f-5893-4f19-b564-b346d7d6e262",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/File/{{idFile}}/{{idFolder}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"File",
+								"{{idFile}}",
+								"{{idFolder}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MoveFileNonExistantFolderDestination",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "32515876-2c71-42ab-bb12-2a51583a07a0",
+								"exec": [
+									"pm.environment.set(\"idFile\", 10);",
+									"pm.environment.set(\"idFolder\", 25);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/File/{{idFile}}/{{idFolder}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"File",
+								"{{idFile}}",
+								"{{idFolder}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MoveFileDestinationNotRootChild",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "9464dc7f-d18c-45cf-9714-9fa05347c1cf",
+								"exec": [
+									"pm.environment.set(\"idFile\", 10);",
+									"pm.environment.set(\"idFolder\", 3);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/File/{{idFile}}/{{idFolder}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"File",
+								"{{idFile}}",
+								"{{idFolder}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MoveFile",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "58fcd656-621d-4315-9641-f6137ae7da58",
+								"exec": [
+									"pm.environment.set(\"idFile\", 10);",
+									"pm.environment.set(\"idFolder\", 18);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/File/{{idFile}}/{{idFolder}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"File",
+								"{{idFile}}",
+								"{{idFolder}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8d15dd02-11fe-4af4-832c-f1fe9153f9ba",
+								"exec": [
+									"pm.environment.set(\"id\", 10);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Name\": \"File1\",\n\t\"Content\": \"Test actualizado\",\n\t\"DateModified\" : \"2019-09-01\",\n\t\"CreationDate\" : \"2019-09-01\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/File/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"File",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Share",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "422a770b-3a0c-45de-9500-fc50fe9ef284",
+								"exec": [
+									"pm.environment.set(\"id\", 10);",
+									"pm.environment.set(\"friendId\", 3);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/File/{{id}}/{{friendId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"File",
+								"{{id}}",
+								"{{friendId}}"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Stop Share",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "7b06f3c6-bf88-42e8-860d-2db849be6753",
+								"exec": [
+									"pm.environment.set(\"id\", 10);",
+									"pm.environment.set(\"friendId\", 3);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/File/{{id}}/{{friendId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"File",
+								"{{id}}",
+								"{{friendId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllNoParametersIsAdmin",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/File/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"File",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllHasName",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "298c846c-544b-4a4c-98dd-f27de409bc58",
+								"exec": [
+									"pm.environment.set(\"fileName\", \"File1\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/File?name={{fileName}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"File"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{fileName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllIsOrderDescendingByName",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e3489f68-7462-41bd-9aac-866ecdd7528a",
+								"exec": [
+									"pm.environment.set(\"fileName\", \"Fil\");",
+									"pm.environment.set(\"isOrderDescending\", \"true\");",
+									"pm.environment.set(\"isOrderByName\", \"true\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/File?Name={{fileName}}&isOrderDescending={{isOrderDescending}}&isOrderByName={{isOrderByName}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"File"
+							],
+							"query": [
+								{
+									"key": "Name",
+									"value": "{{fileName}}"
+								},
+								{
+									"key": "isOrderDescending",
+									"value": "{{isOrderDescending}}"
+								},
+								{
+									"key": "isOrderByName",
+									"value": "{{isOrderByName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllIsOrderByName",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "205ccfcd-da73-48e0-847b-fe9155436936",
+								"exec": [
+									"pm.environment.set(\"fileName\", \"Fil\");",
+									"pm.environment.set(\"isOrderDescending\", \"false\");",
+									"pm.environment.set(\"isOrderByName\", \"true\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/File?Name={{fileName}}&isOrderDescending={{isOrderDescending}}&isOrderByName={{isOrderByName}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"File"
+							],
+							"query": [
+								{
+									"key": "Name",
+									"value": "{{fileName}}"
+								},
+								{
+									"key": "isOrderDescending",
+									"value": "{{isOrderDescending}}"
+								},
+								{
+									"key": "isOrderByName",
+									"value": "{{isOrderByName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllIsOrderByCreationDate",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e2d7b91b-9eec-4165-a742-54334e3a7b85",
+								"exec": [
+									"pm.environment.set(\"fileName\", \"Fil\");",
+									"pm.environment.set(\"isOrderDescending\", \"false\");",
+									"pm.environment.set(\"isOrderByCreationDate\", \"true\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/File?Name={{fileName}}&isOrderDescending={{isOrderDescending}}&isOrderByCreationDate={{isOrderByCreationDate}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"File"
+							],
+							"query": [
+								{
+									"key": "Name",
+									"value": "{{fileName}}"
+								},
+								{
+									"key": "isOrderDescending",
+									"value": "{{isOrderDescending}}"
+								},
+								{
+									"key": "isOrderByCreationDate",
+									"value": "{{isOrderByCreationDate}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllIsOrderByModificationDate",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4dd711a0-30d1-463a-b0d8-7657b2e9c3a6",
+								"exec": [
+									"pm.environment.set(\"fileName\", \"Fil\");",
+									"pm.environment.set(\"isOrderDescending\", \"false\");",
+									"pm.environment.set(\"isOrderModificationDate\", \"true\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/File?Name={{fileName}}&isOrderDescending={{isOrderDescending}}&isOrderByModificationDate={{isOrderByModificationDate}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"File"
+							],
+							"query": [
+								{
+									"key": "Name",
+									"value": "{{fileName}}"
+								},
+								{
+									"key": "isOrderDescending",
+									"value": "{{isOrderDescending}}"
+								},
+								{
+									"key": "isOrderByModificationDate",
+									"value": "{{isOrderByModificationDate}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllIsOrderDescendingByNameCreationDateModificationDate",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ad49f3a9-761a-44c5-a0fd-f61fc8c1ce1c",
+								"exec": [
+									"pm.environment.set(\"fileName\", \"Fil\");",
+									"pm.environment.set(\"isOrderDescending\", \"false\");",
+									"pm.environment.set(\"isOrderByName\", \"true\");",
+									"pm.environment.set(\"isOrderByCreationDate\", \"true\");",
+									"pm.environment.set(\"isOrderModificationDate\", \"true\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/File?Name={{fileName}}&isOrderDescending={{isOrderDescending}}&isOrderByName={{isOrderByName}}&isOrderByCreationDate={{isOrderByCreationDate}}&isOrderByModificationDate={{isOrderByModificationDate}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"File"
+							],
+							"query": [
+								{
+									"key": "Name",
+									"value": "{{fileName}}"
+								},
+								{
+									"key": "isOrderDescending",
+									"value": "{{isOrderDescending}}"
+								},
+								{
+									"key": "isOrderByName",
+									"value": "{{isOrderByName}}"
+								},
+								{
+									"key": "isOrderByCreationDate",
+									"value": "{{isOrderByCreationDate}}"
+								},
+								{
+									"key": "isOrderByModificationDate",
+									"value": "{{isOrderByModificationDate}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllNoParametersIsNonAdmin",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/File/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"File",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "FolderController",
+			"item": [
+				{
+					"name": "MoveFolderNonEntryParameters",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/Folder/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Folder",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MoveFolderNonExistantFolderToSend",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ad1e51e5-8b66-4a68-8851-84e6fabb3243",
+								"exec": [
+									"pm.environment.set(\"idFolderToSend\", 25);",
+									"pm.environment.set(\"idFolderDestination\", 9);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/Folder/{{idFolderToSend}}/{{idFolderDestination}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Folder",
+								"{{idFolderToSend}}",
+								"{{idFolderDestination}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MoveFolderNonExistantFolderDestination",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "fa2de01b-8188-4e77-9cad-2fd56dcd06a1",
+								"exec": [
+									"pm.environment.set(\"idFolderToSend\", 18);",
+									"pm.environment.set(\"idFolderDestination\", 25);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/Folder/{{idFolderToSend}}/{{idFolderDestination}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Folder",
+								"{{idFolderToSend}}",
+								"{{idFolderDestination}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MoveFolderDestinationNotRootChild",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8e3ca53e-0aac-4928-b272-a56e79c89ac8",
+								"exec": [
+									"pm.environment.set(\"idFolderToSend\", 18);",
+									"pm.environment.set(\"idFolderDestination\", 3);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/Folder/{{idFolderToSend}}/{{idFolderDestination}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Folder",
+								"{{idFolderToSend}}",
+								"{{idFolderDestination}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MoveFolderDestinationIsMyChild",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "a8c119d5-872b-4eda-b7d5-36d28a239d05",
+								"exec": [
+									"pm.environment.set(\"idFolderToSend\", 15);",
+									"pm.environment.set(\"idFolderDestination\", 16);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/Folder/{{idFolderToSend}}/{{idFolderDestination}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Folder",
+								"{{idFolderToSend}}",
+								"{{idFolderDestination}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MoveFolder",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "19375d09-f6a2-45a5-b5b9-16d5e7aeae4a",
+								"exec": [
+									"pm.environment.set(\"idFolderToSend\", 16);",
+									"pm.environment.set(\"idFolderDestination\", 3);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/Folder/{{idFolderToSend}}/{{idFolderDestination}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Folder",
+								"{{idFolderToSend}}",
+								"{{idFolderDestination}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "f2486343-67cc-4a66-917c-e0f94fe6040b",
+								"exec": [
+									"pm.environment.set(\"id\", 2);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Name\": \"Folder4\",\r\n\t\"OwnerId\" : 2,\r\n\t\"DateModified\" : \"2019-09-01\",\r\n\t\"CreationDate\" : \"2019-09-01\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/Folder/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Folder",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8608fdd0-9b55-4dc9-bcb0-9379af238aab",
+								"exec": [
+									"pm.environment.set(\"Id\", 21);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/Folder/{{Id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Folder",
+								"{{Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "aadd923a-1ec2-4787-9524-8abe461a2b00",
+								"exec": [
+									"pm.environment.set(\"Id\", 18);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Name\": \"Updated Folder\",\r\n\t\"OwnerId\" : 2,\r\n\t\"DateModified\" : \"2019-09-01\",\r\n\t\"CreationDate\" : \"2019-09-01\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/Folder/{{Id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Folder",
+								"{{Id}}"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Share",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "385988ef-c651-46d4-9ecd-db32919e23be",
+								"exec": [
+									"pm.environment.set(\"id\", 18);",
+									"pm.environment.set(\"friendId\", 3);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/Folder/{{id}}/{{friendId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Folder",
+								"{{id}}",
+								"{{friendId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "StopShare",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "47dd968b-82c0-4b8a-bc8d-9a29511d3a6e",
+								"exec": [
+									"pm.environment.set(\"id\", 18);",
+									"pm.environment.set(\"friendId\", 3);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/Folder/{{id}}/{{friendId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Folder",
+								"{{id}}",
+								"{{friendId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ShowTree",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "fdfd876e-0cb7-4f80-98d0-e5acc10c7d2d",
+								"exec": [
+									"pm.environment.set(\"id\", 3);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "5320da07-86ae-47cc-a737-a09f24be0eb0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/Folder/Tree/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Folder",
+								"Tree",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "ReportController",
+			"item": [
+				{
+					"name": "GetModificationReport",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "10568238-29f6-45d5-aa94-237b90f792cf",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Start\" : \"2019-8-10\",\n\t\"End\" : \"2019-10-10\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/Report/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Report",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTopWriters",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
