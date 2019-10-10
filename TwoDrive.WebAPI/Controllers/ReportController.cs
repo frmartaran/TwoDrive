@@ -29,7 +29,7 @@ namespace TwoDrive.WebApi.Controllers
             fileLogic = currentfileLogic;
         }
 
-        [HttpGet]
+        [HttpGet("/Modifications")]
         public IActionResult GetModificationReport([FromBody] DateTime start, [FromBody] DateTime end)
         {
             try
