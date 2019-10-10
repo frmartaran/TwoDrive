@@ -67,7 +67,7 @@ namespace TwoDrive.WebApi.Filters
             }
         }
 
-        private Element GetElement(ActionExecutedContext context)
+        private Element GetElement(ActionExecutingContext context)
         {
             var elementId = context.RouteData.Values["id"];
             if (elementId == null)
