@@ -29,6 +29,7 @@ namespace TwoDrive.BusinessLogic.Validators
                 var hasSameName = ParentFolder.FolderChildren
                 .Where(f => f.Name == element.Name)
                 .Where(f => f.GetType().Name == "Folder")
+                .Where(f => f.Id != element.Id)
                 .Any();
                 if(hasSameName)
                     throw new ValidationException("Two folders at same level can have the same name");
