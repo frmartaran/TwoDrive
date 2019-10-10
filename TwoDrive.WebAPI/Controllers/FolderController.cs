@@ -73,6 +73,10 @@ namespace TwoDrive.WebApi.Controllers
                     };
                     FolderLogic.MoveElement(folderToMove, folderDestination, moveElementDependencies);
                 }
+                else
+                {
+                    return BadRequest("You must own both elements");
+                }
                 return Ok($"Folder with id {folderToMoveId} was moved to destination with id {folderDestinationId}");
             }
             catch (LogicException exception)
@@ -87,7 +91,7 @@ namespace TwoDrive.WebApi.Controllers
         {
             try
             {
-                var folder = FolderLogic.Get(Id);
+                var folder = FolderLogic.Get(id);
                 folder = model.ToDomain(folder);
                 FolderLogic.Update(folder);
                 var updatedWriter = FolderLogic.Get(id);
