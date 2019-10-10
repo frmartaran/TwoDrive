@@ -225,6 +225,7 @@ namespace TwoDrive.BusinessLogic.Test
             var folderRepository = new FolderRepository(context);
             var root = new Folder
             {
+                Id = 1,
                 Name = "Root",
                 ParentFolder = null,
                 Owner = owner
@@ -232,6 +233,7 @@ namespace TwoDrive.BusinessLogic.Test
 
             var firstChild = new Folder
             {
+                Id = 2,
                 Name = "First",
                 ParentFolder = root,
                 Owner = owner
@@ -239,6 +241,7 @@ namespace TwoDrive.BusinessLogic.Test
 
             var secondChild = new Folder
             {
+                Id = 3,
                 Name = "First",
                 ParentFolder = root,
                 Owner = owner
