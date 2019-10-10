@@ -24,7 +24,7 @@ namespace TwoDrive.BusinessLogic
                     dependencies.ElementRepository.Save();
                 }
             }
-            catch(LogicException exception)
+            catch(ValidationException exception)
             {
                 throw new LogicException(exception.Message, exception);
             }
