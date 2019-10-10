@@ -18,7 +18,7 @@ namespace TwoDrive.WebApi.Filters
         {
             Action = type;
         }
-        public void OnActionExecuted(ActionExecutedContext context)
+        public void OnActionExecuting(ActionExecutingContext context)
         {
 
             var token = context.HttpContext.Request.Headers["Authorization"];
@@ -87,7 +87,7 @@ namespace TwoDrive.WebApi.Filters
             return Action == ClaimType.Delete || Action == ClaimType.Read;
         }
 
-        public void OnActionExecuting(ActionExecutingContext context)
+        public void OnActionExecuted(ActionExecutedContext context)
         {
         }
     }
