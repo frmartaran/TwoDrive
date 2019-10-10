@@ -2,8 +2,8 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using TwoDrive.BusinessLogic;
 using TwoDrive.BusinessLogic.Extensions;
-using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
@@ -31,7 +31,7 @@ namespace TwoDrive.WebApi.Filters
                 };
                 return;
             }
-            var sessionLogic = (SessionLogic) context.HttpContext.RequestServices.GetService(typeof(SessionLogic));
+            var sessionLogic = (ISessionLogic) context.HttpContext.RequestServices.GetService(typeof(ISessionLogic));
             if (!sessionLogic.IsValidToken(token))
             {
                 context.Result = new ContentResult
@@ -41,7 +41,8 @@ namespace TwoDrive.WebApi.Filters
                 };
                 return;
             }
-            if (!(sessionLogic.HasLevel(token) && IsAdministratorAllowedAction()))
+            if ((sessionLogic.HasLevel(token) && !IsAdministratorAllowedAction()) || 
+                !sessionLogic.HasLevel(token))
             {
                 var element = GetElement(context);
                 if (element == null)
@@ -78,7 +79,7 @@ namespace TwoDrive.WebApi.Filters
             var ElementRepository = (IRepository<Element>) context.HttpContext.RequestServices
                             .GetService(typeof(IRepository<Element>));
 
-            var element = ElementRepository.Get((int) elementId);
+            var element = ElementRepository.Get(Convert.ToInt32(elementId));
             return element;
         }
 

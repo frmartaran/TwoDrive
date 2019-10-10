@@ -49,6 +49,7 @@ namespace TwoDrive.WebApi.Controllers
                 };
                 FolderLogic.Create(root);
                 writer.AddRootClaims(root);
+                Logic.Update(writer);
                 return Ok("Writer Created");
             }
             catch (ValidationException validationError)

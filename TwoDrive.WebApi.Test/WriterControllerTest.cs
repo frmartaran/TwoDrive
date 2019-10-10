@@ -33,6 +33,7 @@ namespace TwoDrive.WebApi.Test
 
             var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Create(It.IsAny<Writer>()));
+            mockLogic.Setup(m => m.Update(It.IsAny<Writer>()));
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             mockFolderLogic.Setup(m => m.Create(It.IsAny<Folder>()));
             var mockCurrentSession = new Mock<ICurrent>();

@@ -23,6 +23,7 @@ namespace TwoDrive.DataAccess
         public override Writer Get(int Id)
         {
             return table.Include(w => w.Claims)
+                            .ThenInclude(c => c.Element)
                         .Include(w => w.Friends)
                         .Where(w => w.Id == Id)
                         .FirstOrDefault();

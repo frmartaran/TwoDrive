@@ -17,6 +17,7 @@ namespace TwoDrive.DataAccess
             return context.Sessions
                 .Include(s => s.Writer.Friends)
                 .Include(s => s.Writer.Claims)
+                    .ThenInclude(c => c.Element)
                 .ToList();
         }
 
