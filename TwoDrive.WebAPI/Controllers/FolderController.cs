@@ -149,7 +149,7 @@ namespace TwoDrive.WebApi.Controllers
             return Ok(new FolderModel().FromDomain(folder));
         }
 
-        [HttpGet("{id}/Tree")]
+        [HttpGet("Tree/{id}")]
         [ClaimFilter(ClaimType.Read)]
         public IActionResult ShowTree(int id)
         {
