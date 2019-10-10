@@ -121,32 +121,39 @@ namespace TwoDrive.WebApi.Controllers
         [ClaimFilter(ClaimType.Write)]
         public IActionResult Create(int id, [FromBody] FolderModel model)
         {
-            var loggedWriter = Session.GetCurrentUser(HttpContext);
-            var parentFolder = FolderLogic.Get(id);
-
-            if (loggedWriter == null)
-                return BadRequest("You must log in first");
-            if (parentFolder == null)
-                return NotFound("Parent folder doesn't exist");
-            if (loggedWriter != parentFolder.Owner)
-                return BadRequest("You are not owner of this folder");
-
-            var folder = model.ToDomain();
-            folder.Owner = loggedWriter;
-            folder.ParentFolder = parentFolder;
-            folder.CreationDate = DateTime.Now;
-            folder.DateModified = DateTime.Now;
-            FolderLogic.Create(folder);
-            loggedWriter.AddCreatorClaimsTo(folder);
-            WriterLogic.Update(loggedWriter);
-            var modification = new Modification
+            try
             {
-                ElementModified = folder,
-                type = ModificationType.Added,
-                Date = folder.CreationDate
-            };
-            ModificationLogic.Create(modification);
-            return Ok(new FolderModel().FromDomain(folder));
+                var loggedWriter = Session.GetCurrentUser(HttpContext);
+                var parentFolder = FolderLogic.Get(id);
+
+                if (loggedWriter == null)
+                    return BadRequest("You must log in first");
+                if (parentFolder == null)
+                    return NotFound("Parent folder doesn't exist");
+                if (loggedWriter != parentFolder.Owner)
+                    return BadRequest("You are not owner of this folder");
+
+                var folder = model.ToDomain();
+                folder.Owner = loggedWriter;
+                folder.ParentFolder = parentFolder;
+                folder.CreationDate = DateTime.Now;
+                folder.DateModified = DateTime.Now;
+                FolderLogic.Create(folder);
+                loggedWriter.AddCreatorClaimsTo(folder);
+                WriterLogic.Update(loggedWriter);
+                var modification = new Modification
+                {
+                    ElementModified = folder,
+                    type = ModificationType.Added,
+                    Date = folder.CreationDate
+                };
+                ModificationLogic.Create(modification);
+                return Ok(new FolderModel().FromDomain(folder));
+            }
+            catch (LogicException exception)
+            {
+                return BadRequest(exception);
+            }
         }
 
         [HttpGet("Tree/{id}")]
