@@ -1,0 +1,86 @@
+[
+    {
+        "content": "Primer test",
+        "id": 9,
+        "name": "File1",
+        "parentFolderId": 2,
+        "parentFolder": {
+            "id": 2,
+            "name": "Root",
+            "parentFolderId": null,
+            "parentFolder": null,
+            "ownerId": 2,
+            "owner": {
+                "id": 2,
+                "role": 1,
+                "userName": "Julie Admin",
+                "password": "1234",
+                "friends": null,
+                "claims": null
+            },
+            "creationDate": "2019-10-10T01:10:27.4312888",
+            "dateModified": "2019-10-10T01:10:27.4415479"
+        },
+        "ownerId": 2,
+        "owner": {
+            "id": 2,
+            "role": 1,
+            "userName": "Julie Admin",
+            "password": "1234",
+            "friends": null,
+            "claims": null
+        },
+        "creationDate": "2019-10-10T03:30:52.0088819",
+        "dateModified": "2019-10-10T03:30:52.0088825"
+    },
+    {
+        "content": "Test actualizado",
+        "id": 10,
+        "name": "File1",
+        "parentFolderId": 18,
+        "parentFolder": {
+            "id": 18,
+            "name": "Folder1",
+            "parentFolderId": 2,
+            "parentFolder": {
+                "id": 2,
+                "name": "Root",
+                "parentFolderId": null,
+                "parentFolder": null,
+                "ownerId": 2,
+                "owner": {
+                    "id": 2,
+                    "role": 1,
+                    "userName": "Julie Admin",
+                    "password": "1234",
+                    "friends": null,
+                    "claims": null
+                },
+                "creationDate": "2019-10-10T01:10:27.4312888",
+                "dateModified": "2019-10-10T01:10:27.4415479"
+            },
+            "ownerId": 2,
+            "owner": {
+                "id": 2,
+                "role": 1,
+                "userName": "Julie Admin",
+                "password": "1234",
+                "friends": null,
+                "claims": null
+            },
+            "creationDate": "2019-10-10T18:13:18.4971061",
+            "dateModified": "2019-10-10T18:13:18.497107"
+        },
+        "ownerId": 2,
+        "owner": {
+            "id": 2,
+            "role": 1,
+            "userName": "Julie Admin",
+            "password": "1234",
+            "friends": null,
+            "claims": null
+        },
+        "creationDate": "2019-09-01T00:00:00",
+        "dateModified": "2019-10-10T18:39:49.8503981"
+    }
+]
