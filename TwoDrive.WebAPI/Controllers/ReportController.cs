@@ -56,7 +56,7 @@ namespace TwoDrive.WebApi.Controllers
         }
 
         [HttpGet("Folder/Modifications")]
-        public IActionResult GetFolderModificationsReport()
+        public IActionResult GetFolderModificationReport([FromBody] DateTime start, [FromBody] DateTime end)
         {
             return null;
         }

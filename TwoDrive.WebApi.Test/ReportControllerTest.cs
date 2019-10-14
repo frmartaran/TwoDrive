@@ -166,5 +166,56 @@ namespace TwoDrive.WebApi.Test
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             Assert.AreEqual(okResult.Value, "There are no top writers yet");
         }
+
+        [TestMethod]
+        public void GetFolderModificationReport()
+        {
+            var folder = new Folder
+            {
+                Id = 1
+            };
+            var secondFolder = new Folder
+            {
+                Id = 2
+            };
+            var firstModification = new Modification
+            {
+                Date = new DateTime(2019, 4, 2),
+                ElementModified = folder,
+                type = ModificationType.Changed
+            };
+            var secondModification = new Modification
+            {
+                Date = new DateTime(2019, 4, 2),
+                ElementModified = folder,
+                type = ModificationType.Changed
+            };
+            var thirdModification = new Modification
+            {
+                Date = new DateTime(2019, 4, 2),
+                ElementModified = secondFolder,
+                type = ModificationType.Changed
+            };
+            var allModifications = new List<Modification>
+            {
+                firstModification,
+                secondModification,
+                thirdModification
+            };
+            var groupedList = allModifications
+                .GroupBy(g => g.ElementModified)
+                .ToList();
+            var mockFileLogic = new Mock<ILogic<File>>();
+            var mockLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.GetAllFromDateRange(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                    .Returns(groupedList);
+            var controller = new ReportController(mockLogic.Object, mockFileLogic.Object);
+            var start = new DateTime(2019, 3, 23);
+            var end = new DateTime(2019, 5, 10);
+            var result = controller.GetFolderModificationReport(start, end);
+
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+        }
     }
 }
