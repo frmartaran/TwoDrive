@@ -267,7 +267,7 @@ namespace TwoDrive.BusinessLogic.Test
             var modifications = modificationRepository.GetAll().Count;
             var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
-            Assert.AreEqual(2, modifications);
+            Assert.AreEqual(3, modifications);
         }
 
         [TestMethod]
@@ -315,7 +315,7 @@ namespace TwoDrive.BusinessLogic.Test
             var modifications = modificationRepository.GetAll().Count;
             var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
-            Assert.AreEqual(3, modifications);
+            Assert.AreEqual(5, modifications);
         }
 
         [TestMethod]
@@ -363,7 +363,7 @@ namespace TwoDrive.BusinessLogic.Test
             var modifications = modificationRepository.GetAll().Count;
             var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
-            Assert.AreEqual(3, modifications);
+            Assert.AreEqual(5, modifications);
         }
 
         [TestMethod]
@@ -422,7 +422,7 @@ namespace TwoDrive.BusinessLogic.Test
             var modifications = modificationRepository.GetAll().Count;
             var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
-            Assert.AreEqual(4, modifications);
+            Assert.AreEqual(7, modifications);
         }
 
         [TestMethod]
