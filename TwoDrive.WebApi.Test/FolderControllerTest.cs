@@ -107,6 +107,7 @@ namespace TwoDrive.WebApi.Test
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             var mockModificationLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
 
+            mockModificationLogic.Setup(m => m.Create(It.IsAny<Modification>()));
             mockSessionLogic.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
             .Returns(writer);
             mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
@@ -118,6 +119,7 @@ namespace TwoDrive.WebApi.Test
                 mockModificationLogic.Object);
             var result = controller.MoveFolder(folderToMove.Id, folderDestination.Id);
 
+            mockModificationLogic.VerifyAll();
             mockFolderLogic.VerifyAll();
             mockSessionLogic.VerifyAll();
         }

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using TwoDrive.DataAccess.Extensions;
@@ -12,6 +13,14 @@ namespace TwoDrive.DataAccess
         public FileRepository(TwoDriveDbContext current) : base(current)
         {
             table = current.Files;
+        }
+
+        public override File Get(int Id)
+        {
+            return table
+                .Include(f => f.ParentFolder)
+                .Where(f => f.Id == Id)
+                .FirstOrDefault();
         }
 
         public override bool Exists(File file)

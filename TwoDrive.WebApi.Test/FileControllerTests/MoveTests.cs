@@ -12,7 +12,7 @@ using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Controllers;
 using TwoDrive.WebApi.Interfaces;
 
-namespace TwoDrive.WebApi.Test
+namespace TwoDrive.WebApi.Test.FileControllerTests
 {
     [TestClass]
     public class MoveTests

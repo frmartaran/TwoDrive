@@ -74,6 +74,7 @@ namespace TwoDrive.WebApi.Controllers
                 writerLogic.Update(loggedWriter);
 
                 CreateModification(file, ModificationType.Added);
+                CreateModification(file.ParentFolder, ModificationType.Changed);
                 return Ok(new TxtModel().FromDomain(file));
             }
             catch (ValidationException exception)
@@ -91,6 +92,7 @@ namespace TwoDrive.WebApi.Controllers
                 var file = fileLogic.Get(id);
                 fileLogic.Delete(id);
                 CreateModification(file, ModificationType.Deleted);
+                CreateModification(file.ParentFolder, ModificationType.Changed);
                 return Ok($"{file.Name} has been deleted");
             }
             catch (LogicException exception)
@@ -247,10 +249,12 @@ namespace TwoDrive.WebApi.Controllers
             };
             folderLogic.MoveElement(file, folder, dependencies);
             CreateModification(file, ModificationType.Changed);
+            CreateModification(folder, ModificationType.Changed);
+            CreateModification(file.ParentFolder, ModificationType.Changed);
             return Ok($"File: {file.Name} moved to {folder.Name}");
         }
 
-        private void CreateModification(File file, ModificationType action)
+        private void CreateModification(Element file, ModificationType action)
         {
             var modification = new Modification
             {

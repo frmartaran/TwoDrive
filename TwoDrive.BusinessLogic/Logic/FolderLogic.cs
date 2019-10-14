@@ -75,8 +75,9 @@ namespace TwoDrive.BusinessLogic.Logic
             }
             else
             {
-                AddDeleteModfication(element);
-                FileRepository.Delete(element.Id);
+                var file = FileRepository.Get(element.Id);
+                AddDeleteModfication(file);
+                FileRepository.Delete(file.Id);
                 FileRepository.Save();
                 return;
             }
@@ -90,9 +91,27 @@ namespace TwoDrive.BusinessLogic.Logic
                 type = ModificationType.Deleted,
                 Date = DateTime.Now
             };
+
+            CreateModificationForParentFolder(element);
             ModificationRepository.Insert(modification);
             ModificationRepository.Save();
         }
+
+        private void CreateModificationForParentFolder(Element element)
+        {
+            if (element.ParentFolder != null)
+            {
+                var parentModification = new Modification
+                {
+                    ElementModified = element.ParentFolder,
+                    type = ModificationType.Changed,
+                    Date = DateTime.Now
+                };
+                ModificationRepository.Insert(parentModification);
+                ModificationRepository.Save();
+            }
+        }
+
         public Folder Get(int Id)
         {
             return FolderRepository.Get(Id);

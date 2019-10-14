@@ -77,12 +77,26 @@ namespace TwoDrive.WebApi.Controllers
                 {
                     return BadRequest("You must own both elements");
                 }
+                CreateModification(folderToMove, ModificationType.Changed);
+                CreateModification(folderDestination, ModificationType.Changed);
                 return Ok($"Folder with id {folderToMoveId} was moved to destination with id {folderDestinationId}");
             }
             catch (LogicException exception)
             {
                 return BadRequest(exception.Message);
             }
+        }
+
+        
+        private void CreateModification(Element file, ModificationType action)
+        {
+            var modification = new Modification
+            {
+                ElementModified = file,
+                type = action,
+                Date = file.CreationDate
+            };
+            ModificationLogic.Create(modification);
         }
 
         [HttpPut("{id}")]
@@ -141,13 +155,8 @@ namespace TwoDrive.WebApi.Controllers
                 FolderLogic.Create(folder);
                 loggedWriter.AddCreatorClaimsTo(folder);
                 WriterLogic.Update(loggedWriter);
-                var modification = new Modification
-                {
-                    ElementModified = folder,
-                    type = ModificationType.Added,
-                    Date = folder.CreationDate
-                };
-                ModificationLogic.Create(modification);
+                CreateModification(folder, ModificationType.Added);
+                CreateModification(parentFolder, ModificationType.Changed);
                 return Ok(new FolderModel().FromDomain(folder));
             }
             catch (LogicException exception)

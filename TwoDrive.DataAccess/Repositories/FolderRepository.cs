@@ -18,6 +18,7 @@ namespace TwoDrive.DataAccess
         public override Folder Get(int Id)
         {
             return table
+                .Include(f => f.ParentFolder)
                 .Include(f => f.FolderChildren)
                 .Where(f => f.Id == Id)
                 .FirstOrDefault();
