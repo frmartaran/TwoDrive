@@ -19,7 +19,7 @@ namespace TwoDrive.WebApi.Test
     public class ReportControllerTest
     {
         [TestMethod]
-        public void GetModificationReport()
+        public void GetFileModificationReport()
         {
             var file = new TxtFile
             {
@@ -60,14 +60,14 @@ namespace TwoDrive.WebApi.Test
             var controller = new ReportController(mockLogic.Object, mockFileLogic.Object);
             var start = new DateTime(2019, 3, 23);
             var end = new DateTime(2019, 5, 10);
-            var result = controller.GetModificationReport(start, end);
+            var result = controller.GetFileModificationReport(start, end);
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
 
         [TestMethod]
-        public void GetModificationReportWrongRange()
+        public void GetFileModificationReportWrongRange()
         {
             var mockFileLogic = new Mock<ILogic<File>>();
             var mockLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
@@ -76,14 +76,14 @@ namespace TwoDrive.WebApi.Test
             var controller = new ReportController(mockLogic.Object, mockFileLogic.Object);
             var start = new DateTime(2019, 3, 23);
             var end = new DateTime(2019, 5, 10);
-            var result = controller.GetModificationReport(end, start);
+            var result = controller.GetFileModificationReport(end, start);
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
         }
 
         [TestMethod]
-        public void GetEmptyModificationReport()
+        public void GetEmptyFileModificationReport()
         {
             var allModifications = new List<Modification>();
             var groupedList = allModifications
@@ -96,7 +96,7 @@ namespace TwoDrive.WebApi.Test
             var controller = new ReportController(mockLogic.Object, mockFileLogic.Object);
             var start = new DateTime(2019, 3, 23);
             var end = new DateTime(2019, 5, 10);
-            var result = controller.GetModificationReport(start, end);
+            var result = controller.GetFileModificationReport(start, end);
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));

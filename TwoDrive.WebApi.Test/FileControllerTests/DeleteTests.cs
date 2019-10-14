@@ -37,13 +37,24 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
         [TestMethod]
         public void Delete()
         {
+            var root = new Folder
+            {
+                Id = 2,
+                Name = "Folder",
+                Owner = writer,
+                ParentFolder = null,
+                FolderChildren = new List<Element>()
+            };
+            
             var file = new TxtFile
             {
                 Id = 1,
                 Name = "New file",
                 Content = "Content",
-                ParentFolderId = 1,
+                ParentFolder = root,
             };
+
+            root.FolderChildren.Add(file);
 
             var mockSession = new Mock<ICurrent>();
 

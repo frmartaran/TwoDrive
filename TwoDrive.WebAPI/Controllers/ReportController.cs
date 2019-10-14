@@ -29,8 +29,8 @@ namespace TwoDrive.WebApi.Controllers
             fileLogic = currentfileLogic;
         }
 
-        [HttpGet("/Modifications")]
-        public IActionResult GetModificationReport([FromBody] DateTime start, [FromBody] DateTime end)
+        [HttpGet("File/Modifications")]
+        public IActionResult GetFileModificationReport([FromBody] DateTime start, [FromBody] DateTime end)
         {
             try
             {
@@ -53,6 +53,12 @@ namespace TwoDrive.WebApi.Controllers
             {
                 return BadRequest(exception.Message);
             }
+        }
+
+        [HttpGet("Folder/Modifications")]
+        public IActionResult GetFolderModificationsReport()
+        {
+            return null;
         }
 
         [HttpGet]
