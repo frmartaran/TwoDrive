@@ -1011,7 +1011,8 @@ namespace TwoDrive.BusinessLogic.Test
             var fileRepository = new Mock<IFileRepository>();
             var validator = new Mock<IFolderValidator>();
             var folderRepository = new Mock<IFolderRepository>(MockBehavior.Strict);
-            folderRepository.Setup(m => m.Get(It.IsAny<int>()));
+            folderRepository.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(root);
 
             var modificationRepository = new Mock<IRepository<Modification>>();
             modificationRepository.Setup(m => m.Insert(It.IsAny<Modification>()));
@@ -1021,6 +1022,7 @@ namespace TwoDrive.BusinessLogic.Test
                 validator.Object, modificationRepository.Object);
 
             var logic = new FolderLogic(dependencies);
+            logic.CreateModificationForParentFolder(file);
 
             folderRepository.VerifyAll();
             modificationRepository.VerifyAll();
