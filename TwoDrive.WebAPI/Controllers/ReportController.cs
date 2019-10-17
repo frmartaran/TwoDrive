@@ -41,13 +41,22 @@ namespace TwoDrive.WebApi.Controllers
                 }
                 var report = groups
                     .Where(g => g.Key.GetType().IsSubclassOf(typeof(File)))
-                    .Select(r => new ModificationReportModel
+                    .Select(r => new 
                     {
-                        FileName = r.Key.Name,
+                        Element = r.Key,
                         Amount = r.Count()
 
                     }).ToList();
-                return Ok(report);
+
+                var byOwner = report.GroupBy(g => g.Element.Owner)
+                    .Select(r => new ModificationReportModel
+                    {
+                        Owner = r.Key.UserName,
+                        Amount = r.Sum(ig => ig.Amount)
+
+                    }).ToList();
+
+                return Ok(byOwner);
             }
             catch (LogicException exception)
             {
@@ -58,7 +67,25 @@ namespace TwoDrive.WebApi.Controllers
         [HttpGet("Folder/Modifications")]
         public IActionResult GetFolderModificationReport([FromBody] DateTime start, [FromBody] DateTime end)
         {
-            return null;
+            var folders = modificationLogic.GetAllFromDateRange(start, end)
+                .Where(g => g.Key is Folder)
+                .Select(r => new 
+                {
+                    Element = r.Key,
+                    Amount = r.Count()
+
+                }).ToList();
+
+            var byOwner = folders
+                .GroupBy(g => g.Element.Owner)
+                .Select(r => new ModificationReportModel
+                {
+                    Owner = r.Key.UserName,
+                    Amount = r.Sum(ig => ig.Amount)
+                })
+                .ToList();
+
+            return Ok(byOwner);
         }
 
         [HttpGet]

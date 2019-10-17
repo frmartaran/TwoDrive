@@ -7,7 +7,7 @@ namespace TwoDrive.WebApi.Models
 {
     public class ModificationReportModel
     {
-        public string FileName { get; set; }
+        public string Owner { get; set; }
 
         public int Amount { get; set; }
     }
