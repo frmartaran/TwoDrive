@@ -18,16 +18,45 @@ namespace TwoDrive.WebApi.Test
     [TestClass]
     public class ReportControllerTest
     {
+        private Writer writer;
+        private Writer secondWriter;
+
+        [TestInitialize]
+        public void SetUp()
+        {
+            writer = new Writer()
+            {
+                Id = 2,
+                UserName = "Writer",
+                Password = "132",
+                Role = Role.Writer,
+                Claims = new List<CustomClaim>(),
+                Friends = new List<Writer>()
+            };
+
+            secondWriter = new Writer()
+            {
+                Id = 3,
+                UserName = "Second Writer",
+                Password = "1325",
+                Role = Role.Writer,
+                Claims = new List<CustomClaim>(),
+                Friends = new List<Writer>()
+            };
+        }
         [TestMethod]
         public void GetFileModificationReport()
         {
+            
             var file = new TxtFile
             {
-                Id = 1
+                Id = 1,
+                Owner = writer
             };
             var secondFile = new TxtFile
             {
-                Id = 2
+                Id = 2,
+                Owner = secondWriter
             };
             var firstModification = new Modification
             {
@@ -172,11 +201,13 @@ namespace TwoDrive.WebApi.Test
         {
             var folder = new Folder
             {
-                Id = 1
+                Id = 1,
+                Owner = writer
             };
             var secondFolder = new Folder
             {
-                Id = 2
+                Id = 2,
+                Owner = secondWriter
             };
             var firstModification = new Modification
             {
