@@ -984,5 +984,46 @@ namespace TwoDrive.BusinessLogic.Test
             var logic = new FolderLogic(dependecies);
             logic.Update(null);
         }
+
+        [TestMethod]
+        public void SetModificationToParentFolder()
+        {
+            var writer = new Writer();
+            var root = new Folder
+            {
+                Id = 1,
+                CreationDate = new DateTime(2019, 3, 15),
+                DateModified = new DateTime(2019, 3, 15),
+                Name = "Root",
+                Owner = writer,
+                FolderChildren = new List<Element>()
+            };
+            var file = new TxtFile
+            {
+                Id = 2,
+                Name = "Some file",
+                Owner = writer,
+                ParentFolder = root,
+                CreationDate = new DateTime(2019, 3, 15),
+                DateModified = new DateTime(2019, 3, 15),
+                Content = "Holiwis"
+            };
+            var fileRepository = new Mock<IFileRepository>();
+            var validator = new Mock<IFolderValidator>();
+            var folderRepository = new Mock<IFolderRepository>(MockBehavior.Strict);
+            folderRepository.Setup(m => m.Get(It.IsAny<int>()));
+
+            var modificationRepository = new Mock<IRepository<Modification>>();
+            modificationRepository.Setup(m => m.Insert(It.IsAny<Modification>()));
+            modificationRepository.Setup(m => m.Save());
+
+            var dependencies = new ElementLogicDependencies(folderRepository.Object, fileRepository.Object,
+                validator.Object, modificationRepository.Object);
+
+            var logic = new FolderLogic(dependencies);
+
+            folderRepository.VerifyAll();
+            modificationRepository.VerifyAll();
+        }
     }
 }

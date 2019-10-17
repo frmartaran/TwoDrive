@@ -97,13 +97,13 @@ namespace TwoDrive.BusinessLogic.Logic
             ModificationRepository.Save();
         }
 
-        private void CreateModificationForParentFolder(Element element)
+        public void CreateModificationForParentFolder(Element parentFolder)
         {
-            if (element.ParentFolder != null)
+            if (parentFolder.ParentFolder != null)
             {
                 var parentModification = new Modification
                 {
-                    ElementModified = element.ParentFolder,
+                    ElementModified = parentFolder.ParentFolder,
                     type = ModificationType.Changed,
                     Date = DateTime.Now
                 };
