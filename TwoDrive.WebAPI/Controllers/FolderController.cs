@@ -77,8 +77,8 @@ namespace TwoDrive.WebApi.Controllers
                 {
                     return BadRequest("You must own both elements");
                 }
-                CreateModification(folderToMove, ModificationType.Changed);
-                CreateModification(folderDestination, ModificationType.Changed);
+                FolderLogic.CreateModificationsForTree(folderToMove, ModificationType.Changed);
+                FolderLogic.CreateModificationsForTree(folderDestination, ModificationType.Changed);
                 return Ok($"Folder with id {folderToMoveId} was moved to destination with id {folderDestinationId}");
             }
             catch (LogicException exception)
@@ -108,9 +108,10 @@ namespace TwoDrive.WebApi.Controllers
                 var folder = FolderLogic.Get(id);
                 folder = model.ToDomain(folder);
                 FolderLogic.Update(folder);
-                var updatedWriter = FolderLogic.Get(id);
+                var updatedFolder = FolderLogic.Get(id);
+                FolderLogic.CreateModificationsForTree(updatedFolder, ModificationType.Changed);
                 var toModel = new FolderModel();
-                return Ok(toModel.FromDomain(folder));
+                return Ok(toModel.FromDomain(updatedFolder));
             }
             catch (ValidationException exception)
             {
@@ -156,7 +157,7 @@ namespace TwoDrive.WebApi.Controllers
                 loggedWriter.AddCreatorClaimsTo(folder);
                 WriterLogic.Update(loggedWriter);
                 CreateModification(folder, ModificationType.Added);
-                CreateModification(parentFolder, ModificationType.Changed);
+                FolderLogic.CreateModificationsForTree(parentFolder, ModificationType.Changed);
                 return Ok(new FolderModel().FromDomain(folder));
             }
             catch (LogicException exception)
