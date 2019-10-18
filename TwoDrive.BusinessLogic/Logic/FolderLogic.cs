@@ -92,37 +92,45 @@ namespace TwoDrive.BusinessLogic.Logic
                 Date = DateTime.Now
             };
 
-            CreateModificationForParentFolder(element);
+            CreateModificationsForTree(element, ModificationType.Deleted);
             ModificationRepository.Insert(modification);
             ModificationRepository.Save();
         }
 
-        public void CreateModificationForParentFolder(Element element)
+        public void CreateModificationsForTree(Element element, ModificationType action)
         {
-            Folder parent;
+            var now = DateTime.Now;
             if (element.ParentFolder != null)
             {
-                parent = FolderRepository.Get(element.ParentFolder.Id);
-                UpdateFolderTree(parent);
+                var parent = FolderRepository.Get(element.ParentFolder.Id);
+                UpdateFolderTree(parent, now, action);
             }
+
         }
 
-        private void UpdateFolderTree(Folder parent)
+        private void UpdateFolderTree(Folder folder, DateTime now, ModificationType action)
         {
-            if (parent.ParentFolder != null)
+            CreateModificationForParentFolder(folder, now, action);
+            if (folder.ParentFolder == null)
+                return;
+
+            var parentFromDb = FolderRepository.Get(folder.ParentFolder.Id);
+            UpdateFolderTree(parentFromDb, now, action);
+
+        }
+
+        private void CreateModificationForParentFolder(Folder parent, DateTime now, ModificationType action)
+        {
+            var modification = new Modification
             {
-
-            }
-
-            var parent = FolderRepository.Get(parent.ParentFolder.Id);
-                var parentModification = new Modification
-                {
-                    ElementModified = parent.ParentFolder,
-                    type = ModificationType.Changed,
-                    Date = DateTime.Now
-                };
-                ModificationRepository.Insert(parentModification);
-                ModificationRepository.Save();
+                ElementModified = parent,
+                type = action,
+                Date = now
+            };
+            parent.DateModified = now;
+            FolderRepository.Update(parent);
+            ModificationRepository.Insert(modification);
+            ModificationRepository.Save();
         }
 
         public Folder Get(int Id)

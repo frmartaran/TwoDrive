@@ -423,7 +423,7 @@ namespace TwoDrive.BusinessLogic.Test
             var modifications = modificationRepository.GetAll().Count;
             var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
-            Assert.AreEqual(7, modifications);
+            Assert.AreEqual(8, modifications);
         }
 
         [TestMethod]
@@ -1014,6 +1014,7 @@ namespace TwoDrive.BusinessLogic.Test
             var folderRepository = new Mock<IFolderRepository>(MockBehavior.Strict);
             folderRepository.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(root);
+            folderRepository.Setup(m => m.Update(It.IsAny<Folder>()));
 
             var modificationRepository = new Mock<IRepository<Modification>>();
             modificationRepository.Setup(m => m.Insert(It.IsAny<Modification>()));
@@ -1023,7 +1024,7 @@ namespace TwoDrive.BusinessLogic.Test
                 validator.Object, modificationRepository.Object);
 
             var logic = new FolderLogic(dependencies);
-            logic.CreateModificationForParentFolder(file);
+            logic.CreateModificationsForTree(file, ModificationType.Changed);
 
             folderRepository.VerifyAll();
             modificationRepository.VerifyAll();
@@ -1058,6 +1059,7 @@ namespace TwoDrive.BusinessLogic.Test
             var folderRepository = new Mock<IFolderRepository>(MockBehavior.Strict);
             folderRepository.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(root);
+            folderRepository.Setup(m => m.Update(It.IsAny<Folder>()));
 
             var modificationRepository = new ModificationRepository(context);
 
@@ -1065,7 +1067,7 @@ namespace TwoDrive.BusinessLogic.Test
                 validator.Object, modificationRepository);
 
             var logic = new FolderLogic(dependencies);
-            logic.CreateModificationForParentFolder(file);
+            logic.CreateModificationsForTree(file, ModificationType.Changed);
 
             folderRepository.VerifyAll();
             var modifications = context.Modifications.ToList().Count;
@@ -1075,7 +1077,7 @@ namespace TwoDrive.BusinessLogic.Test
         [TestMethod]
         public void SetModificationToTwoParentFolders()
         {
-            var context = ContextFactory.GetMemoryContext("Set Modification To Parent Folder");
+            var context = ContextFactory.GetMemoryContext("Set Modification To Two Parent Folder");
             var writer = new Writer();
             var root = new Folder
             {
@@ -1093,7 +1095,8 @@ namespace TwoDrive.BusinessLogic.Test
                 DateModified = new DateTime(2019, 3, 15),
                 Name = "Folder",
                 Owner = writer,
-                FolderChildren = new List<Element>()
+                FolderChildren = new List<Element>(),
+                ParentFolder = root
             };
             var file = new TxtFile
             {
@@ -1107,19 +1110,19 @@ namespace TwoDrive.BusinessLogic.Test
             };
             var fileRepository = new Mock<IFileRepository>();
             var validator = new Mock<IFolderValidator>();
-            var folderRepository = new Mock<IFolderRepository>(MockBehavior.Strict);
-            folderRepository.Setup(m => m.Get(It.IsAny<int>()))
-                .Returns(root);
+            var folderRepository = new FolderRepository(context);
+            folderRepository.Insert(root);
+            folderRepository.Insert(folder);
+            folderRepository.Save();
 
             var modificationRepository = new ModificationRepository(context);
 
-            var dependencies = new ElementLogicDependencies(folderRepository.Object, fileRepository.Object,
+            var dependencies = new ElementLogicDependencies(folderRepository, fileRepository.Object,
                 validator.Object, modificationRepository);
 
             var logic = new FolderLogic(dependencies);
-            logic.CreateModificationForParentFolder(file);
+            logic.CreateModificationsForTree(file, ModificationType.Changed);
 
-            folderRepository.VerifyAll();
             var modifications = context.Modifications.ToList().Count;
             Assert.AreEqual(2, modifications);
         }

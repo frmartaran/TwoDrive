@@ -12,6 +12,6 @@ namespace TwoDrive.BusinessLogic.Interfaces
 
         string ShowTree(Folder folder);
 
-        void CreateModificationForParentFolder(Element element);
+        void CreateModificationsForTree(Element element, ModificationType action);
     }
 }
