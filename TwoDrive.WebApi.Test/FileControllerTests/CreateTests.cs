@@ -59,6 +59,8 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(folder);
+            mockFolderLogic.Setup(m => m.CreateModificationsForTree(It.IsAny<Element>(), 
+                It.IsAny<ModificationType>()));
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockWriterLogic.Setup(m => m.Update(It.IsAny<Writer>()));
             var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
