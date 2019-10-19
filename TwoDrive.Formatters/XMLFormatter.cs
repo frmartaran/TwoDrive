@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Xml;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.Formatter.Interface;
+using TwoDrive.Formatters.Exceptions;
 
 namespace TwoDrive.Formatters
 {
@@ -23,11 +25,18 @@ namespace TwoDrive.Formatters
             var document = Load<XmlDocument>(path);
         }
 
-        public T Load<T> (string path) where T : class
+        public T Load<T>(string path) where T : class
         {
-            var document = new XmlDocument();
-            document.Load(path);
-            return document as T;
+            try
+            {
+                var document = new XmlDocument();
+                document.Load(path);
+                return document as T;
+            }
+            catch (FileNotFoundException exception)
+            {
+                throw new FormatterException(exception.Message, exception);
+            }
         }
     }
 }
