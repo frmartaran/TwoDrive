@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TwoDrive.BusinessLogic.Interface\TwoDrive.BusinessLogic.Interfaces.csproj" />
+    <ProjectReference Include="..\TwoDrive.Domain\TwoDrive.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
