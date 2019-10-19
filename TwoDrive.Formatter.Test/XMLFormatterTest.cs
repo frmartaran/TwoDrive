@@ -11,24 +11,17 @@ namespace TwoDrive.Formatter.Test
     [TestClass]
     public class XMLFormatterTest
     {
-        [TestMethod]
-        public void SuccessfullyLoadFileMock()
-        {
-            string path = "Some path";
-            var mockFormatter = new Mock<IFormatter<Folder>>(MockBehavior.Strict);
-            mockFormatter.Setup(m => m.Load<XmlDocument>(It.IsAny<string>()))
-                .Returns(new XmlDocument());
-            mockFormatter.Object.Import(path);
-            mockFormatter.VerifyAll();
-        }
+        private const string examplesRoot = "..\\..\\..\\Xml Tree Examples";
+
 
         [TestMethod]
         public void SuccessfullyLoadFile()
         {
-            string path = "~/Xml Tree Examples/Single Folder.xml";
+            string path = $@"{examplesRoot}\\Single Folder.xml";
             var mockFolderLogic = new Mock<IFolderLogic>();
             var formatter = new XMLFormatter(mockFolderLogic.Object);
             var document = formatter.Load<XmlDocument>(path);
+            Assert.IsNotNull(document);
         }
     }
 }

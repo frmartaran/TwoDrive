@@ -1,9 +1,9 @@
-<<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
   <Root>
-    <CreationDate>2019-03-23</CreationDate>
-    <DateModified>2019-03-23</DateModified>
-    <Folder name="Folder" parentFolder="Root">
-      <CreationDate>2019-03-23</CreationDate>
-      <DateModified>2019-03-23</DateModified>
+    <CreationDate> 2019-03-23 </CreationDate>
+    <DateModified> 2019-03-23 </DateModified>
+    <Folder name = "Folder" >
+      <CreationDate> 2019-03-23 </CreationDate>
+      <DateModified> 2019-03-23 </DateModified>
     </Folder>
   </Root>

@@ -20,12 +20,14 @@ namespace TwoDrive.Formatters
 
         public void Import(string path)
         {
-            throw new NotImplementedException();
+            var document = Load<XmlDocument>(path);
         }
 
-        public XmlDocument Load<XmlDocument>(string path)
+        public T Load<T> (string path) where T : class
         {
-            throw new NotImplementedException();
+            var document = new XmlDocument();
+            document.Load(path);
+            return document as T;
         }
     }
 }

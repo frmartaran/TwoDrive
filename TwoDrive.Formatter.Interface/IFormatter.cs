@@ -13,7 +13,7 @@ namespace TwoDrive.Formatter.Interface
 
         Writer WriterFor { get; set; }
 
-        T Load<T>(string path);
+        T Load<T>(string path) where T : class;
 
         void Import(string path);
     }
