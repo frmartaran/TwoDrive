@@ -35,5 +35,15 @@ namespace TwoDrive.Formatter.Test
             var formatter = new XMLFormatter(mockFolderLogic.Object);
             var document = formatter.Load<XmlDocument>(path);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormatterException))]
+        public void WrongXMLFile()
+        {
+            string path = $@"{examplesRoot}\\Wrong File.xml";
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var formatter = new XMLFormatter(mockFolderLogic.Object);
+            var document = formatter.Load<XmlDocument>(path);
+        }
     }
 }
