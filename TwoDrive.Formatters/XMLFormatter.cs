@@ -37,6 +37,10 @@ namespace TwoDrive.Formatters
             {
                 throw new FormatterException(exception.Message, exception);
             }
+            catch (XmlException exception)
+            {
+                throw new FormatterException(exception.Message, exception);
+            }
         }
     }
 }
