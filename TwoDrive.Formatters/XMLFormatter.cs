@@ -8,6 +8,7 @@ using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.Formatter.Interface;
 using TwoDrive.Formatters.Exceptions;
+using TwoDrive.Formatters.Extensions;
 
 namespace TwoDrive.Formatters
 {
@@ -41,25 +42,7 @@ namespace TwoDrive.Formatters
 
         private Folder CreateFolder(XmlElement node, string name)
         {
-            var creationDateNodes = node.GetElementsByTagName("CreationDate");
-            if (!NodeExists(node, creationDateNodes))
-                throw new FormatterException("Missing Creation Date Tag");
-
-            var creationDateString = creationDateNodes.Item(0).InnerText;
-            var isCorrectFormat = DateTime.TryParse(creationDateString, out DateTime creationDate);
-            if (!isCorrectFormat)
-                throw new FormatterException("Invalid date format");
-
-            var dateModifiedNodes = node.GetElementsByTagName("DateModified");
-            if (!NodeExists(node, dateModifiedNodes))
-                throw new FormatterException("Missing Date Modified Tag");
-
-            var dateModifiedString = dateModifiedNodes.Item(0).InnerText;
-            isCorrectFormat = DateTime.TryParse(dateModifiedString, out DateTime dateModified);
-
-            if (!isCorrectFormat)
-                throw new FormatterException("Invalid date format");
-
+            ValidateDates(node, out DateTime creationDate, out DateTime dateModified);
             var folder = new Folder
             {
                 Owner = WriterFor,
@@ -68,15 +51,29 @@ namespace TwoDrive.Formatters
                 DateModified = dateModified,
                 FolderChildren = new List<Element>()
             };
-
             LogicToSave.Create(folder);
             return folder;
         }
 
-        private static bool NodeExists(XmlElement rootNode, XmlNodeList nodeList)
+        private static void ValidateDates(XmlElement node, out DateTime creationDate, out DateTime dateModified)
         {
-            return nodeList.Count != 0 && nodeList.Item(0).ParentNode == rootNode;
+            var creationDateNodes = node.GetElementsByTagName("CreationDate");
+            var dateModifiedNodes = node.GetElementsByTagName("DateModified");
+            node.ValidateDateNodes(creationDateNodes, dateModifiedNodes);
+
+            var creationDateString = creationDateNodes.Item(0).InnerText;
+            var dateModifiedString = dateModifiedNodes.Item(0).InnerText;
+
+            var isCorrectCreationDate = DateTime.TryParse(creationDateString, out creationDate);
+            var isCorrectDateModified = DateTime.TryParse(dateModifiedString, out dateModified);
+
+            if (!isCorrectCreationDate)
+                throw new FormatterException("Invalid date format. Please try: yyyy-mm-dd");
+
+            if (!isCorrectDateModified)
+                throw new FormatterException("Invalid date format. Please try: yyyy-mm-dd");
         }
+
 
         public T Load<T>(string path) where T : class
         {
