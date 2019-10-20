@@ -9,6 +9,7 @@ using TwoDrive.Domain.FileManagement;
 using TwoDrive.Formatter.Interface;
 using TwoDrive.Formatters.Exceptions;
 using TwoDrive.Formatters.Extensions;
+using System.Linq;
 
 namespace TwoDrive.Formatters
 {
@@ -28,16 +29,32 @@ namespace TwoDrive.Formatters
             var document = Load<XmlDocument>(path);
             var rootNode = document.DocumentElement;
             var root = CreateFolder(rootNode, "Root");
+            LogicToSave.Create(root);
             WriterFor.AddRootClaims(root);
+            AddChildFolders(rootNode, root);
 
-            var folderChildren = rootNode.GetElementsByTagName("Folder");
+        }
+
+        private void AddChildFolders(XmlElement parentNode, Folder parentFolder)
+        {
+            var childNodes = parentNode.GetElementsByTagName("Folder");
+            if (childNodes.Count == 0)
+                return;
+
+            var folderChildren = childNodes.Cast<XmlElement>()
+                .Where(e => e.ParentNode == parentNode)
+                .ToList();
+
             foreach (XmlElement innerFolder in folderChildren)
             {
                 var name = innerFolder.Attributes["name"].Value;
                 var newFolder = CreateFolder(innerFolder, name);
+                newFolder.ParentFolder = parentFolder;
+                LogicToSave.Create(newFolder);
                 WriterFor.AddCreatorClaimsTo(newFolder);
-            }
 
+                AddChildFolders(innerFolder, newFolder);
+            }
         }
 
         private Folder CreateFolder(XmlElement node, string name)
@@ -51,7 +68,6 @@ namespace TwoDrive.Formatters
                 DateModified = dateModified,
                 FolderChildren = new List<Element>()
             };
-            LogicToSave.Create(folder);
             return folder;
         }
 
