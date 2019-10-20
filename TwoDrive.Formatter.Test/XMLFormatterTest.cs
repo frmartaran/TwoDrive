@@ -255,5 +255,29 @@ namespace TwoDrive.Formatter.Test
             Assert.AreEqual(middleFolder, lastFolder.ParentFolder);
             Assert.AreEqual(11, writer.Claims.Count);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormatterException))]
+        public void FolderWithNoName()
+        {
+            var path = $@"{examplesRoot}\\NoName.xml";
+            var context = ContextFactory.GetMemoryContext("No Name");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new Mock<IFileRepository>().Object;
+            var modificationRepository = new Mock<IRepository<Modification>>().Object;
+            var validator = new Mock<IFolderValidator>().Object;
+            var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
+                validator, modificationRepository);
+            var folderLogic = new FolderLogic(dependencies);
+            var formatter = new XMLFormatter(folderLogic)
+            {
+                WriterFor = writer
+            };
+            context.Writers.Add(writer);
+            context.SaveChanges();
+            formatter.Import(path);
+        }
+
+
     }
 }
