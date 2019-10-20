@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TwoDrive.DataAccess\TwoDrive.DataAccess.csproj" />
     <ProjectReference Include="..\TwoDrive.Formatter.Interface\TwoDrive.Formatter.Interface.csproj" />
     <ProjectReference Include="..\TwoDrive.Formatters\TwoDrive.Formatters.csproj" />
   </ItemGroup>

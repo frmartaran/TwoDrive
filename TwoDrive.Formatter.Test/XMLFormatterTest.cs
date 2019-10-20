@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -8,6 +9,7 @@ using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.DataAccess;
 using TwoDrive.DataAccess.Interface;
+using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.Formatter.Interface;
 using TwoDrive.Formatters;
@@ -19,7 +21,20 @@ namespace TwoDrive.Formatter.Test
     public class XMLFormatterTest
     {
         private const string examplesRoot = "..\\..\\..\\Xml Tree Examples";
+        Writer writer;
 
+        [TestInitialize]
+        public void SetUp()
+        {
+            writer = new Writer
+            {
+                UserName = "Writer",
+                Password = "123",
+                Role = Role.Administrator,
+                Claims = new List<CustomClaim>(),
+                Friends = new List<Writer>()
+            };
+        }
 
         [TestMethod]
         public void SuccessfullyLoadFile()
@@ -57,7 +72,10 @@ namespace TwoDrive.Formatter.Test
             var path = $@"{examplesRoot}\\Single Folder.xml";
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             mockFolderLogic.Setup(m => m.Create(It.IsAny<Folder>()));
-            var formatter = new XMLFormatter(mockFolderLogic.Object);
+            var formatter = new XMLFormatter(mockFolderLogic.Object)
+            {
+                WriterFor = writer
+            };
             formatter.Import(path);
 
             mockFolderLogic.VerifyAll();
@@ -75,12 +93,18 @@ namespace TwoDrive.Formatter.Test
             var dependencies = new ElementLogicDependencies(folderRepository, fileRepository, 
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
-            var formatter = new XMLFormatter(folderLogic);
+            var formatter = new XMLFormatter(folderLogic)
+            {
+                WriterFor = writer
+            };
+            context.Writers.Add(writer);
+            context.SaveChanges();
             formatter.Import(path);
 
             var root = context.Folders.FirstOrDefault();
             Assert.IsNotNull(root);
             Assert.AreEqual("Root", root.Name);
+            Assert.AreEqual(3, writer.Claims.Count);
         }
     }
 }
