@@ -133,7 +133,7 @@ namespace TwoDrive.Formatter.Test
         [ExpectedException(typeof(FormatterException))]
         public void WithoutDateModified()
         {
-            var path = $@"{examplesRoot}\\WithoutCreationDate.xml";
+            var path = $@"{examplesRoot}\\WithoutDateModified.xml";
             var context = ContextFactory.GetMemoryContext("Without Creation Date");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new Mock<IFileRepository>().Object;
@@ -149,6 +149,31 @@ namespace TwoDrive.Formatter.Test
             context.Writers.Add(writer);
             context.SaveChanges();
             formatter.Import(path);
+        }
+
+        [TestMethod]
+        public void SaveTwoFolders()
+        {
+            var path = $@"{examplesRoot}\\Single Folder.xml";
+            var context = ContextFactory.GetMemoryContext("Save Root");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new Mock<IFileRepository>().Object;
+            var modificationRepository = new Mock<IRepository<Modification>>().Object;
+            var validator = new Mock<IFolderValidator>().Object;
+            var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
+                validator, modificationRepository);
+            var folderLogic = new FolderLogic(dependencies);
+            var formatter = new XMLFormatter(folderLogic)
+            {
+                WriterFor = writer
+            };
+            context.Writers.Add(writer);
+            context.SaveChanges();
+            formatter.Import(path);
+
+            var foldersCount = context.Folders.ToList().Count;
+            Assert.AreEqual(2, foldersCount);
+            Assert.AreEqual(7, writer.Claims.Count);
         }
     }
 }

@@ -33,8 +33,11 @@ namespace TwoDrive.Formatters
             var creationDateString = creationDateNodes.Item(0).Value;
             DateTime.TryParse(creationDateString, out DateTime creationDate);
 
-            var dateModifiedNode = rootNode.GetElementsByTagName("DateModified");
-            var dateModifiedString = dateModifiedNode.Item(0).Value;
+            var dateModifiedNodes = rootNode.GetElementsByTagName("DateModified");
+            if (!NodeExists(rootNode, dateModifiedNodes))
+                throw new FormatterException("Missing Date Modified Tag");
+
+            var dateModifiedString = dateModifiedNodes.Item(0).Value;
             DateTime.TryParse(dateModifiedString, out DateTime dateModified);
 
             var root = new Folder
