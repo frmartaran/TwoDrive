@@ -47,7 +47,11 @@ namespace TwoDrive.Formatters
 
             foreach (XmlElement innerFolder in folderChildren)
             {
-                var name = innerFolder.Attributes["name"].Value;
+                var nameAttribute = innerFolder.Attributes["name"];
+                if (nameAttribute == null)
+                    throw new FormatterException("Each folder tag must have the name attribute");
+
+                var name = nameAttribute.Value;
                 var newFolder = CreateFolder(innerFolder, name);
                 newFolder.ParentFolder = parentFolder;
                 LogicToSave.Create(newFolder);
