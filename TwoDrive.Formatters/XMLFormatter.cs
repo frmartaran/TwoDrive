@@ -27,6 +27,9 @@ namespace TwoDrive.Formatters
             var document = Load<XmlDocument>(path);
             var rootNode = document.DocumentElement;
             var creationDateNode = rootNode.GetElementsByTagName("CreationDate");
+            if (creationDateNode.Count == 0 || creationDateNode.Item(0).ParentNode != rootNode)
+                throw new FormatterException("Missing Creation Date Tag");
+
             var creationDateString = creationDateNode.Item(0).Value;
             DateTime.TryParse(creationDateString, out DateTime creationDate);
 
