@@ -26,11 +26,11 @@ namespace TwoDrive.Formatters
         {
             var document = Load<XmlDocument>(path);
             var rootNode = document.DocumentElement;
-            var creationDateNode = rootNode.GetElementsByTagName("CreationDate");
-            if (creationDateNode.Count == 0 || creationDateNode.Item(0).ParentNode != rootNode)
+            var creationDateNodes = rootNode.GetElementsByTagName("CreationDate");
+            if (!NodeExists(rootNode, creationDateNodes))
                 throw new FormatterException("Missing Creation Date Tag");
 
-            var creationDateString = creationDateNode.Item(0).Value;
+            var creationDateString = creationDateNodes.Item(0).Value;
             DateTime.TryParse(creationDateString, out DateTime creationDate);
 
             var dateModifiedNode = rootNode.GetElementsByTagName("DateModified");
@@ -49,6 +49,11 @@ namespace TwoDrive.Formatters
             WriterFor.AddRootClaims(root);
             LogicToSave.Create(root);
 
+        }
+
+        private static bool NodeExists(XmlElement rootNode, XmlNodeList nodeList)
+        {
+            return nodeList.Count != 0 && nodeList.Item(0).ParentNode == rootNode;
         }
 
         public T Load<T>(string path) where T : class
