@@ -26,32 +26,46 @@ namespace TwoDrive.Formatters
         {
             var document = Load<XmlDocument>(path);
             var rootNode = document.DocumentElement;
-            var creationDateNodes = rootNode.GetElementsByTagName("CreationDate");
-            if (!NodeExists(rootNode, creationDateNodes))
+            var root = CreateFolder(rootNode, "Root");
+            WriterFor.AddRootClaims(root);
+
+            var folderChildren = rootNode.GetElementsByTagName("Folder");
+            foreach (XmlElement innerFolder in folderChildren)
+            {
+                var name = innerFolder.Attributes["name"].Value;
+                var newFolder = CreateFolder(innerFolder, name);
+                WriterFor.AddCreatorClaimsTo(newFolder);
+            }
+
+        }
+
+        private Folder CreateFolder(XmlElement node, string name)
+        {
+            var creationDateNodes = node.GetElementsByTagName("CreationDate");
+            if (!NodeExists(node, creationDateNodes))
                 throw new FormatterException("Missing Creation Date Tag");
 
-            var creationDateString = creationDateNodes.Item(0).Value;
+            var creationDateString = creationDateNodes.Item(0).InnerText;
             DateTime.TryParse(creationDateString, out DateTime creationDate);
 
-            var dateModifiedNodes = rootNode.GetElementsByTagName("DateModified");
-            if (!NodeExists(rootNode, dateModifiedNodes))
+            var dateModifiedNodes = node.GetElementsByTagName("DateModified");
+            if (!NodeExists(node, dateModifiedNodes))
                 throw new FormatterException("Missing Date Modified Tag");
 
-            var dateModifiedString = dateModifiedNodes.Item(0).Value;
+            var dateModifiedString = dateModifiedNodes.Item(0).InnerText;
             DateTime.TryParse(dateModifiedString, out DateTime dateModified);
 
-            var root = new Folder
+            var folder = new Folder
             {
                 Owner = WriterFor,
-                Name = "Root",
+                Name = name,
                 CreationDate = creationDate,
                 DateModified = dateModified,
                 FolderChildren = new List<Element>()
             };
 
-            WriterFor.AddRootClaims(root);
-            LogicToSave.Create(root);
-
+            LogicToSave.Create(folder);
+            return folder;
         }
 
         private static bool NodeExists(XmlElement rootNode, XmlNodeList nodeList)

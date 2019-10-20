@@ -102,9 +102,13 @@ namespace TwoDrive.Formatter.Test
             formatter.Import(path);
 
             var root = context.Folders.FirstOrDefault();
+            var claimsForRoot = writer.Claims
+                .Where(c => c.Element == root)
+                .ToList()
+                .Count;
             Assert.IsNotNull(root);
             Assert.AreEqual("Root", root.Name);
-            Assert.AreEqual(3, writer.Claims.Count);
+            Assert.AreEqual(3, claimsForRoot);
         }
 
         [TestMethod]
@@ -155,7 +159,7 @@ namespace TwoDrive.Formatter.Test
         public void SaveTwoFolders()
         {
             var path = $@"{examplesRoot}\\Single Folder.xml";
-            var context = ContextFactory.GetMemoryContext("Save Root");
+            var context = ContextFactory.GetMemoryContext("Save Two Folders");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new Mock<IFileRepository>().Object;
             var modificationRepository = new Mock<IRepository<Modification>>().Object;
