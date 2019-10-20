@@ -106,5 +106,27 @@ namespace TwoDrive.Formatter.Test
             Assert.AreEqual("Root", root.Name);
             Assert.AreEqual(3, writer.Claims.Count);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormatterException))]
+        public void WithoutDateModified()
+        {
+            var path = $@"{examplesRoot}\\WithoutCreationDate.xml";
+            var context = ContextFactory.GetMemoryContext("Without Creation Date");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new Mock<IFileRepository>().Object;
+            var modificationRepository = new Mock<IRepository<Modification>>().Object;
+            var validator = new Mock<IFolderValidator>().Object;
+            var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
+                validator, modificationRepository);
+            var folderLogic = new FolderLogic(dependencies);
+            var formatter = new XMLFormatter(folderLogic)
+            {
+                WriterFor = writer
+            };
+            context.Writers.Add(writer);
+            context.SaveChanges();
+            formatter.Import(path);
+        }
     }
 }
