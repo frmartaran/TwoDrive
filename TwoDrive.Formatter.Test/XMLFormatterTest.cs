@@ -278,6 +278,35 @@ namespace TwoDrive.Formatter.Test
             formatter.Import(path);
         }
 
+        [TestMethod]
+        public void SaveSimpleTreeWithFile()
+        {
+            var path = $@"{examplesRoot}\\Simple Tree With File.xml";
+            var context = ContextFactory.GetMemoryContext("Simple tree with file");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new Mock<IFileRepository>().Object;
+            var modificationRepository = new Mock<IRepository<Modification>>().Object;
+            var validator = new Mock<IFolderValidator>().Object;
+            var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
+                validator, modificationRepository);
+            var folderLogic = new FolderLogic(dependencies);
+            var formatter = new XMLFormatter(folderLogic)
+            {
+                WriterFor = writer
+            };
+            context.Writers.Add(writer);
+            context.SaveChanges();
+            formatter.Import(path);
+
+            var foldersCount = context.Folders.ToList().Count;
+            var filesCount = context.Files.ToList().Count;
+            Assert.AreEqual(2, foldersCount);
+            Assert.AreEqual(1, filesCount);
+            Assert.AreEqual(11, writer.Claims.Count);
+        }
+
+
+
 
     }
 }
