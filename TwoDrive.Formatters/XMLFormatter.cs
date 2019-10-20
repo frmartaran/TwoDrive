@@ -46,14 +46,19 @@ namespace TwoDrive.Formatters
                 throw new FormatterException("Missing Creation Date Tag");
 
             var creationDateString = creationDateNodes.Item(0).InnerText;
-            DateTime.TryParse(creationDateString, out DateTime creationDate);
+            var isCorrectFormat = DateTime.TryParse(creationDateString, out DateTime creationDate);
+            if (!isCorrectFormat)
+                throw new FormatterException("Invalid date format");
 
             var dateModifiedNodes = node.GetElementsByTagName("DateModified");
             if (!NodeExists(node, dateModifiedNodes))
                 throw new FormatterException("Missing Date Modified Tag");
 
             var dateModifiedString = dateModifiedNodes.Item(0).InnerText;
-            DateTime.TryParse(dateModifiedString, out DateTime dateModified);
+            isCorrectFormat = DateTime.TryParse(dateModifiedString, out DateTime dateModified);
+
+            if (!isCorrectFormat)
+                throw new FormatterException("Invalid date format");
 
             var folder = new Folder
             {
