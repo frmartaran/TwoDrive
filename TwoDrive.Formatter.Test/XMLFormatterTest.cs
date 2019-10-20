@@ -1,8 +1,13 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.BusinessLogic.Interfaces.LogicInput;
+using TwoDrive.BusinessLogic.Logic;
+using TwoDrive.DataAccess;
+using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.Formatter.Interface;
 using TwoDrive.Formatters;
@@ -40,10 +45,42 @@ namespace TwoDrive.Formatter.Test
         [ExpectedException(typeof(FormatterException))]
         public void WrongXMLFile()
         {
-            string path = $@"{examplesRoot}\\Wrong File.xml";
+            var path = $@"{examplesRoot}\\Wrong File.xml";
             var mockFolderLogic = new Mock<IFolderLogic>();
             var formatter = new XMLFormatter(mockFolderLogic.Object);
             var document = formatter.Load<XmlDocument>(path);
+        }
+
+        [TestMethod]
+        public void SaveRootMock()
+        {
+            var path = $@"{examplesRoot}\\Single Folder.xml";
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            mockFolderLogic.Setup(m => m.Create(It.IsAny<Folder>()));
+            var formatter = new XMLFormatter(mockFolderLogic.Object);
+            formatter.Import(path);
+
+            mockFolderLogic.VerifyAll();
+        }
+
+        [TestMethod]
+        public void SaveRoot()
+        {
+            var path = $@"{examplesRoot}\\Single Folder.xml";
+            var context = ContextFactory.GetMemoryContext("Save Root");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new Mock<IFileRepository>().Object;
+            var modificationRepository = new Mock<IRepository<Modification>>().Object;
+            var validator = new Mock<IFolderValidator>().Object;
+            var dependencies = new ElementLogicDependencies(folderRepository, fileRepository, 
+                validator, modificationRepository);
+            var folderLogic = new FolderLogic(dependencies);
+            var formatter = new XMLFormatter(folderLogic);
+            formatter.Import(path);
+
+            var root = context.Folders.FirstOrDefault();
+            Assert.IsNotNull(root);
+            Assert.AreEqual("Root", root.Name);
         }
     }
 }
