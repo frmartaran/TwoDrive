@@ -223,5 +223,33 @@ namespace TwoDrive.Formatter.Test
             context.SaveChanges();
             formatter.Import(path);
         }
+
+        [TestMethod]
+        public void SaveTwoLevelOfFolders()
+        {
+            var path = $@"{examplesRoot}\\Single Folder.xml";
+            var context = ContextFactory.GetMemoryContext("Save Two Folders");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new Mock<IFileRepository>().Object;
+            var modificationRepository = new Mock<IRepository<Modification>>().Object;
+            var validator = new Mock<IFolderValidator>().Object;
+            var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
+                validator, modificationRepository);
+            var folderLogic = new FolderLogic(dependencies);
+            var formatter = new XMLFormatter(folderLogic)
+            {
+                WriterFor = writer
+            };
+            context.Writers.Add(writer);
+            context.SaveChanges();
+            formatter.Import(path);
+
+            var foldersCount = context.Folders.ToList().Count;
+            var middleFolder = context.Folders.ElementAt(1);
+            var lastFolder = context.Folders.ElementAt(2);
+            Assert.AreEqual(3, foldersCount);
+            Assert.AreEqual(middleFolder, lastFolder.ParentFolder);
+            Assert.AreEqual(11, writer.Claims.Count);
+        }
     }
 }
