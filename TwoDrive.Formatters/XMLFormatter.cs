@@ -26,12 +26,13 @@ namespace TwoDrive.Formatters
         {
             var document = Load<XmlDocument>(path);
             var rootNode = document.DocumentElement;
-            var creationDateString = rootNode.FirstChild.Value;
-            DateTime creationDate;
-            DateTime.TryParse(creationDateString, out creationDate);
-            var dateModifiedString = rootNode.FirstChild.NextSibling.Value;
-            DateTime dateModified;
-            DateTime.TryParse(dateModifiedString, out dateModified);
+            var creationDateNode = rootNode.GetElementsByTagName("CreationDate");
+            var creationDateString = creationDateNode.Item(0).Value;
+            DateTime.TryParse(creationDateString, out DateTime creationDate);
+
+            var dateModifiedNode = rootNode.GetElementsByTagName("DateModified");
+            var dateModifiedString = dateModifiedNode.Item(0).Value;
+            DateTime.TryParse(dateModifiedString, out DateTime dateModified);
 
             var root = new Folder
             {
