@@ -12,7 +12,7 @@ using TwoDrive.Importer.MockDomain;
 
 namespace TwoDrive.Importers
 {
-    public class XMLImporter : IImporter
+    public class XMLImporter : IImporter<IFolder>
     {
         public string FileExtension
         {
