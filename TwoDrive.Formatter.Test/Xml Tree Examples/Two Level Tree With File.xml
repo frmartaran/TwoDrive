@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <Root>
+    <CreationDate>2019-03-23</CreationDate>
+    <DateModified>2019-03-23</DateModified>
+    <Folder name="Folder">
+      <CreationDate>2019-03-23</CreationDate>
+      <DateModified>2019-03-23</DateModified>
+      <Folder name="inner Folder">
+        <CreationDate>2019-03-23</CreationDate>
+        <DateModified>2019-03-23</DateModified>
+        <File name="File.html">
+          <CreationDate>2019-03-23</CreationDate>
+          <DateModified>2019-03-23</DateModified>
+          <Content><![CDATA[<p>This is important if you want to
+            insert HTML</p>]]></Content>
+        </File>
+      </Folder>
+    </Folder>
+  </Root>

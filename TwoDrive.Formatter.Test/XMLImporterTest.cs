@@ -318,8 +318,38 @@ namespace TwoDrive.Importer.Test
             Assert.AreEqual(11, writer.Claims.Count);
         }
 
+        [TestMethod]
+        public void SaveSimpleTreeWithTwoTypeOfFile()
+        {
+            var path = $@"{examplesRoot}\\Two Types Of Files.xml";
+            var context = ContextFactory.GetMemoryContext("Two Types Of File");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+            var modificationRepository = new Mock<IRepository<Modification>>().Object;
+            var validator = new Mock<IFolderValidator>().Object;
+            var fileValidator = new Mock<IValidator<Element>>().Object;
+            var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
+                validator, modificationRepository);
+            var folderLogic = new FolderLogic(dependencies);
+            var fileLogic = new FileLogic(fileRepository, fileValidator);
+            var formatter = new XMLImporter(folderLogic, fileLogic)
+            {
+                WriterFor = writer
+            };
+            context.Writers.Add(writer);
+            context.SaveChanges();
+            formatter.Import(path);
 
-
+            var foldersCount = context.Folders.ToList().Count;
+            var filesCount = context.Files.ToList().Count;
+            var txtfile = context.Files.FirstOrDefault();
+            var htmlfile = context.Files.LastOrDefault();
+            Assert.AreEqual(2, foldersCount);
+            Assert.AreEqual(2, filesCount);
+            Assert.IsInstanceOfType(txtfile, typeof(TxtFile));
+            Assert.IsInstanceOfType(htmlfile, typeof(HTMLFile));
+            Assert.AreEqual(11, writer.Claims.Count);
+        }
 
     }
 }
