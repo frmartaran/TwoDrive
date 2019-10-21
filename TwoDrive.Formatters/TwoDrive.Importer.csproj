@@ -5,9 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TwoDrive.BusinessLogic.Interface\TwoDrive.BusinessLogic.Interfaces.csproj" />
-    <ProjectReference Include="..\TwoDrive.BusinessLogic\TwoDrive.BusinessLogic.csproj" />
-    <ProjectReference Include="..\TwoDrive.Domain\TwoDrive.Domain.csproj" />
     <ProjectReference Include="..\TwoDrive.Formatter.Interface\TwoDrive.Importer.Interface.csproj" />
   </ItemGroup>
 

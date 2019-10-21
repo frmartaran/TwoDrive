@@ -2,47 +2,49 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using TwoDrive.BusinessLogic.Extensions;
-using TwoDrive.BusinessLogic.Interfaces;
-using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.Importer.Interface;
 using TwoDrive.Importers.Exceptions;
 using TwoDrive.Importers.Extensions;
 using System.Linq;
 using TwoDrive.Importer;
-using System.Reflection;
+using TwoDrive.Importer.Interface.IFileManagement;
+using TwoDrive.Importer.MockDomain;
 
 namespace TwoDrive.Importers
 {
-    public class XMLImporter : ITreeImporter
+    public class XMLImporter : IImporter
     {
-        public ILogic<Folder> LogicToSave { get; set; }
-        public IFileLogic FileLogic { get; set; }
-        public string FileExtension { get; set; }
-        public Writer WriterFor { get; set; }
-
-        public XMLImporter(ILogic<Folder> logic, IFileLogic fileLogic)
+        public string FileExtension
         {
-            LogicToSave = logic;
-            FileLogic = fileLogic;
+            get
+            {
+                return FileExtension;
+            }
+            set
+            {
+                FileExtension = "XML";
+            }
         }
 
-        public void Import(string path)
+        private List<IFolder> Tree { get; set; }
+
+        public List<IFolder> Import(string path)
         {
             var document = Load<XmlDocument>(path);
             var rootNode = document.DocumentElement;
             var root = CreateFolder(rootNode, ImporterConstants.Root);
-            LogicToSave.Create(root);
-            WriterFor.AddRootClaims(root);
+            Tree.Add(root);
             var fileNodes = rootNode.GetElementsByTagName(ImporterConstants.File);
             AddFiles(root, fileNodes);
             AddChildFolders(rootNode, root);
+            return Tree;
 
         }
 
-        private void AddFiles(Folder parentFolder, XmlNodeList fileNodes)
+        private void AddFiles(MockFolder parentFolder, XmlNodeList fileNodes)
         {
+            var allFiles = new List<MockFile>();
             foreach (XmlElement element in fileNodes)
             {
                 ValidateDates(element, out DateTime creationDate, out DateTime dateModified);
@@ -51,43 +53,22 @@ namespace TwoDrive.Importers
                 var contentNode = element.GetElementsByTagName(ImporterConstants.Content);
                 var typeNode = element.Attributes[ImporterConstants.Type];
                 var type = typeNode.Value;
-                Domain.FileManagement.File file = new TxtFile();
-                switch (type)
+                var file = new MockFile
                 {
-                    case "txt":
-                        file = new TxtFile
-                        {
-                            CreationDate = creationDate,
-                            DateModified = dateModified,
-                            Name = name,
-                            Content = contentNode.Item(0).InnerText,
-                            Owner = WriterFor,
-                            ParentFolder = parentFolder
-                        };
-                        break;
-                    case "html":
-                        file = new HTMLFile
-                        {
-                            CreationDate = creationDate,
-                            DateModified = dateModified,
-                            Name = name,
-                            Content = contentNode.Item(0).InnerText,
-                            Owner = WriterFor,
-                            ParentFolder = parentFolder,
-                            ShouldRender = true
-                        };
-
-                        break;
-                    default:
-                        throw new ImporterException(ImporterResource.Unsupported);
-                }
-
-                FileLogic.Create(file);
-                WriterFor.AddCreatorClaimsTo(file);
+                    Name = name,
+                    CreationDate = creationDate,
+                    DateModified = dateModified,
+                    Content = contentNode.Item(0).InnerText,
+                    Extension = type,
+                    ParentFolder = parentFolder,
+                    ShouldRender = false
+                };
+                allFiles.Add(file);
             }
+            parentFolder.FolderChildren.AddRange(allFiles);
         }
 
-        private void AddChildFolders(XmlElement parentNode, Folder parentFolder)
+        private void AddChildFolders(XmlElement parentNode, MockFolder parentFolder)
         {
             var childNodes = parentNode.GetElementsByTagName(ImporterConstants.Folder);
             if (childNodes.Count == 0)
@@ -106,23 +87,21 @@ namespace TwoDrive.Importers
                 var name = nameAttribute.Value;
                 var newFolder = CreateFolder(innerFolder, name);
                 newFolder.ParentFolder = parentFolder;
-                LogicToSave.Create(newFolder);
-                WriterFor.AddCreatorClaimsTo(newFolder);
-
+                parentFolder.FolderChildren.Add(newFolder);
+                Tree.Add(newFolder);
                 AddChildFolders(innerFolder, newFolder);
             }
         }
 
-        private Folder CreateFolder(XmlElement node, string name)
+        private MockFolder CreateFolder(XmlElement node, string name)
         {
             ValidateDates(node, out DateTime creationDate, out DateTime dateModified);
-            var folder = new Folder
+            var folder = new MockFolder
             {
-                Owner = WriterFor,
                 Name = name,
                 CreationDate = creationDate,
                 DateModified = dateModified,
-                FolderChildren = new List<Element>()
+                FolderChildren = new List<IElement>()
             };
             return folder;
         }

@@ -8,7 +8,7 @@ namespace TwoDrive.Importer.Interface.IFileManagement
     {
         string Extension { get; set; }
 
-        string ShouldRender { get; set; }
+        bool ShouldRender { get; set; }
 
         string Content { get; set; }
     }

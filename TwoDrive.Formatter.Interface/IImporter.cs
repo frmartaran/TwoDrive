@@ -1,16 +1,15 @@
-﻿using TwoDrive.BusinessLogic.Interfaces;
+﻿using System.Collections.Generic;
+using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.Importer.Interface.IFileManagement;
 
 namespace TwoDrive.Importer.Interface
 {
-    public interface IImporter<ImportType>
-        where ImportType : class
+    public interface IImporter
     {
-        ILogic<ImportType> LogicToSave { get; set; }
-
         string FileExtension { get; set; }
 
         T Load<T>(string path) where T : class;
 
-        void Import(string path);
+        List<IFolder> Import(string path);
     }
 }
