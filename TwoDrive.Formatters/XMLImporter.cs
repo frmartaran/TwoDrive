@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using TwoDrive.Domain.FileManagement;
 using TwoDrive.Importer.Interface;
 using TwoDrive.Importers.Exceptions;
 using TwoDrive.Importers.Extensions;
@@ -31,6 +30,7 @@ namespace TwoDrive.Importers
 
         public List<IFolder> Import(string path)
         {
+            Tree = new List<IFolder>();
             var document = Load<XmlDocument>(path);
             var rootNode = document.DocumentElement;
             var root = CreateFolder(rootNode, ImporterConstants.Root);
