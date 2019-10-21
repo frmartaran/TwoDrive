@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using TwoDrive.BusinessLogic;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using TwoDrive.BusinessLogic.Logic;
@@ -40,8 +41,9 @@ namespace TwoDrive.Formatter.Test
         public void SuccessfullyLoadFile()
         {
             string path = $@"{examplesRoot}\\Single Folder.xml";
-            var mockFolderLogic = new Mock<IFolderLogic>();
-            var formatter = new XMLFormatter(mockFolderLogic.Object);
+            var mockFolderLogic = new Mock<IFolderLogic>().Object;
+            var mockFileLogic = new Mock<IFileLogic>().Object;
+            var formatter = new XMLFormatter(mockFolderLogic, mockFileLogic);
             var document = formatter.Load<XmlDocument>(path);
             Assert.IsNotNull(document);
         }
@@ -51,8 +53,9 @@ namespace TwoDrive.Formatter.Test
         public void FileNotFound()
         {
             var path = "path";
-            var mockFolderLogic = new Mock<IFolderLogic>();
-            var formatter = new XMLFormatter(mockFolderLogic.Object);
+            var mockFolderLogic = new Mock<IFolderLogic>().Object;
+            var mockFileLogic = new Mock<IFileLogic>().Object;
+            var formatter = new XMLFormatter(mockFolderLogic, mockFileLogic);
             var document = formatter.Load<XmlDocument>(path);
         }
 
@@ -61,8 +64,9 @@ namespace TwoDrive.Formatter.Test
         public void WrongXMLFile()
         {
             var path = $@"{examplesRoot}\\Wrong File.xml";
-            var mockFolderLogic = new Mock<IFolderLogic>();
-            var formatter = new XMLFormatter(mockFolderLogic.Object);
+            var mockFolderLogic = new Mock<IFolderLogic>().Object;
+            var mockFileLogic = new Mock<IFileLogic>().Object;
+            var formatter = new XMLFormatter(mockFolderLogic, mockFileLogic);
             var document = formatter.Load<XmlDocument>(path);
         }
 
@@ -71,8 +75,9 @@ namespace TwoDrive.Formatter.Test
         {
             var path = $@"{examplesRoot}\\Single Folder.xml";
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            var mockFileLogic = new Mock<IFileLogic>().Object;
             mockFolderLogic.Setup(m => m.Create(It.IsAny<Folder>()));
-            var formatter = new XMLFormatter(mockFolderLogic.Object)
+            var formatter = new XMLFormatter(mockFolderLogic.Object, mockFileLogic)
             {
                 WriterFor = writer
             };
@@ -90,10 +95,11 @@ namespace TwoDrive.Formatter.Test
             var fileRepository = new Mock<IFileRepository>().Object;
             var modificationRepository = new Mock<IRepository<Modification>>().Object;
             var validator = new Mock<IFolderValidator>().Object;
+            var mockFileLogic = new Mock<IFileLogic>().Object;
             var dependencies = new ElementLogicDependencies(folderRepository, fileRepository, 
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
-            var formatter = new XMLFormatter(folderLogic)
+            var formatter = new XMLFormatter(folderLogic, mockFileLogic)
             {
                 WriterFor = writer
             };
@@ -119,12 +125,13 @@ namespace TwoDrive.Formatter.Test
             var context = ContextFactory.GetMemoryContext("Without Creation Date");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new Mock<IFileRepository>().Object;
+            var mockFileLogic = new Mock<IFileLogic>().Object;
             var modificationRepository = new Mock<IRepository<Modification>>().Object;
             var validator = new Mock<IFolderValidator>().Object;
             var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
-            var formatter = new XMLFormatter(folderLogic)
+            var formatter = new XMLFormatter(folderLogic, mockFileLogic)
             {
                 WriterFor = writer
             };
@@ -141,12 +148,13 @@ namespace TwoDrive.Formatter.Test
             var context = ContextFactory.GetMemoryContext("Without Creation Date");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new Mock<IFileRepository>().Object;
+            var mockFileLogic = new Mock<IFileLogic>().Object;
             var modificationRepository = new Mock<IRepository<Modification>>().Object;
             var validator = new Mock<IFolderValidator>().Object;
             var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
-            var formatter = new XMLFormatter(folderLogic)
+            var formatter = new XMLFormatter(folderLogic, mockFileLogic)
             {
                 WriterFor = writer
             };
@@ -164,10 +172,11 @@ namespace TwoDrive.Formatter.Test
             var fileRepository = new Mock<IFileRepository>().Object;
             var modificationRepository = new Mock<IRepository<Modification>>().Object;
             var validator = new Mock<IFolderValidator>().Object;
+            var mockFileLogic = new Mock<IFileLogic>().Object;
             var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
-            var formatter = new XMLFormatter(folderLogic)
+            var formatter = new XMLFormatter(folderLogic, mockFileLogic)
             {
                 WriterFor = writer
             };
@@ -188,12 +197,13 @@ namespace TwoDrive.Formatter.Test
             var context = ContextFactory.GetMemoryContext("Without Creation Date");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new Mock<IFileRepository>().Object;
+            var mockFileLogic = new Mock<IFileLogic>().Object;
             var modificationRepository = new Mock<IRepository<Modification>>().Object;
             var validator = new Mock<IFolderValidator>().Object;
             var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
-            var formatter = new XMLFormatter(folderLogic)
+            var formatter = new XMLFormatter(folderLogic, mockFileLogic)
             {
                 WriterFor = writer
             };
@@ -210,12 +220,13 @@ namespace TwoDrive.Formatter.Test
             var context = ContextFactory.GetMemoryContext("Without Creation Date");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new Mock<IFileRepository>().Object;
+            var mockFileLogic = new Mock<IFileLogic>().Object;
             var modificationRepository = new Mock<IRepository<Modification>>().Object;
             var validator = new Mock<IFolderValidator>().Object;
             var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
-            var formatter = new XMLFormatter(folderLogic)
+            var formatter = new XMLFormatter(folderLogic, mockFileLogic)
             {
                 WriterFor = writer
             };
@@ -231,12 +242,13 @@ namespace TwoDrive.Formatter.Test
             var context = ContextFactory.GetMemoryContext("Save Two Levels Of Folders");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new Mock<IFileRepository>().Object;
+            var mockFileLogic = new Mock<IFileLogic>().Object;
             var modificationRepository = new Mock<IRepository<Modification>>().Object;
             var validator = new Mock<IFolderValidator>().Object;
             var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
-            var formatter = new XMLFormatter(folderLogic)
+            var formatter = new XMLFormatter(folderLogic, mockFileLogic)
             {
                 WriterFor = writer
             };
@@ -264,12 +276,13 @@ namespace TwoDrive.Formatter.Test
             var context = ContextFactory.GetMemoryContext("No Name");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new Mock<IFileRepository>().Object;
+            var mockFileLogic = new Mock<IFileLogic>().Object;
             var modificationRepository = new Mock<IRepository<Modification>>().Object;
             var validator = new Mock<IFolderValidator>().Object;
             var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
-            var formatter = new XMLFormatter(folderLogic)
+            var formatter = new XMLFormatter(folderLogic, mockFileLogic)
             {
                 WriterFor = writer
             };
@@ -284,13 +297,15 @@ namespace TwoDrive.Formatter.Test
             var path = $@"{examplesRoot}\\Simple Tree With File.xml";
             var context = ContextFactory.GetMemoryContext("Simple tree with file");
             var folderRepository = new FolderRepository(context);
-            var fileRepository = new Mock<IFileRepository>().Object;
+            var fileRepository = new FileRepository(context);
             var modificationRepository = new Mock<IRepository<Modification>>().Object;
             var validator = new Mock<IFolderValidator>().Object;
+            var fileValidator = new Mock<IValidator<Element>>().Object;
             var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
-            var formatter = new XMLFormatter(folderLogic)
+            var fileLogic = new FileLogic(fileRepository, fileValidator);
+            var formatter = new XMLFormatter(folderLogic, fileLogic)
             {
                 WriterFor = writer
             };

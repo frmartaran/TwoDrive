@@ -16,12 +16,14 @@ namespace TwoDrive.Formatters
     public class XMLFormatter : IFormatter<Folder>
     {
         public ILogic<Folder> LogicToSave { get; set; }
+        public IFileLogic FileLogic { get; set; }
         public string FileExtension { get; set; }
         public Writer WriterFor { get; set; }
 
-        public XMLFormatter(ILogic<Folder> logic)
+        public XMLFormatter(ILogic<Folder> logic, IFileLogic fileLogic)
         {
             LogicToSave = logic;
+            FileLogic = fileLogic;
         }
 
         public void Import(string path)
@@ -31,6 +33,26 @@ namespace TwoDrive.Formatters
             var root = CreateFolder(rootNode, "Root");
             LogicToSave.Create(root);
             WriterFor.AddRootClaims(root);
+            var fileNodes = rootNode.GetElementsByTagName("File");
+            foreach(XmlElement element in fileNodes)
+            {
+                ValidateDates(element, out DateTime creationDate, out DateTime dateModified);
+                var nameAttribute = element.Attributes["name"];
+                var name = nameAttribute.Value;
+                var contentNode = element.GetElementsByTagName("Content");
+                var file = new TxtFile
+                {
+                    CreationDate = creationDate,
+                    DateModified = dateModified,
+                    Name = name,
+                    Content = contentNode.Item(0).InnerText,
+                    Owner = WriterFor,
+                    ParentFolder = root
+                };
+                FileLogic.Create(file);
+                WriterFor.AddCreatorClaimsTo(file);
+                
+            }
             AddChildFolders(rootNode, root);
 
         }
