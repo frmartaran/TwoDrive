@@ -23,11 +23,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwoDrive.WebApi.Test", "Two
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwoDrive.Domain.Interface", "TwoDrive.Domain.Interface\TwoDrive.Domain.Interface.csproj", "{DE1A1B44-03D2-4B3B-A555-48928C5CC32C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoDrive.Formatter.Interface", "TwoDrive.Formatter.Interface\TwoDrive.Formatter.Interface.csproj", "{385789AC-1EC2-4CF2-B083-41B41201EDAE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoDrive.Importer.Interface", "TwoDrive.Formatter.Interface\TwoDrive.Importer.Interface.csproj", "{385789AC-1EC2-4CF2-B083-41B41201EDAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoDrive.Formatters", "TwoDrive.Formatters\TwoDrive.Formatters.csproj", "{1EE179AC-871E-49D0-84A9-84F66E474D2F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoDrive.Importer", "TwoDrive.Formatters\TwoDrive.Importer.csproj", "{1EE179AC-871E-49D0-84A9-84F66E474D2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoDrive.Formatter.Test", "TwoDrive.Formatter.Test\TwoDrive.Formatter.Test.csproj", "{9ACD403E-1C87-4C86-96C8-BBC1A324996E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoDrive.Importer.Test", "TwoDrive.Formatter.Test\TwoDrive.Importer.Test.csproj", "{9ACD403E-1C87-4C86-96C8-BBC1A324996E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

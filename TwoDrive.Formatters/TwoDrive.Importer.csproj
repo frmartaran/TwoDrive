@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TwoDrive.BusinessLogic.Interface\TwoDrive.BusinessLogic.Interfaces.csproj" />
+    <ProjectReference Include="..\TwoDrive.BusinessLogic\TwoDrive.BusinessLogic.csproj" />
+    <ProjectReference Include="..\TwoDrive.Domain\TwoDrive.Domain.csproj" />
+    <ProjectReference Include="..\TwoDrive.Formatter.Interface\TwoDrive.Importer.Interface.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="ImporterResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ImporterResource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="ImporterResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ImporterResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

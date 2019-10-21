@@ -6,21 +6,22 @@ using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
-using TwoDrive.Formatter.Interface;
-using TwoDrive.Formatters.Exceptions;
-using TwoDrive.Formatters.Extensions;
+using TwoDrive.Importer.Interface;
+using TwoDrive.Importers.Exceptions;
+using TwoDrive.Importers.Extensions;
 using System.Linq;
+using TwoDrive.Importer;
 
-namespace TwoDrive.Formatters
+namespace TwoDrive.Importers
 {
-    public class XMLFormatter : IFormatter<Folder>
+    public class XMLImporter : ITreeImporter
     {
         public ILogic<Folder> LogicToSave { get; set; }
         public IFileLogic FileLogic { get; set; }
         public string FileExtension { get; set; }
         public Writer WriterFor { get; set; }
 
-        public XMLFormatter(ILogic<Folder> logic, IFileLogic fileLogic)
+        public XMLImporter(ILogic<Folder> logic, IFileLogic fileLogic)
         {
             LogicToSave = logic;
             FileLogic = fileLogic;
@@ -30,16 +31,23 @@ namespace TwoDrive.Formatters
         {
             var document = Load<XmlDocument>(path);
             var rootNode = document.DocumentElement;
-            var root = CreateFolder(rootNode, "Root");
+            var root = CreateFolder(rootNode, ImporterConstants.Root);
             LogicToSave.Create(root);
             WriterFor.AddRootClaims(root);
-            var fileNodes = rootNode.GetElementsByTagName("File");
-            foreach(XmlElement element in fileNodes)
+            var fileNodes = rootNode.GetElementsByTagName(ImporterConstants.File);
+            AddFiles(root, fileNodes);
+            AddChildFolders(rootNode, root);
+
+        }
+
+        private void AddFiles(Folder parentFolder, XmlNodeList fileNodes)
+        {
+            foreach (XmlElement element in fileNodes)
             {
                 ValidateDates(element, out DateTime creationDate, out DateTime dateModified);
-                var nameAttribute = element.Attributes["name"];
+                var nameAttribute = element.Attributes[ImporterConstants.Name];
                 var name = nameAttribute.Value;
-                var contentNode = element.GetElementsByTagName("Content");
+                var contentNode = element.GetElementsByTagName(ImporterConstants.Content);
                 var file = new TxtFile
                 {
                     CreationDate = creationDate,
@@ -47,19 +55,16 @@ namespace TwoDrive.Formatters
                     Name = name,
                     Content = contentNode.Item(0).InnerText,
                     Owner = WriterFor,
-                    ParentFolder = root
+                    ParentFolder = parentFolder
                 };
                 FileLogic.Create(file);
                 WriterFor.AddCreatorClaimsTo(file);
-                
             }
-            AddChildFolders(rootNode, root);
-
         }
 
         private void AddChildFolders(XmlElement parentNode, Folder parentFolder)
         {
-            var childNodes = parentNode.GetElementsByTagName("Folder");
+            var childNodes = parentNode.GetElementsByTagName(ImporterConstants.Folder);
             if (childNodes.Count == 0)
                 return;
 
@@ -69,9 +74,9 @@ namespace TwoDrive.Formatters
 
             foreach (XmlElement innerFolder in folderChildren)
             {
-                var nameAttribute = innerFolder.Attributes["name"];
+                var nameAttribute = innerFolder.Attributes[ImporterConstants.Name];
                 if (nameAttribute == null)
-                    throw new FormatterException("Each folder tag must have the name attribute");
+                    throw new ImporterException(ImporterResource.NoName_Exception);
 
                 var name = nameAttribute.Value;
                 var newFolder = CreateFolder(innerFolder, name);
@@ -99,8 +104,8 @@ namespace TwoDrive.Formatters
 
         private static void ValidateDates(XmlElement node, out DateTime creationDate, out DateTime dateModified)
         {
-            var creationDateNodes = node.GetElementsByTagName("CreationDate");
-            var dateModifiedNodes = node.GetElementsByTagName("DateModified");
+            var creationDateNodes = node.GetElementsByTagName(ImporterConstants.CreationDate);
+            var dateModifiedNodes = node.GetElementsByTagName(ImporterConstants.DateModified);
             node.ValidateDateNodes(creationDateNodes, dateModifiedNodes);
 
             var creationDateString = creationDateNodes.Item(0).InnerText;
@@ -109,11 +114,9 @@ namespace TwoDrive.Formatters
             var isCorrectCreationDate = DateTime.TryParse(creationDateString, out creationDate);
             var isCorrectDateModified = DateTime.TryParse(dateModifiedString, out dateModified);
 
-            if (!isCorrectCreationDate)
-                throw new FormatterException("Invalid date format. Please try: yyyy-mm-dd");
+            if (!isCorrectCreationDate || !isCorrectDateModified)
+                throw new ImporterException(ImporterResource.WrongFormat_Exception);
 
-            if (!isCorrectDateModified)
-                throw new FormatterException("Invalid date format. Please try: yyyy-mm-dd");
         }
 
 
@@ -127,11 +130,11 @@ namespace TwoDrive.Formatters
             }
             catch (FileNotFoundException exception)
             {
-                throw new FormatterException(exception.Message, exception);
+                throw new ImporterException(exception.Message, exception);
             }
             catch (XmlException exception)
             {
-                throw new FormatterException(exception.Message, exception);
+                throw new ImporterException(exception.Message, exception);
             }
         }
     }

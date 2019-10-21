@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
-using TwoDrive.Formatters.Exceptions;
+using TwoDrive.Importers.Exceptions;
 
-namespace TwoDrive.Formatters.Extensions
+namespace TwoDrive.Importers.Extensions
 {
     public static class XMLNodeExtension
     {
@@ -12,10 +12,10 @@ namespace TwoDrive.Formatters.Extensions
             XmlNodeList creationDateNodes, XmlNodeList dateModifiedNodes)
         {
             if (!parentNode.ExistsChildNode(creationDateNodes))
-                throw new FormatterException("Missing Creation Date Tag");
+                throw new ImporterException("Missing Creation Date Tag");
 
             if (!parentNode.ExistsChildNode(dateModifiedNodes))
-                throw new FormatterException("Missing Date Modified Tag");
+                throw new ImporterException("Missing Date Modified Tag");
         }
 
         public static bool ExistsChildNode(this XmlElement rootNode, XmlNodeList nodeList)

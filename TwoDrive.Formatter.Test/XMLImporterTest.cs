@@ -1,7 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Xml;
 using TwoDrive.BusinessLogic;
@@ -12,14 +11,13 @@ using TwoDrive.DataAccess;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
-using TwoDrive.Formatter.Interface;
-using TwoDrive.Formatters;
-using TwoDrive.Formatters.Exceptions;
+using TwoDrive.Importers;
+using TwoDrive.Importers.Exceptions;
 
-namespace TwoDrive.Formatter.Test
+namespace TwoDrive.Importer.Test
 {
     [TestClass]
-    public class XMLFormatterTest
+    public class XMLImporterTest
     {
         private const string examplesRoot = "..\\..\\..\\Xml Tree Examples";
         Writer writer;
@@ -43,30 +41,30 @@ namespace TwoDrive.Formatter.Test
             string path = $@"{examplesRoot}\\Single Folder.xml";
             var mockFolderLogic = new Mock<IFolderLogic>().Object;
             var mockFileLogic = new Mock<IFileLogic>().Object;
-            var formatter = new XMLFormatter(mockFolderLogic, mockFileLogic);
+            var formatter = new XMLImporter(mockFolderLogic, mockFileLogic);
             var document = formatter.Load<XmlDocument>(path);
             Assert.IsNotNull(document);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FormatterException))]
+        [ExpectedException(typeof(ImporterException))]
         public void FileNotFound()
         {
             var path = "path";
             var mockFolderLogic = new Mock<IFolderLogic>().Object;
             var mockFileLogic = new Mock<IFileLogic>().Object;
-            var formatter = new XMLFormatter(mockFolderLogic, mockFileLogic);
+            var formatter = new XMLImporter(mockFolderLogic, mockFileLogic);
             var document = formatter.Load<XmlDocument>(path);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FormatterException))]
+        [ExpectedException(typeof(ImporterException))]
         public void WrongXMLFile()
         {
             var path = $@"{examplesRoot}\\Wrong File.xml";
             var mockFolderLogic = new Mock<IFolderLogic>().Object;
             var mockFileLogic = new Mock<IFileLogic>().Object;
-            var formatter = new XMLFormatter(mockFolderLogic, mockFileLogic);
+            var formatter = new XMLImporter(mockFolderLogic, mockFileLogic);
             var document = formatter.Load<XmlDocument>(path);
         }
 
@@ -77,7 +75,7 @@ namespace TwoDrive.Formatter.Test
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             var mockFileLogic = new Mock<IFileLogic>().Object;
             mockFolderLogic.Setup(m => m.Create(It.IsAny<Folder>()));
-            var formatter = new XMLFormatter(mockFolderLogic.Object, mockFileLogic)
+            var formatter = new XMLImporter(mockFolderLogic.Object, mockFileLogic)
             {
                 WriterFor = writer
             };
@@ -99,7 +97,7 @@ namespace TwoDrive.Formatter.Test
             var dependencies = new ElementLogicDependencies(folderRepository, fileRepository, 
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
-            var formatter = new XMLFormatter(folderLogic, mockFileLogic)
+            var formatter = new XMLImporter(folderLogic, mockFileLogic)
             {
                 WriterFor = writer
             };
@@ -118,7 +116,7 @@ namespace TwoDrive.Formatter.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FormatterException))]
+        [ExpectedException(typeof(ImporterException))]
         public void WithoutCreationDate()
         {
             var path = $@"{examplesRoot}\\WithoutCreationDate.xml";
@@ -131,7 +129,7 @@ namespace TwoDrive.Formatter.Test
             var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
-            var formatter = new XMLFormatter(folderLogic, mockFileLogic)
+            var formatter = new XMLImporter(folderLogic, mockFileLogic)
             {
                 WriterFor = writer
             };
@@ -141,7 +139,7 @@ namespace TwoDrive.Formatter.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FormatterException))]
+        [ExpectedException(typeof(ImporterException))]
         public void WithoutDateModified()
         {
             var path = $@"{examplesRoot}\\WithoutDateModified.xml";
@@ -154,7 +152,7 @@ namespace TwoDrive.Formatter.Test
             var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
-            var formatter = new XMLFormatter(folderLogic, mockFileLogic)
+            var formatter = new XMLImporter(folderLogic, mockFileLogic)
             {
                 WriterFor = writer
             };
@@ -176,7 +174,7 @@ namespace TwoDrive.Formatter.Test
             var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
-            var formatter = new XMLFormatter(folderLogic, mockFileLogic)
+            var formatter = new XMLImporter(folderLogic, mockFileLogic)
             {
                 WriterFor = writer
             };
@@ -190,7 +188,7 @@ namespace TwoDrive.Formatter.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FormatterException))]
+        [ExpectedException(typeof(ImporterException))]
         public void InvalidCreationDate()
         {
             var path = $@"{examplesRoot}\\InvalidCreationDate.xml";
@@ -203,7 +201,7 @@ namespace TwoDrive.Formatter.Test
             var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
-            var formatter = new XMLFormatter(folderLogic, mockFileLogic)
+            var formatter = new XMLImporter(folderLogic, mockFileLogic)
             {
                 WriterFor = writer
             };
@@ -213,7 +211,7 @@ namespace TwoDrive.Formatter.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FormatterException))]
+        [ExpectedException(typeof(ImporterException))]
         public void InvalidDateModified()
         {
             var path = $@"{examplesRoot}\\InvalidDateModified.xml";
@@ -226,7 +224,7 @@ namespace TwoDrive.Formatter.Test
             var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
-            var formatter = new XMLFormatter(folderLogic, mockFileLogic)
+            var formatter = new XMLImporter(folderLogic, mockFileLogic)
             {
                 WriterFor = writer
             };
@@ -248,7 +246,7 @@ namespace TwoDrive.Formatter.Test
             var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
-            var formatter = new XMLFormatter(folderLogic, mockFileLogic)
+            var formatter = new XMLImporter(folderLogic, mockFileLogic)
             {
                 WriterFor = writer
             };
@@ -269,7 +267,7 @@ namespace TwoDrive.Formatter.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FormatterException))]
+        [ExpectedException(typeof(ImporterException))]
         public void FolderWithNoName()
         {
             var path = $@"{examplesRoot}\\NoName.xml";
@@ -282,7 +280,7 @@ namespace TwoDrive.Formatter.Test
             var dependencies = new ElementLogicDependencies(folderRepository, fileRepository,
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
-            var formatter = new XMLFormatter(folderLogic, mockFileLogic)
+            var formatter = new XMLImporter(folderLogic, mockFileLogic)
             {
                 WriterFor = writer
             };
@@ -305,7 +303,7 @@ namespace TwoDrive.Formatter.Test
                 validator, modificationRepository);
             var folderLogic = new FolderLogic(dependencies);
             var fileLogic = new FileLogic(fileRepository, fileValidator);
-            var formatter = new XMLFormatter(folderLogic, fileLogic)
+            var formatter = new XMLImporter(folderLogic, fileLogic)
             {
                 WriterFor = writer
             };
