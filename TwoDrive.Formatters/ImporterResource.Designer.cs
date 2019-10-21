@@ -70,6 +70,15 @@ namespace TwoDrive.Importer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unsupported file type. Must be &apos;txt&apos; or &apos;html&apos;.
+        /// </summary>
+        internal static string Unsupported {
+            get {
+                return ResourceManager.GetString("Unsupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid date format. Please try: yyyy-mm-dd.
         /// </summary>
         internal static string WrongFormat_Exception {

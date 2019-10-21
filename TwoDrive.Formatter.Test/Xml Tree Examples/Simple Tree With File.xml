@@ -2,11 +2,11 @@
   <Root>
     <CreationDate>2019-03-23</CreationDate>
     <DateModified>2019-03-23</DateModified>
-    <Folder name="Folder" parentFolder="Root">
+    <Folder name="Folder">
       <CreationDate>2019-03-23</CreationDate>
       <DateModified>2019-03-23</DateModified>
     </Folder>
-    <File name="File.txt" parentFolder="Root">
+    <File name="File.txt" type="txt">
       <CreationDate>2019-03-23</CreationDate>
       <DateModified>2019-03-23</DateModified>
       <Content>This is A File</Content>

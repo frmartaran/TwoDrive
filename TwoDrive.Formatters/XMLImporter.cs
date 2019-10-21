@@ -48,15 +48,39 @@ namespace TwoDrive.Importers
                 var nameAttribute = element.Attributes[ImporterConstants.Name];
                 var name = nameAttribute.Value;
                 var contentNode = element.GetElementsByTagName(ImporterConstants.Content);
-                var file = new TxtFile
+                var typeNode = element.Attributes[ImporterConstants.Type];
+                var type = typeNode.Value;
+                Domain.FileManagement.File file = new TxtFile();
+                switch (type)
                 {
-                    CreationDate = creationDate,
-                    DateModified = dateModified,
-                    Name = name,
-                    Content = contentNode.Item(0).InnerText,
-                    Owner = WriterFor,
-                    ParentFolder = parentFolder
-                };
+                    case "txt":
+                        file = new TxtFile
+                        {
+                            CreationDate = creationDate,
+                            DateModified = dateModified,
+                            Name = name,
+                            Content = contentNode.Item(0).InnerText,
+                            Owner = WriterFor,
+                            ParentFolder = parentFolder
+                        };
+                        break;
+                    case "html":
+                        file = new HTMLFile
+                        {
+                            CreationDate = creationDate,
+                            DateModified = dateModified,
+                            Name = name,
+                            Content = contentNode.Item(0).InnerText,
+                            Owner = WriterFor,
+                            ParentFolder = parentFolder,
+                            ShouldRender = true
+                        };
+
+                        break;
+                    default:
+                        throw new ImporterException(ImporterResource.Unsupported);
+                }
+
                 FileLogic.Create(file);
                 WriterFor.AddCreatorClaimsTo(file);
             }

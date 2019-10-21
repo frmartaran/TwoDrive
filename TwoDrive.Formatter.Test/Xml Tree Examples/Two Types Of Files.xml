@@ -6,12 +6,12 @@
       <CreationDate>2019-03-23</CreationDate>
       <DateModified>2019-03-23</DateModified>
     </Folder>
-    <File name="File.txt">
+    <File name="File.txt" type="txt">
       <CreationDate>2019-03-23</CreationDate>
       <DateModified>2019-03-23</DateModified>
       <Content>This is A File</Content>
     </File>
-    <File name="Page.html">
+    <File name="Page.html" type="html">
       <CreationDate>2019-03-23</CreationDate>
       <DateModified>2019-03-23</DateModified>
       <Content><![CDATA[<h1>This is a HTML File</h1>]]></Content>

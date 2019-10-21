@@ -342,13 +342,13 @@ namespace TwoDrive.Importer.Test
 
             var foldersCount = context.Folders.ToList().Count;
             var filesCount = context.Files.ToList().Count;
-            var txtfile = context.Files.FirstOrDefault();
-            var htmlfile = context.Files.LastOrDefault();
+            var htmlFile = context.Files.FirstOrDefault();
+            var txtfile = context.Files.LastOrDefault();
             Assert.AreEqual(2, foldersCount);
             Assert.AreEqual(2, filesCount);
             Assert.IsInstanceOfType(txtfile, typeof(TxtFile));
-            Assert.IsInstanceOfType(htmlfile, typeof(HTMLFile));
-            Assert.AreEqual(11, writer.Claims.Count);
+            Assert.IsInstanceOfType(htmlFile, typeof(HTMLFile));
+            Assert.AreEqual(15, writer.Claims.Count);
         }
 
     }
