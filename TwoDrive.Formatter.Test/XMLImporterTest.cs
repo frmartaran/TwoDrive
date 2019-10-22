@@ -150,9 +150,12 @@ namespace TwoDrive.Importer.Test
             var files = root.FolderChildren
                 .OfType<MockFile>()
                 .ToList();
-
+            var htmlFile = files
+                .Where(t => t.Extension == "html")
+                .FirstOrDefault();
             Assert.AreEqual(2, foldersCount);
             Assert.AreEqual(2, files.Count);
+            Assert.IsTrue(htmlFile.ShouldRender);
         }
 
         [TestMethod]
@@ -180,6 +183,37 @@ namespace TwoDrive.Importer.Test
             var path = $@"{examplesRoot}\\File with no content.xml";
             var formatter = new XMLImporter();
             var tree = formatter.Import(path);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ImporterException))]
+        public void FileWtihNoCreationDate()
+        {
+            var path = $@"{examplesRoot}\\File with no creation date.xml";
+            var formatter = new XMLImporter();
+            var tree = formatter.Import(path);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ImporterException))]
+        public void FileWtihNoDateModified()
+        {
+            var path = $@"{examplesRoot}\\File with no date modified.xml";
+            var formatter = new XMLImporter();
+            var tree = formatter.Import(path);
+        }
+
+        [TestMethod]
+        public void FileWtihNoRenderDefined()
+        {
+            var path = $@"{examplesRoot}\\File with no date modified.xml";
+            var formatter = new XMLImporter();
+            var tree = formatter.Import(path);
+            var root = tree.FirstOrDefault();
+            var htmlFile = root.FolderChildren
+                .OfType<MockFile>()
+                .FirstOrDefault();
+            Assert.IsFalse(htmlFile.ShouldRender);
         }
 
 

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="NoContent_Exception" xml:space="preserve">
+    <value>Missing Content Tag</value>
+  </data>
   <data name="NoName_Exception" xml:space="preserve">
     <value>Each folder tag must have the name attribute</value>
   </data>

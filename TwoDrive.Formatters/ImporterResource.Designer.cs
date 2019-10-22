@@ -61,6 +61,15 @@ namespace TwoDrive.Importer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing Content Tag.
+        /// </summary>
+        internal static string NoContent_Exception {
+            get {
+                return ResourceManager.GetString("NoContent_Exception", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Each folder tag must have the name attribute.
         /// </summary>
         internal static string NoName_Exception {
