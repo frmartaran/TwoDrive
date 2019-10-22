@@ -123,6 +123,9 @@
   <data name="NoName_Exception" xml:space="preserve">
     <value>Each folder tag must have the name attribute</value>
   </data>
+  <data name="NoRoot_Exception" xml:space="preserve">
+    <value>This importer only imports trees that start from the root folder. Use another importer or add a new one.</value>
+  </data>
   <data name="NoType_Exception" xml:space="preserve">
     <value>Missing Type Attribute. </value>
   </data>

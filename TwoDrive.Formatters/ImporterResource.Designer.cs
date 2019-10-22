@@ -79,6 +79,15 @@ namespace TwoDrive.Importer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This importer only imports trees that start from the root folder. Use another importer or add a new one..
+        /// </summary>
+        internal static string NoRoot_Exception {
+            get {
+                return ResourceManager.GetString("NoRoot_Exception", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Missing Type Attribute. .
         /// </summary>
         internal static string NoType_Exception {

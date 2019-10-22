@@ -33,6 +33,9 @@ namespace TwoDrive.Importers
             Tree = new List<IFolder>();
             var document = Load<XmlDocument>(path);
             var rootNode = document.DocumentElement;
+            if (rootNode.Name != ImporterConstants.Root)
+                throw new ImporterException(ImporterResource.NoRoot_Exception);
+
             var root = CreateFolder(rootNode, ImporterConstants.Root);
             Tree.Add(root);
             var fileNodes = rootNode.GetElementsByTagName(ImporterConstants.File);
