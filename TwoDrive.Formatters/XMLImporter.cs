@@ -49,6 +49,9 @@ namespace TwoDrive.Importers
             {
                 ValidateDates(element, out DateTime creationDate, out DateTime dateModified);
                 var nameAttribute = element.Attributes[ImporterConstants.Name];
+                if (nameAttribute == null)
+                    throw new ImporterException(ImporterResource.NoName_Exception);
+
                 var name = nameAttribute.Value;
                 var contentNode = element.GetElementsByTagName(ImporterConstants.Content);
                 var typeNode = element.Attributes[ImporterConstants.Type];
