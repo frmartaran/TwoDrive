@@ -206,14 +206,14 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void FileWtihNoRenderDefined()
         {
-            var path = $@"{examplesRoot}\\File with no date modified.xml";
+            var path = $@"{examplesRoot}\\File with no render.xml";
             var formatter = new XMLImporter();
             var tree = formatter.Import(path);
             var root = tree.FirstOrDefault();
-            var htmlFile = root.FolderChildren
+            var file = root.FolderChildren
                 .OfType<MockFile>()
                 .FirstOrDefault();
-            Assert.IsFalse(htmlFile.ShouldRender);
+            Assert.IsFalse(file.ShouldRender);
         }
 
 

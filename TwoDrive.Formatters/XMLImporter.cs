@@ -52,13 +52,19 @@ namespace TwoDrive.Importers
                 if (nameAttribute == null)
                     throw new ImporterException(ImporterResource.NoName_Exception);
                 var name = nameAttribute.Value;
-                var typeNode = element.Attributes[ImporterConstants.Type];
-                if (typeNode == null)
+
+                var typeAttribute = element.Attributes[ImporterConstants.Type];
+                if (typeAttribute == null)
                     throw new ImporterException(ImporterResource.NoType_Exception);
-                var type = typeNode.Value;
+                var type = typeAttribute.Value;
+
                 var contentNode = element.GetElementsByTagName(ImporterConstants.Content);
                 if (contentNode.Count == 0)
                     throw new ImporterException(ImporterResource.NoContent_Exception);
+
+                var renderAttribute = element.Attributes["render"];
+                var shouldRender = renderAttribute == null ? false : Convert.ToBoolean(renderAttribute.Value);
+
                 var file = new MockFile
                 {
                     Name = name,
@@ -67,7 +73,7 @@ namespace TwoDrive.Importers
                     Content = contentNode.Item(0).InnerText,
                     Extension = type,
                     ParentFolder = parentFolder,
-                    ShouldRender = false
+                    ShouldRender = shouldRender
                 };
                 allFiles.Add(file);
             }

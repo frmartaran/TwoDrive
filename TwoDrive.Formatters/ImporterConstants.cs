@@ -24,6 +24,8 @@ namespace TwoDrive.Importer
 
         public const string Type = "type";
 
+        public const string Render = "render";
+
         #endregion
     }
 }
