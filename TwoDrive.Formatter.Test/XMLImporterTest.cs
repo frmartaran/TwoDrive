@@ -229,6 +229,7 @@ namespace TwoDrive.Importer.Test
             var file = child.FolderChildren
                 .OfType<MockFile>()
                 .FirstOrDefault();
+
             Assert.IsNotNull(child);
             Assert.AreEqual(child, file.ParentFolder);
         }

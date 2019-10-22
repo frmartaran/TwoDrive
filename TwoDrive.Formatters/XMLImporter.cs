@@ -101,6 +101,8 @@ namespace TwoDrive.Importers
                 newFolder.ParentFolder = parentFolder;
                 parentFolder.FolderChildren.Add(newFolder);
                 Tree.Add(newFolder);
+                var fileNodes = innerFolder.GetElementsByTagName(ImporterConstants.File);
+                AddFiles(newFolder, fileNodes);
                 AddChildFolders(innerFolder, newFolder);
             }
         }
