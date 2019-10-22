@@ -155,5 +155,15 @@ namespace TwoDrive.Importer.Test
             Assert.AreEqual(2, files.Count);
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(ImporterException))]
+        public void FileWtihNoName()
+        {
+            var path = $@"{examplesRoot}\\File with no name.xml";
+            var formatter = new XMLImporter();
+            var tree = formatter.Import(path);
+        }
+
+
     }
 }
