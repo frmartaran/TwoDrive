@@ -51,13 +51,13 @@ namespace TwoDrive.Importers
                 var nameAttribute = element.Attributes[ImporterConstants.Name];
                 if (nameAttribute == null)
                     throw new ImporterException(ImporterResource.NoName_Exception);
-
                 var name = nameAttribute.Value;
-                var contentNode = element.GetElementsByTagName(ImporterConstants.Content);
                 var typeNode = element.Attributes[ImporterConstants.Type];
                 if (typeNode == null)
                     throw new ImporterException(ImporterResource.NoType_Exception);
                 var type = typeNode.Value;
+                var contentNode = element.GetElementsByTagName(ImporterConstants.Content);
+
                 var file = new MockFile
                 {
                     Name = name,
