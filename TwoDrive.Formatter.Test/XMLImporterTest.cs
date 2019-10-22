@@ -216,6 +216,23 @@ namespace TwoDrive.Importer.Test
             Assert.IsFalse(file.ShouldRender);
         }
 
+        [TestMethod]
+        public void FolderChildHasFile()
+        {
+            var path = $@"{examplesRoot}\\Child has file.xml";
+            var formatter = new XMLImporter();
+            var tree = formatter.Import(path);
+            var root = tree.FirstOrDefault();
+            var child = root.FolderChildren
+                .OfType<MockFolder>()
+                .FirstOrDefault();
+            var file = child.FolderChildren
+                .OfType<MockFile>()
+                .FirstOrDefault();
+            Assert.IsNotNull(child);
+            Assert.AreEqual(child, file.ParentFolder);
+        }
+
 
     }
 }
