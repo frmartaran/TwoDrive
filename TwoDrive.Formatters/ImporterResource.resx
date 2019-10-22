@@ -120,6 +120,9 @@
   <data name="NoName_Exception" xml:space="preserve">
     <value>Each folder tag must have the name attribute</value>
   </data>
+  <data name="NoType_Exception" xml:space="preserve">
+    <value>Missing Type Attribute. </value>
+  </data>
   <data name="Unsupported" xml:space="preserve">
     <value>Unsupported file type. Must be 'txt' or 'html'</value>
   </data>

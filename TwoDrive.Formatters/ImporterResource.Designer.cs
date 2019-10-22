@@ -70,6 +70,15 @@ namespace TwoDrive.Importer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing Type Attribute. .
+        /// </summary>
+        internal static string NoType_Exception {
+            get {
+                return ResourceManager.GetString("NoType_Exception", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unsupported file type. Must be &apos;txt&apos; or &apos;html&apos;.
         /// </summary>
         internal static string Unsupported {

@@ -55,6 +55,8 @@ namespace TwoDrive.Importers
                 var name = nameAttribute.Value;
                 var contentNode = element.GetElementsByTagName(ImporterConstants.Content);
                 var typeNode = element.Attributes[ImporterConstants.Type];
+                if (typeNode == null)
+                    throw new ImporterException(ImporterResource.NoType_Exception);
                 var type = typeNode.Value;
                 var file = new MockFile
                 {

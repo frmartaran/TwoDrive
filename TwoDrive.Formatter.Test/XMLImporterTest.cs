@@ -168,7 +168,7 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void FileWtihNoType()
         {
-            var path = $@"{examplesRoot}\\File with no name.xml";
+            var path = $@"{examplesRoot}\\File with no type.xml";
             var formatter = new XMLImporter();
             var tree = formatter.Import(path);
         }
