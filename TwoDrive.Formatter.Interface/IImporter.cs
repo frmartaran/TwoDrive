@@ -10,6 +10,6 @@ namespace TwoDrive.Importer.Interface
 
         T Load<T>(string path) where T : class;
 
-        List<ImportType> Import(string path);
+        IFolder Import(string path);
     }
 }

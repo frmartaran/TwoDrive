@@ -26,23 +26,24 @@ namespace TwoDrive.Importers
             }
         }
 
-        private List<IFolder> Tree { get; set; }
 
-        public List<IFolder> Import(string path)
+        public IFolder Import(string path)
         {
-            Tree = new List<IFolder>();
             var document = Load<XmlDocument>(path);
             var rootNode = document.DocumentElement;
-            if (rootNode.Name != ImporterConstants.Root)
-                throw new ImporterException(ImporterResource.NoRoot_Exception);
-
+            ValidateRootTag(rootNode);
             var root = CreateFolder(rootNode, ImporterConstants.Root);
-            Tree.Add(root);
             var fileNodes = rootNode.GetElementsByTagName(ImporterConstants.File);
             AddFiles(root, fileNodes);
             AddChildFolders(rootNode, root);
-            return Tree;
+            return root;
 
+        }
+
+        private static void ValidateRootTag(XmlElement rootNode)
+        {
+            if (rootNode.Name != ImporterConstants.Root)
+                throw new ImporterException(ImporterResource.NoRoot_Exception);
         }
 
         private void AddFiles(MockFolder parentFolder, XmlNodeList fileNodes)
@@ -52,18 +53,15 @@ namespace TwoDrive.Importers
             {
                 ValidateDates(element, out DateTime creationDate, out DateTime dateModified);
                 var nameAttribute = element.Attributes[ImporterConstants.Name];
-                if (nameAttribute == null)
-                    throw new ImporterException(ImporterResource.NoName_Exception);
+                ValidateNameAttribute(nameAttribute);
                 var name = nameAttribute.Value;
 
                 var typeAttribute = element.Attributes[ImporterConstants.Type];
-                if (typeAttribute == null)
-                    throw new ImporterException(ImporterResource.NoType_Exception);
+                ValidateTypeAttribute(typeAttribute);
                 var type = typeAttribute.Value;
 
                 var contentNode = element.GetElementsByTagName(ImporterConstants.Content);
-                if (contentNode.Count == 0)
-                    throw new ImporterException(ImporterResource.NoContent_Exception);
+                ValidateContentTag(contentNode);
 
                 var renderAttribute = element.Attributes["render"];
                 var shouldRender = renderAttribute == null ? false : Convert.ToBoolean(renderAttribute.Value);
@@ -83,6 +81,24 @@ namespace TwoDrive.Importers
             parentFolder.FolderChildren.AddRange(allFiles);
         }
 
+        private static void ValidateContentTag(XmlNodeList contentNode)
+        {
+            if (contentNode.Count == 0)
+                throw new ImporterException(ImporterResource.NoContent_Exception);
+        }
+
+        private static void ValidateTypeAttribute(XmlAttribute typeAttribute)
+        {
+            if (typeAttribute == null)
+                throw new ImporterException(ImporterResource.NoType_Exception);
+        }
+
+        private static void ValidateNameAttribute(XmlAttribute nameAttribute)
+        {
+            if (nameAttribute == null)
+                throw new ImporterException(ImporterResource.NoName_Exception);
+        }
+
         private void AddChildFolders(XmlElement parentNode, MockFolder parentFolder)
         {
             var childNodes = parentNode.GetElementsByTagName(ImporterConstants.Folder);
@@ -96,14 +112,12 @@ namespace TwoDrive.Importers
             foreach (XmlElement innerFolder in folderChildren)
             {
                 var nameAttribute = innerFolder.Attributes[ImporterConstants.Name];
-                if (nameAttribute == null)
-                    throw new ImporterException(ImporterResource.NoName_Exception);
+                ValidateNameAttribute(nameAttribute);
 
                 var name = nameAttribute.Value;
                 var newFolder = CreateFolder(innerFolder, name);
                 newFolder.ParentFolder = parentFolder;
                 parentFolder.FolderChildren.Add(newFolder);
-                Tree.Add(newFolder);
                 var fileNodes = innerFolder.GetElementsByTagName(ImporterConstants.File);
                 AddFiles(newFolder, fileNodes);
                 AddChildFolders(innerFolder, newFolder);

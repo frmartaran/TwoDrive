@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Xml;
+using TwoDrive.Importer.Interface.IFileManagement;
 using TwoDrive.Importer.MockDomain;
 using TwoDrive.Importers;
 using TwoDrive.Importers.Exceptions;
@@ -44,11 +45,11 @@ namespace TwoDrive.Importer.Test
         {
             var path = $@"{examplesRoot}\\Single Folder.xml";
             var formatter = new XMLImporter();
-            var tree = formatter.Import(path);
-            var root = tree.FirstOrDefault();
-            Assert.IsNotNull(tree);
+            var root = formatter.Import(path);
+            Assert.IsNotNull(root);
             Assert.AreEqual(root.Name, ImporterConstants.Root);
-            Assert.AreEqual(2, tree.Count);
+            Assert.AreEqual(1, root.FolderChildren.Count);
+            Assert.IsNull(root.ParentFolder);
         }
 
         [TestMethod]
@@ -74,10 +75,10 @@ namespace TwoDrive.Importer.Test
         {
             var path = $@"{examplesRoot}\\Single Folder.xml";
             var formatter = new XMLImporter();
-            var tree = formatter.Import(path);
+            var root = formatter.Import(path);
 
-            var foldersCount = tree.Count;
-            Assert.AreEqual(2, foldersCount);
+            Assert.IsNotNull(root);
+            Assert.AreEqual(1, root.FolderChildren.Count);
         }
 
         [TestMethod]
@@ -103,12 +104,14 @@ namespace TwoDrive.Importer.Test
         {
             var path = $@"{examplesRoot}\\Two Level Tree.xml";
             var formatter = new XMLImporter();
-            var tree = formatter.Import(path);
+            var root = formatter.Import(path);
 
-            var foldersCount = tree.Count;
-            var middleFolder = tree.ElementAt(1);
-            var lastFolder = tree.ElementAt(2);
-            Assert.AreEqual(3, foldersCount);
+            var middleFolder = root.FolderChildren
+                .FirstOrDefault() as IFolder;
+            var lastFolder = middleFolder.FolderChildren
+                .FirstOrDefault();
+            Assert.AreEqual(1, root.FolderChildren.Count);
+            Assert.AreEqual(1, middleFolder.FolderChildren.Count);
             Assert.AreEqual(middleFolder, lastFolder.ParentFolder);
         }
 
@@ -126,15 +129,14 @@ namespace TwoDrive.Importer.Test
         {
             var path = $@"{examplesRoot}\\Simple Tree With File.xml";
             var formatter = new XMLImporter();
-            var tree = formatter.Import(path);
+            var root = formatter.Import(path);
 
-            var foldersCount = tree.Count;
-            var root = tree.FirstOrDefault();
             var filesCount = root.FolderChildren
                 .Where(e => e is MockFile)
                 .ToList()
                 .Count;
-            Assert.AreEqual(2, foldersCount);
+
+            Assert.AreEqual(2, root.FolderChildren.Count);
             Assert.AreEqual(1, filesCount);
         }
 
@@ -143,17 +145,15 @@ namespace TwoDrive.Importer.Test
         {
             var path = $@"{examplesRoot}\\Two Types Of Files.xml";
             var formatter = new XMLImporter();
-            var tree = formatter.Import(path);
+            var root = formatter.Import(path);
 
-            var foldersCount = tree.Count;
-            var root = tree.FirstOrDefault();
             var files = root.FolderChildren
                 .OfType<MockFile>()
                 .ToList();
             var htmlFile = files
                 .Where(t => t.Extension == "html")
                 .FirstOrDefault();
-            Assert.AreEqual(2, foldersCount);
+            Assert.AreEqual(3, root.FolderChildren.Count);
             Assert.AreEqual(2, files.Count);
             Assert.IsTrue(htmlFile.ShouldRender);
         }
@@ -208,8 +208,7 @@ namespace TwoDrive.Importer.Test
         {
             var path = $@"{examplesRoot}\\File with no render.xml";
             var formatter = new XMLImporter();
-            var tree = formatter.Import(path);
-            var root = tree.FirstOrDefault();
+            var root = formatter.Import(path);
             var file = root.FolderChildren
                 .OfType<MockFile>()
                 .FirstOrDefault();
@@ -221,8 +220,7 @@ namespace TwoDrive.Importer.Test
         {
             var path = $@"{examplesRoot}\\Child has file.xml";
             var formatter = new XMLImporter();
-            var tree = formatter.Import(path);
-            var root = tree.FirstOrDefault();
+            var root = formatter.Import(path);
             var child = root.FolderChildren
                 .OfType<MockFolder>()
                 .FirstOrDefault();
