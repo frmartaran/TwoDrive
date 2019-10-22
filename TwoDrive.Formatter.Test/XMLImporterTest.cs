@@ -234,6 +234,15 @@ namespace TwoDrive.Importer.Test
             Assert.AreEqual(child, file.ParentFolder);
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(ImporterException))]
+        public void NoRoot()
+        {
+            var path = $@"{examplesRoot}\\No root.xml";
+            var formatter = new XMLImporter();
+            var tree = formatter.Import(path);
+        }
+
 
     }
 }
