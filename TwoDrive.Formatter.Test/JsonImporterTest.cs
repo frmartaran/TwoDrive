@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TwoDrive.Importer.Interface.IFileManagement;
 using TwoDrive.Importers.Exceptions;
@@ -40,6 +41,19 @@ namespace TwoDrive.Importer.Test
 
             Assert.IsNotNull(folder);
             Assert.IsInstanceOfType(folder, typeof(IFolder));
+        }
+
+        [TestMethod]
+        public void SaveAChild()
+        {
+            var path = $"{examplesRoot}\\document.json";
+            var importer = new JsonImporter();
+            var folder = importer.Import(path);
+            var child = folder.FolderChildren.FirstOrDefault();
+
+            Assert.IsNotNull(child);
+            Assert.IsInstanceOfType(folder, typeof(IFolder));
+            
         }
     }
 }
