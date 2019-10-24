@@ -18,11 +18,7 @@ namespace TwoDrive.Importers
         {
             get
             {
-                return FileExtension;
-            }
-            set
-            {
-                FileExtension = "XML";
+                return "XML";
             }
         }
 

@@ -6,10 +6,10 @@ namespace TwoDrive.Importer.Interface
     public interface IImporter<ImportType>
         where ImportType : class
     {
-        string FileExtension { get; set; }
+        string FileExtension { get;}
 
         T Load<T>(string path) where T : class;
 
-        IFolder Import(string path);
+        ImportType Import(string path);
     }
 }
