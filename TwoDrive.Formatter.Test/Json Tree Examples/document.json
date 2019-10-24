@@ -1,0 +1,46 @@
+{
+  "$type": "IFolder",
+  "Folder": {
+    "Name": "Root",
+    "ParentFolder": null,
+    "Owner": null,
+    "CreationDate": "2019-09-03",
+    "DateModified": "2019-09-03",
+    "FolderChildren" : [
+        {
+         "$type": "IFile",
+         "File": {
+            "Name": "Root",
+            "ParentFolder": null,
+            "Owner": null,
+            "CreationDate": "2012-04-23T18:25:43.511Z",
+            "DateModified": "2012-04-23T18:25:43.511Z",
+            "Content": "This is a file"
+          }
+        },
+        {
+          "$type": "IFile",
+          "File": {
+            "Name": "Root",
+            "ParentFolder": null,
+            "Owner": null,
+            "CreationDate": "2012-04-23T18:25:43.511Z",
+            "DateModified": "2012-04-23T18:25:43.511Z",
+            "Content": "This is a file",
+            "ShouldRender": "true"
+          }
+        },
+        {
+          "$type": "Folder",
+          "File": {
+            "Name": "Root",
+            "ParentFolder": null,
+            "Owner": null,
+            "CreationDate": "2012-04-23T18:25:43.511Z",
+            "DateModified": "2012-04-23T18:25:43.511Z",
+            "FolderChildren": []
+          }
+        }
+      ]
+  }
+}
