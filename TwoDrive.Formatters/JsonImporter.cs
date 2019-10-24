@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using TwoDrive.Importer.Interface;
 using TwoDrive.Importer.Interface.IFileManagement;
+using TwoDrive.Importer.MockDomain;
 using TwoDrive.Importers.Exceptions;
 
 namespace TwoDrive.Importer
@@ -21,7 +23,9 @@ namespace TwoDrive.Importer
 
         public IFolder Import(string path)
         {
-            throw new NotImplementedException();
+            var jsonString = Load<string>(path);
+            var folder = JsonConvert.DeserializeObject<MockFolder>(jsonString);
+            return folder;
         }
 
         public T Load<T>(string path) where T : class
