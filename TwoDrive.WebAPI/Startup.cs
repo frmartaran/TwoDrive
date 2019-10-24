@@ -35,6 +35,16 @@ namespace TwoDrive.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    );
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDbContext<TwoDriveDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
@@ -66,6 +76,7 @@ namespace TwoDrive.WebApi
                 app.UseDeveloperExceptionPage();
             }
             app.UseMvc();
+            app.UseCors("CorsPolicy");
         }
     }
 }

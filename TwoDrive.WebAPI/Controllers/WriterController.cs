@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using TwoDrive.BusinessLogic;
 using TwoDrive.BusinessLogic.Exceptions;
@@ -16,6 +17,7 @@ using TwoDrive.WebApi.Models;
 namespace TwoDrive.WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("CorsPolicy")]
     public class WriterController : ControllerBase
     {
         private ILogic<Writer> Logic { get; set; }

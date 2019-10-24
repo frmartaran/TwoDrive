@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TwoDrive.BusinessLogic.Exceptions;
@@ -16,6 +17,7 @@ namespace TwoDrive.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [AuthorizeFilter(Role.Administrator)]
+    [EnableCors("CorsPolicy")]
     public class ReportController : ControllerBase
     {
         private IModificationLogic modificationLogic;
