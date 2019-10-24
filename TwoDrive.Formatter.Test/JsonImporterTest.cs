@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TwoDrive.Importers.Exceptions;
 
 namespace TwoDrive.Importer.Test
 {
@@ -18,6 +19,15 @@ namespace TwoDrive.Importer.Test
             var jsonFile = importer.Load<string>(path);
 
             Assert.IsNotNull(jsonFile);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ImporterException))]
+        public void FileNotFound()
+        {
+            var path = $"{examplesRoot}\\doc.json";
+            var importer = new JsonImporter();
+            var jsonFile = importer.Load<string>(path);
         }
     }
 }
