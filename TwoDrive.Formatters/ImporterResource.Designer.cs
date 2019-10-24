@@ -61,6 +61,15 @@ namespace TwoDrive.Importer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File Not Found.
+        /// </summary>
+        internal static string FileNotFound_Exception {
+            get {
+                return ResourceManager.GetString("FileNotFound_Exception", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Missing Content Tag.
         /// </summary>
         internal static string NoContent_Exception {

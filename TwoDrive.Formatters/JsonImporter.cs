@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using TwoDrive.Importer.Interface;
 using TwoDrive.Importer.Interface.IFileManagement;
+using TwoDrive.Importers.Exceptions;
 
 namespace TwoDrive.Importer
 {
@@ -15,7 +16,7 @@ namespace TwoDrive.Importer
             {
                 return "JSON";
             }
-           
+
         }
 
         public IFolder Import(string path)
@@ -25,10 +26,18 @@ namespace TwoDrive.Importer
 
         public T Load<T>(string path) where T : class
         {
-            using (var reader = new StreamReader(path))
+            try
             {
-                return reader.ReadToEnd() as T;
+                using (var reader = new StreamReader(path))
+                {
+                    return reader.ReadToEnd() as T;
+                }
             }
+            catch (FileNotFoundException exception)
+            {
+                throw new ImporterException(ImporterResource.FileNotFound_Exception, exception);
+            }
+
         }
     }
 }
