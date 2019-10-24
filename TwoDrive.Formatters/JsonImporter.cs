@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using TwoDrive.Importer.Interface;
 using TwoDrive.Importer.Interface.IFileManagement;
@@ -24,7 +25,10 @@ namespace TwoDrive.Importer
 
         public T Load<T>(string path) where T : class
         {
-            throw new NotImplementedException();
+            using (var reader = new StreamReader(path))
+            {
+                return reader.ReadToEnd() as T;
+            }
         }
     }
 }
