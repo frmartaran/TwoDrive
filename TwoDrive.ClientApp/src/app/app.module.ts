@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common'; 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
@@ -9,8 +9,8 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { LoginComponent } from './components/login/login.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 import { UserNotLoggedIn } from './guards/UserNotLoggedIn.guard';
 import { UserLoggedIn } from './guards/UserLogggedIn.guard';
@@ -25,7 +25,9 @@ import {
   MatIconModule,
   MatListModule ,
   MatStepperModule,
-  MatInputModule
+  MatInputModule,
+  MatDialogModule,
+  MatMenuModule
 } from '@angular/material';
 
 const MaterialModules = [
@@ -37,7 +39,9 @@ const MaterialModules = [
   MatIconModule,
   MatListModule ,
   MatStepperModule,
-  MatInputModule
+  MatInputModule,
+  MatDialogModule,
+  MatMenuModule
 ];
 
 @NgModule({
@@ -46,20 +50,20 @@ const MaterialModules = [
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent,
-    LoginComponent
+    LoginComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     CommonModule,
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule.forRoot([
       { path: 'login', component: LoginComponent, canActivate : [UserLoggedIn] },
       { path: '', redirectTo: 'login', pathMatch: 'full' },
       { path: 'home-page', component: HomeComponent, canActivate: [UserNotLoggedIn] },
       { path: 'counter', component: CounterComponent, canActivate: [UserNotLoggedIn] },
-      { path: 'fetch-data', component: FetchDataComponent, canActivate: [UserNotLoggedIn] },
     ]),
     BrowserAnimationsModule,
     MaterialModules
@@ -69,6 +73,7 @@ const MaterialModules = [
     UserLoggedIn,
     UserNotLoggedIn,
   ],
+  entryComponents: [ConfirmDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,7 +1,9 @@
+import { LogoutService } from './../services/logout.service';
 import { LoginService } from 'src/app/services/login.service';
 import { Component } from '@angular/core';
-import { Observable} from 'rxjs';
-
+import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material';
+ 
 @Component({
   selector: 'app-nav-menu',
   templateUrl: './nav-menu.component.html',
@@ -10,13 +12,31 @@ import { Observable} from 'rxjs';
 export class NavMenuComponent {
   isExpanded = false;
 
-  constructor(private loginService: LoginService) { }
+  constructor(private logoutService: LogoutService,
+    public dialog: MatDialog) {}
 
   collapse() {
     this.isExpanded = false;
   }
-
-  toggle() {
+    toggle() {
     this.isExpanded = !this.isExpanded;
+  }
+ 
+  confirmDialog(): void {
+    const message = `Are you sure you want to log out?`;
+ 
+    const dialogData = new ConfirmDialogModel("Confirm Log Out", message);
+ 
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
+ 
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if(dialogResult){
+        this.logoutService.Logout().subscribe();
+        window.location.reload();
+      }
+    });
   }
 }

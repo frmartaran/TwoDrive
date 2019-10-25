@@ -32,7 +32,6 @@ export class LoginComponent implements OnInit {
     this.loginService.Login(this.credentials)
     .subscribe(
       response => {
-        localStorage.setItem("token", JSON.stringify(response));
         this.loginService.authenticateUser(response);
       },
       (error) => {
