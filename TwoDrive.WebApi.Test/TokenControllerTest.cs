@@ -25,11 +25,24 @@ namespace TwoDrive.WebApi.Test
                 Username = "Writer",
                 Password = "1234"
             };
+            var writer = new Writer
+            {
+                Id = 1,
+                Role = Role.Administrator
+            };
             var token = Guid.NewGuid();
+            var session = new Session
+            {
+                Id = 1,
+                Token = token,
+                Writer = writer
+            };
             var mockCurrentSession = new Mock<ICurrent>();
             var mockLogic = new Mock<ISessionLogic>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Create(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(token);
+            mockLogic.Setup(m => m.GetSession(It.IsAny<string>()))
+                .Returns(session);
             var controller = new TokenController(mockLogic.Object, mockCurrentSession.Object);
             var result = controller.LogIn(logInModel);
 

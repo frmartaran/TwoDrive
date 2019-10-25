@@ -35,7 +35,15 @@ namespace TwoDrive.WebApi.Controllers
             {
                 return BadRequest("Incorrect username or password");
             }
-            return Ok(token);
+            var stringToken = token.Value.ToString();
+            var session = logic.GetSession(stringToken);
+            var sessionModel = new SessionModel
+            {
+                UserId = session.Writer.Id,
+                Token = session.Token,
+                IsAdmin = session.Writer.Role == Domain.Role.Administrator
+            };
+            return Ok(sessionModel);
         }
 
         [HttpDelete]
