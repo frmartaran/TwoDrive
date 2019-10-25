@@ -17,7 +17,7 @@ export class UserLoggedIn implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> {
-    return this.loginService.isAuthenticated
+    return this.loginService.getIsAuthenticated
       .pipe(
         take(1),
         map((isLoggedIn: boolean) => {

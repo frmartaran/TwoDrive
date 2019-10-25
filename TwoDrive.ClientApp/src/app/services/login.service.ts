@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class LoginService {
 
-  private loggedIn = new BehaviorSubject<boolean>(false);
+  private isAuthenticated = new BehaviorSubject<boolean>(false);
   public url: string = "http://localhost:3682";
   private readonly loginEndpoint = this.url +'/api/Token';
 
@@ -16,13 +16,16 @@ export class LoginService {
 
   public Login(credentials : any)
   {
-    this.loggedIn.next(true);
     return this.http.post(this.loginEndpoint, credentials);
   }
 
-  get isAuthenticated(){
-    const token = localStorage.getItem('token');
-    return this.loggedIn.asObservable();
+  authenticateUser(response : Object){
+    localStorage.setItem("token", JSON.stringify(response));
+    this.isAuthenticated.next(true);
+  }
+
+  get getIsAuthenticated(){
+    return this.isAuthenticated; 
   }
 
 }

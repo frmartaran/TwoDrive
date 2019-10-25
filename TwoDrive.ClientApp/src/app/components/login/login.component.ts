@@ -33,9 +33,10 @@ export class LoginComponent implements OnInit {
     .subscribe(
       response => {
         localStorage.setItem("token", JSON.stringify(response));
+        this.loginService.authenticateUser(response);
       },
       (error) => {
-        this.authenticationError = error;
+        this.authenticationError = error.error;
       },
       () => {
         this.router.navigate(['/home-page']);

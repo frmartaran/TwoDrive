@@ -9,12 +9,13 @@ import { LoginService } from './services/login.service';
 })
 export class AppComponent {
   title = 'app';
-  isLoggedIn: Observable<boolean>; 
+  isAuthenticated$: Observable<boolean>; 
 
   constructor(private loginService: LoginService) { }
 
   ngOnInit() {
-    this.isLoggedIn = this.loginService.isAuthenticated;
+    localStorage.removeItem('token');
+    this.isAuthenticated$ = this.loginService.getIsAuthenticated;
   }
   
 }

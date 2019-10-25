@@ -1,5 +1,5 @@
 <body>
-  <app-nav-menu *ngIf="isLoggedIn|async"></app-nav-menu>
+  <app-nav-menu *ngIf="isAuthenticated$|async"></app-nav-menu>
   <div class="container">
     <router-outlet></router-outlet>
   </div>
