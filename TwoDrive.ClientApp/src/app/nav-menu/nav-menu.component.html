@@ -1,21 +1,23 @@
-<mat-toolbar color="white">
+<mat-toolbar>
   <mat-toolbar-row>
     <h1>TwoDrive</h1>
-    <span class="menu-spacer"></span>
-    <div>
-      <a mat-button [routerLink]="'/counter'"> Counter </a>
-      <button mat-button [matMenuTriggerFor] = "writers">Writers</button>
-      <mat-menu #writers = "matMenu">
-         <button mat-menu-item>Create</button>
-         <button mat-menu-item>Update</button>
-         <button mat-menu-item>Delete</button>
-         <button mat-menu-item>Get</button>
-         <button mat-menu-item>Add Friend</button>
-         <button mat-menu-item>Remove Friend</button>
-         <button mat-menu-item>Show Friend</button>
-      </mat-menu>
-      <a mat-button [routerLink]="'#'" (click)="confirmDialog()"> Log Out </a>
-    </div>
+    <a mat-button [routerLink]="'/counter'"> Counter </a>
+    <button mat-button [matMenuTriggerFor] = "writers">Writers</button>
+    <mat-menu #writers = "matMenu">
+        <button mat-menu-item>Create</button>
+        <button mat-menu-item>Update</button>
+        <button mat-menu-item>Delete</button>
+        <button mat-menu-item>Get writer</button>
+        <button mat-menu-item>Add Friend</button>
+        <button mat-menu-item>Remove Friend</button>
+        <button mat-menu-item>Show Friend</button>
+    </mat-menu>
+    <div class="flex-spacer"></div>
+    <a mat-button>
+        <span class="mat-button-wrapper" (click)="confirmDialog()">
+            <mat-icon>exit_to_app</mat-icon>Logout 
+        </span>
+    </a>
   </mat-toolbar-row>
 </mat-toolbar>
 

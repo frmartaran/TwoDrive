@@ -14,7 +14,6 @@ export class AppComponent {
   constructor(private loginService: LoginService) { }
 
   ngOnInit() {
-    localStorage.removeItem('token');
     this.isAuthenticated$ = this.loginService.getIsAuthenticated;
   }
   

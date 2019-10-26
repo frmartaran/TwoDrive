@@ -11,6 +11,11 @@ export class LoginService {
   private isAuthenticated = new BehaviorSubject<boolean>(false);
   public url: string = "http://localhost:3682";
   private readonly loginEndpoint = this.url +'/api/Token';
+  private session: any = {
+    userId: '',
+    token: '',
+    isAdmin: false
+};
 
   constructor(private http: HttpClient) { }
 
@@ -20,7 +25,11 @@ export class LoginService {
   }
 
   authenticateUser(response : Object){
-    localStorage.setItem("token", JSON.stringify(response));
+    var responseInJson = JSON.stringify(response);
+    this.session = JSON.parse(responseInJson);
+    localStorage.setItem("token", this.session.token);
+    localStorage.setItem("userId", this.session.userId);
+    localStorage.setItem("isAdmin", this.session.isAdmin);
     this.isAuthenticated.next(true);
   }
 

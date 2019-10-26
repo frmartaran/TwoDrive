@@ -1,5 +1,4 @@
 import { LogoutService } from './../services/logout.service';
-import { LoginService } from 'src/app/services/login.service';
 import { Component } from '@angular/core';
 import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material';
@@ -25,7 +24,7 @@ export class NavMenuComponent {
   confirmDialog(): void {
     const message = `Are you sure you want to log out?`;
  
-    const dialogData = new ConfirmDialogModel("Confirm Log Out", message);
+    const dialogData = new ConfirmDialogModel("Confirm Logout", message);
  
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
@@ -35,6 +34,10 @@ export class NavMenuComponent {
     dialogRef.afterClosed().subscribe(dialogResult => {
       if(dialogResult){
         this.logoutService.Logout().subscribe();
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('isAdmin');
+        window.location.href = '/login';
         window.location.reload();
       }
     });
