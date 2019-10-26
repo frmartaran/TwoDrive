@@ -1,4 +1,4 @@
-import { LogoutService } from './../services/logout.service';
+import { LogoutService } from 'src/app/services/logout.service';
 import { Component } from '@angular/core';
 import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material';
@@ -10,9 +10,12 @@ import { MatDialog } from '@angular/material';
 })
 export class NavMenuComponent {
   isExpanded = false;
+  isAdmin : boolean;
 
   constructor(private logoutService: LogoutService,
-    public dialog: MatDialog) {}
+    public dialog: MatDialog) {
+      this.isAdmin = (localStorage.getItem('isAdmin') == 'true');
+    }
 
   collapse() {
     this.isExpanded = false;

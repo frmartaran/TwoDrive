@@ -5,12 +5,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
-import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
+import { AppComponent } from './components/app-component/app.component';
+import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { LoginComponent } from './components/login/login.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { CreateWriterComponent } from './components/create-writer/create-writer.component';
+import { WriterManagementComponent } from './components/writer-management/writer-management.component';
 
 import { UserNotLoggedIn } from './guards/UserNotLoggedIn.guard';
 import { UserLoggedIn } from './guards/UserLogggedIn.guard';
@@ -27,7 +29,10 @@ import {
   MatStepperModule,
   MatInputModule,
   MatDialogModule,
-  MatMenuModule
+  MatMenuModule,
+  MatRadioModule,
+  MatTableModule,
+  MatPaginatorModule
 } from '@angular/material';
 
 const MaterialModules = [
@@ -41,7 +46,10 @@ const MaterialModules = [
   MatStepperModule,
   MatInputModule,
   MatDialogModule,
-  MatMenuModule
+  MatMenuModule,
+  MatRadioModule,
+  MatTableModule,
+  MatPaginatorModule
 ];
 
 @NgModule({
@@ -51,7 +59,9 @@ const MaterialModules = [
     HomeComponent,
     CounterComponent,
     LoginComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    CreateWriterComponent,
+    WriterManagementComponent
   ],
   imports: [
     CommonModule,
@@ -64,6 +74,8 @@ const MaterialModules = [
       { path: '', redirectTo: 'login', pathMatch: 'full' },
       { path: 'home-page', component: HomeComponent, canActivate: [UserNotLoggedIn] },
       { path: 'counter', component: CounterComponent, canActivate: [UserNotLoggedIn] },
+      { path: 'create-user', component: CreateWriterComponent, canActivate: [UserNotLoggedIn] },
+      { path: 'writer-management', component: WriterManagementComponent, canActivate: [UserNotLoggedIn] }
     ]),
     BrowserAnimationsModule,
     MaterialModules
@@ -73,7 +85,9 @@ const MaterialModules = [
     UserLoggedIn,
     UserNotLoggedIn,
   ],
-  entryComponents: [ConfirmDialogComponent],
+  entryComponents: [
+    ConfirmDialogComponent    
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

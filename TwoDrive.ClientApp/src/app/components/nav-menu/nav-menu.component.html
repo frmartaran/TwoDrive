@@ -4,13 +4,8 @@
     <a mat-button [routerLink]="'/counter'"> Counter </a>
     <button mat-button [matMenuTriggerFor] = "writers">Writers</button>
     <mat-menu #writers = "matMenu">
-        <button mat-menu-item>Create</button>
-        <button mat-menu-item>Update</button>
-        <button mat-menu-item>Delete</button>
-        <button mat-menu-item>Get writer</button>
-        <button mat-menu-item>Add Friend</button>
-        <button mat-menu-item>Remove Friend</button>
-        <button mat-menu-item>Show Friend</button>
+        <button mat-menu-item *ngIf="isAdmin" [routerLink]="['/create-user']">Create</button>
+        <button mat-menu-item [routerLink]="['/writer-management']">Manage Writers</button>
     </mat-menu>
     <div class="flex-spacer"></div>
     <a mat-button>
