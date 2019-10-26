@@ -1,0 +1,23 @@
+table {
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.search-writers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.mat-elevation-z8{
+  width: 100%;
+}
+
+#search-input{
+  margin-bottom: 5px
+}
