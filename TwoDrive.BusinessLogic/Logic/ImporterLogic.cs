@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
@@ -31,8 +32,17 @@ namespace TwoDrive.BusinessLogic.Logic
         public IImporter<IFolder> GetImporter()
         {
             var assemblyInfo = Assembly.LoadFrom("TwoDrive.Importer.dll");
+            var applicablesTypes = assemblyInfo.DefinedTypes
+                .Where(t => (typeof(IImporter<IFolder>).IsAssignableFrom(t)))
+                .ToList();
 
-            return null;
+            var importerType = applicablesTypes
+                .Where(t => t.GetField("Extension", BindingFlags.NonPublic
+                                                  | BindingFlags.Static)
+                    .GetRawConstantValue() as string == Options.FileType)
+                .SingleOrDefault();
+            var instance = Activator.CreateInstance(importerType);
+            return instance as IImporter<IFolder>;
         }
     }
 }
