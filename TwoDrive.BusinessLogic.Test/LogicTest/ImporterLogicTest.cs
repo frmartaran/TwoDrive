@@ -2,6 +2,7 @@
 using Moq;
 using System;
 using System.Collections.Generic;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Logic;
@@ -35,7 +36,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockFileLogic = new Mock<IFileLogic>();
             var mockWriterLogic = new Mock<ILogic<Writer>>();
-            var dependencies = new ImporterLogicDependencies(mockFolderLogic.Object, 
+            var dependencies = new ImporterLogicDependencies(mockFolderLogic.Object,
                 mockFileLogic.Object, mockWriterLogic.Object);
             var options = new ImportingOptions
             {
@@ -67,6 +68,26 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importer = importerLogic.GetImporter();
 
             Assert.IsInstanceOfType(importer, typeof(JsonImporter));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ImporterNotFoundException))]
+        public void WrongImporterType()
+        {
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockFileLogic = new Mock<IFileLogic>();
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var dependencies = new ImporterLogicDependencies(mockFolderLogic.Object,
+                mockFileLogic.Object, mockWriterLogic.Object);
+            var options = new ImportingOptions
+            {
+                FilePath = "",
+                FileType = "txt",
+                Owner = writer
+            };
+            var importerLogic = new ImporterLogic(options, dependencies);
+            var importer = importerLogic.GetImporter();
+
         }
 
 
