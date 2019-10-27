@@ -4,6 +4,7 @@ using System.Linq;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Interfaces.LogicInput;
+using TwoDrive.BusinessLogic.Resources;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
@@ -40,7 +41,7 @@ namespace TwoDrive.BusinessLogic.Logic
         {
             var folder = Get(id);
             if (folder == null)
-                throw new LogicException("The folder doesn't exists");
+                throw new LogicException(BusinessResource.FolderNotFound);
 
             DeleteChildren(folder);
         }
@@ -155,7 +156,7 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public string ShowTree(Folder root)
         {
-            var tree = string.Format("{0} +- {1} \n", "", root.Name);
+            var tree = string.Format(BusinessResource.ShowTreeFormat, "", root.Name);
             ShowChildren(root, ref tree, Spaces);
             return tree;
         }
@@ -171,9 +172,9 @@ namespace TwoDrive.BusinessLogic.Logic
                 foreach (var child in children)
                 {
                     if (children.IndexOf(child) == folder.FolderChildren.Count - 1)
-                        tree += string.Format("{0} +- {1} \n", $"{prefix}\\", child.Name);
+                        tree += string.Format(BusinessResource.ShowTreeFormat, $"{prefix}\\", child.Name);
                     else
-                        tree += string.Format("{0} +- {1} \n", $"{prefix}|", child.Name);
+                        tree += string.Format(BusinessResource.ShowTreeFormat, $"{prefix}|", child.Name);
                     ShowChildren(child, ref tree, prefix + Spaces);
                 }
                 return;

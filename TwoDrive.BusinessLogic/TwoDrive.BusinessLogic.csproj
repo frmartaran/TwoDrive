@@ -6,6 +6,21 @@
     <ProjectReference Include="..\TwoDrive.DataAccess.Interface\TwoDrive.DataAccess.Interface.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Resources\BusinessResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>BusinessResource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\BusinessResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BusinessResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
