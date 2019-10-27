@@ -70,6 +70,15 @@ namespace TwoDrive.Importer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing type especification on json. Supported types: &quot;File&quot; or &quot;Folder&quot;.
+        /// </summary>
+        internal static string MissingType_Exception {
+            get {
+                return ResourceManager.GetString("MissingType_Exception", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Missing Content Tag.
         /// </summary>
         internal static string NoContent_Exception {

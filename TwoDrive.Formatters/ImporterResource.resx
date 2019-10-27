@@ -120,6 +120,10 @@
   <data name="FileNotFound_Exception" xml:space="preserve">
     <value>File Not Found</value>
   </data>
+  <data name="MissingType_Exception" xml:space="preserve">
+    <value>Missing type especification on json. Supported types: "File" or "Folder"</value>
+    <comment>Might need to be updated if new types are added</comment>
+  </data>
   <data name="NoContent_Exception" xml:space="preserve">
     <value>Missing Content Tag</value>
   </data>

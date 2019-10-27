@@ -40,8 +40,15 @@ namespace TwoDrive.Importer
                 MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead,
                 Binder = binder
             };
-            var folder = JsonConvert.DeserializeObject<Folder>(jsonString, settings);
-            return folder;
+            try
+            {
+                var folder = JsonConvert.DeserializeObject<Folder>(jsonString, settings);
+                return folder;
+            }
+            catch (JsonSerializationException exception)
+            {
+                throw new ImporterException(ImporterResource.MissingType_Exception, exception);
+            }
         }
 
         public T Load<T>(string path) where T : class
