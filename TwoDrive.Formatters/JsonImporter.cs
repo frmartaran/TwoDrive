@@ -31,23 +31,28 @@ namespace TwoDrive.Importer
                     typeof(Folder)
                 }
             };
-            var jsonString = Load<string>(path);
             var settings = new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Objects,
                 MissingMemberHandling = MissingMemberHandling.Error,
-                NullValueHandling = NullValueHandling.Include,
                 MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead,
+                DateParseHandling = DateParseHandling.DateTime,
+                DateFormatHandling = DateFormatHandling.IsoDateFormat,
                 Binder = binder
             };
             try
             {
+                var jsonString = Load<string>(path);
                 var folder = JsonConvert.DeserializeObject<Folder>(jsonString, settings);
                 return folder;
             }
             catch (JsonSerializationException exception)
             {
-                throw new ImporterException(ImporterResource.MissingType_Exception, exception);
+                throw new ImporterException(ImporterResource.Json_Type_Exception, exception);
+            }
+            catch (JsonReaderException exception)
+            {
+                throw new ImporterException(ImporterResource.Json_DateFormat_Exception, exception);
             }
         }
 
