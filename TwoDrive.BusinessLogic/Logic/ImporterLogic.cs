@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
@@ -29,6 +30,8 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public IImporter<IFolder> GetImporter()
         {
+            var assemblyInfo = Assembly.LoadFrom("TwoDrive.Importer.dll");
+
             return null;
         }
     }
