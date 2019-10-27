@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TwoDrive.Importers.Exceptions
+namespace TwoDrive.Importer.Interface.Exceptions
 {
     public class ImporterException : Exception
     {
