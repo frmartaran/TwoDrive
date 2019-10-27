@@ -156,7 +156,7 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public string ShowTree(Folder root)
         {
-            var tree = string.Format(BusinessResource.ShowTreeFormat, "", root.Name);
+            var tree = string.Format(BusinessResource.ShowTreeFormat + " \n", "", root.Name);
             ShowChildren(root, ref tree, Spaces);
             return tree;
         }
@@ -172,9 +172,9 @@ namespace TwoDrive.BusinessLogic.Logic
                 foreach (var child in children)
                 {
                     if (children.IndexOf(child) == folder.FolderChildren.Count - 1)
-                        tree += string.Format(BusinessResource.ShowTreeFormat, $"{prefix}\\", child.Name);
+                        tree += string.Format(BusinessResource.ShowTreeFormat + " \n", $"{prefix}\\", child.Name);
                     else
-                        tree += string.Format(BusinessResource.ShowTreeFormat, $"{prefix}|", child.Name);
+                        tree += string.Format(BusinessResource.ShowTreeFormat + " \n", $"{prefix}|", child.Name);
                     ShowChildren(child, ref tree, prefix + Spaces);
                 }
                 return;

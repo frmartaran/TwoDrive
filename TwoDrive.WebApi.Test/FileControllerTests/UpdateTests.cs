@@ -12,6 +12,7 @@ using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Controllers;
 using TwoDrive.WebApi.Interfaces;
 using TwoDrive.WebApi.Models;
+using TwoDrive.WebApi.Resource;
 
 namespace TwoDrive.WebApi.Test.FileControllerTests
 {
@@ -80,7 +81,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             mockLogic.VerifyAll();
             mockModification.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
-            Assert.AreEqual("File Updated", okResult.Value);
+            Assert.AreEqual(ApiResource.FileUpdated, okResult.Value);
         }
 
         [TestMethod]

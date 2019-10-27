@@ -13,6 +13,7 @@ using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Controllers;
 using TwoDrive.WebApi.Interfaces;
 using TwoDrive.WebApi.Models;
+using TwoDrive.WebApi.Resource;
 
 namespace TwoDrive.WebApi.Test.FileControllerTests
 {
@@ -129,7 +130,8 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             mockFolderLogic.VerifyAll();
             mockSession.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
-            Assert.AreEqual("You are not owner of this folder", badRquestResult.Value);
+            var message = string.Format(ApiResource.NotOwnerOf, folder.Name);
+            Assert.AreEqual(message, badRquestResult.Value);
         }
 
         [TestMethod]
@@ -222,7 +224,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             mockFolderLogic.VerifyAll();
             mockSession.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
-            Assert.AreEqual("You must log in first", badRquestResult.Value);
+            Assert.AreEqual(ApiResource.MustLogIn, badRquestResult.Value);
         }
 
         [TestMethod]
@@ -261,7 +263,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             mockFolderLogic.VerifyAll();
             mockSession.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
-            Assert.AreEqual("Parent folder doesn't exist", notFoundResult.Value);
+            Assert.AreEqual(ApiResource.ParentFolderNotFound, notFoundResult.Value);
         }
 
     }
