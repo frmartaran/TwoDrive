@@ -1,10 +1,9 @@
-
 using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using TwoDrive.BusinessLogic;
-using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.Domain;
+using TwoDrive.WebApi.Resource;
 
 namespace TwoDrive.WebApi.Filters
 {
@@ -28,7 +27,7 @@ namespace TwoDrive.WebApi.Filters
                 context.Result = new ContentResult
                 {
                     StatusCode = 400,
-                    Content = "Token is required"
+                    Content = ApiResource.MissingToken
                 };
                 return;
             }
@@ -38,7 +37,7 @@ namespace TwoDrive.WebApi.Filters
                 context.Result = new ContentResult
                 {
                     StatusCode = 400,
-                    Content = "Invalid Token"
+                    Content = ApiResource.InvalidToken
                 };
                 return;
             }
@@ -47,7 +46,7 @@ namespace TwoDrive.WebApi.Filters
                 context.Result = new ContentResult
                 {
                     StatusCode = 400,
-                    Content = "The user is no authorized"
+                    Content = ApiResource.NotAuthorized_AuthorizeFilter
                 };
                 return;
             }

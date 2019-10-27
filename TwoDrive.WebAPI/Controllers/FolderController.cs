@@ -10,6 +10,7 @@ using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Filters;
 using TwoDrive.WebApi.Interfaces;
 using TwoDrive.WebApi.Models;
+using TwoDrive.WebApi.Resource;
 
 namespace TwoDrive.WebApi.Controllers
 {
@@ -48,7 +49,7 @@ namespace TwoDrive.WebApi.Controllers
             {
                 var folder = FolderLogic.Get(id);
                 FolderLogic.Delete(id);
-                return Ok($"Folder: {folder.Name} has been deleted");
+                return Ok(string.Format(ApiResource.Deleted_FolderController, folder.Name));
             }
             catch (LogicException exception)
             {
@@ -75,11 +76,11 @@ namespace TwoDrive.WebApi.Controllers
                 }
                 else
                 {
-                    return BadRequest("You must own both elements");
+                    return BadRequest(ApiResource.MustOwn_FolderController);
                 }
                 FolderLogic.CreateModificationsForTree(folderToMove, ModificationType.Changed);
                 FolderLogic.CreateModificationsForTree(folderDestination, ModificationType.Changed);
-                return Ok($"Folder with id {folderToMoveId} was moved to destination with id {folderDestinationId}");
+                return Ok(string.Format(ApiResource.Moved_FolderController, folderToMove.Name, folderDestination.Name));
             }
             catch (LogicException exception)
             {
@@ -126,7 +127,7 @@ namespace TwoDrive.WebApi.Controllers
             var folder = FolderLogic.Get(id);
             if (folder == null)
             {
-                return NotFound("Folder not found");
+                return NotFound(ApiResource.FolderNotFound);
             }
             var folderModel = new FolderModel();
             return Ok(folderModel.FromDomain(folder));
@@ -142,11 +143,11 @@ namespace TwoDrive.WebApi.Controllers
                 var parentFolder = FolderLogic.Get(id);
 
                 if (loggedWriter == null)
-                    return BadRequest("You must log in first");
+                    return BadRequest(ApiResource.MustLogIn);
                 if (parentFolder == null)
-                    return NotFound("Parent folder doesn't exist");
+                    return NotFound(ApiResource.ParentFolderNotFound);
                 if (loggedWriter != parentFolder.Owner)
-                    return BadRequest("You are not owner of this folder");
+                    return BadRequest(string.Format(ApiResource.NotOwnerOf, parentFolder.Name));
 
                 var folder = model.ToDomain();
                 folder.Owner = loggedWriter;
@@ -172,7 +173,7 @@ namespace TwoDrive.WebApi.Controllers
         {
             var folder = FolderLogic.Get(id);
             if (folder == null)
-                return NotFound("Folder not found");
+                return NotFound(ApiResource.FolderNotFoundS);
 
             var tree = FolderLogic.ShowTree(folder);
             return Ok(tree);
@@ -186,19 +187,19 @@ namespace TwoDrive.WebApi.Controllers
             {
                 var writer = Session.GetCurrentUser(HttpContext);
                 if (writer == null)
-                    return NotFound("You must log in first");
+                    return NotFound(ApiResource.MustLogIn);
 
                 var friend = WriterLogic.Get(friendId);
                 if (friend == null)
-                    return NotFound("Friend not found");
+                    return NotFound(ApiResource.FriendNotFound);
 
                 var folder = FolderLogic.Get(id);
                 if (folder == null)
-                    return NotFound("Folder not found");
+                    return NotFound(ApiResource.FolderNotFound);
 
                 writer.AllowFriendTo(friend, folder, ClaimType.Read);
                 WriterLogic.Update(friend);
-                return Ok($"{folder.Name} has been shared with {friend.UserName}");
+                return Ok(string.Format(ApiResource.Shared, folder.Name, friend.UserName));
             }
             catch (LogicException exception)
             {
@@ -214,22 +215,22 @@ namespace TwoDrive.WebApi.Controllers
             {
                 var writer = Session.GetCurrentUser(HttpContext);
                 if (writer == null)
-                    return NotFound("You must log in first");
+                    return NotFound(ApiResource.MustLogIn);
 
                 var friend = WriterLogic.Get(friendId);
                 if (friend == null)
-                    return NotFound("Friend not found");
+                    return NotFound(ApiResource.FriendNotFound);
 
                 var folder = FolderLogic.Get(id);
                 if (folder == null)
-                    return NotFound("Folder not found");
+                    return NotFound(ApiResource.FolderNotFound);
 
                 if (!writer.IsFriendsWith(friend))
-                    return BadRequest($"You must be friends with {friend.UserName}");
+                    return BadRequest(string.Format(ApiResource.MustBeFriends, friend.UserName));
 
                 writer.RevokeFriendFrom(friend, folder, ClaimType.Read);
                 WriterLogic.Update(friend);
-                return Ok($"Stopped sharing {folder.Name} with {friend.UserName}");
+                return Ok(string.Format(ApiResource.StopSharing, folder.Name, friend.UserName));
             }
             catch (LogicException exception)
             {
