@@ -70,11 +70,20 @@ namespace TwoDrive.Importer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Missing type especification on json. Supported types: &quot;File&quot; or &quot;Folder&quot;.
+        ///   Looks up a localized string similar to Wrong date format..
         /// </summary>
-        internal static string MissingType_Exception {
+        internal static string Json_DateFormat_Exception {
             get {
-                return ResourceManager.GetString("MissingType_Exception", resourceCulture);
+                return ResourceManager.GetString("Json_DateFormat_Exception", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing or Wrong type especification on json. Supported types: &quot;File&quot; or &quot;Folder&quot;.
+        /// </summary>
+        internal static string Json_Type_Exception {
+            get {
+                return ResourceManager.GetString("Json_Type_Exception", resourceCulture);
             }
         }
         
@@ -111,6 +120,15 @@ namespace TwoDrive.Importer {
         internal static string NoType_Exception {
             get {
                 return ResourceManager.GetString("NoType_Exception", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to s.
+        /// </summary>
+        internal static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
         

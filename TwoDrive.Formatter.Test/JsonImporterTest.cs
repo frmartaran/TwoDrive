@@ -108,5 +108,23 @@ namespace TwoDrive.Importer.Test
             var importer = new JsonImporter();
             var folder = importer.Import(path);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ImporterException))]
+        public void WrongTypeInJson()
+        {
+            var path = $"{examplesRoot}\\WrongType.json";
+            var importer = new JsonImporter();
+            var folder = importer.Import(path);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ImporterException))]
+        public void WrongDateFormatInJson()
+        {
+            var path = $"{examplesRoot}\\WrongDateFormat.json";
+            var importer = new JsonImporter();
+            var folder = importer.Import(path);
+        }
     }
 }
