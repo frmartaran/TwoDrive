@@ -23,8 +23,24 @@ namespace TwoDrive.Importer
 
         public IFolder Import(string path)
         {
+            var binder = new KnownTypesBinder
+            {
+                KnownTypes = new List<Type>
+                {
+                    typeof(MockFile),
+                    typeof(MockFolder)
+                }
+            };
             var jsonString = Load<string>(path);
-            var folder = JsonConvert.DeserializeObject<MockFolder>(jsonString);
+            var settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Objects,
+                MissingMemberHandling = MissingMemberHandling.Error,
+                NullValueHandling = NullValueHandling.Include,
+                MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead,
+                Binder = binder
+            };
+            var folder = JsonConvert.DeserializeObject<MockFolder>(jsonString, settings);
             return folder;
         }
 
