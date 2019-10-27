@@ -173,7 +173,7 @@ namespace TwoDrive.WebApi.Controllers
         {
             var folder = FolderLogic.Get(id);
             if (folder == null)
-                return NotFound(ApiResource.FolderNotFoundS);
+                return NotFound(ApiResource.FolderNotFound);
 
             var tree = FolderLogic.ShowTree(folder);
             return Ok(tree);
