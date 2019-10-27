@@ -16,7 +16,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SuccessfullyLoadJsonFile()
         {
-            var path = $"{examplesRoot}\\document.json";
+            var path = $"{examplesRoot}\\baseCase.json";
             var importer = new JsonImporter();
             var jsonFile = importer.Load<string>(path);
 
@@ -35,7 +35,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SaveAFolder()
         {
-            var path = $"{examplesRoot}\\document.json";
+            var path = $"{examplesRoot}\\baseCase.json";
             var importer = new JsonImporter();
             var folder = importer.Import(path);
 
@@ -46,7 +46,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SaveAChild()
         {
-            var path = $"{examplesRoot}\\document.json";
+            var path = $"{examplesRoot}\\baseCase.json";
             var importer = new JsonImporter();
             var folder = importer.Import(path);
             var child = folder.FolderChildren.FirstOrDefault();
@@ -59,7 +59,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SaveAChildFolder()
         {
-            var path = $"{examplesRoot}\\document.json";
+            var path = $"{examplesRoot}\\baseCase.json";
             var importer = new JsonImporter();
             var folder = importer.Import(path);
             var child = folder.FolderChildren.OfType<IFolder>().FirstOrDefault();
@@ -72,7 +72,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SaveATwoFilesAndOneFolder()
         {
-            var path = $"{examplesRoot}\\document.json";
+            var path = $"{examplesRoot}\\baseCase.json";
             var importer = new JsonImporter();
             var folder = importer.Import(path);
             var folderChild = folder.FolderChildren.OfType<IFolder>().FirstOrDefault();
@@ -82,6 +82,31 @@ namespace TwoDrive.Importer.Test
             Assert.IsInstanceOfType(folderChild, typeof(IFolder));
             Assert.AreEqual(2, files.Count);
 
+        }
+
+        [TestMethod]
+        public void SaveThreeLevelTree()
+        {
+            var path = $"{examplesRoot}\\Level3Tree.json";
+            var importer = new JsonImporter();
+            var folder = importer.Import(path);
+            var folderChild = folder.FolderChildren.OfType<IFolder>().FirstOrDefault();
+            var folderGrandson = folder.FolderChildren.OfType<IFolder>().FirstOrDefault(); 
+
+            Assert.IsNotNull(folder);
+            Assert.IsNotNull(folderChild);
+            Assert.IsNotNull(folderGrandson);
+            Assert.AreEqual(2, folderGrandson.FolderChildren.Count);
+
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ImporterException))]
+        public void MissingTypeInJson()
+        {
+            var path = $"{examplesRoot}\\MissingType.json";
+            var importer = new JsonImporter();
+            var folder = importer.Import(path);
         }
     }
 }
