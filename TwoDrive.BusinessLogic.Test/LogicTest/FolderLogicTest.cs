@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using TwoDrive.BusinessLogic.Exceptions;
 using System.Linq;
 
-namespace TwoDrive.BusinessLogic.Test
+namespace TwoDrive.BusinessLogic.Test.LogicTest
 {
     [TestClass]
     public class FolderLogicTest

@@ -9,7 +9,7 @@ using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 
-namespace TwoDrive.BusinessLogic.Test
+namespace TwoDrive.BusinessLogic.Test.LogicTest
 {
     [TestClass]
     public class ModificationLogicTest

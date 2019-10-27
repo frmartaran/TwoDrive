@@ -19,6 +19,7 @@
     <ProjectReference Include="..\TwoDrive.BusinessLogic.Interface\TwoDrive.BusinessLogic.Interfaces.csproj" />
     <ProjectReference Include="..\TwoDrive.BusinessLogic\TwoDrive.BusinessLogic.csproj" />
     <ProjectReference Include="..\TwoDrive.DataAccess\TwoDrive.DataAccess.csproj" />
+    <ProjectReference Include="..\TwoDrive.Formatters\TwoDrive.Importer.csproj" />
   </ItemGroup>
 
 </Project>
