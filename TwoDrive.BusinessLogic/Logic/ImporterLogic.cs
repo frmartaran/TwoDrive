@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.BusinessLogic.Resources;
 using TwoDrive.Domain;
 using TwoDrive.Importer.Interface;
 using TwoDrive.Importer.Interface.IFileManagement;
@@ -34,18 +36,26 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public IImporter<IFolder> GetImporter()
         {
-            var assemblyInfo = Assembly.LoadFrom(DllToImport);
-            var applicablesTypes = assemblyInfo.ExportedTypes
-                .Where(t => (typeof(IImporter<IFolder>).IsAssignableFrom(t)))
-                .ToList();
+            try
+            {
+                var assemblyInfo = Assembly.LoadFrom(DllToImport);
+                var applicablesTypes = assemblyInfo.ExportedTypes
+                    .Where(t => (typeof(IImporter<IFolder>).IsAssignableFrom(t)))
+                    .ToList();
 
-            var importerType = applicablesTypes
-                .Where(t => t.GetField(fieldName, BindingFlags.NonPublic
-                                                  | BindingFlags.Static)
-                    .GetRawConstantValue() as string == Options.FileType)
-                .SingleOrDefault();
-            var instance = Activator.CreateInstance(importerType);
-            return instance as IImporter<IFolder>;
+                var importerType = applicablesTypes
+                    .Where(t => t.GetField(fieldName, BindingFlags.NonPublic
+                                                      | BindingFlags.Static)
+                        .GetRawConstantValue() as string == Options.FileType)
+                    .SingleOrDefault();
+                var instance = Activator.CreateInstance(importerType);
+                return instance as IImporter<IFolder>;
+            }
+            catch (ArgumentNullException exception)
+            {
+                throw new ImporterNotFoundException(BusinessResource.ImporterNotFound_ImporterLogic, exception);
+            }
+            
         }
     }
 }

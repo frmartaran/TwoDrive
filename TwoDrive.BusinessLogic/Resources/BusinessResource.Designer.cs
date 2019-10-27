@@ -142,6 +142,15 @@ namespace TwoDrive.BusinessLogic.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Importer not found.
+        /// </summary>
+        public static string ImporterNotFound_ImporterLogic {
+            get {
+                return ResourceManager.GetString("ImporterNotFound_ImporterLogic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dependencies must be set to validate destination.
         /// </summary>
         public static string MissingDependencies_FolderValidator {
