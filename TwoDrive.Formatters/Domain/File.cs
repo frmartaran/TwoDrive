@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using TwoDrive.Importer.Interface.IFileManagement;
 
-namespace TwoDrive.Importer.MockDomain
+namespace TwoDrive.Importer.Domain
 {
-    public class MockFile : MockElement, IFile
+    public class File : Element, IFile
     {
         public string Extension { get; set; }
         public bool ShouldRender { get; set; }

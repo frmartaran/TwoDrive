@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Xml;
 using TwoDrive.Importer.Interface.IFileManagement;
-using TwoDrive.Importer.MockDomain;
+using TwoDrive.Importer.Domain;
 using TwoDrive.Importers;
 using TwoDrive.Importers.Exceptions;
 
@@ -132,7 +132,7 @@ namespace TwoDrive.Importer.Test
             var root = formatter.Import(path);
 
             var filesCount = root.FolderChildren
-                .Where(e => e is MockFile)
+                .Where(e => e is File)
                 .ToList()
                 .Count;
 
@@ -148,7 +148,7 @@ namespace TwoDrive.Importer.Test
             var root = formatter.Import(path);
 
             var files = root.FolderChildren
-                .OfType<MockFile>()
+                .OfType<File>()
                 .ToList();
             var htmlFile = files
                 .Where(t => t.Extension == "html")
@@ -210,7 +210,7 @@ namespace TwoDrive.Importer.Test
             var formatter = new XMLImporter();
             var root = formatter.Import(path);
             var file = root.FolderChildren
-                .OfType<MockFile>()
+                .OfType<File>()
                 .FirstOrDefault();
             Assert.IsFalse(file.ShouldRender);
         }
@@ -222,10 +222,10 @@ namespace TwoDrive.Importer.Test
             var formatter = new XMLImporter();
             var root = formatter.Import(path);
             var child = root.FolderChildren
-                .OfType<MockFolder>()
+                .OfType<Folder>()
                 .FirstOrDefault();
             var file = child.FolderChildren
-                .OfType<MockFile>()
+                .OfType<File>()
                 .FirstOrDefault();
 
             Assert.IsNotNull(child);

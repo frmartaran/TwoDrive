@@ -53,7 +53,35 @@ namespace TwoDrive.Importer.Test
 
             Assert.IsNotNull(child);
             Assert.IsInstanceOfType(folder, typeof(IFolder));
-            
+            Assert.IsInstanceOfType(child, typeof(IFile));
+        }
+
+        [TestMethod]
+        public void SaveAChildFolder()
+        {
+            var path = $"{examplesRoot}\\document.json";
+            var importer = new JsonImporter();
+            var folder = importer.Import(path);
+            var child = folder.FolderChildren.OfType<IFolder>().FirstOrDefault();
+
+            Assert.IsNotNull(child);
+            Assert.IsInstanceOfType(child, typeof(IFolder));
+
+        }
+
+        [TestMethod]
+        public void SaveATwoFilesAndOneFolder()
+        {
+            var path = $"{examplesRoot}\\document.json";
+            var importer = new JsonImporter();
+            var folder = importer.Import(path);
+            var folderChild = folder.FolderChildren.OfType<IFolder>().FirstOrDefault();
+            var files = folder.FolderChildren.OfType<IFile>().ToList();
+
+            Assert.IsNotNull(folderChild);
+            Assert.IsInstanceOfType(folderChild, typeof(IFolder));
+            Assert.AreEqual(2, files.Count);
+
         }
     }
 }

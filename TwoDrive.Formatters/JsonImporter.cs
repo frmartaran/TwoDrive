@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using TwoDrive.Importer.Interface;
 using TwoDrive.Importer.Interface.IFileManagement;
-using TwoDrive.Importer.MockDomain;
+using TwoDrive.Importer.Domain;
 using TwoDrive.Importers.Exceptions;
 
 namespace TwoDrive.Importer
@@ -27,8 +27,8 @@ namespace TwoDrive.Importer
             {
                 KnownTypes = new List<Type>
                 {
-                    typeof(MockFile),
-                    typeof(MockFolder)
+                    typeof(Domain.File),
+                    typeof(Folder)
                 }
             };
             var jsonString = Load<string>(path);
@@ -40,7 +40,7 @@ namespace TwoDrive.Importer
                 MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead,
                 Binder = binder
             };
-            var folder = JsonConvert.DeserializeObject<MockFolder>(jsonString, settings);
+            var folder = JsonConvert.DeserializeObject<Folder>(jsonString, settings);
             return folder;
         }
 

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using TwoDrive.Importer.Interface.IFileManagement;
 
-namespace TwoDrive.Importer.MockDomain
+namespace TwoDrive.Importer.Domain
 {
-    public class MockElement : IElement
+    public class Element : IElement
     {
         public string Name { get; set; }
         public IFolder ParentFolder { get; set; }

@@ -8,7 +8,7 @@ using TwoDrive.Importers.Extensions;
 using System.Linq;
 using TwoDrive.Importer;
 using TwoDrive.Importer.Interface.IFileManagement;
-using TwoDrive.Importer.MockDomain;
+using TwoDrive.Importer.Domain;
 
 namespace TwoDrive.Importers
 {
@@ -42,9 +42,9 @@ namespace TwoDrive.Importers
                 throw new ImporterException(ImporterResource.NoRoot_Exception);
         }
 
-        private void AddFiles(MockFolder parentFolder, XmlNodeList fileNodes)
+        private void AddFiles(Folder parentFolder, XmlNodeList fileNodes)
         {
-            var allFiles = new List<MockFile>();
+            var allFiles = new List<Importer.Domain.File>();
             foreach (XmlElement element in fileNodes)
             {
                 ValidateDates(element, out DateTime creationDate, out DateTime dateModified);
@@ -62,7 +62,7 @@ namespace TwoDrive.Importers
                 var renderAttribute = element.Attributes["render"];
                 var shouldRender = renderAttribute == null ? false : Convert.ToBoolean(renderAttribute.Value);
 
-                var file = new MockFile
+                var file = new Importer.Domain.File
                 {
                     Name = name,
                     CreationDate = creationDate,
@@ -95,7 +95,7 @@ namespace TwoDrive.Importers
                 throw new ImporterException(ImporterResource.NoName_Exception);
         }
 
-        private void AddChildFolders(XmlElement parentNode, MockFolder parentFolder)
+        private void AddChildFolders(XmlElement parentNode, Folder parentFolder)
         {
             var childNodes = parentNode.GetElementsByTagName(ImporterConstants.Folder);
             if (childNodes.Count == 0)
@@ -120,10 +120,10 @@ namespace TwoDrive.Importers
             }
         }
 
-        private MockFolder CreateFolder(XmlElement node, string name)
+        private Folder CreateFolder(XmlElement node, string name)
         {
             ValidateDates(node, out DateTime creationDate, out DateTime dateModified);
-            var folder = new MockFolder
+            var folder = new Folder
             {
                 Name = name,
                 CreationDate = creationDate,
