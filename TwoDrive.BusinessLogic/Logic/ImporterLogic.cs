@@ -48,6 +48,7 @@ namespace TwoDrive.BusinessLogic.Logic
                                                       | BindingFlags.Static)
                         .GetRawConstantValue() as string == Options.FileType)
                     .SingleOrDefault();
+
                 var instance = Activator.CreateInstance(importerType);
                 return instance as IImporter<IFolder>;
             }
@@ -56,6 +57,11 @@ namespace TwoDrive.BusinessLogic.Logic
                 throw new ImporterNotFoundException(BusinessResource.ImporterNotFound_ImporterLogic, exception);
             }
             
+        }
+
+        public void Import()
+        {
+
         }
     }
 }
