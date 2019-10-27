@@ -2,11 +2,11 @@
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.Domain;
+using TwoDrive.Importer;
 using TwoDrive.Importers;
 
 namespace TwoDrive.BusinessLogic.Test.LogicTest
@@ -48,5 +48,27 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
 
             Assert.IsInstanceOfType(importer, typeof(XMLImporter));
         }
+
+        [TestMethod]
+        public void GetJsonImporter()
+        {
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockFileLogic = new Mock<IFileLogic>();
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var dependencies = new ImporterLogicDependencies(mockFolderLogic.Object,
+                mockFileLogic.Object, mockWriterLogic.Object);
+            var options = new ImportingOptions
+            {
+                FilePath = "",
+                FileType = "JSON",
+                Owner = writer
+            };
+            var importerLogic = new ImporterLogic(options, dependencies);
+            var importer = importerLogic.GetImporter();
+
+            Assert.IsInstanceOfType(importer, typeof(JsonImporter));
+        }
+
+
     }
 }

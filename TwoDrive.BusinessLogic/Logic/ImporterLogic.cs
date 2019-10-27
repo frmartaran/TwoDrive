@@ -13,6 +13,9 @@ namespace TwoDrive.BusinessLogic.Logic
 {
     public class ImporterLogic
     {
+        private const string DllToImport = "TwoDrive.Importer.dll";
+
+        private const string fieldName = "Extension";
         private IFolderLogic FolderLogic { get; set; }
 
         private IFileLogic FileLogic { get; set; }
@@ -31,13 +34,13 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public IImporter<IFolder> GetImporter()
         {
-            var assemblyInfo = Assembly.LoadFrom("TwoDrive.Importer.dll");
-            var applicablesTypes = assemblyInfo.DefinedTypes
+            var assemblyInfo = Assembly.LoadFrom(DllToImport);
+            var applicablesTypes = assemblyInfo.ExportedTypes
                 .Where(t => (typeof(IImporter<IFolder>).IsAssignableFrom(t)))
                 .ToList();
 
             var importerType = applicablesTypes
-                .Where(t => t.GetField("Extension", BindingFlags.NonPublic
+                .Where(t => t.GetField(fieldName, BindingFlags.NonPublic
                                                   | BindingFlags.Static)
                     .GetRawConstantValue() as string == Options.FileType)
                 .SingleOrDefault();
