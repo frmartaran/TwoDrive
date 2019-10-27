@@ -4,7 +4,7 @@
     <ProjectReference Include="..\TwoDrive.BusinessLogic.Interface\TwoDrive.BusinessLogic.Interfaces.csproj" />
     <ProjectReference Include="..\TwoDrive.Domain\TwoDrive.Domain.csproj" />
     <ProjectReference Include="..\TwoDrive.DataAccess.Interface\TwoDrive.DataAccess.Interface.csproj" />
-    <ProjectReference Include="..\TwoDrive.Formatter.Interface\TwoDrive.Importer.Interface.csproj" />
+    <ProjectReference Include="..\TwoDrive.Importer.Interface\TwoDrive.Importer.Interface.csproj" />
   </ItemGroup>
 
   <ItemGroup>

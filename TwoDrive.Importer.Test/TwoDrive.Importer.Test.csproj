@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TwoDrive.Formatter.Interface\TwoDrive.Importer.Interface.csproj" />
-    <ProjectReference Include="..\TwoDrive.Formatters\TwoDrive.Importer.csproj" />
+    <ProjectReference Include="..\TwoDrive.Importer.Interface\TwoDrive.Importer.Interface.csproj" />
+    <ProjectReference Include="..\TwoDrive.Importer\TwoDrive.Importer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
