@@ -70,11 +70,11 @@ namespace TwoDrive.Importer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wrong date format..
+        ///   Looks up a localized string similar to Wrong Json Format.
         /// </summary>
-        internal static string Json_DateFormat_Exception {
+        internal static string Json_Format_Exception {
             get {
-                return ResourceManager.GetString("Json_DateFormat_Exception", resourceCulture);
+                return ResourceManager.GetString("Json_Format_Exception", resourceCulture);
             }
         }
         
@@ -120,15 +120,6 @@ namespace TwoDrive.Importer {
         internal static string NoType_Exception {
             get {
                 return ResourceManager.GetString("NoType_Exception", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to s.
-        /// </summary>
-        internal static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
         

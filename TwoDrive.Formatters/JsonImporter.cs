@@ -52,7 +52,7 @@ namespace TwoDrive.Importer
             }
             catch (JsonReaderException exception)
             {
-                throw new ImporterException(ImporterResource.Json_DateFormat_Exception, exception);
+                throw new ImporterException(ImporterResource.Json_Format_Exception, exception);
             }
         }
 

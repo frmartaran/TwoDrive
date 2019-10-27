@@ -120,8 +120,8 @@
   <data name="FileNotFound_Exception" xml:space="preserve">
     <value>File Not Found</value>
   </data>
-  <data name="Json_DateFormat_Exception" xml:space="preserve">
-    <value>Wrong date format.</value>
+  <data name="Json_Format_Exception" xml:space="preserve">
+    <value>Wrong Json Format</value>
   </data>
   <data name="Json_Type_Exception" xml:space="preserve">
     <value>Missing or Wrong type especification on json. Supported types: "File" or "Folder"</value>
@@ -138,9 +138,6 @@
   </data>
   <data name="NoType_Exception" xml:space="preserve">
     <value>Missing Type Attribute. </value>
-  </data>
-  <data name="String1" xml:space="preserve">
-    <value>s</value>
   </data>
   <data name="Unsupported" xml:space="preserve">
     <value>Unsupported file type. Must be 'txt' or 'html'</value>
