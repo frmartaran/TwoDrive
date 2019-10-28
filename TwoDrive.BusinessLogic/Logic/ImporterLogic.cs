@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -8,6 +9,7 @@ using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Resources;
 using TwoDrive.Domain;
+using TwoDrive.Domain.FileManagement;
 using TwoDrive.Importer.Interface;
 using TwoDrive.Importer.Interface.IFileManagement;
 
@@ -56,11 +58,40 @@ namespace TwoDrive.BusinessLogic.Logic
             {
                 throw new ImporterNotFoundException(BusinessResource.ImporterNotFound_ImporterLogic, exception);
             }
-            
+
         }
 
         public void Import()
         {
+            var importer = GetImporter();
+            var parentFolder = importer.Import(Options.FilePath);
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<IElement, Element>()
+                .Include<IFolder, Folder>()
+                .Include<IFile, File>()
+                .ForMember(src => src.IsDeleted, opt => opt.Ignore())
+                .ForMember(src => src.DeletedDate, opt => opt.Ignore())
+                .ForMember(src => src.Id, opt => opt.Ignore())
+                .ForMember(src => src.Owner, opt => opt.Ignore())
+                .ForMember(src => src.OwnerId, opt => opt.Ignore())
+                .ForMember(src => src.ParentFolderId, opt => opt.Ignore());
+
+                cfg.CreateMap<IFile, File>()
+                    .Include<IFile, TxtFile>()
+                    .Include<IFile, HTMLFile>();
+
+                cfg.CreateMap<IFolder, Folder>()
+                .ForMember(src => src.FolderChildren, opt => opt.MapFrom(f => f.FolderChildren));
+
+                cfg.CreateMap<IFile, HTMLFile>()
+                .ForMember(src => src.ShouldRender, opt => opt.MapFrom(f => f.ShouldRender));
+
+                cfg.CreateMap<IFile, TxtFile>();
+
+            });
+            var mapper = config.CreateMapper();
+            var domainFolder = mapper.Map<IFolder, Folder>(parentFolder);
+            FolderLogic.Create(domainFolder);
 
         }
     }

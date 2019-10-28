@@ -21,6 +21,10 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
     {
         private Writer writer;
 
+        private const string examplesRootForJson = "..\\..\\..\\Json Tree Examples";
+        private const string examplesRootForXML = "..\\..\\..\\Xml Tree Examples";
+
+
         [TestInitialize]
         public void SetUp()
         {
@@ -105,7 +109,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 mockFileLogic.Object, mockWriterLogic.Object);
             var options = new ImportingOptions
             {
-                FilePath = "",
+                FilePath = $"{examplesRootForXML}\\One Folder.xml",
                 FileType = "XML",
                 Owner = writer
             };
@@ -135,7 +139,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerDependecies = new ImporterLogicDependencies(folderLogic, fileLogic, writerLogic);
             var options = new ImportingOptions
             {
-                FilePath = "",
+                FilePath = $"{examplesRootForXML}\\One Folder.xml",
                 FileType = "XML",
                 Owner = writer
             };

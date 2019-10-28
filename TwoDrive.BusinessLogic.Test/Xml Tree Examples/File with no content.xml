@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <Root>
+    <CreationDate>2019-03-23</CreationDate>
+    <DateModified>2019-03-23</DateModified>
+    <Folder name="Folder">
+      <CreationDate>2019-03-23</CreationDate>
+      <DateModified>2019-03-23</DateModified>
+    </Folder>
+    <File name="File" type="txt">
+      <CreationDate>2019-03-23</CreationDate>
+      <DateModified>2019-03-23</DateModified>
+    </File>
+  </Root>
