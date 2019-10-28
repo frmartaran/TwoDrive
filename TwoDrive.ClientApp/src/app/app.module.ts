@@ -32,7 +32,8 @@ import {
   MatMenuModule,
   MatRadioModule,
   MatTableModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatTooltipModule
 } from '@angular/material';
 
 const MaterialModules = [
@@ -49,7 +50,8 @@ const MaterialModules = [
   MatMenuModule,
   MatRadioModule,
   MatTableModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatTooltipModule
 ];
 
 @NgModule({

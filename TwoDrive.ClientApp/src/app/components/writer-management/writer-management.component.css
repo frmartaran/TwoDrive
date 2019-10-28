@@ -21,3 +21,11 @@ table {
 #search-input{
   margin-bottom: 5px
 }
+
+#action{
+  text-align: right;
+}
+
+#action-def{
+  text-align: right;
+}
