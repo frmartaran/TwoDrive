@@ -15,7 +15,7 @@ export class LoginService {
     userId: '',
     token: '',
     isAdmin: false
-};
+  };
 
   constructor(private http: HttpClient) { }
 

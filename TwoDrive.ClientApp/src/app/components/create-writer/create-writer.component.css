@@ -23,3 +23,7 @@ mat-card{
 .roles-radio-group{
     display: inline-flex;
 }
+
+.error{
+    color: red
+}

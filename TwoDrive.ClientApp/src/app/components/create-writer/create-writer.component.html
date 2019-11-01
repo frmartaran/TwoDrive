@@ -4,18 +4,18 @@
         <form #writerForm="ngForm" (ngSubmit)="Create(writerForm)">
             <mat-card-content>
                 <mat-form-field>
-                    <input matInput id="username" name="username" placeholder="Username" required>
+                    <input matInput id="username" name="username" placeholder="Username" required [(ngModel)]="user.username">
                 </mat-form-field>
             
                 <mat-form-field>
-                    <input matInput id="password" name="password" placeholder="Password" required>
+                    <input matInput id="password" name="password" placeholder="Password" required [(ngModel)]="user.password">
                 </mat-form-field>
-    
+
                 <div class="roles-radio-group">
                     <mat-label>Role: </mat-label>
                     <mat-radio-group  layout="row">
-                        <mat-radio-button value="Administrator">Administrator</mat-radio-button>
-                        <mat-radio-button value="Writer">Writer</mat-radio-button>
+                        <mat-radio-button value="Administrator" (click)="setRole('Administrator')">Administrator</mat-radio-button>
+                        <mat-radio-button value="Writer" (click)="setRole('Writer')">Writer</mat-radio-button>
                     </mat-radio-group>
                 </div>
     

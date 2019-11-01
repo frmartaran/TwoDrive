@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
     this.credentials.password = loginForm.value.password;
     this.loginService.Login(this.credentials)
     .subscribe(
-      response => {
+      (response) => {
         this.loginService.authenticateUser(response);
       },
       (error) => {

@@ -26,10 +26,8 @@ namespace TwoDrive.WebApi.Models
             if (entity == null)
                 return null;
 
-            Id = entity.Id;
             Role = entity.Role;
             UserName = entity.UserName;
-            Password = entity.Password;
 
             if (Friends != null)
             {
@@ -82,10 +80,10 @@ namespace TwoDrive.WebApi.Models
                 Password = this.Password,
                 Friends = this.Friends?
                         .Select(f => f.ToDomain())
-                        .ToList() ?? null,
+                        .ToList() ?? new List<Writer>(),
                 Claims = this.Claims?
                     .Select(c => c.ToDomain())
-                    .ToList() ?? null
+                    .ToList() ?? new List<CustomClaim>()
             };
 
             if (Id.HasValue)

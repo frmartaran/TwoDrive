@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './components/app-component/app.component';
@@ -33,7 +33,8 @@ import {
   MatRadioModule,
   MatTableModule,
   MatPaginatorModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatSnackBarModule
 } from '@angular/material';
 
 const MaterialModules = [
@@ -51,7 +52,8 @@ const MaterialModules = [
   MatRadioModule,
   MatTableModule,
   MatPaginatorModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatSnackBarModule
 ];
 
 @NgModule({
