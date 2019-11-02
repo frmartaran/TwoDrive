@@ -8,7 +8,7 @@
       <Folder name="inner Folder">
         <CreationDate>2019-03-23</CreationDate>
         <DateModified>2019-03-23</DateModified>
-        <File name="File.html">
+        <File name="File.html" type="html">
           <CreationDate>2019-03-23</CreationDate>
           <DateModified>2019-03-23</DateModified>
           <Content><![CDATA[<p>This is important if you want to
