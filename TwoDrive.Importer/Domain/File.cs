@@ -7,7 +7,7 @@ namespace TwoDrive.Importer.Domain
 {
     public class File : Element, IFile
     {
-        public string Extension { get; set; }
+        public string Type { get; set; }
         public bool ShouldRender { get; set; }
         public string Content { get; set; }
     }

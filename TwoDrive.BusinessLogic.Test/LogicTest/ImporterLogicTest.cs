@@ -208,11 +208,10 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var modificationsCount = context.Modifications.Count();
             var filesCount = context.Files.Count();
             Assert.AreEqual(2, foldersInDb.Count);
-            Assert.AreEqual(7, claims);
-            Assert.AreEqual(3, modificationsCount);
+            Assert.AreEqual(1, filesCount);
+            Assert.AreEqual(11, claims);
+            Assert.AreEqual(5, modificationsCount);
 
         }
-
-
     }
 }

@@ -6,7 +6,7 @@ namespace TwoDrive.Importer.Interface.IFileManagement
 {
     public interface IFile : IElement
     {
-        string Extension { get; set; }
+        string Type { get; set; }
 
         bool ShouldRender { get; set; }
 

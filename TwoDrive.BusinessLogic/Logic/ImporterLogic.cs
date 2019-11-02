@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Extensions;
+using TwoDrive.BusinessLogic.Helpers;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Resources;
@@ -69,36 +70,43 @@ namespace TwoDrive.BusinessLogic.Logic
         {
             var importer = GetImporter();
             var parentFolder = importer.Import(Options.FilePath);
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<IElement, Element>()
-                .Include<IFolder, Folder>()
-                .Include<IFile, File>()
-                .ForMember(src => src.IsDeleted, opt => opt.Ignore())
-                .ForMember(src => src.DeletedDate, opt => opt.Ignore())
-                .ForMember(src => src.Id, opt => opt.Ignore())
-                .ForMember(src => src.Owner, opt => opt.Ignore())
-                .ForMember(src => src.OwnerId, opt => opt.Ignore())
-                .ForMember(src => src.ParentFolderId, opt => opt.Ignore());
+            var mapper = MapperHelper.GetFileManagementMapper();
 
-                cfg.CreateMap<IFile, File>()
-                    .Include<IFile, TxtFile>()
-                    .Include<IFile, HTMLFile>();
-
-                cfg.CreateMap<IFolder, Folder>()
-                .ForMember(src => src.FolderChildren, opt => opt.MapFrom(f => f.FolderChildren));
-
-                cfg.CreateMap<IFile, HTMLFile>()
-                .ForMember(src => src.ShouldRender, opt => opt.MapFrom(f => f.ShouldRender));
-
-                cfg.CreateMap<IFile, TxtFile>();
-
-            });
-            var mapper = config.CreateMapper();
             var domainFolder = mapper.Map<IFolder, Folder>(parentFolder);
             domainFolder.Owner = Options.Owner;
+
+            var childrenList = domainFolder.FolderChildren;
+            domainFolder.FolderChildren = new List<Element>();
+
             FolderLogic.Create(domainFolder);
+
+            foreach (var child in childrenList)
+            {
+                child.ParentFolder = domainFolder;
+                var owner = domainFolder.Owner;
+                child.Owner = owner;
+                if (child is Folder)
+                {
+                    FolderLogic.Create(child as Folder);
+                }
+                else
+                {
+                    FileLogic.Create(child as File);
+                }
+
+                owner.AddCreatorClaimsTo(child);
+                WriterLogic.Update(owner);
+                CreateImportModification(child);
+                FolderLogic.CreateModificationsForTree(child, ModificationType.Changed);
+            }
+
             Options.Owner.AddRootClaims(domainFolder);
             WriterLogic.Update(Options.Owner);
+            CreateImportModification(domainFolder);
+        }
+
+        private void CreateImportModification(Element domainFolder)
+        {
             var modification = new Modification
             {
                 Date = DateTime.Now,
@@ -106,7 +114,6 @@ namespace TwoDrive.BusinessLogic.Logic
                 type = ModificationType.Imported
             };
             ModificationLogic.Create(modification);
-            
         }
     }
 }
