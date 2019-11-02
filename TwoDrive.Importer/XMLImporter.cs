@@ -70,7 +70,7 @@ namespace TwoDrive.Importers
                     CreationDate = creationDate,
                     DateModified = dateModified,
                     Content = contentNode.Item(0).InnerText,
-                    Type = type,
+                    Type = type.ToUpper(),
                     ParentFolder = parentFolder,
                     ShouldRender = shouldRender
                 };
