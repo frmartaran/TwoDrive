@@ -213,5 +213,52 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             Assert.AreEqual(5, modificationsCount);
 
         }
+
+        [TestMethod]
+        public void ImportAFolderWithTwoTypesOfFiles()
+        {
+            var context = ContextFactory.GetMemoryContext("Import A Folder with two types of files");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+            var fileValidator = new Mock<IValidator<Element>>().Object;
+            var validator = new Mock<IFolderValidator>().Object;
+            var modificationRepository = new ModificationRepository(context);
+            var modificationsLogic = new ModificationLogic(modificationRepository);
+            var folderDependecies = new ElementLogicDependencies(folderRepository, fileRepository,
+                validator, modificationRepository);
+            var writerRepository = new WriterRepository(context);
+            var writerValidator = new Mock<IValidator<Writer>>().Object;
+
+            var folderLogic = new FolderLogic(folderDependecies);
+            var fileLogic = new FileLogic(fileRepository, fileValidator);
+            var writerLogic = new WriterLogic(writerRepository, writerValidator);
+            var importerDependecies = new ImporterLogicDependencies(folderLogic, fileLogic, writerLogic,
+                modificationsLogic);
+            var options = new ImportingOptions
+            {
+                FilePath = $"{examplesRootForXML}\\Two Types Of Files.xml",
+                FileType = "XML",
+                Owner = writer
+            };
+            writerRepository.Insert(writer);
+            writerRepository.Save();
+
+            var importerLogic = new ImporterLogic(options, importerDependecies);
+            importerLogic.Import();
+
+            var foldersInDb = folderLogic.GetAll();
+            var claims = writer.Claims.Count;
+            var modificationsCount = context.Modifications.Count();
+            var txtFileCount = context.Txts.Count();
+            var htmlFileCount = context.Htmls.Count();
+            var filesCount = context.Files.Count();
+            Assert.AreEqual(2, foldersInDb.Count);
+            Assert.AreEqual(2, filesCount);
+            Assert.AreEqual(1, txtFileCount);
+            Assert.AreEqual(1, htmlFileCount);
+            Assert.AreEqual(15, claims);
+            Assert.AreEqual(7, modificationsCount);
+
+        }
     }
 }
