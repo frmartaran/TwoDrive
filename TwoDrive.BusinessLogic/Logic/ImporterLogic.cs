@@ -72,7 +72,15 @@ namespace TwoDrive.BusinessLogic.Logic
             var parentFolder = importer.Import(Options.FilePath);
             var mapper = MapperHelper.GetFileManagementMapper();
 
-            var domainFolder = mapper.Map<IFolder, Folder>(parentFolder);
+            Folder domainFolder;
+            try
+            {
+                domainFolder = mapper.Map<IFolder, Folder>(parentFolder);
+            }
+            catch (AutoMapperMappingException exception)
+            {
+                throw new LogicException(BusinessResource.MappingError_Mapper, exception);
+            }
             domainFolder.Owner = Options.Owner;
 
             var childrenList = domainFolder.FolderChildren;

@@ -151,6 +151,15 @@ namespace TwoDrive.BusinessLogic.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error at importing elements, please validate all types are supported..
+        /// </summary>
+        public static string MappingError_Mapper {
+            get {
+                return ResourceManager.GetString("MappingError_Mapper", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dependencies must be set to validate destination.
         /// </summary>
         public static string MissingDependencies_FolderValidator {
@@ -291,6 +300,15 @@ namespace TwoDrive.BusinessLogic.Resources {
         public static string ShowTreeFormat {
             get {
                 return ResourceManager.GetString("ShowTreeFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsupported File Type.
+        /// </summary>
+        public static string UnsupportedFileType_Mapper {
+            get {
+                return ResourceManager.GetString("UnsupportedFileType_Mapper", resourceCulture);
             }
         }
     }

@@ -147,6 +147,9 @@
   <data name="ImporterNotFound_ImporterLogic" xml:space="preserve">
     <value>Importer not found</value>
   </data>
+  <data name="MappingError_Mapper" xml:space="preserve">
+    <value>Error at importing elements, please validate all types are supported.</value>
+  </data>
   <data name="MissingDependencies_FolderValidator" xml:space="preserve">
     <value>Dependencies must be set to validate destination</value>
   </data>
@@ -194,5 +197,8 @@
   </data>
   <data name="ShowTreeFormat" xml:space="preserve">
     <value>{0} +- {1}</value>
+  </data>
+  <data name="UnsupportedFileType_Mapper" xml:space="preserve">
+    <value>Unsupported File Type</value>
   </data>
 </root>

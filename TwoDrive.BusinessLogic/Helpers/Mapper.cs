@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TwoDrive.BusinessLogic.Exceptions;
+using TwoDrive.BusinessLogic.Resources;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.Importer.Interface.IFileManagement;
 
@@ -34,7 +35,7 @@ namespace TwoDrive.BusinessLogic.Helpers
                             case "TXT":
                                 return opt.Mapper.Map<TxtFile>(src);
                             default:
-                                throw new LogicException("");
+                                throw new LogicException(BusinessResource.UnsupportedFileType_Mapper);
                         }
 
                     });

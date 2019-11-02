@@ -284,7 +284,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 modificationsLogic);
             var options = new ImportingOptions
             {
-                FilePath = $"{examplesRootForXML}\\Two Types Of Files.xml",
+                FilePath = $"{examplesRootForXML}\\Unsupported File Type.xml",
                 FileType = "XML",
                 Owner = writer
             };
