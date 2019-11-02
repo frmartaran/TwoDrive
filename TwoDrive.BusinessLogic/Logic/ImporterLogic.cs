@@ -80,10 +80,19 @@ namespace TwoDrive.BusinessLogic.Logic
 
             FolderLogic.Create(domainFolder);
 
-            foreach (var child in childrenList)
+            ImportChildren(domainFolder, childrenList);
+
+            Options.Owner.AddRootClaims(domainFolder);
+            WriterLogic.Update(Options.Owner);
+            CreateImportModification(domainFolder);
+        }
+
+        private void ImportChildren(Folder parentFolder, ICollection<Element> children)
+        {
+            foreach (var child in children)
             {
-                child.ParentFolder = domainFolder;
-                var owner = domainFolder.Owner;
+                child.ParentFolder = parentFolder;
+                var owner = parentFolder.Owner;
                 child.Owner = owner;
                 if (child is Folder)
                 {
@@ -99,10 +108,6 @@ namespace TwoDrive.BusinessLogic.Logic
                 CreateImportModification(child);
                 FolderLogic.CreateModificationsForTree(child, ModificationType.Changed);
             }
-
-            Options.Owner.AddRootClaims(domainFolder);
-            WriterLogic.Update(Options.Owner);
-            CreateImportModification(domainFolder);
         }
 
         private void CreateImportModification(Element domainFolder)
