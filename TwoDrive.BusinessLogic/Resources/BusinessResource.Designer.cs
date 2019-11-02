@@ -169,6 +169,15 @@ namespace TwoDrive.BusinessLogic.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The owner for the elements to import must be set..
+        /// </summary>
+        public static string MissingOwner {
+            get {
+                return ResourceManager.GetString("MissingOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A file should have a parent folder.
         /// </summary>
         public static string MissingParent_FileValidator {

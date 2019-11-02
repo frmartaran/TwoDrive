@@ -153,6 +153,9 @@
   <data name="MissingDependencies_FolderValidator" xml:space="preserve">
     <value>Dependencies must be set to validate destination</value>
   </data>
+  <data name="MissingOwner" xml:space="preserve">
+    <value>The owner for the elements to import must be set.</value>
+  </data>
   <data name="MissingParent_FileValidator" xml:space="preserve">
     <value>A file should have a parent folder</value>
   </data>

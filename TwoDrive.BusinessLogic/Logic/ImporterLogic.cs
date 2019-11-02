@@ -68,6 +68,9 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public void Import()
         {
+            if (Options.Owner == null)
+                throw new LogicException(BusinessResource.MissingOwner);
+
             var importer = GetImporter();
             var parentFolder = importer.Import(Options.FilePath);
             var mapper = MapperHelper.GetFileManagementMapper();
