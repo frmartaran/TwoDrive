@@ -102,9 +102,12 @@ namespace TwoDrive.BusinessLogic.Logic
                 child.ParentFolder = parentFolder;
                 var owner = parentFolder.Owner;
                 child.Owner = owner;
-                if (child is Folder)
+                if (child is Folder folder)
                 {
-                    FolderLogic.Create(child as Folder);
+                    var innerChildren = folder.FolderChildren;
+                    folder.FolderChildren = new List<Element>();
+                    FolderLogic.Create(folder);
+                    ImportChildren(folder, innerChildren);
                 }
                 else
                 {

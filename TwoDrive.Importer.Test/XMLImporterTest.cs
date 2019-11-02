@@ -171,7 +171,7 @@ namespace TwoDrive.Importer.Test
                 .OfType<File>()
                 .ToList();
             var htmlFile = files
-                .Where(t => t.Type == "html")
+                .Where(t => t.Type == "HTML")
                 .FirstOrDefault();
             Assert.AreEqual(3, root.FolderChildren.Count);
             Assert.AreEqual(2, files.Count);
