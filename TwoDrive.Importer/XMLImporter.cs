@@ -32,10 +32,20 @@ namespace TwoDrive.Importers
             ValidateRootTag(rootNode);
             var root = CreateFolder(rootNode, ImporterConstants.Root);
             var fileNodes = rootNode.GetElementsByTagName(ImporterConstants.File);
-            AddFiles(root, fileNodes);
+            var correctFileNodes = FilterListOfNodes(rootNode, fileNodes);
+
+            AddFiles(root, correctFileNodes);
             AddChildFolders(rootNode, root);
             return root;
 
+        }
+
+        private List<XmlElement> FilterListOfNodes(XmlElement rootNode, XmlNodeList fileNodes)
+        {
+            return fileNodes
+                    .AsList()
+                    .Where(n => n.ParentNode == rootNode)
+                    .ToList();
         }
 
         private static void ValidateRootTag(XmlElement rootNode)
@@ -44,7 +54,7 @@ namespace TwoDrive.Importers
                 throw new ImporterException(ImporterResource.NoRoot_Exception);
         }
 
-        private void AddFiles(Folder parentFolder, XmlNodeList fileNodes)
+        private void AddFiles(Folder parentFolder, List<XmlElement> fileNodes)
         {
             var allFiles = new List<Importer.Domain.File>();
             foreach (XmlElement element in fileNodes)
@@ -117,7 +127,9 @@ namespace TwoDrive.Importers
                 newFolder.ParentFolder = parentFolder;
                 parentFolder.FolderChildren.Add(newFolder);
                 var fileNodes = innerFolder.GetElementsByTagName(ImporterConstants.File);
-                AddFiles(newFolder, fileNodes);
+                var correctFileNodes = FilterListOfNodes(innerFolder, fileNodes);
+                AddFiles(newFolder, correctFileNodes);
+
                 AddChildFolders(innerFolder, newFolder);
             }
         }

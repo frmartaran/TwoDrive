@@ -116,6 +116,26 @@ namespace TwoDrive.Importer.Test
         }
 
         [TestMethod]
+        public void SaveTwoLevelOfFoldersWithFile()
+        {
+            var path = $@"{examplesRoot}\\Two Level Tree With File.xml";
+            var formatter = new XMLImporter();
+            var root = formatter.Import(path);
+
+            var middleFolder = root.FolderChildren
+                .FirstOrDefault() as IFolder;
+            var lastFolder = middleFolder.FolderChildren
+                .FirstOrDefault() as IFolder;
+            var file = lastFolder.FolderChildren.
+                OfType<IFile>()
+                .FirstOrDefault();
+            Assert.AreEqual(1, root.FolderChildren.Count);
+            Assert.AreEqual(1, middleFolder.FolderChildren.Count);
+            Assert.AreEqual(middleFolder, lastFolder.ParentFolder);
+            Assert.IsNotNull(file);
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(ImporterException))]
         public void FolderWithNoName()
         {
