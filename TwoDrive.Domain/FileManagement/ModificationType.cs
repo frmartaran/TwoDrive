@@ -5,6 +5,7 @@ namespace TwoDrive.Domain.FileManagement
     {
         Changed,
         Added,
-        Deleted
+        Deleted,
+        Imported
     }
 }

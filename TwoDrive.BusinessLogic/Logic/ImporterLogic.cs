@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using TwoDrive.BusinessLogic.Exceptions;
+using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Resources;
@@ -28,12 +29,15 @@ namespace TwoDrive.BusinessLogic.Logic
 
         private ImportingOptions Options { get; set; }
 
+        private IModificationLogic ModificationLogic { get; set; }
+
         public ImporterLogic(ImportingOptions options, ImporterLogicDependencies dependencies)
         {
             Options = options;
             FolderLogic = dependencies.FolderLogic;
             FileLogic = dependencies.FileLogic;
             WriterLogic = dependencies.WriterLogic;
+            ModificationLogic = dependencies.ModificationLogic; 
         }
 
         public IImporter<IFolder> GetImporter()
@@ -91,8 +95,18 @@ namespace TwoDrive.BusinessLogic.Logic
             });
             var mapper = config.CreateMapper();
             var domainFolder = mapper.Map<IFolder, Folder>(parentFolder);
+            domainFolder.Owner = Options.Owner;
             FolderLogic.Create(domainFolder);
-
+            Options.Owner.AddRootClaims(domainFolder);
+            WriterLogic.Update(Options.Owner);
+            var modification = new Modification
+            {
+                Date = DateTime.Now,
+                ElementModified = domainFolder,
+                type = ModificationType.Imported
+            };
+            ModificationLogic.Create(modification);
+            
         }
     }
 }

@@ -2,6 +2,7 @@
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
@@ -44,8 +45,9 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockFileLogic = new Mock<IFileLogic>();
             var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockModificationLogic = new Mock<IModificationLogic>().Object;
             var dependencies = new ImporterLogicDependencies(mockFolderLogic.Object,
-                mockFileLogic.Object, mockWriterLogic.Object);
+                mockFileLogic.Object, mockWriterLogic.Object, mockModificationLogic);
             var options = new ImportingOptions
             {
                 FilePath = "",
@@ -64,8 +66,9 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockFileLogic = new Mock<IFileLogic>();
             var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockModificationLogic = new Mock<IModificationLogic>().Object;
             var dependencies = new ImporterLogicDependencies(mockFolderLogic.Object,
-                mockFileLogic.Object, mockWriterLogic.Object);
+                mockFileLogic.Object, mockWriterLogic.Object, mockModificationLogic);
             var options = new ImportingOptions
             {
                 FilePath = "",
@@ -85,8 +88,10 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var mockFolderLogic = new Mock<IFolderLogic>();
             var mockFileLogic = new Mock<IFileLogic>();
             var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockModificationLogic = new Mock<IModificationLogic>().Object;
+
             var dependencies = new ImporterLogicDependencies(mockFolderLogic.Object,
-                mockFileLogic.Object, mockWriterLogic.Object);
+                mockFileLogic.Object, mockWriterLogic.Object, mockModificationLogic);
             var options = new ImportingOptions
             {
                 FilePath = "",
@@ -104,9 +109,13 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             mockFolderLogic.Setup(m => m.Create(It.IsAny<Folder>()));
             var mockFileLogic = new Mock<IFileLogic>();
-            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockWriterLogic.Setup(m => m.Update(It.IsAny<Writer>()));
+            var mockModificationLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
+            mockModificationLogic.Setup(m => m.Create(It.IsAny<Modification>()));
+
             var dependencies = new ImporterLogicDependencies(mockFolderLogic.Object,
-                mockFileLogic.Object, mockWriterLogic.Object);
+                mockFileLogic.Object, mockWriterLogic.Object, mockModificationLogic.Object);
             var options = new ImportingOptions
             {
                 FilePath = $"{examplesRootForXML}\\One Folder.xml",
@@ -117,6 +126,8 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             importerLogic.Import();
 
             mockFolderLogic.VerifyAll();
+            mockWriterLogic.VerifyAll();
+            mockModificationLogic.VerifyAll();
         }
 
         [TestMethod]
@@ -127,16 +138,18 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var fileRepository = new FileRepository(context);
             var fileValidator = new Mock<IValidator<Element>>().Object;
             var validator = new Mock<IFolderValidator>().Object;
-            var modifications = new Mock<IRepository<Modification>>().Object;
+            var modificationRepository = new ModificationRepository(context);
+            var modificationsLogic = new ModificationLogic(modificationRepository);
             var folderDependecies = new ElementLogicDependencies(folderRepository, fileRepository, 
-                validator, modifications);
+                validator, modificationRepository);
             var writerRepository = new WriterRepository(context);
             var writerValidator = new Mock<IValidator<Writer>>().Object;
 
             var folderLogic = new FolderLogic(folderDependecies);
             var fileLogic = new FileLogic(fileRepository, fileValidator);
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
-            var importerDependecies = new ImporterLogicDependencies(folderLogic, fileLogic, writerLogic);
+            var importerDependecies = new ImporterLogicDependencies(folderLogic, fileLogic, writerLogic, 
+                modificationsLogic);
             var options = new ImportingOptions
             {
                 FilePath = $"{examplesRootForXML}\\One Folder.xml",
@@ -150,7 +163,11 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             importerLogic.Import();
 
             var foldersInDb = folderLogic.GetAll();
+            var claims = writer.Claims.Count;
+            var modificationsCount = context.Modifications.ToList().Count;
             Assert.AreEqual(1, foldersInDb.Count);
+            Assert.AreEqual(3, claims);
+            Assert.AreEqual(1, modificationsCount);
             
         }
 
