@@ -28,7 +28,7 @@ namespace TwoDrive.BusinessLogic.Helpers
                     .Include<IFile, TxtFile>()
                     .Include<IFile, HTMLFile>()
                     .ConstructUsing((src, opt) => {
-                        switch (src.Type)
+                        switch (src.Type.ToUpper())
                         {
                             case "HTML":
                                 return opt.Mapper.Map<HTMLFile>(src);
