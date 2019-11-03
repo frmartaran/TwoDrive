@@ -525,5 +525,25 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             Assert.AreEqual(7, modificationsCount);
 
         }
+
+        [TestMethod]
+        public void GetAllImporters()
+        {
+            var mockFolderLogic = new Mock<IFolderLogic>().Object;
+            var mockFileLogic = new Mock<IFileLogic>().Object;
+            var mockWriterLogic = new Mock<ILogic<Writer>>().Object;
+            var mockModificationLogic = new Mock<IModificationLogic>().Object;
+
+            var dependencies = new ImporterDependencies(mockFolderLogic, mockFileLogic, 
+                mockWriterLogic, mockModificationLogic);
+
+            var importerLogic = new ImporterLogic(dependencies);
+            var importerNames = importerLogic.GetAllImporters();
+
+            Assert.IsNotNull(importerNames);
+            Assert.IsTrue(importerNames.Contains("XML"));
+            Assert.IsTrue(importerNames.Contains("JSON"));
+
+        }
     }
 }
