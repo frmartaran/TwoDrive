@@ -346,7 +346,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
         [ExpectedException(typeof(LogicException))]
         public void ImportMissingWriter()
         {
-            var context = ContextFactory.GetMemoryContext("Import A Two Level Tree");
+            var context = ContextFactory.GetMemoryContext("Import Missing Writer");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
             var fileValidator = new Mock<IValidator<Element>>().Object;
@@ -426,7 +426,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
         [ExpectedException(typeof(LogicException))]
         public void ImportedChildFailsValidation()
         {
-            var context = ContextFactory.GetMemoryContext("Import when root already exists");
+            var context = ContextFactory.GetMemoryContext("Import child fails validation");
             var folderRepository = new FolderRepository(context);
             var fileRepository = new FileRepository(context);
             var fileValidator = new Mock<IValidator<Element>>().Object;
@@ -451,18 +451,6 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             };
             writerRepository.Insert(writer);
             writerRepository.Save();
-
-            var root = new Folder
-            {
-                CreationDate = new DateTime(2019, 3, 15),
-                DateModified = new DateTime(2019, 3, 15),
-                FolderChildren = new List<Element>(),
-                Owner = writer,
-                Name = "Root",
-                ParentFolder = null,
-            };
-
-            folderLogic.Create(root);
 
             var importerLogic = new ImporterLogic(options, importerDependecies);
             importerLogic.Import();

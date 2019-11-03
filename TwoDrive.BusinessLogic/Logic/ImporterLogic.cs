@@ -92,15 +92,17 @@ namespace TwoDrive.BusinessLogic.Logic
             {
                 FolderLogic.Create(domainFolder);
                 ImportChildren(domainFolder, childrenList);
-
-
             }
             catch (ValidationException exception)
             {
-                if(domainFolder.Id != 0)
-                    FolderLogic.Delete(domainFolder.Id);
+                if (!(exception is DuplicateResourceException))
+                {
+                    var root = FolderLogic.GetRootFolder(Options.Owner);
+                    FolderLogic.Delete(root.Id);
+                }
 
-                throw new LogicException(exception.Message);
+                throw new LogicException(exception.Message, exception);
+                    
             }
 
             Options.Owner.AddRootClaims(domainFolder);

@@ -137,10 +137,11 @@ namespace TwoDrive.BusinessLogic.Validators
         protected override void Hook(Element element)
         {
             var rootAlreadyExists = FolderRepository.GetAll()
+                .Where(f => f.Name == rootName)
                 .Where(f => f.Owner == element.Owner)
                 .Any();
             if (IsRoot(element) && rootAlreadyExists)
-                throw new ValidationException(BusinessResource.RootAlreadyExists);
+                throw new DuplicateResourceException(BusinessResource.RootAlreadyExists);
         }
     }
 }
