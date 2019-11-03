@@ -54,5 +54,11 @@ namespace TwoDrive.WebApi.Controllers
                 return BadRequest(exception.Message);
             }
         }
+
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return null;
+        }
     }
 }
