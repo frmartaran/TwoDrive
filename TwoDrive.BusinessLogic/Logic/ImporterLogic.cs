@@ -88,10 +88,20 @@ namespace TwoDrive.BusinessLogic.Logic
 
             var childrenList = domainFolder.FolderChildren;
             domainFolder.FolderChildren = new List<Element>();
+            try
+            {
+                FolderLogic.Create(domainFolder);
+                ImportChildren(domainFolder, childrenList);
 
-            FolderLogic.Create(domainFolder);
 
-            ImportChildren(domainFolder, childrenList);
+            }
+            catch (ValidationException exception)
+            {
+                if(domainFolder.Id != 0)
+                    FolderLogic.Delete(domainFolder.Id);
+
+                throw new LogicException(exception.Message);
+            }
 
             Options.Owner.AddRootClaims(domainFolder);
             WriterLogic.Update(Options.Owner);
