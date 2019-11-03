@@ -58,7 +58,8 @@ namespace TwoDrive.WebApi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return null;
+            var allImporters = ImporterLogic.GetAllImporters();
+            return Ok(allImporters);
         }
     }
 }
