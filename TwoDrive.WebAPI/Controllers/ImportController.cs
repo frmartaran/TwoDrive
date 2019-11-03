@@ -29,6 +29,9 @@ namespace TwoDrive.WebApi.Controllers
         public IActionResult Import([FromBody] string path, string importType, int ownerId)
         {
             var owner = WriterLogic.Get(ownerId);
+            if (owner == null)
+                return BadRequest(ApiResource.WriterNotFound);
+
             var options = new ImportingOptions
             {
                 FilePath = path,

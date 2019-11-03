@@ -40,14 +40,14 @@ namespace TwoDrive.WebApi.Test
 
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             mockImportLogic.VerifyAll();
+            mockWriterLogic.VerifyAll();
+
         }
 
         [TestMethod]
         public void OwnerNotFound()
         {
-            var mockImportLogic = new Mock<IImporterLogic>(MockBehavior.Strict);
-            mockImportLogic.Setup(m => m.Import());
-            mockImportLogic.SetupSet(m => m.Options = It.IsAny<ImportingOptions>());
+            var mockImportLogic = new Mock<IImporterLogic>();
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
             mockWriterLogic.Setup(m => m.Get(It.IsAny<int>()))
@@ -58,6 +58,7 @@ namespace TwoDrive.WebApi.Test
 
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
             mockImportLogic.VerifyAll();
+            mockWriterLogic.VerifyAll();
         }
     }
 }
