@@ -49,6 +49,10 @@ namespace TwoDrive.WebApi.Controllers
             {
                 return BadRequest(exception.Message);
             }
+            catch (LogicException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
     }
 }
