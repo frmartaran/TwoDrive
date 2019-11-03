@@ -83,5 +83,27 @@ namespace TwoDrive.WebApi.Test
             mockWriterLogic.VerifyAll();
 
         }
+
+        [TestMethod]
+        public void ImportingError()
+        {
+            var mockImportLogic = new Mock<IImporterLogic>(MockBehavior.Strict);
+            mockImportLogic.Setup(m => m.Import())
+                .Throws(new LogicException(""));
+
+            mockImportLogic.SetupSet(m => m.Options = It.IsAny<ImportingOptions>());
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            mockWriterLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(writer);
+
+            var controller = new ImportController(mockImportLogic.Object, mockWriterLogic.Object);
+            var result = controller.Import("", "txt", writer.Id);
+
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+            mockImportLogic.VerifyAll();
+            mockWriterLogic.VerifyAll();
+
+        }
     }
 }
