@@ -4,6 +4,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
@@ -59,6 +60,28 @@ namespace TwoDrive.WebApi.Test
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
             mockImportLogic.VerifyAll();
             mockWriterLogic.VerifyAll();
+        }
+
+        [TestMethod]
+        public void ImporterNotFound()
+        {
+            var mockImportLogic = new Mock<IImporterLogic>(MockBehavior.Strict);
+            mockImportLogic.Setup(m => m.Import())
+                .Throws(new ImporterNotFoundException(""));
+
+            mockImportLogic.SetupSet(m => m.Options = It.IsAny<ImportingOptions>());
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            mockWriterLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(writer);
+
+            var controller = new ImportController(mockImportLogic.Object, mockWriterLogic.Object);
+            var result = controller.Import("", "txt", writer.Id);
+
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+            mockImportLogic.VerifyAll();
+            mockWriterLogic.VerifyAll();
+
         }
     }
 }
