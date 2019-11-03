@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
@@ -31,16 +32,23 @@ namespace TwoDrive.WebApi.Controllers
             var owner = WriterLogic.Get(ownerId);
             if (owner == null)
                 return BadRequest(ApiResource.WriterNotFound);
-
-            var options = new ImportingOptions
+            try
             {
-                FilePath = path,
-                FileType = importType,
-                Owner = owner
-            };
-            ImporterLogic.Options = options;
-            ImporterLogic.Import();
-            return Ok(ApiResource.Import_Success);
+                var options = new ImportingOptions
+                {
+                    FilePath = path,
+                    FileType = importType,
+                    Owner = owner
+                };
+                ImporterLogic.Options = options;
+                ImporterLogic.Import();
+                return Ok(ApiResource.Import_Success);
+
+            }
+            catch (ImporterNotFoundException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
     }
 }
