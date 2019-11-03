@@ -38,7 +38,7 @@ namespace TwoDrive.BusinessLogic.Logic
             FolderLogic = dependencies.FolderLogic;
             FileLogic = dependencies.FileLogic;
             WriterLogic = dependencies.WriterLogic;
-            ModificationLogic = dependencies.ModificationLogic; 
+            ModificationLogic = dependencies.ModificationLogic;
         }
 
         public IImporter<IFolder> GetImporter()
@@ -79,19 +79,17 @@ namespace TwoDrive.BusinessLogic.Logic
             try
             {
                 domainFolder = mapper.Map<IFolder, Folder>(parentFolder);
+
+                domainFolder.Owner = Options.Owner;
+                var childrenList = domainFolder.FolderChildren;
+                domainFolder.FolderChildren = new List<Element>();
+
+                FolderLogic.Create(domainFolder);
+                ImportChildren(domainFolder, childrenList);
             }
             catch (AutoMapperMappingException exception)
             {
                 throw new LogicException(BusinessResource.MappingError_Mapper, exception);
-            }
-            domainFolder.Owner = Options.Owner;
-
-            var childrenList = domainFolder.FolderChildren;
-            domainFolder.FolderChildren = new List<Element>();
-            try
-            {
-                FolderLogic.Create(domainFolder);
-                ImportChildren(domainFolder, childrenList);
             }
             catch (ValidationException exception)
             {
@@ -102,7 +100,7 @@ namespace TwoDrive.BusinessLogic.Logic
                 }
 
                 throw new LogicException(exception.Message, exception);
-                    
+
             }
 
             Options.Owner.AddRootClaims(domainFolder);
