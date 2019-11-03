@@ -29,16 +29,12 @@ namespace TwoDrive.WebApi.Test
         {
             var mockImportLogic = new Mock<IImporterLogic>(MockBehavior.Strict);
             mockImportLogic.Setup(m => m.Import());
+            mockImportLogic.SetupSet(m => m.Options = It.IsAny<ImportingOptions>());
 
-            var folderLogic = new Mock<IFolderLogic>().Object;
-            var fileLogic = new Mock<IFileLogic>().Object;
-            var modificationLogic = new Mock<IModificationLogic>().Object;
             var mockWriterLogic = new Mock<ILogic<Writer>>();
             mockWriterLogic.Setup(m => m.Get(It.IsAny<int>()));
-            var dependencies = new ImporterDependencies(folderLogic, fileLogic,
-                mockWriterLogic.Object, modificationLogic);
 
-            var controller = new ImportController(dependencies);
+            var controller = new ImportController(mockImportLogic.Object, mockWriterLogic.Object);
             var result = controller.Import("", "XML", writer.Id);
 
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));

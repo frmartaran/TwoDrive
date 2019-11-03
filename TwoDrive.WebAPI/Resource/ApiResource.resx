@@ -228,4 +228,7 @@
   <data name="WrongRequestBody" xml:space="preserve">
     <value>Something's went wrong in the request body</value>
   </data>
+  <data name="Import_Success" xml:space="preserve">
+    <value>Tree imported successfully</value>
+  </data>
 </root>

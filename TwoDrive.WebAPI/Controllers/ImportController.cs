@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
+using TwoDrive.WebApi.Resource;
 
 namespace TwoDrive.WebApi.Controllers
 {
@@ -14,17 +15,29 @@ namespace TwoDrive.WebApi.Controllers
     [ApiController]
     public class ImportController : ControllerBase
     {
-        private ImporterDependencies Dependencies;
+        private IImporterLogic ImporterLogic;
 
-        public ImportController(ImporterDependencies dependencies)
+        private ILogic<Writer> WriterLogic;
+
+        public ImportController(IImporterLogic importerlogic, ILogic<Writer> writerLogic)
         {
-            Dependencies = dependencies;
+            ImporterLogic = importerlogic;
+            WriterLogic = writerLogic;
         }
 
         [HttpPost("{importType}/{ownerId}")]
         public IActionResult Import([FromBody] string path, string importType, int ownerId)
         {
-            return null;
+            var owner = WriterLogic.Get(ownerId);
+            var options = new ImportingOptions
+            {
+                FilePath = path,
+                FileType = importType,
+                Owner = owner
+            };
+            ImporterLogic.Options = options;
+            ImporterLogic.Import();
+            return Ok(ApiResource.Import_Success);
         }
     }
 }

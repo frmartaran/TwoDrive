@@ -55,7 +55,8 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 FileType = "XML",
                 Owner = writer
             };
-            var importerLogic = new ImporterLogic(options, dependencies);
+            var importerLogic = new ImporterLogic(dependencies);
+            importerLogic.Options = options;
             var importer = importerLogic.GetImporter();
 
             Assert.IsInstanceOfType(importer, typeof(XMLImporter));
@@ -76,7 +77,9 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 FileType = "JSON",
                 Owner = writer
             };
-            var importerLogic = new ImporterLogic(options, dependencies);
+            var importerLogic = new ImporterLogic(dependencies);
+            importerLogic.Options = options;
+
             var importer = importerLogic.GetImporter();
 
             Assert.IsInstanceOfType(importer, typeof(JsonImporter));
@@ -99,7 +102,9 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 FileType = "txt",
                 Owner = writer
             };
-            var importerLogic = new ImporterLogic(options, dependencies);
+            var importerLogic = new ImporterLogic(dependencies);
+            importerLogic.Options = options;
+
             var importer = importerLogic.GetImporter();
 
         }
@@ -123,7 +128,8 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 FileType = "XML",
                 Owner = writer
             };
-            var importerLogic = new ImporterLogic(options, dependencies);
+            var importerLogic = new ImporterLogic(dependencies);
+            importerLogic.Options = options;
             importerLogic.Import();
 
             mockFolderLogic.VerifyAll();
@@ -160,7 +166,8 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             writerRepository.Insert(writer);
             writerRepository.Save();
 
-            var importerLogic = new ImporterLogic(options, importerDependecies);
+            var importerLogic = new ImporterLogic(importerDependecies);
+            importerLogic.Options = options;
             importerLogic.Import();
 
             var foldersInDb = folderLogic.GetAll();
@@ -201,7 +208,9 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             writerRepository.Insert(writer);
             writerRepository.Save();
 
-            var importerLogic = new ImporterLogic(options, importerDependecies);
+            var importerLogic = new ImporterLogic(importerDependecies);
+            importerLogic.Options = options;
+
             importerLogic.Import();
 
             var foldersInDb = folderLogic.GetAll();
@@ -244,7 +253,9 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             writerRepository.Insert(writer);
             writerRepository.Save();
 
-            var importerLogic = new ImporterLogic(options, importerDependecies);
+            var importerLogic = new ImporterLogic(importerDependecies);
+            importerLogic.Options = options;
+
             importerLogic.Import();
 
             var foldersInDb = folderLogic.GetAll();
@@ -292,7 +303,9 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             writerRepository.Insert(writer);
             writerRepository.Save();
 
-            var importerLogic = new ImporterLogic(options, importerDependecies);
+            var importerLogic = new ImporterLogic(importerDependecies);
+            importerLogic.Options = options;
+
             importerLogic.Import();
         }
 
@@ -325,7 +338,9 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             writerRepository.Insert(writer);
             writerRepository.Save();
 
-            var importerLogic = new ImporterLogic(options, importerDependecies);
+            var importerLogic = new ImporterLogic(importerDependecies);
+            importerLogic.Options = options;
+
             importerLogic.Import();
 
             var foldersInDb = folderLogic.GetAll();
@@ -371,7 +386,9 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             writerRepository.Insert(writer);
             writerRepository.Save();
 
-            var importerLogic = new ImporterLogic(options, importerDependecies);
+            var importerLogic = new ImporterLogic(importerDependecies);
+            importerLogic.Options = options;
+
             importerLogic.Import();
 
         }
@@ -418,7 +435,9 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
 
             folderLogic.Create(root);
 
-            var importerLogic = new ImporterLogic(options, importerDependecies);
+            var importerLogic = new ImporterLogic(importerDependecies);
+            importerLogic.Options = options;
+
             importerLogic.Import();
         }
 
@@ -452,7 +471,9 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             writerRepository.Insert(writer);
             writerRepository.Save();
 
-            var importerLogic = new ImporterLogic(options, importerDependecies);
+            var importerLogic = new ImporterLogic(importerDependecies);
+            importerLogic.Options = options;
+
             importerLogic.Import();
         }
 
@@ -485,7 +506,9 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             writerRepository.Insert(writer);
             writerRepository.Save();
 
-            var importerLogic = new ImporterLogic(options, importerDependecies);
+            var importerLogic = new ImporterLogic(importerDependecies);
+            importerLogic.Options = options;
+
             importerLogic.Import();
 
             var foldersInDb = folderLogic.GetAll();

@@ -27,13 +27,12 @@ namespace TwoDrive.BusinessLogic.Logic
 
         private ILogic<Writer> WriterLogic { get; set; }
 
-        private ImportingOptions Options { get; set; }
+        public ImportingOptions Options { get; set; }
 
         private IModificationLogic ModificationLogic { get; set; }
 
-        public ImporterLogic(ImportingOptions options, ImporterDependencies dependencies)
+        public ImporterLogic(ImporterDependencies dependencies)
         {
-            Options = options;
             FolderLogic = dependencies.FolderLogic;
             FileLogic = dependencies.FileLogic;
             WriterLogic = dependencies.WriterLogic;

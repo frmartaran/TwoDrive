@@ -169,6 +169,15 @@ namespace TwoDrive.WebApi.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tree imported successfully.
+        /// </summary>
+        public static string Import_Success {
+            get {
+                return ResourceManager.GetString("Import_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid Token.
         /// </summary>
         public static string InvalidToken {
