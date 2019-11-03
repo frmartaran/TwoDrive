@@ -145,7 +145,12 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public List<string> GetAllImporters()
         {
-            throw new NotImplementedException();
+            var assemblyInfo = Assembly.LoadFrom(DllToImport);
+            return assemblyInfo.ExportedTypes
+                .Where(t => (typeof(IImporter<IFolder>).IsAssignableFrom(t)))
+                .Select(t => t.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static)
+                        .GetRawConstantValue() as string)
+                .ToList();
         }
     }
 }
