@@ -189,6 +189,9 @@
   <data name="NotUnique_WriterValidator" xml:space="preserve">
     <value>The username must be unique. Try another username</value>
   </data>
+  <data name="RootAlreadyExists" xml:space="preserve">
+    <value>A writer can only have one root</value>
+  </data>
   <data name="RootClaims_Claims" xml:space="preserve">
     <value>Can't add root claims to a child folder</value>
   </data>

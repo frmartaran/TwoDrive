@@ -8,6 +8,7 @@ using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using TwoDrive.BusinessLogic.Logic;
+using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.DataAccess;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
@@ -140,7 +141,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var validator = new Mock<IFolderValidator>().Object;
             var modificationRepository = new ModificationRepository(context);
             var modificationsLogic = new ModificationLogic(modificationRepository);
-            var folderDependecies = new ElementLogicDependencies(folderRepository, fileRepository, 
+            var folderDependecies = new ElementLogicDependencies(folderRepository, fileRepository,
                 validator, modificationRepository);
             var writerRepository = new WriterRepository(context);
             var writerValidator = new Mock<IValidator<Writer>>().Object;
@@ -148,7 +149,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var folderLogic = new FolderLogic(folderDependecies);
             var fileLogic = new FileLogic(fileRepository, fileValidator);
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
-            var importerDependecies = new ImporterLogicDependencies(folderLogic, fileLogic, writerLogic, 
+            var importerDependecies = new ImporterLogicDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
             var options = new ImportingOptions
             {
@@ -168,7 +169,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             Assert.AreEqual(1, foldersInDb.Count);
             Assert.AreEqual(3, claims);
             Assert.AreEqual(1, modificationsCount);
-            
+
         }
 
         [TestMethod]
@@ -373,6 +374,52 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(options, importerDependecies);
             importerLogic.Import();
 
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void ImportWhenRootAlreadyExists()
+        {
+            var context = ContextFactory.GetMemoryContext("Import when root already exists");
+            var folderRepository = new FolderRepository(context);
+            var fileRepository = new FileRepository(context);
+            var fileValidator = new Mock<IValidator<Element>>().Object;
+            var validator = new FolderValidator(folderRepository);
+            var modificationRepository = new ModificationRepository(context);
+            var modificationsLogic = new ModificationLogic(modificationRepository);
+            var folderDependecies = new ElementLogicDependencies(folderRepository, fileRepository,
+                validator, modificationRepository);
+            var writerRepository = new WriterRepository(context);
+            var writerValidator = new Mock<IValidator<Writer>>().Object;
+
+            var folderLogic = new FolderLogic(folderDependecies);
+            var fileLogic = new FileLogic(fileRepository, fileValidator);
+            var writerLogic = new WriterLogic(writerRepository, writerValidator);
+            var importerDependecies = new ImporterLogicDependencies(folderLogic, fileLogic, writerLogic,
+                modificationsLogic);
+            var options = new ImportingOptions
+            {
+                FilePath = $"{examplesRootForXML}\\Two Level Tree With File.xml",
+                FileType = "XML",
+                Owner = writer
+            };
+            writerRepository.Insert(writer);
+            writerRepository.Save();
+
+            var root = new Folder
+            {
+                CreationDate = new DateTime(2019, 3, 15),
+                DateModified = new DateTime(2019, 3, 15),
+                FolderChildren = new List<Element>(),
+                Owner = writer,
+                Name = "Root",
+                ParentFolder = null,
+            };
+
+            folderLogic.Create(root);
+
+            var importerLogic = new ImporterLogic(options, importerDependecies);
+            importerLogic.Import();
         }
     }
 }

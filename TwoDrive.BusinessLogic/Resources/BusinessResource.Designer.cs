@@ -277,6 +277,15 @@ namespace TwoDrive.BusinessLogic.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A writer can only have one root.
+        /// </summary>
+        public static string RootAlreadyExists {
+            get {
+                return ResourceManager.GetString("RootAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can&apos;t add root claims to a child folder.
         /// </summary>
         public static string RootClaims_Claims {

@@ -133,5 +133,14 @@ namespace TwoDrive.BusinessLogic.Validators
         {
             return folder.Name == rootName;
         }
+
+        protected override void Hook(Element element)
+        {
+            var rootAlreadyExists = FolderRepository.GetAll()
+                .Where(f => f.Owner == element.Owner)
+                .Any();
+            if (IsRoot(element) && rootAlreadyExists)
+                throw new ValidationException(BusinessResource.RootAlreadyExists);
+        }
     }
 }
