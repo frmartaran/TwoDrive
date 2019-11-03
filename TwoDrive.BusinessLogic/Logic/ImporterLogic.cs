@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.BusinessLogic.Helpers;
@@ -17,7 +16,7 @@ using TwoDrive.Importer.Interface.IFileManagement;
 
 namespace TwoDrive.BusinessLogic.Logic
 {
-    public class ImporterLogic
+    public class ImporterLogic : IImporterLogic
     {
         private const string DllToImport = "TwoDrive.Importer.dll";
 
@@ -32,7 +31,7 @@ namespace TwoDrive.BusinessLogic.Logic
 
         private IModificationLogic ModificationLogic { get; set; }
 
-        public ImporterLogic(ImportingOptions options, ImporterLogicDependencies dependencies)
+        public ImporterLogic(ImportingOptions options, ImporterDependencies dependencies)
         {
             Options = options;
             FolderLogic = dependencies.FolderLogic;
@@ -143,6 +142,11 @@ namespace TwoDrive.BusinessLogic.Logic
                 type = ModificationType.Imported
             };
             ModificationLogic.Create(modification);
+        }
+
+        public List<string> GetAllImporters()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TwoDrive.Domain\TwoDrive.Domain.csproj" />
     <ProjectReference Include="..\TwoDrive.DataAccess.Interface\TwoDrive.DataAccess.Interface.csproj" />
+    <ProjectReference Include="..\TwoDrive.Importer.Interface\TwoDrive.Importer.Interface.csproj" />
   </ItemGroup>
 
 </Project>

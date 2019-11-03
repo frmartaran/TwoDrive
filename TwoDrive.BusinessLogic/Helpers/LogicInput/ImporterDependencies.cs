@@ -7,7 +7,7 @@ using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.BusinessLogic.Helpers.LogicInput
 {
-    public class ImporterLogicDependencies
+    public class ImporterDependencies
     {
         public IFolderLogic FolderLogic { get; set; }
 
@@ -17,7 +17,7 @@ namespace TwoDrive.BusinessLogic.Helpers.LogicInput
 
         public IModificationLogic ModificationLogic { get; set; }
 
-        public ImporterLogicDependencies(IFolderLogic folderLogic, 
+        public ImporterDependencies(IFolderLogic folderLogic, 
             IFileLogic fileLogic, ILogic<Writer> writerLogic, IModificationLogic modificationLogic)
         {
             FolderLogic = folderLogic;

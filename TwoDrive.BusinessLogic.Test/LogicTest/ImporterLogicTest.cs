@@ -47,7 +47,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var mockFileLogic = new Mock<IFileLogic>();
             var mockWriterLogic = new Mock<ILogic<Writer>>();
             var mockModificationLogic = new Mock<IModificationLogic>().Object;
-            var dependencies = new ImporterLogicDependencies(mockFolderLogic.Object,
+            var dependencies = new ImporterDependencies(mockFolderLogic.Object,
                 mockFileLogic.Object, mockWriterLogic.Object, mockModificationLogic);
             var options = new ImportingOptions
             {
@@ -68,7 +68,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var mockFileLogic = new Mock<IFileLogic>();
             var mockWriterLogic = new Mock<ILogic<Writer>>();
             var mockModificationLogic = new Mock<IModificationLogic>().Object;
-            var dependencies = new ImporterLogicDependencies(mockFolderLogic.Object,
+            var dependencies = new ImporterDependencies(mockFolderLogic.Object,
                 mockFileLogic.Object, mockWriterLogic.Object, mockModificationLogic);
             var options = new ImportingOptions
             {
@@ -91,7 +91,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var mockWriterLogic = new Mock<ILogic<Writer>>();
             var mockModificationLogic = new Mock<IModificationLogic>().Object;
 
-            var dependencies = new ImporterLogicDependencies(mockFolderLogic.Object,
+            var dependencies = new ImporterDependencies(mockFolderLogic.Object,
                 mockFileLogic.Object, mockWriterLogic.Object, mockModificationLogic);
             var options = new ImportingOptions
             {
@@ -115,7 +115,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var mockModificationLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
             mockModificationLogic.Setup(m => m.Create(It.IsAny<Modification>()));
 
-            var dependencies = new ImporterLogicDependencies(mockFolderLogic.Object,
+            var dependencies = new ImporterDependencies(mockFolderLogic.Object,
                 mockFileLogic.Object, mockWriterLogic.Object, mockModificationLogic.Object);
             var options = new ImportingOptions
             {
@@ -149,7 +149,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var folderLogic = new FolderLogic(folderDependecies);
             var fileLogic = new FileLogic(fileRepository, fileValidator);
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
-            var importerDependecies = new ImporterLogicDependencies(folderLogic, fileLogic, writerLogic,
+            var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
             var options = new ImportingOptions
             {
@@ -190,7 +190,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var folderLogic = new FolderLogic(folderDependecies);
             var fileLogic = new FileLogic(fileRepository, fileValidator);
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
-            var importerDependecies = new ImporterLogicDependencies(folderLogic, fileLogic, writerLogic,
+            var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
             var options = new ImportingOptions
             {
@@ -233,7 +233,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var folderLogic = new FolderLogic(folderDependecies);
             var fileLogic = new FileLogic(fileRepository, fileValidator);
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
-            var importerDependecies = new ImporterLogicDependencies(folderLogic, fileLogic, writerLogic,
+            var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
             var options = new ImportingOptions
             {
@@ -281,7 +281,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var folderLogic = new FolderLogic(folderDependecies);
             var fileLogic = new FileLogic(fileRepository, fileValidator);
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
-            var importerDependecies = new ImporterLogicDependencies(folderLogic, fileLogic, writerLogic,
+            var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
             var options = new ImportingOptions
             {
@@ -314,7 +314,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var folderLogic = new FolderLogic(folderDependecies);
             var fileLogic = new FileLogic(fileRepository, fileValidator);
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
-            var importerDependecies = new ImporterLogicDependencies(folderLogic, fileLogic, writerLogic,
+            var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
             var options = new ImportingOptions
             {
@@ -361,7 +361,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var folderLogic = new FolderLogic(folderDependecies);
             var fileLogic = new FileLogic(fileRepository, fileValidator);
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
-            var importerDependecies = new ImporterLogicDependencies(folderLogic, fileLogic, writerLogic,
+            var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
             var options = new ImportingOptions
             {
@@ -395,7 +395,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var folderLogic = new FolderLogic(folderDependecies);
             var fileLogic = new FileLogic(fileRepository, fileValidator);
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
-            var importerDependecies = new ImporterLogicDependencies(folderLogic, fileLogic, writerLogic,
+            var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
             var options = new ImportingOptions
             {
@@ -441,7 +441,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var folderLogic = new FolderLogic(folderDependecies);
             var fileLogic = new FileLogic(fileRepository, fileValidator);
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
-            var importerDependecies = new ImporterLogicDependencies(folderLogic, fileLogic, writerLogic,
+            var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
             var options = new ImportingOptions
             {
@@ -474,7 +474,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var folderLogic = new FolderLogic(folderDependecies);
             var fileLogic = new FileLogic(fileRepository, fileValidator);
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
-            var importerDependecies = new ImporterLogicDependencies(folderLogic, fileLogic, writerLogic,
+            var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
             var options = new ImportingOptions
             {

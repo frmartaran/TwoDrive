@@ -21,6 +21,7 @@ using TwoDrive.WebApi.Interfaces;
 using TwoDrive.WebApi.Helpers;
 using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.BusinessLogic.Interfaces.LogicInput;
+using TwoDrive.BusinessLogic.Helpers.LogicInput;
 
 namespace TwoDrive.WebApi
 {
@@ -50,6 +51,7 @@ namespace TwoDrive.WebApi
             services.AddScoped<IValidator<Element>, FileValidator>();
             services.AddScoped<IValidator<Writer>, WriterValidator>();
             services.AddScoped<ElementLogicDependencies, ElementLogicDependencies>();
+            services.AddScoped<ImporterDependencies, ImporterDependencies>();
 
             services.AddScoped<IFolderRepository, FolderRepository>();
             services.AddScoped<IFileRepository, FileRepository>();
