@@ -115,6 +115,13 @@ namespace TwoDrive.WebApi.Controllers
             return Ok(model);
         }
 
+        [HttpGet("Display/{id}")]
+        [ClaimFilter(ClaimType.Read)]
+        public IActionResult DisplayContent(int id)
+        {
+            return null;
+        }
+
         [HttpGet]
         public IActionResult GetAll(string name = "", bool isOrderDescending = false, bool isOrderByName = false, 
             bool isOrderByCreationDate = false, bool IsOrderByModificationDate = false)
