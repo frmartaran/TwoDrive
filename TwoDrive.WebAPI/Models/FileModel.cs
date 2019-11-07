@@ -9,6 +9,8 @@ namespace TwoDrive.WebApi.Models
 {
     public class FileModel : ElementModel, IModel<File, FileModel>
     {
+        public string Content { get; set; }
+
         public virtual FileModel FromDomain(File entity)
         {
             if (entity == null)
@@ -22,6 +24,7 @@ namespace TwoDrive.WebApi.Models
             ParentFolderId = entity.ParentFolderId;
             CreationDate = entity.CreationDate;
             DateModified = entity.DateModified;
+            Content = entity.Content;
             return this;
         }
         public virtual File ToDomain()

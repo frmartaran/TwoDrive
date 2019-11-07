@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TwoDrive.Domain.FileManagement;
-using TwoDrive.WebApi.Interfaces;
 
 namespace TwoDrive.WebApi.Models
 {
-    public class TxtModel : FileModel
+    public class HTMLModel : FileModel
     {
+        public bool ShouldRender { get; set; }
+
         public override FileModel FromDomain(File entity)
         {
+            var htmlFile = entity as HTMLFile;
+            ShouldRender = htmlFile.ShouldRender;
             return base.FromDomain(entity);
         }
-        public File ToDomain(TxtFile file)
+
+        public File ToDomain(HTMLFile file)
         {
             if (this == null)
                 return null;
@@ -25,6 +29,7 @@ namespace TwoDrive.WebApi.Models
             file.CreationDate = this.CreationDate;
             file.DateModified = this.DateModified;
             file.Content = this.Content;
+            file.ShouldRender = this.ShouldRender;
 
             if (ParentFolder != null)
                 file.ParentFolder = ParentFolder.ToDomain();
@@ -37,17 +42,19 @@ namespace TwoDrive.WebApi.Models
 
             return file;
         }
+
         public override File ToDomain()
         {
             if (this == null)
                 return null;
 
-            var file = new TxtFile
+            var file = new HTMLFile
             {
                 Name = this.Name,
                 CreationDate = this.CreationDate,
                 DateModified = this.DateModified,
-                Content = this.Content
+                Content = this.Content,
+                ShouldRender = this.ShouldRender
             };
 
             if (ParentFolder != null)

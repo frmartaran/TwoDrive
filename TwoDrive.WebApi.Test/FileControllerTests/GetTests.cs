@@ -340,5 +340,55 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
 
         }
+
+        [TestMethod]
+        public void GetHTML()
+        {
+            var folder = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChildren = new List<Element>(),
+                Owner = new Writer()
+            };
+            var file = new HTMLFile
+            {
+                Id = 1,
+                Name = "New file",
+                Content = "<html><h1>This is a test</h1></html>",
+                Owner = writer,
+                ShouldRender = false,
+                ParentFolder = folder,
+                ParentFolderId = 1,
+                CreationDate = new DateTime(2019, 6, 10),
+                DateModified = new DateTime(2019, 6, 10),
+            };
+
+            var fileAsModel = new TxtModel().FromDomain(file);
+
+            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(file);
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockModification = new Mock<IModificationLogic>();
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSession = new Mock<ICurrent>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IFolderValidator>();
+
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
+            var result = controller.Get(1);
+            var okResult = result as OkObjectResult;
+            var modelResult = okResult.Value as TxtModel;
+            var fileResult = modelResult.ToDomain();
+
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.AreEqual(file, fileResult);
+        }
     }
 }
