@@ -5,7 +5,7 @@ using TwoDrive.Importer.Interface.IFileManagement;
 
 namespace TwoDrive.Importer.Domain
 {
-    public class Element : IElement
+    public abstract class Element : IElement
     {
         public string Name { get; set; }
         public IFolder ParentFolder { get; set; }

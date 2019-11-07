@@ -11,13 +11,13 @@ namespace TwoDrive.Importer
 {
     public class JsonImporter : IImporter<IFolder>
     {
-        private const string Extension = "JSON";
+        private const string Name = "JSON";
 
         public string FileExtension
         {
             get
             {
-                return Extension;
+                return Name;
             }
 
         }

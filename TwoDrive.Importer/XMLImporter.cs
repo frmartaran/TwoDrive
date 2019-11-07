@@ -15,12 +15,12 @@ namespace TwoDrive.Importers
     public class XMLImporter : IImporter<IFolder>
     {
 
-        private const string Extension = "XML";
+        private const string Name = "XML";
         public string FileExtension
         {
             get
             {
-                return Extension;
+                return Name;
             }
         }
 

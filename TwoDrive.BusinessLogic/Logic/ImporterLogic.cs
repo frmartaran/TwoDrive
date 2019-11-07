@@ -20,7 +20,7 @@ namespace TwoDrive.BusinessLogic.Logic
     {
         private const string DllToImport = "TwoDrive.Importer.dll";
 
-        private const string fieldName = "Extension";
+        private const string fieldName = "Name";
         private IFolderLogic FolderLogic { get; set; }
 
         private IFileLogic FileLogic { get; set; }
