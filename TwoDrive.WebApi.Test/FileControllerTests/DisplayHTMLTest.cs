@@ -18,67 +18,54 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
     [TestClass]
     public class DisplayHTMLTest
     {
+        Mock<ILogic<Writer>> MockWriterLogic;
+        Mock<IModificationLogic> MockModification;
+        Mock<IFolderLogic> MockFolderLogic;
+        Mock<ICurrent> MockSession;
+        Mock<IRepository<Element>> MockElementRepository;
+        Mock<IFolderValidator> MockElementValidator;
+        Mock<IFileLogic> MockLogic;
+
+
         private Writer writer;
 
         [TestInitialize]
         public void SetUp()
         {
-            writer = new Writer()
-            {
-                Id = 2,
-                UserName = "Writer",
-                Password = "132",
-                Role = Role.Writer,
-                Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
-            };
+            MockWriterLogic = new Mock<ILogic<Writer>>();
+            MockModification = new Mock<IModificationLogic>();
+            MockFolderLogic = new Mock<IFolderLogic>();
+            MockSession = new Mock<ICurrent>();
+            MockElementRepository = new Mock<IRepository<Element>>();
+            MockElementValidator = new Mock<IFolderValidator>();
+            MockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
         }
 
         [TestMethod]
         public void DisplayAsSimpleString()
         {
-            var folder = new Folder
-            {
-                Id = 3,
-                Name = "Root",
-                FolderChildren = new List<Element>(),
-                Owner = new Writer()
-            };
             var content = "<html><h1>This is a test</h1></html>";
             var file = new HTMLFile
             {
                 Id = 1,
-                Name = "New file",
                 Content = content,
-                Owner = writer,
                 ShouldRender = false,
-                ParentFolder = folder,
-                ParentFolderId = 1,
-                CreationDate = new DateTime(2019, 6, 10),
-                DateModified = new DateTime(2019, 6, 10),
             };
 
-            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
-            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+            MockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(file);
 
-            var mockWriterLogic = new Mock<ILogic<Writer>>();
-            var mockModification = new Mock<IModificationLogic>();
-            var mockFolderLogic = new Mock<IFolderLogic>();
-            var mockSession = new Mock<ICurrent>();
-            var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IFolderValidator>();
+            var controller = new FileController(MockLogic.Object, MockFolderLogic.Object,
+                MockWriterLogic.Object, MockSession.Object, MockModification.Object,
+                MockElementValidator.Object, MockElementRepository.Object);
 
-            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
-                mockElementValidator.Object, mockElementRepository.Object);
             var result = controller.DisplayContent(1);
             var okResult = result as OkObjectResult;
             var stringResult = okResult.Value as string;
 
             var wasEncoded = WasEncoded(content, stringResult);
 
-            mockLogic.VerifyAll();
+            MockLogic.VerifyAll();
             Assert.IsTrue(wasEncoded);
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
@@ -86,48 +73,28 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
         [TestMethod]
         public void DisplayAsHTML()
         {
-            var folder = new Folder
-            {
-                Id = 3,
-                Name = "Root",
-                FolderChildren = new List<Element>(),
-                Owner = new Writer()
-            };
             var content = "<html><h1>This is a test</h1></html>";
             var file = new HTMLFile
             {
                 Id = 1,
-                Name = "New file",
                 Content = content,
-                Owner = writer,
                 ShouldRender = true,
-                ParentFolder = folder,
-                ParentFolderId = 1,
-                CreationDate = new DateTime(2019, 6, 10),
-                DateModified = new DateTime(2019, 6, 10),
             };
 
-            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
-            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+            MockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(file);
 
-            var mockWriterLogic = new Mock<ILogic<Writer>>();
-            var mockModification = new Mock<IModificationLogic>();
-            var mockFolderLogic = new Mock<IFolderLogic>();
-            var mockSession = new Mock<ICurrent>();
-            var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IFolderValidator>();
+            var controller = new FileController(MockLogic.Object, MockFolderLogic.Object,
+                MockWriterLogic.Object, MockSession.Object, MockModification.Object,
+                MockElementValidator.Object, MockElementRepository.Object);
 
-            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
-                mockElementValidator.Object, mockElementRepository.Object);
             var result = controller.DisplayContent(1);
             var okResult = result as OkObjectResult;
             var stringResult = okResult.Value as string;
 
             var wasEncoded = WasEncoded(content, stringResult);
 
-            mockLogic.VerifyAll();
+            MockLogic.VerifyAll();
             Assert.IsFalse(wasEncoded);
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
@@ -136,45 +103,25 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
         [TestMethod]
         public void FileIsNotAnHtmlFile()
         {
-            var folder = new Folder
-            {
-                Id = 3,
-                Name = "Root",
-                FolderChildren = new List<Element>(),
-                Owner = new Writer()
-            };
+           
             var content = "I'm A TXT File";
             var file = new TxtFile
             {
                 Id = 1,
-                Name = "New TXT file",
                 Content = content,
-                Owner = writer,
-                ParentFolder = folder,
-                ParentFolderId = 1,
-                CreationDate = new DateTime(2019, 6, 10),
-                DateModified = new DateTime(2019, 6, 10),
             };
 
-            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
-            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+            MockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(file);
 
-            var mockWriterLogic = new Mock<ILogic<Writer>>();
-            var mockModification = new Mock<IModificationLogic>();
-            var mockFolderLogic = new Mock<IFolderLogic>();
-            var mockSession = new Mock<ICurrent>();
-            var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IFolderValidator>();
-
-            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
-                mockElementValidator.Object, mockElementRepository.Object);
+            var controller = new FileController(MockLogic.Object, MockFolderLogic.Object,
+                MockWriterLogic.Object, MockSession.Object, MockModification.Object,
+                MockElementValidator.Object, MockElementRepository.Object);
             var result = controller.DisplayContent(1);
             var okResult = result as OkObjectResult;
             var stringResult = okResult.Value as string;
 
-            mockLogic.VerifyAll();
+            MockLogic.VerifyAll();
             Assert.AreEqual(file.Content, stringResult);
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
@@ -182,23 +129,15 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
         [TestMethod]
         public void FileNotFound()
         {
-            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
-            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+            MockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns<File>(null);
 
-            var mockWriterLogic = new Mock<ILogic<Writer>>();
-            var mockModification = new Mock<IModificationLogic>();
-            var mockFolderLogic = new Mock<IFolderLogic>();
-            var mockSession = new Mock<ICurrent>();
-            var mockElementRepository = new Mock<IRepository<Element>>();
-            var mockElementValidator = new Mock<IFolderValidator>();
-
-            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
-                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
-                mockElementValidator.Object, mockElementRepository.Object);
+            var controller = new FileController(MockLogic.Object, MockFolderLogic.Object,
+                MockWriterLogic.Object, MockSession.Object, MockModification.Object,
+                MockElementValidator.Object, MockElementRepository.Object);
             var result = controller.DisplayContent(1);
 
-            mockLogic.VerifyAll();
+            MockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
         }
 
