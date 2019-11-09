@@ -143,11 +143,11 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 FolderChildren = new List<Element>(),
                 Owner = new Writer()
             };
-            var content = "<html><h1>This is a test</h1></html>";
+            var content = "I'm A TXT File";
             var file = new TxtFile
             {
                 Id = 1,
-                Name = "New file",
+                Name = "New TXT file",
                 Content = content,
                 Owner = writer,
                 ParentFolder = folder,
@@ -174,10 +174,9 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             var okResult = result as OkObjectResult;
             var stringResult = okResult.Value as string;
 
-            var wasEncoded = WasEncoded(content, stringResult);
-
             mockLogic.VerifyAll();
-            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+            Assert.AreEqual(file.Content, stringResult);
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
 
         private bool WasEncoded(string original, string content)
