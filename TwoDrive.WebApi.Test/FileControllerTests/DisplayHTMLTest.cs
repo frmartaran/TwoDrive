@@ -138,8 +138,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
 
         private bool WasEncoded(string original, string content)
         {
-            var uncoded = HttpUtility.HtmlDecode(content);
-            if (uncoded.Equals(original))
+            if (!content.Equals(original))
                 return true;
             return false;
         }
