@@ -85,6 +85,57 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
 
+        [TestMethod]
+        public void DisplayAsHTML()
+        {
+            var folder = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChildren = new List<Element>(),
+                Owner = new Writer()
+            };
+            var content = "<html><h1>This is a test</h1></html>";
+            var file = new HTMLFile
+            {
+                Id = 1,
+                Name = "New file",
+                Content = content,
+                Owner = writer,
+                ShouldRender = true,
+                ParentFolder = folder,
+                ParentFolderId = 1,
+                CreationDate = new DateTime(2019, 6, 10),
+                DateModified = new DateTime(2019, 6, 10),
+            };
+
+            var fileAsModel = new HTMLModel().FromDomain(file);
+
+            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(file);
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockModification = new Mock<IModificationLogic>();
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSession = new Mock<ICurrent>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IFolderValidator>();
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
+            var result = controller.DisplayContent(1);
+            var okResult = result as OkObjectResult;
+            var stringResult = okResult.Value as string;
+
+            var wasEncoded = WasEncoded(content, stringResult);
+
+            mockLogic.VerifyAll();
+            Assert.IsFalse(wasEncoded);
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+        }
+
         private bool WasEncoded(string original, string content)
         {
             var uncoded = HttpUtility.HtmlDecode(content);
