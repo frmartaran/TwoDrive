@@ -179,6 +179,31 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
 
+        [TestMethod]
+        public void FileNotFound()
+        {
+            var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns<File>(null);
+
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockModification = new Mock<IModificationLogic>();
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockSession = new Mock<ICurrent>();
+            var mockElementRepository = new Mock<IRepository<Element>>();
+            var mockElementValidator = new Mock<IFolderValidator>();
+
+            var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
+                mockWriterLogic.Object, mockSession.Object, mockModification.Object,
+                mockElementValidator.Object, mockElementRepository.Object);
+            var result = controller.DisplayContent(1);
+            var okResult = result as OkObjectResult;
+            var stringResult = okResult.Value as string;
+
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        }
+
         private bool WasEncoded(string original, string content)
         {
             if (!content.Equals(original))

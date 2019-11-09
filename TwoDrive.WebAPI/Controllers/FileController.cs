@@ -116,7 +116,7 @@ namespace TwoDrive.WebApi.Controllers
             return Ok(model);
         }
 
-        [HttpGet("Display/{id}")]
+        [HttpGet("Content/{id}")]
         [ClaimFilter(ClaimType.Read)]
         public IActionResult DisplayContent(int id)
         {
