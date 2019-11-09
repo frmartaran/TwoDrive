@@ -120,16 +120,24 @@ namespace TwoDrive.WebApi.Controllers
         [ClaimFilter(ClaimType.Read)]
         public IActionResult DisplayContent(int id)
         {
-            var file = fileLogic.Get(id);
-            if(file is HTMLFile htmlFile)
+            try
             {
-                if (!htmlFile.ShouldRender)
+                var file = fileLogic.Get(id);
+                if (file is HTMLFile htmlFile)
                 {
-                    var encodedContent = HttpUtility.HtmlEncode(file.Content);
-                    return Ok(encodedContent);
+                    if (!htmlFile.ShouldRender)
+                    {
+                        var encodedContent = HttpUtility.HtmlEncode(file.Content);
+                        return Ok(encodedContent);
+                    }
                 }
+                return Ok(file.Content);
             }
-            return Ok(file.Content);
+            catch (NullReferenceException)
+            {
+                return BadRequest(ApiResource.FileNotFound);
+            }
+            
             
         }
 

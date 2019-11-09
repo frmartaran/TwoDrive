@@ -197,8 +197,6 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 mockWriterLogic.Object, mockSession.Object, mockModification.Object,
                 mockElementValidator.Object, mockElementRepository.Object);
             var result = controller.DisplayContent(1);
-            var okResult = result as OkObjectResult;
-            var stringResult = okResult.Value as string;
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
