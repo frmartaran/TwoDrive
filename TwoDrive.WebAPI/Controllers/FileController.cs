@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TwoDrive.BusinessLogic.Exceptions;
@@ -119,7 +120,9 @@ namespace TwoDrive.WebApi.Controllers
         [ClaimFilter(ClaimType.Read)]
         public IActionResult DisplayContent(int id)
         {
-            return null;
+            var file = fileLogic.Get(id);
+            var encodedContent = HttpUtility.HtmlEncode(file.Content);
+            return Ok(encodedContent);
         }
 
         [HttpGet]
