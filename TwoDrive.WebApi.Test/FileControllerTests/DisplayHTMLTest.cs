@@ -26,9 +26,6 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
         Mock<IFolderValidator> MockElementValidator;
         Mock<IFileLogic> MockLogic;
 
-
-        private Writer writer;
-
         [TestInitialize]
         public void SetUp()
         {

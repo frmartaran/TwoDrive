@@ -52,7 +52,7 @@ namespace TwoDrive.WebApi.Controllers
 
         [HttpPost("{id}")]
         [ClaimFilter(ClaimType.Write)]
-        public IActionResult Create(int id, [FromBody] TxtModel model)
+        public IActionResult Create(int id, [FromBody] FileModel model)
         {
             try
             {
@@ -65,8 +65,7 @@ namespace TwoDrive.WebApi.Controllers
                 if (loggedWriter != parentFolder.Owner)
                     return BadRequest(string.Format(ApiResource.NotOwnerOf, parentFolder.Name));
 
-
-                var file = model.ToDomain() as File;
+                var file = model.ToDomain();
                 file.Owner = loggedWriter;
                 file.ParentFolder = parentFolder;
                 file.CreationDate = DateTime.Now;
@@ -77,7 +76,7 @@ namespace TwoDrive.WebApi.Controllers
 
                 CreateModification(file, ModificationType.Added);
                 folderLogic.CreateModificationsForTree(file, ModificationType.Changed);
-                return Ok(new TxtModel().FromDomain(file));
+                return Ok(file);
             }
             catch (ValidationException exception)
             {
@@ -112,8 +111,8 @@ namespace TwoDrive.WebApi.Controllers
             if (file == null)
                 return NotFound(ApiResource.FileNotFound);
 
-            var model = new TxtModel().FromDomain(file);
-            return Ok(model);
+           // var model = FileModel.ToModel(file);
+            return Ok(file);
         }
 
         [HttpGet("Content/{id}")]
@@ -162,14 +161,14 @@ namespace TwoDrive.WebApi.Controllers
             };
 
             var files = fileLogic.GetAll(fileFilter);
-            var writerfiles = files
-                .Select(f => new TxtModel().FromDomain(f))
+            /*var writerfiles = files
+                .Select(f => FileModel.ToModel(f))
                 .ToList();
 
             if (writerfiles.Count == 0)
-                return NotFound(ApiResource.FilesNotFound);
+                return NotFound(ApiResource.FilesNotFound);*/
 
-            return Ok(writerfiles);
+            return Ok(files);
         }
 
         [HttpPut("{id}")]
@@ -179,7 +178,7 @@ namespace TwoDrive.WebApi.Controllers
             try
             {
                 var file = fileLogic.Get(id);
-                file = model.ToDomain(file as TxtFile);
+                file = model.ToDomain();
                 fileLogic.Update(file);
                 CreateModification(file, ModificationType.Changed);
                 folderLogic.CreateModificationsForTree(file, ModificationType.Changed);

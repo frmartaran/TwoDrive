@@ -50,6 +50,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 Id = 1,
                 Name = "New file",
                 Content = "Content",
+                ParentFolder = null,
                 ParentFolderId = 1,
             };
 
