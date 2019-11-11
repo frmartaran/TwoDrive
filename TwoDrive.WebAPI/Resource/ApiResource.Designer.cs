@@ -358,6 +358,24 @@ namespace TwoDrive.WebApi.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Json reader threw an exception.
+        /// </summary>
+        public static string Reader_JSON {
+            get {
+                return ResourceManager.GetString("Reader_JSON", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Json serializer threw an exception.
+        /// </summary>
+        public static string Serializer_JSON {
+            get {
+                return ResourceManager.GetString("Serializer_JSON", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} has been shared with {1}.
         /// </summary>
         public static string Shared {
@@ -372,6 +390,15 @@ namespace TwoDrive.WebApi.Resource {
         public static string StopSharing {
             get {
                 return ResourceManager.GetString("StopSharing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsupported type of file, can&apos;t get model.
+        /// </summary>
+        public static string UnsupportedFileType {
+            get {
+                return ResourceManager.GetString("UnsupportedFileType", resourceCulture);
             }
         }
         

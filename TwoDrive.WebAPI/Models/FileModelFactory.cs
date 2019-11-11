@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TwoDrive.Domain.FileManagement;
+using TwoDrive.WebApi.Resource;
 
 namespace TwoDrive.WebApi.Models
 {
@@ -12,12 +13,12 @@ namespace TwoDrive.WebApi.Models
         {
             switch (entity.GetType().Name)
             {
-                case "HtmlFile":
+                case "HTMLFile":
                     return new HTMLModel().FromDomain(entity);
                 case "TxtFile":
                     return new TxtModel().FromDomain(entity);
                 default:
-                    throw new ArgumentException("");
+                    throw new ArgumentException(ApiResource.UnsupportedFileType);
             }
         }
     }

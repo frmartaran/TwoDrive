@@ -231,4 +231,13 @@
   <data name="Import_Success" xml:space="preserve">
     <value>Tree imported successfully</value>
   </data>
+  <data name="Reader_JSON" xml:space="preserve">
+    <value>Json reader threw an exception</value>
+  </data>
+  <data name="Serializer_JSON" xml:space="preserve">
+    <value>Json serializer threw an exception</value>
+  </data>
+  <data name="UnsupportedFileType" xml:space="preserve">
+    <value>Unsupported type of file, can't get model</value>
+  </data>
 </root>

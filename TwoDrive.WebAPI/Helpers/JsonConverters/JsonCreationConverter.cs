@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TwoDrive.WebApi.Resource;
 
 namespace TwoDrive.WebApi.Helpers.JsonConverters
 {
@@ -19,9 +20,9 @@ namespace TwoDrive.WebApi.Helpers.JsonConverters
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             if (reader == null)
-                throw new ArgumentException();
+                throw new ArgumentException(ApiResource.Reader_JSON);
             if (serializer == null)
-                throw new ArgumentException();
+                throw new ArgumentException(ApiResource.Serializer_JSON);
             if (reader.TokenType == JsonToken.Null)
                 return null;
             var jObject = JObject.Load(reader);

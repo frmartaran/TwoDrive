@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using TwoDrive.WebApi.Models;
+using TwoDrive.WebApi.Resource;
 
 namespace TwoDrive.WebApi.Helpers.JsonConverters
 {
@@ -20,7 +21,7 @@ namespace TwoDrive.WebApi.Helpers.JsonConverters
             else if (type.Equals(ApiConstants.TXTType))
                 return new TxtModel();
             else
-                throw new ArgumentException();
+                throw new ArgumentException(ApiResource.UnsupportedFileType);
         }
     }
 }
