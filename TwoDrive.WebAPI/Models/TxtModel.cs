@@ -19,7 +19,6 @@ namespace TwoDrive.WebApi.Models
                 CreationDate = this.CreationDate,
                 DateModified = this.DateModified,
                 Content = this.Content,
-                Owner = this.Owner.ToDomain(),
             };
 
             if (ParentFolder != null)

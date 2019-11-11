@@ -76,7 +76,7 @@ namespace TwoDrive.WebApi.Controllers
 
                 CreateModification(file, ModificationType.Added);
                 folderLogic.CreateModificationsForTree(file, ModificationType.Changed);
-                return Ok(file);
+                return Ok(FileModelFactory.GetModel(file));
             }
             catch (ValidationException exception)
             {
@@ -111,11 +111,11 @@ namespace TwoDrive.WebApi.Controllers
             if (file == null)
                 return NotFound(ApiResource.FileNotFound);
 
-           // var model = FileModel.ToModel(file);
-            return Ok(file);
+            var model = new FileModel().FromDomain(file);
+            return Ok(FileModelFactory.GetModel(file));
         }
 
-        [HttpGet("Content/{id}")]
+        [HttpGet("{id}/Content")]
         [ClaimFilter(ClaimType.Read)]
         public IActionResult DisplayContent(int id)
         {
@@ -161,14 +161,14 @@ namespace TwoDrive.WebApi.Controllers
             };
 
             var files = fileLogic.GetAll(fileFilter);
-            /*var writerfiles = files
-                .Select(f => FileModel.ToModel(f))
+            var writerfiles = files
+                .Select(f => FileModelFactory.GetModel(f))
                 .ToList();
 
             if (writerfiles.Count == 0)
-                return NotFound(ApiResource.FilesNotFound);*/
+                return NotFound(ApiResource.FilesNotFound);
 
-            return Ok(files);
+            return Ok(writerfiles);
         }
 
         [HttpPut("{id}")]
