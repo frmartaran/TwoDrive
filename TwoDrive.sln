@@ -29,6 +29,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwoDrive.Importer.Test", "T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwoDrive.Importer", "TwoDrive.Importer\TwoDrive.Importer.csproj", "{DA54F5B5-B2D8-46AD-AFD1-FA5AD258F764}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{78D35785-F60C-442B-B79F-85EFC2027D97}"
+	ProjectSection(SolutionItems) = preProject
+		CodeCoverage.RunSettings = CodeCoverage.RunSettings
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
