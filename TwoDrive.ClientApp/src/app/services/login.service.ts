@@ -28,7 +28,7 @@ export class LoginService {
     var responseInJson = JSON.stringify(response);
     this.session = JSON.parse(responseInJson);
     localStorage.setItem("token", this.session.token);
-    localStorage.setItem("userId", this.session.userId);
+    localStorage.setItem("writerId", this.session.userId);
     localStorage.setItem("isAdmin", this.session.isAdmin);
     this.isAuthenticated.next(true);
   }

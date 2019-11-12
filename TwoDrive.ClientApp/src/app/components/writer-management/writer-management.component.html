@@ -8,18 +8,22 @@
 
             <ng-container matColumnDef="username">
             <th mat-header-cell *matHeaderCellDef>Username </th>
-            <td mat-cell *matCellDef="let element"> {{element.username}} </td>
+            <td mat-cell *matCellDef="let element"> 
+                {{element.userName}} 
+            </td>
             </ng-container>
 
             <ng-container matColumnDef="role">
             <th mat-header-cell *matHeaderCellDef>Role </th>
-            <td mat-cell *matCellDef="let element"> {{element.role}} </td>
+            <td mat-cell *matCellDef="let element"> 
+                {{element.role}} 
+            </td>
             </ng-container>
 
                 <!-- Action Column -->
             <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef id="action-def"> Action </th>
-                <td mat-cell *matCellDef="let element" class="action-link" id="action"> 
+                <td mat-cell *matCellDef="let element" class="action-link" id="action">
                     <a mat-button matTooltip="Edit Writer">
                         <span class="mat-button-wrapper">                        
                             <mat-icon>edit</mat-icon>

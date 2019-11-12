@@ -38,7 +38,7 @@ export class NavMenuComponent {
       if(dialogResult){
         this.logoutService.Logout().subscribe();
         localStorage.removeItem('token');
-        localStorage.removeItem('userId');
+        localStorage.removeItem('writerId');
         localStorage.removeItem('isAdmin');
         window.location.href = '/login';
         window.location.reload();

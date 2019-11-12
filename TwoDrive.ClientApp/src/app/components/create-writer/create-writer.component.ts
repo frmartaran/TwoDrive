@@ -1,5 +1,5 @@
 import { NgForm } from '@angular/forms';
-import { UserService } from 'src/app/services/user.service';
+import { WriterService } from 'src/app/services/writer.service';
 import { Component, OnInit } from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
@@ -19,7 +19,7 @@ export class CreateWriterComponent implements OnInit {
 
   public creationError: string = "";
 
-  constructor(private userService : UserService,
+  constructor(private userService : WriterService,
     private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
@@ -39,7 +39,7 @@ export class CreateWriterComponent implements OnInit {
     this.user.username = writerForm.value.username;
     this.user.password = writerForm.value.password;
     this.user.role = this.role;
-    this.userService.CreateUser(this.user)
+    this.userService.CreateWriter(this.user)
     .subscribe(
       (response) => {
         this.openSnackBar(response, 'Success!');

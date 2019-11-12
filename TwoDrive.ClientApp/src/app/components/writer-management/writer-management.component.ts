@@ -1,33 +1,14 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource, MatPaginator} from '@angular/material';
+import { WriterService } from 'src/app/services/writer.service';
+import { Component, OnInit, ViewChild} from '@angular/core';
+import { MatTableDataSource, MatPaginator, MatSnackBar} from '@angular/material';
 
-export interface WriterData {
-  username: string;
+export interface Writer {
+  id: number;
   role: string;
+  userName: string;
+  friends: [];
+  claims: [];
 }
-
-const writerData: WriterData[] = [
-  {username: 'Hydrogen', role: 'Hasdasdasdasd'},
-  {username: 'Helium', role: 'Heasdasdasd'},
-  {username: 'Lithium', role: 'Liasdasdasd'},
-  {username: 'Beryllium', role: 'Beasdasdasd'},
-  {username: 'Boron', role: 'Basdasdasdas'},
-  {username: 'Carbon', role: 'Casdasdasd'},
-  {username: 'Nitrogen', role: 'Nasdasdasd'},
-  {username: 'Oxygen', role: 'Oasdasdasd'},
-  {username: 'Fluorine', role: 'Fasdasdasd'},
-  {username: 'Neon', role: 'Neasdasdasdasd'},
-  {username: 'Sodium', role: 'Naasdasdasd'},
-  {username: 'Magnesium', role: 'Mgasdasdasd'},
-  {username: 'Aluminum', role: 'Alasdasdasd'},
-  {username: 'Silicon', role: 'Siasdasdasd'},
-  {username: 'Phosphorus', role: 'Pasdasdasd'},
-  {username: 'Sulfur', role: 'Sasdasdasd'},
-  {username: 'Chlorine', role: 'Clasdasdasd'},
-  {username: 'Argon', role: 'Arasdasdasd'},
-  {username: 'Potassium', role: 'Kasdasdasd'},
-  {username: 'Calcium', role: 'Caasdasdads'},
-];
 
 @Component({
   selector: 'app-writer-management',
@@ -36,16 +17,39 @@ const writerData: WriterData[] = [
 })
 export class WriterManagementComponent implements OnInit {
   displayedColumns: string[] = ['username', 'role', 'action'];
-  dataSource: MatTableDataSource<WriterData>;
+  dataSource: MatTableDataSource<Writer>;
+  writers: [];
+  writerLoggedInId: number;
+
+  constructor(private writerService : WriterService,
+    private _snackBar: MatSnackBar){}
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 5000,
+    });
+  }
+
   ngOnInit() {
-    this.dataSource =  new MatTableDataSource<WriterData>(writerData);
-    this.dataSource.paginator = this.paginator;
+    this.writerService.GetAllWriters()
+    .subscribe(
+      (response) => {
+        var responseString = JSON.stringify(response);
+        var responseParsed = this.writerService.ParseGetAllWritersResponse(responseString);
+        this.writers = responseParsed
+        this.dataSource =  new MatTableDataSource<Writer>(this.writers);
+        this.dataSource.paginator = this.paginator;        
+      },
+      (error) => {
+        this.openSnackBar(error, 'Error!');
+      }
+    )
   }
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+
 }
