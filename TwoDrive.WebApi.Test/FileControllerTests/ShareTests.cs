@@ -30,7 +30,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
         }
 
@@ -44,7 +44,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var file = new TxtFile
             {
@@ -58,7 +58,12 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 CreationDate = new DateTime(2019, 6, 10),
                 DateModified = new DateTime(2019, 6, 10),
             };
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             var mockLogic = new Mock<IFileLogic>();
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(file);
@@ -156,9 +161,14 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             var mockLogic = new Mock<IFileLogic>();
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns<File>(null);
@@ -198,7 +208,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var file = new TxtFile
             {
@@ -253,7 +263,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var file = new TxtFile
             {
@@ -267,7 +277,12 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 CreationDate = new DateTime(2019, 6, 10),
                 DateModified = new DateTime(2019, 6, 10),
             };
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             writer.AllowFriendTo(friend, file, ClaimType.Read);
 
             var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
@@ -369,10 +384,15 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
 
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
 
             var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
@@ -414,7 +434,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var file = new TxtFile
             {
@@ -468,7 +488,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var file = new TxtFile
             {
@@ -482,7 +502,12 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 CreationDate = new DateTime(2019, 6, 10),
                 DateModified = new DateTime(2019, 6, 10),
             };
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
 
             var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))
@@ -523,7 +548,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var file = new TxtFile
             {
@@ -537,7 +562,12 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 CreationDate = new DateTime(2019, 6, 10),
                 DateModified = new DateTime(2019, 6, 10),
             };
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             writer.AllowFriendTo(friend, file, ClaimType.Read);
             var mockLogic = new Mock<IFileLogic>();
             mockLogic.Setup(m => m.Get(It.IsAny<int>()))

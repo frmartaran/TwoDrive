@@ -145,7 +145,12 @@ namespace TwoDrive.WebApi.Controllers
                 {
                     return BadRequest($"You're already friend with {friend.UserName}");
                 };
-                writer.Friends.Add(friend);
+                var writerFriendToAdd = new WriterFriend
+                {
+                    Friend = friend,
+                    Writer = writer,
+                };
+                writer.Friends.Add(writerFriendToAdd);
                 Logic.Update(writer);
                 return Ok($"You are now friends with {friend.UserName}");
             }
@@ -170,7 +175,8 @@ namespace TwoDrive.WebApi.Controllers
                 {
                     return BadRequest("Can't remove friend since you aren't friends");
                 };
-                writer.Friends.Remove(friend);
+                writer.Friends = writer.Friends.Where(f => f.FriendId != id)
+                    .ToList();
                 Logic.Update(writer);
                 return Ok($"You are not friends with {friend.UserName} anymore");
             }
@@ -193,7 +199,7 @@ namespace TwoDrive.WebApi.Controllers
                 else
                 {
                     var toModel = writer.Friends
-                        .Select(f => new WriterModel().FromDomain(f))
+                        .Select(f => new WriterModel().FromDomain(f.Friend))
                         .ToList();
                     return Ok(toModel);
                 }

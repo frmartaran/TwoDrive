@@ -20,7 +20,7 @@ namespace TwoDrive.BusinessLogic.Extensions
 
         public static bool IsFriendsWith(this Writer writer, Writer friend)
         {
-            return writer.Friends.Contains(friend);
+            return writer.Friends.Any(f => f.Friend.Id == friend.Id);
         }
 
         public static void AddRootClaims(this Writer writer, Folder root)

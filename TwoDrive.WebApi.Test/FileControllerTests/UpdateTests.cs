@@ -30,7 +30,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
         }
         [TestMethod]

@@ -33,6 +33,7 @@ namespace TwoDrive.DataAccess
             return table
                 .Include(w => w.Claims)
                     .ThenInclude(c => c.Element)
+                .Include(w => w.Friends)
                 .ToList();
         }
     }

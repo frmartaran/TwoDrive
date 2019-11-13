@@ -47,7 +47,7 @@ namespace TwoDrive.BusinessLogic.Test
                 Id = 1,
                 UserName = "Writer",
                 Password = "A password",
-                Friends = new List<Writer>(),
+                Friends = new List<WriterFriend>(),
                 Claims = defaultClaims,
             };
             root.Owner = writer;
@@ -87,7 +87,12 @@ namespace TwoDrive.BusinessLogic.Test
         public void IsFriendsWith()
         {
             var friend = new Writer();
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             var isAFriend = writer.IsFriendsWith(friend);
             Assert.IsTrue(isAFriend);
         }
@@ -274,7 +279,12 @@ namespace TwoDrive.BusinessLogic.Test
             {
                 Claims = new List<CustomClaim>()
             };
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             writer.AllowFriendTo(friend, root, ClaimType.Read);
             var canFriendRead = friend.Claims
                 .Where(c => c.Element == root)
@@ -302,7 +312,12 @@ namespace TwoDrive.BusinessLogic.Test
             {
                 Claims = new List<CustomClaim>()
             };
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             writer.AllowFriendTo(friend, root, ClaimType.Read);
             writer.AllowFriendTo(friend, root, ClaimType.Read);
         }
@@ -314,7 +329,12 @@ namespace TwoDrive.BusinessLogic.Test
             {
                 Claims = new List<CustomClaim>()
             };
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             writer.AllowFriendTo(friend, root, ClaimType.Read);
             writer.RevokeFriendFrom(friend, root, ClaimType.Read);
 
@@ -337,7 +357,12 @@ namespace TwoDrive.BusinessLogic.Test
             };
             friend.Claims.Add(read);
             folder.Owner = friend;
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             writer.RevokeFriendFrom(friend, root, ClaimType.Read);
 
         }
@@ -350,7 +375,12 @@ namespace TwoDrive.BusinessLogic.Test
             {
                 Claims = new List<CustomClaim>()
             };
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             writer.RevokeFriendFrom(friend, root, ClaimType.Read);
         }
     }

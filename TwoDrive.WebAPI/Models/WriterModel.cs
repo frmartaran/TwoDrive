@@ -26,13 +26,14 @@ namespace TwoDrive.WebApi.Models
             if (entity == null)
                 return null;
 
+            Id = entity.Id;
             Role = entity.Role;
             UserName = entity.UserName;
 
             if (Friends != null)
             {
                 Friends = entity.Friends
-                .Select(e => new WriterModel().FromDomain(e))
+                .Select(e => new WriterModel().FromDomain(e.Friend))
                 .ToList();
             }
             if (Claims != null)
@@ -56,7 +57,11 @@ namespace TwoDrive.WebApi.Models
             writer.UserName = this.UserName;
             writer.Password = this.Password;
             writer.Friends = this.Friends?
-                        .Select(f => f.ToDomain())
+                        .Select(f => new WriterFriend 
+                        {
+                            Writer = writer,
+                            Friend = f.ToDomain()
+                        })
                         .ToList() ?? null;
             writer.Claims = this.Claims?
                     .Select(c => c.ToDomain())
@@ -78,14 +83,17 @@ namespace TwoDrive.WebApi.Models
                 Role = this.Role,
                 UserName = this.UserName,
                 Password = this.Password,
-                Friends = this.Friends?
-                        .Select(f => f.ToDomain())
-                        .ToList() ?? new List<Writer>(),
                 Claims = this.Claims?
                     .Select(c => c.ToDomain())
                     .ToList() ?? new List<CustomClaim>()
             };
-
+            writer.Friends = this.Friends?
+                        .Select(f => new WriterFriend
+                        {
+                            Writer = writer,
+                            Friend = f.ToDomain()
+                        })
+                        .ToList() ?? new List<WriterFriend>();
             if (Id.HasValue)
                 writer.Id = Id.Value;
 

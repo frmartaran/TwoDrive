@@ -25,7 +25,7 @@ namespace TwoDrive.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ElementId");
+                    b.Property<int>("ElementId");
 
                     b.Property<int>("Type");
 
@@ -116,8 +116,6 @@ namespace TwoDrive.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("FriendId");
-
                     b.Property<string>("Password");
 
                     b.Property<int>("Role");
@@ -126,9 +124,26 @@ namespace TwoDrive.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.ToTable("Writers");
+                });
+
+            modelBuilder.Entity("TwoDrive.Domain.WriterFriend", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("FriendId");
+
+                    b.Property<int>("WriterId");
+
+                    b.HasKey("Id");
+
                     b.HasIndex("FriendId");
 
-                    b.ToTable("Writers");
+                    b.HasIndex("WriterId");
+
+                    b.ToTable("WriterFriend");
                 });
 
             modelBuilder.Entity("TwoDrive.Domain.FileManagement.File", b =>
@@ -158,7 +173,8 @@ namespace TwoDrive.DataAccess.Migrations
                 {
                     b.HasOne("TwoDrive.Domain.FileManagement.Element", "Element")
                         .WithMany()
-                        .HasForeignKey("ElementId");
+                        .HasForeignKey("ElementId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("TwoDrive.Domain.Writer")
                         .WithMany("Claims")
@@ -191,11 +207,17 @@ namespace TwoDrive.DataAccess.Migrations
                         .HasForeignKey("WriterId");
                 });
 
-            modelBuilder.Entity("TwoDrive.Domain.Writer", b =>
+            modelBuilder.Entity("TwoDrive.Domain.WriterFriend", b =>
                 {
                     b.HasOne("TwoDrive.Domain.Writer", "Friend")
+                        .WithMany()
+                        .HasForeignKey("FriendId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TwoDrive.Domain.Writer", "Writer")
                         .WithMany("Friends")
-                        .HasForeignKey("FriendId");
+                        .HasForeignKey("WriterId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }
