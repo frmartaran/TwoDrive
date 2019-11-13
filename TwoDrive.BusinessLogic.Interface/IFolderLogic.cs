@@ -11,5 +11,7 @@ namespace TwoDrive.BusinessLogic.Interfaces
         Folder GetRootFolder(Writer owner);
 
         string ShowTree(Folder folder);
+
+        void CreateModificationsForTree(Element element, ModificationType action);
     }
 }

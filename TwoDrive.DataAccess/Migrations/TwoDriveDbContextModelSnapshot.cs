@@ -150,6 +150,10 @@ namespace TwoDrive.DataAccess.Migrations
                 {
                     b.HasBaseType("TwoDrive.Domain.FileManagement.Element");
 
+                    b.Property<string>("Content");
+
+                    b.Property<string>("Extension");
+
                     b.HasDiscriminator().HasValue("File");
                 });
 
@@ -160,11 +164,18 @@ namespace TwoDrive.DataAccess.Migrations
                     b.HasDiscriminator().HasValue("Folder");
                 });
 
-            modelBuilder.Entity("TwoDrive.Domain.FileManagement.TxtFile", b =>
+            modelBuilder.Entity("TwoDrive.Domain.FileManagement.HTMLFile", b =>
                 {
                     b.HasBaseType("TwoDrive.Domain.FileManagement.File");
 
-                    b.Property<string>("Content");
+                    b.Property<bool>("ShouldRender");
+
+                    b.HasDiscriminator().HasValue("HTMLFile");
+                });
+
+            modelBuilder.Entity("TwoDrive.Domain.FileManagement.TxtFile", b =>
+                {
+                    b.HasBaseType("TwoDrive.Domain.FileManagement.File");
 
                     b.HasDiscriminator().HasValue("TxtFile");
                 });

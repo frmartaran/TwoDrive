@@ -1,0 +1,35 @@
+  {
+    "Name": "Root",
+    "ParentFolder": null,
+    "CreationDate": "2019-09-03",
+    "DateModified": "2019-09-03",
+    "FolderChildren" : [
+	        {
+            "$type": "File",
+            "Type":  "txt",
+            "Name": "File 1",
+            "ParentFolder": null,
+            "CreationDate": "2012-04-23T18:25:43.511Z",
+            "DateModified": "2012-04-23T18:25:43.511Z",
+            "Content": "This is a file"
+          },
+	        {
+            "$type": "File",
+            "Type":  "html",
+            "Name": "File 2",
+            "ParentFolder": null,
+            "CreationDate": "2012-04-23T18:25:43.511Z",
+            "DateModified": "2012-04-23T18:25:43.511Z",
+            "Content": "This is a file",
+            "ShouldRender": "true"
+          },
+	        {
+	          "$type" : "Folder",
+            "Name": "Root",
+            "ParentFolder": null,
+            "CreationDate": "2012-04-23T18:25:43.511Z",
+            "DateModified": "2012-04-23T18:25:43.511Z",
+            "FolderChildren": []
+          }
+      ]
+}

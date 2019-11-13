@@ -4,6 +4,7 @@ using System.Linq;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Interfaces.LogicInput;
+using TwoDrive.BusinessLogic.Resources;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
@@ -40,7 +41,7 @@ namespace TwoDrive.BusinessLogic.Logic
         {
             var folder = Get(id);
             if (folder == null)
-                throw new LogicException("The folder doesn't exists");
+                throw new LogicException(BusinessResource.FolderNotFound);
 
             DeleteChildren(folder);
         }
@@ -92,24 +93,45 @@ namespace TwoDrive.BusinessLogic.Logic
                 Date = DateTime.Now
             };
 
-            CreateModificationForParentFolder(element);
+            CreateModificationsForTree(element, ModificationType.Deleted);
             ModificationRepository.Insert(modification);
             ModificationRepository.Save();
         }
 
-        private void CreateModificationForParentFolder(Element element)
+        public void CreateModificationsForTree(Element element, ModificationType action)
         {
+            var now = DateTime.Now;
             if (element.ParentFolder != null)
             {
-                var parentModification = new Modification
-                {
-                    ElementModified = element.ParentFolder,
-                    type = ModificationType.Changed,
-                    Date = DateTime.Now
-                };
-                ModificationRepository.Insert(parentModification);
-                ModificationRepository.Save();
+                var parent = FolderRepository.Get(element.ParentFolder.Id);
+                UpdateFolderTree(parent, now, action);
             }
+
+        }
+
+        private void UpdateFolderTree(Folder folder, DateTime now, ModificationType action)
+        {
+            CreateModificationForParentFolder(folder, now, action);
+            if (folder.ParentFolder == null)
+                return;
+
+            var parentFromDb = FolderRepository.Get(folder.ParentFolder.Id);
+            UpdateFolderTree(parentFromDb, now, action);
+
+        }
+
+        private void CreateModificationForParentFolder(Folder parent, DateTime now, ModificationType action)
+        {
+            var modification = new Modification
+            {
+                ElementModified = parent,
+                type = action,
+                Date = now
+            };
+            parent.DateModified = now;
+            FolderRepository.Update(parent);
+            ModificationRepository.Insert(modification);
+            ModificationRepository.Save();
         }
 
         public Folder Get(int Id)
@@ -134,7 +156,7 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public string ShowTree(Folder root)
         {
-            var tree = string.Format("{0} +- {1} \n", "", root.Name);
+            var tree = string.Format(BusinessResource.ShowTreeFormat + " \n", "", root.Name);
             ShowChildren(root, ref tree, Spaces);
             return tree;
         }
@@ -150,9 +172,9 @@ namespace TwoDrive.BusinessLogic.Logic
                 foreach (var child in children)
                 {
                     if (children.IndexOf(child) == folder.FolderChildren.Count - 1)
-                        tree += string.Format("{0} +- {1} \n", $"{prefix}\\", child.Name);
+                        tree += string.Format(BusinessResource.ShowTreeFormat + " \n", $"{prefix}\\", child.Name);
                     else
-                        tree += string.Format("{0} +- {1} \n", $"{prefix}|", child.Name);
+                        tree += string.Format(BusinessResource.ShowTreeFormat + " \n", $"{prefix}|", child.Name);
                     ShowChildren(child, ref tree, prefix + Spaces);
                 }
                 return;

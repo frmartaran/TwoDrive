@@ -9,6 +9,7 @@ using TwoDrive.BusinessLogic;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.WebApi.Interfaces;
 using TwoDrive.WebApi.Models;
+using TwoDrive.WebApi.Resource;
 
 namespace TwoDrive.WebApi.Controllers
 {
@@ -33,7 +34,7 @@ namespace TwoDrive.WebApi.Controllers
             var token = logic.Create(model.Username, model.Password);
             if (token == null)
             {
-                return BadRequest("Incorrect username or password");
+                return BadRequest(ApiResource.LoginError_TokenController);
             }
             var stringToken = token.Value.ToString();
             var session = logic.GetSession(stringToken);
@@ -53,11 +54,11 @@ namespace TwoDrive.WebApi.Controllers
             {
                 var session = currentSession.GetCurrentSession(HttpContext);
                 logic.RemoveSession(session);
-                return Ok("Bye!");
+                return Ok(ApiResource.LogOut_TokenController);
             }
             catch (LogicException)
             {
-                return BadRequest("There was an error logging out");
+                return BadRequest(ApiResource.LogOutError_TokenController);
             }
         }
     }

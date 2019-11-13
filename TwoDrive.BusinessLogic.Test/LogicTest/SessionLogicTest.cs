@@ -11,7 +11,7 @@ using TwoDrive.DataAccess;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 
-namespace TwoDrive.BusinessLogic.Test
+namespace TwoDrive.BusinessLogic.Test.LogicTest
 {
     [TestClass]
     public class SessionLogicTest

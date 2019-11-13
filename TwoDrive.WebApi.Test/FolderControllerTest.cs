@@ -4,8 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using TwoDrive.BusinessLogic;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.BusinessLogic.Interfaces;
@@ -105,21 +103,22 @@ namespace TwoDrive.WebApi.Test
             var mockElementRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
             var mockElementValidator = new Mock<IFolderValidator>(MockBehavior.Strict);
             var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
-            var mockModificationLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
+            var mockModificationLogic = new Mock<IModificationLogic>();
 
-            mockModificationLogic.Setup(m => m.Create(It.IsAny<Modification>()));
             mockSessionLogic.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
             .Returns(writer);
             mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
             .Returns(folderToMove);
-            mockFolderLogic.Setup(m => m.MoveElement(It.IsAny<Element>(), It.IsAny<Folder>(), It.IsAny<MoveElementDependencies>()));
+            mockFolderLogic.Setup(m => m.MoveElement(It.IsAny<Element>(), It.IsAny<Folder>(), 
+                It.IsAny<MoveElementDependencies>()));
+            mockFolderLogic.Setup(m => m.CreateModificationsForTree(It.IsAny<Element>(), 
+                It.IsAny<ModificationType>()));
 
             var controller = new FolderController(mockFolderLogic.Object, mockSessionLogic.Object,
                 mockElementRepository.Object, mockElementValidator.Object, mockLogicWriter.Object,
                 mockModificationLogic.Object);
             var result = controller.MoveFolder(folderToMove.Id, folderDestination.Id);
 
-            mockModificationLogic.VerifyAll();
             mockFolderLogic.VerifyAll();
             mockSessionLogic.VerifyAll();
         }
@@ -144,6 +143,8 @@ namespace TwoDrive.WebApi.Test
             mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
             .Returns(folder);
             mockFolderLogic.Setup(m => m.Update(It.IsAny<Folder>()));
+            mockFolderLogic.Setup(m => m.CreateModificationsForTree(It.IsAny<Element>(), 
+                It.IsAny<ModificationType>()));
 
             var controller = new FolderController(mockFolderLogic.Object, mockSessionLogic.Object,
                 mockElementRepository.Object, mockElementValidator.Object, mockLogicWriter.Object,
@@ -306,6 +307,8 @@ namespace TwoDrive.WebApi.Test
             mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(root);
             mockFolderLogic.Setup(m => m.Create(It.IsAny<Folder>()));
+            mockFolderLogic.Setup(m => m.CreateModificationsForTree(It.IsAny<Element>(), 
+                It.IsAny<ModificationType>()));
             mockLogicWriter.Setup(m => m.Update(It.IsAny<Writer>()));
             mockModificationLogic.Setup(m => m.Create(It.IsAny<Modification>()));
 

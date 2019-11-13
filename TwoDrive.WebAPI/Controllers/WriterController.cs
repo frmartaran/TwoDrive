@@ -13,6 +13,7 @@ using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Filters;
 using TwoDrive.WebApi.Interfaces;
 using TwoDrive.WebApi.Models;
+using TwoDrive.WebApi.Resource;
 
 namespace TwoDrive.WebApi.Controllers
 {
@@ -35,7 +36,7 @@ namespace TwoDrive.WebApi.Controllers
         public IActionResult Create([FromBody] WriterModel model)
         {
             if (model == null)
-                return BadRequest("Something's went wrong in the request body");
+                return BadRequest(ApiResource.WrongRequestBody);
 
             try
             {
@@ -52,7 +53,7 @@ namespace TwoDrive.WebApi.Controllers
                 FolderLogic.Create(root);
                 writer.AddRootClaims(root);
                 Logic.Update(writer);
-                return Ok("Writer Created");
+                return Ok(ApiResource.Created_WriterController);
             }
             catch (ValidationException validationError)
             {
@@ -70,7 +71,7 @@ namespace TwoDrive.WebApi.Controllers
                 var folder = FolderLogic.GetRootFolder(writer);
                 FolderLogic.Delete(folder.Id);
                 Logic.Delete(id);
-                return Ok($"Writer: {writer.UserName} has been deleted");
+                return Ok(string.Format(ApiResource.Deleted_WriterController, writer.UserName));
             }
             catch (LogicException exception)
             {
@@ -85,7 +86,7 @@ namespace TwoDrive.WebApi.Controllers
             var writer = Logic.Get(id);
             if (writer == null)
             {
-                return NotFound("User not found");
+                return NotFound(ApiResource.WriterNotFound);
             }
             var model = new WriterModel();
             return Ok(model.FromDomain(writer));
@@ -99,7 +100,7 @@ namespace TwoDrive.WebApi.Controllers
                 .ToList();
             if (writers.Count == 0)
             {
-                return NotFound("No writers found");
+                return NotFound(ApiResource.WritersNotFound);
             }
             var asModels = writers
                 .Select(w => new WriterModel().FromDomain(w))
@@ -112,7 +113,7 @@ namespace TwoDrive.WebApi.Controllers
         public IActionResult Update(int id, [FromBody] WriterModel model)
         {
             if (model == null)
-                return BadRequest("There's an error in the request");
+                return BadRequest(ApiResource.WrongRequestBody);
 
             try
             {
@@ -136,14 +137,14 @@ namespace TwoDrive.WebApi.Controllers
             {
                 var writer = CurrentSession.GetCurrentUser(HttpContext);
                 if (writer == null)
-                    return BadRequest("You need to login first");
+                    return BadRequest(ApiResource.MustLogIn);
                 var friend = Logic.Get(id);
                 if (friend == null)
-                    return BadRequest("The friend doesn't exist");
+                    return BadRequest(ApiResource.FriendNotFound);
 
                 if (writer.IsFriendsWith(friend))
                 {
-                    return BadRequest($"You're already friend with {friend.UserName}");
+                    return BadRequest(string.Format(ApiResource.AlreadyFriends, friend.UserName));
                 };
                 var writerFriendToAdd = new WriterFriend
                 {
@@ -152,7 +153,7 @@ namespace TwoDrive.WebApi.Controllers
                 };
                 writer.Friends.Add(writerFriendToAdd);
                 Logic.Update(writer);
-                return Ok($"You are now friends with {friend.UserName}");
+                return Ok(string.Format(ApiResource.NowFriends, friend.UserName));
             }
             catch (ValidationException exception)
             {
@@ -167,18 +168,18 @@ namespace TwoDrive.WebApi.Controllers
             {
                 var writer = CurrentSession.GetCurrentUser(HttpContext);
                 if (writer == null)
-                    return BadRequest("You must log in first");
+                    return BadRequest(ApiResource.MustLogIn);
                 var friend = Logic.Get(id);
                 if (friend == null)
-                    return BadRequest("The writer doesn't exist");
+                    return BadRequest(ApiResource.WriterNotFound);
                 if (!writer.IsFriendsWith(friend))
                 {
-                    return BadRequest("Can't remove friend since you aren't friends");
+                    return BadRequest(ApiResource.CantRemove);
                 };
                 writer.Friends = writer.Friends.Where(f => f.FriendId != id)
                     .ToList();
                 Logic.Update(writer);
-                return Ok($"You are not friends with {friend.UserName} anymore");
+                return Ok(string.Format(ApiResource.NowNotFriends, friend.UserName));
             }
             catch (ValidationException exception)
             {
@@ -194,7 +195,7 @@ namespace TwoDrive.WebApi.Controllers
                 var writer = Logic.Get(id);
                 if (writer.Friends.Count == 0)
                 {
-                    return Ok("Writer has no friends");
+                    return Ok(ApiResource.NoFriends);
                 }
                 else
                 {
@@ -206,7 +207,7 @@ namespace TwoDrive.WebApi.Controllers
             }
             catch (NullReferenceException)
             {
-                return BadRequest("Writer not found");
+                return BadRequest(ApiResource.WriterNotFound);
             }
 
         }

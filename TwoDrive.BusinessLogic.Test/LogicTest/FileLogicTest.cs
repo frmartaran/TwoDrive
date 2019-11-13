@@ -11,7 +11,7 @@ using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.Domain;
 using TwoDrive.BusinessLogic.Exceptions;
 
-namespace TwoDrive.BusinessLogic.Test
+namespace TwoDrive.BusinessLogic.Test.LogicTest
 {
     [TestClass]
     public class FileLogicTest

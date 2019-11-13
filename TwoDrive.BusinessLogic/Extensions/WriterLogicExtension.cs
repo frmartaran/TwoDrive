@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Helpers;
+using TwoDrive.BusinessLogic.Resources;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 
@@ -33,7 +34,7 @@ namespace TwoDrive.BusinessLogic.Extensions
         private static void ValidateIsRoot(Folder root)
         {
             if (!IsRoot(root))
-                throw new LogicException("Can't add root claims to a child folder");
+                throw new LogicException(BusinessResource.RootClaims_Claims);
         }
 
         private static bool IsRoot(Element root)
@@ -89,19 +90,19 @@ namespace TwoDrive.BusinessLogic.Extensions
             var canAlreadyDelete = writer.HasClaimsFor(element, ClaimType.Delete);
 
             if (canAlreadyRead && canAlreadyWrite && canAlreadyShare && canAlreadyDelete)
-                throw new LogicException("Writer already has creator claims for this element");
+                throw new LogicException(BusinessResource.ExisitngCreatorClaims_Claims);
         }
 
         private static void ValidateIsNotRoot(Element element)
         {
             if (IsRoot(element))
-                throw new LogicException("Can't add creator claims to root");
+                throw new LogicException(BusinessResource.CantAddCreatorClaims);
         }
 
         private static void ValidateIfOwner(Writer writer, Element element)
         {
             if (element.Owner != writer)
-                throw new LogicException($"{writer.UserName} not owner of this element");
+                throw new LogicException(string.Format(BusinessResource.NotOwner, writer.UserName));
         }
 
         public static void RemoveAllClaims(this Writer writer, Element element)
@@ -111,7 +112,7 @@ namespace TwoDrive.BusinessLogic.Extensions
                 .ToList();
 
             if (allClaims.Count == 0)
-                throw new LogicException("No claims to remove");
+                throw new LogicException(BusinessResource.NoClaims);
 
             writer.Claims.RemoveRange(allClaims);
         }
@@ -134,14 +135,15 @@ namespace TwoDrive.BusinessLogic.Extensions
         {
             var areFriends = owner.IsFriendsWith(friend);
             if (!areFriends)
-                throw new LogicException($"The owner is not friends with {friend.UserName}");
+                throw new LogicException(string.Format(BusinessResource.NotFriends, friend.UserName));
         }
 
         private static void ValidateIfFriendCan(Writer friend, Element element, ClaimType type)
         {
             var canAlreardy = friend.HasClaimsFor(element, type);
             if (canAlreardy)
-                throw new LogicException($"{friend.UserName} can already {type.ToString()} this element");
+                throw new LogicException(string.Format(BusinessResource.AlreadyHas_Claims,
+                    friend.UserName, type.ToString()));
         }
 
         public static void RevokeFriendFrom(this Writer writer, Writer friend, Element element, ClaimType type)
@@ -161,7 +163,7 @@ namespace TwoDrive.BusinessLogic.Extensions
         private static void ValidateIfFriendCan(CustomClaim claim)
         {
             if (claim == null)
-                throw new LogicException("There are no claims to remove");
+                throw new LogicException(BusinessResource.NoClaims);
         }
     }
 }

@@ -11,6 +11,7 @@ using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Controllers;
 using TwoDrive.WebApi.Interfaces;
+using TwoDrive.WebApi.Resource;
 
 namespace TwoDrive.WebApi.Test.FileControllerTests
 {
@@ -80,7 +81,8 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             mockLogic.VerifyAll();
             mockModification.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
-            Assert.AreEqual($"{file.Name} has been deleted", okResult.Value);
+            var message = string.Format(ApiResource.Delete_FileController, file.Name);
+            Assert.AreEqual(message, okResult.Value);
         }
 
         [TestMethod]

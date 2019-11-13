@@ -12,8 +12,9 @@ using TwoDrive.Domain.FileManagement;
 using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using Microsoft.EntityFrameworkCore;
 using TwoDrive.BusinessLogic.Exceptions;
+using System.Linq;
 
-namespace TwoDrive.BusinessLogic.Test
+namespace TwoDrive.BusinessLogic.Test.LogicTest
 {
     [TestClass]
     public class FolderLogicTest
@@ -422,7 +423,7 @@ namespace TwoDrive.BusinessLogic.Test
             var modifications = modificationRepository.GetAll().Count;
             var allFoldersInDb = folderRepository.GetAll();
             Assert.AreEqual(0, allFoldersInDb.Count);
-            Assert.AreEqual(7, modifications);
+            Assert.AreEqual(8, modifications);
         }
 
         [TestMethod]
@@ -983,6 +984,147 @@ namespace TwoDrive.BusinessLogic.Test
                 fileRepository, elementValidator, modificationRepostory);
             var logic = new FolderLogic(dependecies);
             logic.Update(null);
+        }
+
+        [TestMethod]
+        public void SetModificationToParentFolderMock()
+        {
+            var writer = new Writer();
+            var root = new Folder
+            {
+                Id = 1,
+                CreationDate = new DateTime(2019, 3, 15),
+                DateModified = new DateTime(2019, 3, 15),
+                Name = "Root",
+                Owner = writer,
+                FolderChildren = new List<Element>()
+            };
+            var file = new TxtFile
+            {
+                Id = 2,
+                Name = "Some file",
+                Owner = writer,
+                ParentFolder = root,
+                CreationDate = new DateTime(2019, 3, 15),
+                DateModified = new DateTime(2019, 3, 15),
+                Content = "Holiwis"
+            };
+            var fileRepository = new Mock<IFileRepository>();
+            var validator = new Mock<IFolderValidator>();
+            var folderRepository = new Mock<IFolderRepository>(MockBehavior.Strict);
+            folderRepository.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(root);
+            folderRepository.Setup(m => m.Update(It.IsAny<Folder>()));
+
+            var modificationRepository = new Mock<IRepository<Modification>>();
+            modificationRepository.Setup(m => m.Insert(It.IsAny<Modification>()));
+            modificationRepository.Setup(m => m.Save());
+
+            var dependencies = new ElementLogicDependencies(folderRepository.Object, fileRepository.Object,
+                validator.Object, modificationRepository.Object);
+
+            var logic = new FolderLogic(dependencies);
+            logic.CreateModificationsForTree(file, ModificationType.Changed);
+
+            folderRepository.VerifyAll();
+            modificationRepository.VerifyAll();
+        }
+
+        [TestMethod]
+        public void SetModificationToParentFolder()
+        {
+            var context = ContextFactory.GetMemoryContext("Set Modification To Parent Folder");
+            var writer = new Writer();
+            var root = new Folder
+            {
+                Id = 1,
+                CreationDate = new DateTime(2019, 3, 15),
+                DateModified = new DateTime(2019, 3, 15),
+                Name = "Root",
+                Owner = writer,
+                FolderChildren = new List<Element>()
+            };
+            var file = new TxtFile
+            {
+                Id = 2,
+                Name = "Some file",
+                Owner = writer,
+                ParentFolder = root,
+                CreationDate = new DateTime(2019, 3, 15),
+                DateModified = new DateTime(2019, 3, 15),
+                Content = "Holiwis"
+            };
+            var fileRepository = new Mock<IFileRepository>();
+            var validator = new Mock<IFolderValidator>();
+            var folderRepository = new Mock<IFolderRepository>(MockBehavior.Strict);
+            folderRepository.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(root);
+            folderRepository.Setup(m => m.Update(It.IsAny<Folder>()));
+
+            var modificationRepository = new ModificationRepository(context);
+
+            var dependencies = new ElementLogicDependencies(folderRepository.Object, fileRepository.Object,
+                validator.Object, modificationRepository);
+
+            var logic = new FolderLogic(dependencies);
+            logic.CreateModificationsForTree(file, ModificationType.Changed);
+
+            folderRepository.VerifyAll();
+            var modifications = context.Modifications.ToList().Count;
+            Assert.AreEqual(1, modifications);
+        }
+
+        [TestMethod]
+        public void SetModificationToTwoParentFolders()
+        {
+            var context = ContextFactory.GetMemoryContext("Set Modification To Two Parent Folder");
+            var writer = new Writer();
+            var root = new Folder
+            {
+                Id = 1,
+                CreationDate = new DateTime(2019, 3, 15),
+                DateModified = new DateTime(2019, 3, 15),
+                Name = "Root",
+                Owner = writer,
+                FolderChildren = new List<Element>()
+            };
+            var folder = new Folder
+            {
+                Id = 3,
+                CreationDate = new DateTime(2019, 3, 15),
+                DateModified = new DateTime(2019, 3, 15),
+                Name = "Folder",
+                Owner = writer,
+                FolderChildren = new List<Element>(),
+                ParentFolder = root
+            };
+            var file = new TxtFile
+            {
+                Id = 2,
+                Name = "Some file",
+                Owner = writer,
+                ParentFolder = folder,
+                CreationDate = new DateTime(2019, 3, 15),
+                DateModified = new DateTime(2019, 3, 15),
+                Content = "Holiwis"
+            };
+            var fileRepository = new Mock<IFileRepository>();
+            var validator = new Mock<IFolderValidator>();
+            var folderRepository = new FolderRepository(context);
+            folderRepository.Insert(root);
+            folderRepository.Insert(folder);
+            folderRepository.Save();
+
+            var modificationRepository = new ModificationRepository(context);
+
+            var dependencies = new ElementLogicDependencies(folderRepository, fileRepository.Object,
+                validator.Object, modificationRepository);
+
+            var logic = new FolderLogic(dependencies);
+            logic.CreateModificationsForTree(file, ModificationType.Changed);
+
+            var modifications = context.Modifications.ToList().Count;
+            Assert.AreEqual(2, modifications);
         }
     }
 }

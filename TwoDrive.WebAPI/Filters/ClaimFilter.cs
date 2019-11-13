@@ -1,4 +1,3 @@
-
 using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -7,6 +6,7 @@ using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
+using TwoDrive.WebApi.Resource;
 
 namespace TwoDrive.WebApi.Filters
 {
@@ -27,7 +27,7 @@ namespace TwoDrive.WebApi.Filters
                 context.Result = new ContentResult
                 {
                     StatusCode = 400,
-                    Content = "Token is required"
+                    Content = ApiResource.MissingToken
                 };
                 return;
             }
@@ -37,11 +37,11 @@ namespace TwoDrive.WebApi.Filters
                 context.Result = new ContentResult
                 {
                     StatusCode = 400,
-                    Content = "Invalid Token"
+                    Content = ApiResource.InvalidToken
                 };
                 return;
             }
-            if ((sessionLogic.HasLevel(token) && !IsAdministratorAllowedAction()) || 
+            if ((sessionLogic.HasLevel(token) && !IsAdministratorAllowedAction()) ||
                 !sessionLogic.HasLevel(token))
             {
                 var element = GetElement(context);
@@ -49,8 +49,8 @@ namespace TwoDrive.WebApi.Filters
                 {
                     context.Result = new ContentResult
                     {
-                        StatusCode = 400,
-                        Content = "Invalid Element"
+                        StatusCode = 404,
+                        Content = ApiResource.ElementNotFound_ClaimFilter
                     };
                     return;
                 }
@@ -61,7 +61,8 @@ namespace TwoDrive.WebApi.Filters
                     context.Result = new ContentResult
                     {
                         StatusCode = 400,
-                        Content = $"This user is not allow to {Action.ToString()} this element"
+                        Content = string.Format(ApiResource.NotAllowed_ClaimFilter, 
+                        writer.UserName, Action.ToString())
                     };
                     return;
                 }

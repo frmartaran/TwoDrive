@@ -13,6 +13,7 @@ using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Controllers;
 using TwoDrive.WebApi.Interfaces;
 using TwoDrive.WebApi.Models;
+using TwoDrive.WebApi.Resource;
 
 namespace TwoDrive.WebApi.Test.FileControllerTests
 {
@@ -49,6 +50,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 Id = 1,
                 Name = "New file",
                 Content = "Content",
+                ParentFolder = null,
                 ParentFolderId = 1,
             };
 
@@ -59,6 +61,8 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(folder);
+            mockFolderLogic.Setup(m => m.CreateModificationsForTree(It.IsAny<Element>(), 
+                It.IsAny<ModificationType>()));
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockWriterLogic.Setup(m => m.Update(It.IsAny<Writer>()));
             var mockLogic = new Mock<IFileLogic>(MockBehavior.Strict);
@@ -127,7 +131,8 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             mockFolderLogic.VerifyAll();
             mockSession.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
-            Assert.AreEqual("You are not owner of this folder", badRquestResult.Value);
+            var message = string.Format(ApiResource.NotOwnerOf, folder.Name);
+            Assert.AreEqual(message, badRquestResult.Value);
         }
 
         [TestMethod]
@@ -220,7 +225,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             mockFolderLogic.VerifyAll();
             mockSession.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
-            Assert.AreEqual("You must log in first", badRquestResult.Value);
+            Assert.AreEqual(ApiResource.MustLogIn, badRquestResult.Value);
         }
 
         [TestMethod]
@@ -259,7 +264,7 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             mockFolderLogic.VerifyAll();
             mockSession.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
-            Assert.AreEqual("Parent folder doesn't exist", notFoundResult.Value);
+            Assert.AreEqual(ApiResource.ParentFolderNotFound, notFoundResult.Value);
         }
 
     }

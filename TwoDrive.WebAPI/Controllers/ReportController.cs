@@ -12,6 +12,7 @@ using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Filters;
 using TwoDrive.WebApi.Models;
+using TwoDrive.WebApi.Resource;
 
 namespace TwoDrive.WebApi.Controllers
 {
@@ -39,7 +40,7 @@ namespace TwoDrive.WebApi.Controllers
                 var groups = modificationLogic.GetAllFromDateRange(start, end);
                 if (groups.Count == 0)
                 {
-                    return Ok("There haven't been any modfications to files yet");
+                    return Ok(ApiResource.NoModificationsYet_ReportController);
                 }
                 var report = groups
                     .Where(g => g.Key.GetType().IsSubclassOf(typeof(File)))
@@ -96,7 +97,7 @@ namespace TwoDrive.WebApi.Controllers
             var allFiles = fileLogic.GetAll();
             if (allFiles.Count() == 0)
             {
-                return Ok("There are no top writers yet");
+                return Ok(ApiResource.NoTopWriters_ReportController);
             }
             var filesGroupedByOwner = allFiles
                     .GroupBy(g => g.Owner)

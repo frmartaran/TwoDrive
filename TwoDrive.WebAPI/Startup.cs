@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using TwoDrive.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using TwoDrive.BusinessLogic.Interfaces;
@@ -21,6 +15,7 @@ using TwoDrive.WebApi.Interfaces;
 using TwoDrive.WebApi.Helpers;
 using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.BusinessLogic.Interfaces.LogicInput;
+using TwoDrive.BusinessLogic.Helpers.LogicInput;
 
 namespace TwoDrive.WebApi
 {
@@ -60,6 +55,7 @@ namespace TwoDrive.WebApi
             services.AddScoped<IValidator<Element>, FileValidator>();
             services.AddScoped<IValidator<Writer>, WriterValidator>();
             services.AddScoped<ElementLogicDependencies, ElementLogicDependencies>();
+            services.AddScoped<ImporterDependencies, ImporterDependencies>();
 
             services.AddScoped<IFolderRepository, FolderRepository>();
             services.AddScoped<IFileRepository, FileRepository>();

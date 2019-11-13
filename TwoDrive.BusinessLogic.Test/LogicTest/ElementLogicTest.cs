@@ -11,7 +11,7 @@ using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.DataAccess.Interface;
 using Moq;
 
-namespace TwoDrive.BusinessLogic.Test
+namespace TwoDrive.BusinessLogic.Test.LogicTest
 {
     [TestClass]
     public class ElementLogicTest

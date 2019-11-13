@@ -74,6 +74,8 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             .Returns(folderDestination);
             mockFolderLogic.Setup(m => m.MoveElement(It.IsAny<Element>(), It.IsAny<Folder>(),
                 It.IsAny<MoveElementDependencies>()));
+            mockFolderLogic.Setup(m => m.CreateModificationsForTree(It.IsAny<Element>(),
+                It.IsAny<ModificationType>()));
 
             var controller = new FileController(mockLogic.Object, mockFolderLogic.Object,
                 mockWriterLogic.Object, mockSession.Object, mockModification.Object,

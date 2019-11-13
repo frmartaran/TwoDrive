@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.BusinessLogic.Resources;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain.FileManagement;
 
@@ -27,7 +28,7 @@ namespace TwoDrive.BusinessLogic.Logic
         {
             var beforeStart = startDate.CompareTo(endDate);
             if(beforeStart > 0)
-                throw new LogicException("End date cannot be earlier than start date");
+                throw new LogicException(BusinessResource.EndBeforeStart);
                 
             return Repository.GetAll()
                 .Where(m => m.Date >= startDate)

@@ -7,7 +7,7 @@ using TwoDrive.DataAccess;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 
-namespace TwoDrive.BusinessLogic.Test
+namespace TwoDrive.BusinessLogic.Test.ValidatorsTest
 {
     [TestClass]
     public class ElementValidatorTest

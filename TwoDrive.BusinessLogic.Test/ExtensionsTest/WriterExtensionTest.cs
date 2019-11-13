@@ -6,7 +6,7 @@ using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 
-namespace TwoDrive.BusinessLogic.Test
+namespace TwoDrive.BusinessLogic.Test.ExtensionsTest
 {
     [TestClass]
     public class WriterExtensionTest

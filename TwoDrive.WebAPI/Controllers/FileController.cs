@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ using TwoDrive.Domain.FileManagement;
 using TwoDrive.WebApi.Filters;
 using TwoDrive.WebApi.Interfaces;
 using TwoDrive.WebApi.Models;
+using TwoDrive.WebApi.Resource;
 
 namespace TwoDrive.WebApi.Controllers
 {
@@ -52,21 +54,20 @@ namespace TwoDrive.WebApi.Controllers
 
         [HttpPost("{id}")]
         [ClaimFilter(ClaimType.Write)]
-        public IActionResult Create(int id, [FromBody] TxtModel model)
+        public IActionResult Create(int id, [FromBody] FileModel model)
         {
             try
             {
                 var loggedWriter = inSession.GetCurrentUser(HttpContext);
                 var parentFolder = folderLogic.Get(id);
                 if (loggedWriter == null)
-                    return BadRequest("You must log in first");
+                    return BadRequest(ApiResource.MustLogIn);
                 if (parentFolder == null)
-                    return NotFound("Parent folder doesn't exist");
+                    return NotFound(ApiResource.ParentFolderNotFound);
                 if (loggedWriter != parentFolder.Owner)
-                    return BadRequest("You are not owner of this folder");
+                    return BadRequest(string.Format(ApiResource.NotOwnerOf, parentFolder.Name));
 
-
-                var file = model.ToDomain() as File;
+                var file = model.ToDomain();
                 file.Owner = loggedWriter;
                 file.ParentFolder = parentFolder;
                 file.CreationDate = DateTime.Now;
@@ -76,8 +77,8 @@ namespace TwoDrive.WebApi.Controllers
                 writerLogic.Update(loggedWriter);
 
                 CreateModification(file, ModificationType.Added);
-                CreateModification(file.ParentFolder, ModificationType.Changed);
-                return Ok(new TxtModel().FromDomain(file));
+                folderLogic.CreateModificationsForTree(file, ModificationType.Changed);
+                return Ok(FileModelFactory.GetModel(file));
             }
             catch (ValidationException exception)
             {
@@ -94,8 +95,9 @@ namespace TwoDrive.WebApi.Controllers
                 var file = fileLogic.Get(id);
                 fileLogic.Delete(id);
                 CreateModification(file, ModificationType.Deleted);
-                CreateModification(file.ParentFolder, ModificationType.Changed);
-                return Ok($"{file.Name} has been deleted");
+                folderLogic.CreateModificationsForTree(file, ModificationType.Deleted);
+
+                return Ok(string.Format(ApiResource.Delete_FileController, file.Name));
             }
             catch (LogicException exception)
             {
@@ -109,10 +111,35 @@ namespace TwoDrive.WebApi.Controllers
         {
             var file = fileLogic.Get(id);
             if (file == null)
-                return NotFound("File not found");
+                return NotFound(ApiResource.FileNotFound);
 
-            var model = new TxtModel().FromDomain(file);
-            return Ok(model);
+            var model = new FileModel().FromDomain(file);
+            return Ok(FileModelFactory.GetModel(file));
+        }
+
+        [HttpGet("{id}/Content")]
+        [ClaimFilter(ClaimType.Read)]
+        public IActionResult DisplayContent(int id)
+        {
+            try
+            {
+                var file = fileLogic.Get(id);
+                if (file is HTMLFile htmlFile)
+                {
+                    if (!htmlFile.ShouldRender)
+                    {
+                        var encodedContent = HttpUtility.HtmlEncode(file.Content);
+                        return Ok(encodedContent);
+                    }
+                }
+                return Ok(file.Content);
+            }
+            catch (NullReferenceException)
+            {
+                return BadRequest(ApiResource.FileNotFound);
+            }
+            
+            
         }
 
         [HttpGet]
@@ -121,7 +148,7 @@ namespace TwoDrive.WebApi.Controllers
         {
             var writer = inSession.GetCurrentUser(HttpContext);
             if (writer == null)
-                return NotFound("You need to log in first");
+                return NotFound(ApiResource.MustLogIn);
 
             var fileFilter = new FileFilter
             {
@@ -137,11 +164,11 @@ namespace TwoDrive.WebApi.Controllers
 
             var files = fileLogic.GetAll(fileFilter);
             var writerfiles = files
-                .Select(f => new TxtModel().FromDomain(f))
+                .Select(f => FileModelFactory.GetModel(f))
                 .ToList();
 
             if (writerfiles.Count == 0)
-                return NotFound("No files found");
+                return NotFound(ApiResource.FilesNotFound);
 
             return Ok(writerfiles);
         }
@@ -153,10 +180,12 @@ namespace TwoDrive.WebApi.Controllers
             try
             {
                 var file = fileLogic.Get(id);
-                file = model.ToDomain(file as TxtFile);
+                file = model.ToDomain();
                 fileLogic.Update(file);
                 CreateModification(file, ModificationType.Changed);
-                return Ok("File Updated");
+                folderLogic.CreateModificationsForTree(file, ModificationType.Changed);
+
+                return Ok(ApiResource.FileUpdated);
             }
             catch (ValidationException exception)
             {
@@ -172,21 +201,21 @@ namespace TwoDrive.WebApi.Controllers
             {
                 var writer = inSession.GetCurrentUser(HttpContext);
                 if (writer == null)
-                    return NotFound("You must log in first");
+                    return NotFound(ApiResource.MustLogIn);
 
                 var friend = writerLogic.Get(friendId);
                 if (friend == null)
-                    return NotFound("Friend not found");
+                    return NotFound(ApiResource.FriendNotFound);
 
                 var file = fileLogic.Get(id);
                 if (file == null)
-                    return NotFound("File not found");
+                    return NotFound(ApiResource.FileNotFound);
                 if (!writer.IsFriendsWith(friend))
-                    return BadRequest($"You are not friends with {friend.UserName}");
+                    return BadRequest(string.Format(ApiResource.NotFriends, friend.UserName));
 
                 writer.AllowFriendTo(friend, file, ClaimType.Read);
                 writerLogic.Update(friend);
-                return Ok($"{file.Name} shared with {friend.UserName}");
+                return Ok(string.Format(ApiResource.Shared, file.Name, friend.UserName));
             }
             catch (LogicException exception)
             {
@@ -202,21 +231,21 @@ namespace TwoDrive.WebApi.Controllers
             {
                 var writer = inSession.GetCurrentUser(HttpContext);
                 if (writer == null)
-                    return NotFound("You must log in first");
+                    return NotFound(ApiResource.MustLogIn);
 
                 var friend = writerLogic.Get(friendId);
                 if (friend == null)
-                    return NotFound("Friend not found");
+                    return NotFound(ApiResource.FriendNotFound);
 
                 var file = fileLogic.Get(id);
                 if (file == null)
-                    return NotFound("File not found");
+                    return NotFound(ApiResource.FileNotFound);
                 if (!writer.IsFriendsWith(friend))
-                    return BadRequest($"You must be friends with {friend.UserName} to revoke");
+                    return BadRequest(string.Format(ApiResource.MustBeFriends, friend.UserName));
 
                 writer.RevokeFriendFrom(friend, file, ClaimType.Read);
                 writerLogic.Update(friend);
-                return Ok($"Stop sharing file: {file.Name} with {friend.UserName}");
+                return Ok(string.Format(ApiResource.StopSharing, file.Name, friend.UserName));
             }
             catch (LogicException exception)
             {
@@ -230,19 +259,18 @@ namespace TwoDrive.WebApi.Controllers
         {
             var writer = inSession.GetCurrentUser(HttpContext);
             if (writer == null)
-                return NotFound("You must log in first");
+                return NotFound(ApiResource.MustLogIn);
 
             var file = fileLogic.Get(id);
             if (file == null)
-                return NotFound("File not found");
+                return NotFound(ApiResource.FileNotFound);
 
             var folder = folderLogic.Get(folderId);
             if (folder == null)
-                return NotFound("Folder not found");
+                return NotFound(ApiResource.FolderNotFound);
 
             if (!writer.IsOwnerOfOriginAndDestination(file, folder))
-                return BadRequest("Writer is not owner of both the origin " +
-                    "element and destiny folder");
+                return BadRequest(ApiResource.MustOwn_FolderController);
 
             var dependencies = new MoveElementDependencies
             {
@@ -252,8 +280,9 @@ namespace TwoDrive.WebApi.Controllers
             folderLogic.MoveElement(file, folder, dependencies);
             CreateModification(file, ModificationType.Changed);
             CreateModification(folder, ModificationType.Changed);
-            CreateModification(file.ParentFolder, ModificationType.Changed);
-            return Ok($"File: {file.Name} moved to {folder.Name}");
+            folderLogic.CreateModificationsForTree(folder, ModificationType.Changed);
+            folderLogic.CreateModificationsForTree(file, ModificationType.Changed);
+            return Ok(string.Format(ApiResource.Moved_FileController, file.Name, folder.Name));
         }
 
         private void CreateModification(Element file, ModificationType action)

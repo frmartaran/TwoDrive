@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.BusinessLogic.Resources;
 using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
@@ -27,12 +28,12 @@ namespace TwoDrive.BusinessLogic.Validators
             {
                 var ParentFolder = element.ParentFolder;
                 var hasSameName = ParentFolder.FolderChildren
-                .Where(f => f.Name == element.Name)
-                .Where(f => f.GetType().Name == "Folder")
-                .Where(f => f.Id != element.Id)
-                .Any();
-                if(hasSameName)
-                    throw new ValidationException("Two folders at same level can have the same name");
+                    .OfType<Folder>()
+                    .Where(f => f.Name == element.Name)
+                    .Where(f => f.Id != element.Id)
+                    .Any();
+                if (hasSameName)
+                    throw new ValidationException(BusinessResource.SameName_FolderValidator);
             }
         }
 
@@ -40,7 +41,7 @@ namespace TwoDrive.BusinessLogic.Validators
         {
             var hasParentFolder = element.ParentFolder != null;
             if (!IsRoot(element) && !hasParentFolder)
-                throw new ValidationException("A child folder must have a parent folder");
+                throw new ValidationException(BusinessResource.MissingParent_FolderValidator);
         }
 
         public bool IsValidDestination(Element elementToTransfer, Folder folderDestination)
@@ -54,7 +55,7 @@ namespace TwoDrive.BusinessLogic.Validators
             }
             else
             {
-                throw new ValidationException("Dependencies must be set to validate destination");
+                throw new ValidationException(BusinessResource.MissingDependencies_FolderValidator);
             }
         }
 
@@ -64,7 +65,7 @@ namespace TwoDrive.BusinessLogic.Validators
             var isDestinationMyRootChild = IsElementInsideFolder(ownerRootFolder, folderDestination);
             if (!isDestinationMyRootChild)
             {
-                throw new ValidationException("Destination must be my root's child");
+                throw new ValidationException(BusinessResource.DestinationNotInRoot_FolderValidator);
             }
         }
 
@@ -73,7 +74,7 @@ namespace TwoDrive.BusinessLogic.Validators
             var isDestinationInDB = FolderRepository.Get(folderDestination.Id) != null;
             if (!isDestinationInDB)
             {
-                throw new ValidationException("Destination doesnt exists");
+                throw new ValidationException(BusinessResource.DestinationNotFound_FolderValidator);
             }
         }
 
@@ -83,7 +84,7 @@ namespace TwoDrive.BusinessLogic.Validators
             {
                 if (IsElementInsideFolder(folder, folderDestination))
                 {
-                    throw new ValidationException("Destination is child of element to transfer");
+                    throw new ValidationException(BusinessResource.ChildDestination_FolderValidator);
                 }
             }
         }
@@ -113,7 +114,7 @@ namespace TwoDrive.BusinessLogic.Validators
 
         private ICollection<Element> GetChildren(Folder containerFolder)
         {
-            if(containerFolder.FolderChildren.Count > 0)
+            if (containerFolder.FolderChildren.Count > 0)
             {
                 return containerFolder.FolderChildren;
             }
@@ -125,12 +126,28 @@ namespace TwoDrive.BusinessLogic.Validators
 
         private bool AreElementToTransferAndDestinationEmpty(Element elementToTransfer, Element elementDestination)
         {
-            return elementToTransfer == null && elementDestination == null; 
+            return elementToTransfer == null && elementDestination == null;
         }
 
         private bool IsRoot(Element folder)
         {
             return folder.Name == rootName;
+        }
+
+        protected override void Hook(Element element)
+        {
+            ValidateIfRootExists(element);
+        }
+
+        private void ValidateIfRootExists(Element element)
+        {
+            var rootAlreadyExists = FolderRepository.GetAll()
+                .Where(f => f.Id != element.Id)
+                .Where(f => f.Name == rootName)
+                .Where(f => f.Owner == element.Owner)
+                .Any();
+            if (IsRoot(element) && rootAlreadyExists)
+                throw new DuplicateResourceException(BusinessResource.RootAlreadyExists);
         }
     }
 }
