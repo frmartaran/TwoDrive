@@ -361,3 +361,4 @@ MigrationBackup/
 project.lock.json
 project.assets.json
 .vscode/
+/TwoDrive.ClientApp/dist/
