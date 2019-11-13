@@ -10,8 +10,8 @@ using TwoDrive.DataAccess;
 namespace TwoDrive.DataAccess.Migrations
 {
     [DbContext(typeof(TwoDriveDbContext))]
-    [Migration("20191113034925_WriterAndFriendsRelationshipIsManyToMany")]
-    partial class WriterAndFriendsRelationshipIsManyToMany
+    [Migration("20191113115610_CustomClaimElementIdFKNotNullable")]
+    partial class CustomClaimElementIdFKNotNullable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,7 +27,7 @@ namespace TwoDrive.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ElementId");
+                    b.Property<int>("ElementId");
 
                     b.Property<int>("Type");
 
