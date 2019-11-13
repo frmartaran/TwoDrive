@@ -39,7 +39,7 @@ namespace TwoDrive.Importer
                 MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead,
                 DateParseHandling = DateParseHandling.DateTime,
                 DateFormatHandling = DateFormatHandling.IsoDateFormat,
-                Binder = binder
+                SerializationBinder = binder
             };
             try
             {
