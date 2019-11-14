@@ -7,7 +7,7 @@ using TwoDrive.WebApi.Interfaces;
 
 namespace TwoDrive.WebApi.Models
 {
-    public class WriterModel : IModel<Writer, WriterModel>
+    public class WriterModel
     {
         public int? Id { get; set; }
 
@@ -21,7 +21,7 @@ namespace TwoDrive.WebApi.Models
 
         public ICollection<ClaimModel> Claims { get; set; }
 
-        public WriterModel FromDomain(Writer entity)
+        public WriterModel FromDomain(Writer entity, bool isFirstLevel = true)
         {
             if (entity == null)
                 return null;
@@ -30,13 +30,13 @@ namespace TwoDrive.WebApi.Models
             Role = entity.Role;
             UserName = entity.UserName;
 
-            if (Friends != null)
+            if (entity.Friends != null && isFirstLevel)
             {
                 Friends = entity.Friends
-                .Select(e => new WriterModel().FromDomain(e.Friend))
+                .Select(wf => new WriterModel().FromDomain(wf.Friend, false))
                 .ToList();
             }
-            if (Claims != null)
+            if (entity.Claims != null)
             {
                 Claims = entity.Claims
                 .Select(c => new ClaimModel().FromDomain(c))

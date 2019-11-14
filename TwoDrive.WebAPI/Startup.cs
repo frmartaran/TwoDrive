@@ -16,6 +16,7 @@ using TwoDrive.WebApi.Helpers;
 using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
+using Newtonsoft.Json;
 
 namespace TwoDrive.WebApi
 {
@@ -38,6 +39,12 @@ namespace TwoDrive.WebApi
                     .AllowAnyHeader()
                     .AllowCredentials()
                     );
+            });
+
+            services.AddMvc().AddJsonOptions(opts =>
+            {
+                opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
+                opts.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
