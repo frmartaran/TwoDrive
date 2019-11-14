@@ -240,4 +240,7 @@
   <data name="UnsupportedFileType" xml:space="preserve">
     <value>Unsupported type of file, can't get model</value>
   </data>
+  <data name="FriendAndWriterAreTheSame" xml:space="preserve">
+    <value>A writer can't be his own friend</value>
+  </data>
 </root>

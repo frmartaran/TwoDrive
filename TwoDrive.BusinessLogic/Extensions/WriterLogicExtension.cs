@@ -24,6 +24,11 @@ namespace TwoDrive.BusinessLogic.Extensions
             return writer.Friends.Any(f => f.Friend.Id == friend.Id);
         }
 
+        public static bool AreFriendAndWriterTheSameWriter(this Writer writer, Writer friend)
+        {
+            return friend.Id == writer.Id;
+        }
+
         public static void AddRootClaims(this Writer writer, Folder root)
         {
             ValidateIsRoot(root);

@@ -146,6 +146,11 @@ namespace TwoDrive.WebApi.Controllers
                 {
                     return BadRequest(string.Format(ApiResource.AlreadyFriends, friend.UserName));
                 };
+                if (writer.AreFriendAndWriterTheSameWriter(friend))
+                {
+                    return BadRequest(string.Format(ApiResource.FriendAndWriterAreTheSame, friend.UserName));
+                };
+
                 var writerFriendToAdd = new WriterFriend
                 {
                     Friend = friend,

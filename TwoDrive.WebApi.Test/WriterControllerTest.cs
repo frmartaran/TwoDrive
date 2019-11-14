@@ -377,6 +377,7 @@ namespace TwoDrive.WebApi.Test
         {
             var writer = new Writer
             {
+                Id = 1,
                 Role = Role.Writer,
                 UserName = "Valid Writer",
                 Password = "1234",
@@ -385,6 +386,7 @@ namespace TwoDrive.WebApi.Test
             };
             var friend = new Writer
             {
+                Id = 2,
                 Role = Role.Administrator,
                 UserName = "Writer",
                 Password = "1234",

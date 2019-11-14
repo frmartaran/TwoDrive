@@ -107,6 +107,32 @@ namespace TwoDrive.BusinessLogic.Test.ExtensionsTest
         }
 
         [TestMethod]
+        public void AreFriendAndWriterTheSameWriter()
+        {
+            var friend = new Writer 
+            {
+                Id = 1
+            };
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
+            var isSameWriter = writer.AreFriendAndWriterTheSameWriter(friend);
+            Assert.IsTrue(isSameWriter);
+        }
+
+
+        [TestMethod]
+        public void AreFriendAndWriterNotTheSameWriter()
+        {
+            var friend = new Writer();
+            var isSameWriter = writer.AreFriendAndWriterTheSameWriter(friend);
+            Assert.IsFalse(isSameWriter);
+        }
+
+        [TestMethod]
         public void AddRootClaims()
         {
             writer.Claims = new List<CustomClaim>();
