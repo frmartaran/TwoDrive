@@ -1,14 +1,7 @@
 import { WriterService } from 'src/app/services/writer.service';
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef} from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSnackBar} from '@angular/material';
-
-export interface Writer {
-  id: number;
-  role: string;
-  userName: string;
-  friends: [];
-  claims: [];
-}
+import { Writer } from 'src/app/components/interfaces/interfaces.model';
 
 @Component({
   selector: 'app-writer-management',
@@ -18,11 +11,12 @@ export interface Writer {
 export class WriterManagementComponent implements OnInit {
   displayedColumns: string[] = ['username', 'role', 'action'];
   dataSource: MatTableDataSource<Writer>;
-  writers: [];
-  writerLoggedInId: number;
+  writers: Writer[];
+  private loggedInWriter: Writer;
 
   constructor(private writerService : WriterService,
-    private _snackBar: MatSnackBar){}
+    private _snackBar: MatSnackBar,
+    private changeDetectorRefs: ChangeDetectorRef){}
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
@@ -33,6 +27,51 @@ export class WriterManagementComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.writerService.GetLoggedInWriter()
+    .subscribe(
+      (response) => {
+        var responseString = JSON.stringify(response);
+        var writer = JSON.parse(responseString);
+        this.writerService.SetLoggedInWriter(writer);     
+        this.GetAllWriters();  
+      },
+      (error) => {
+        this.openSnackBar(error.error, 'Error!');
+      }
+    )
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  public addFriend(writer: Writer){
+    this.writerService.AddFriend(writer.id)
+    .subscribe(
+      (response) => {
+        this.writers.find(w => w.id == writer.id).isFriendsWithUserLoggedIn = true;
+        this.changeDetectorRefs.detectChanges();  
+      },
+      (error) => {
+        this.openSnackBar(error.error, 'Error!');
+      }
+    )
+  }
+
+  public removeFriend(writer: Writer){
+    this.writerService.RemoveFriend(writer.id)
+    .subscribe(
+      (response) => {
+        this.writers.find(w => w.id == writer.id).isFriendsWithUserLoggedIn = false;
+        this.changeDetectorRefs.detectChanges();  
+      },
+      (error) => {
+        this.openSnackBar(error.error, 'Error!');
+      }
+    )
+  }
+
+  private GetAllWriters(){
     this.writerService.GetAllWriters()
     .subscribe(
       (response) => {
@@ -43,13 +82,9 @@ export class WriterManagementComponent implements OnInit {
         this.dataSource.paginator = this.paginator;        
       },
       (error) => {
-        this.openSnackBar(error, 'Error!');
+        this.openSnackBar(error.error, 'Error!');
       }
     )
-  }
-
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
 }

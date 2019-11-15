@@ -34,12 +34,12 @@
                             <mat-icon>delete</mat-icon>
                         </span>
                     </a>
-                    <a mat-button matTooltip="Add Friend">
+                    <a mat-button matTooltip="Add Friend" *ngIf="!element.isFriendsWithUserLoggedIn" (click)="addFriend(element)">
                         <span class="mat-button-wrapper">
                             <mat-icon>person_add</mat-icon>
                         </span>
                     </a>
-                    <a mat-button matTooltip="Remove Friend">
+                    <a mat-button matTooltip="Remove Friend" *ngIf="element.isFriendsWithUserLoggedIn" (click)="removeFriend(element)">
                         <span class="mat-button-wrapper">
                             <mat-icon>remove_circle</mat-icon>
                         </span>
