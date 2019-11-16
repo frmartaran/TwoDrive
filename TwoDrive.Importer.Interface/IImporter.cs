@@ -3,13 +3,13 @@ using TwoDrive.Importer.Interface.IFileManagement;
 
 namespace TwoDrive.Importer.Interface
 {
-    public interface IImporter<ImportType>
-        where ImportType : class
+    public interface IImporter
     {
         string FileExtension { get;}
 
-        T Load<T>(string path) where T : class;
+        T Load<T>(ImportingParameters paramenters) where T : class;
 
-        ImportType Import(string path);
+        ImportType Import<ImportType>(ImportingParameters parameters) 
+            where ImportType : class;
     }
 }

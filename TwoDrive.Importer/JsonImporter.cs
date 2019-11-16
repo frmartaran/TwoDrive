@@ -6,10 +6,11 @@ using TwoDrive.Importer.Interface;
 using TwoDrive.Importer.Interface.IFileManagement;
 using TwoDrive.Importer.Domain;
 using TwoDrive.Importer.Interface.Exceptions;
+using TwoDrive.Importer.Parameters;
 
 namespace TwoDrive.Importer
 {
-    public class JsonImporter : IImporter<IFolder>
+    public class JsonImporter : IImporter
     {
         private const string Name = "JSON";
 
@@ -22,8 +23,9 @@ namespace TwoDrive.Importer
 
         }
 
-        public IFolder Import(string path)
+        public T Import<T>(ImportingParameters parameters) where T : class
         {
+            var param = parameters as JsonParameter;
             var binder = new KnownTypesBinder
             {
                 KnownTypes = new List<Type>
@@ -43,9 +45,9 @@ namespace TwoDrive.Importer
             };
             try
             {
-                var jsonString = Load<string>(path);
+                var jsonString = Load<string>(param);
                 var folder = JsonConvert.DeserializeObject<Folder>(jsonString, settings);
-                return folder;
+                return folder as T;
             }
             catch (JsonSerializationException exception)
             {
@@ -57,11 +59,12 @@ namespace TwoDrive.Importer
             }
         }
 
-        public T Load<T>(string path) where T : class
+        public T Load<T>(ImportingParameters parameters) where T : class
         {
             try
             {
-                using (var reader = new StreamReader(path))
+                var param = parameters as JsonParameter;
+                using (var reader = new StreamReader(param.Path))
                 {
                     return reader.ReadToEnd() as T;
                 }
