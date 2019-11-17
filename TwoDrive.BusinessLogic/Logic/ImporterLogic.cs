@@ -22,6 +22,7 @@ namespace TwoDrive.BusinessLogic.Logic
         private const string DllToImport = "TwoDrive.Importer.dll";
 
         private const string fieldName = "Name";
+
         private IFolderLogic FolderLogic { get; set; }
 
         private IFileLogic FileLogic { get; set; }
@@ -150,12 +151,27 @@ namespace TwoDrive.BusinessLogic.Logic
             var allImporters = assemblyInfo.ExportedTypes
                 .Where(t => (typeof(IImporter).IsAssignableFrom(t)))
                 .ToList();
-            
-            var names = allImporters
-                .Select(t => t.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static)
-                        .GetRawConstantValue() as string)
-                .ToList();
-            return new List<ImporterInfo>();
+            var importersInfo = new List<ImporterInfo>();
+            foreach (var importer in allImporters)
+            {
+                var importerInstance = Activator.CreateInstance(importer);
+
+                var name = importer.GetProperty("ImporterName").GetValue(importerInstance)
+                    as string;
+                var parameter = importer.GetProperty("ParameterType").GetValue(importerInstance)
+                    as Type;
+
+                var parameterInstance = Activator.CreateInstance(parameter) as ImportingParameters;
+
+                var info = new ImporterInfo
+                {
+                    Name = name,
+                    Parameters = parameterInstance
+                };
+                importersInfo.Add(info);
+
+            }
+            return importersInfo;
         }
     }
 }

@@ -23,6 +23,14 @@ namespace TwoDrive.Importer
 
         }
 
+        public Type ParameterType
+        {
+            get
+            {
+                return typeof(JsonParameter);
+            }
+        }
+
         public T Import<T>(ImportingParameters parameters) where T : class
         {
             var param = parameters as JsonParameter;

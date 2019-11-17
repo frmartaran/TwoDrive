@@ -7,7 +7,9 @@ using System.Text;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using TwoDrive.Domain;
+using TwoDrive.Importer.Parameters;
 using TwoDrive.WebApi.Controllers;
 
 namespace TwoDrive.WebApi.Test
@@ -109,10 +111,21 @@ namespace TwoDrive.WebApi.Test
         [TestMethod]
         public void GetAllImporters()
         {
-            var allImporters = new List<string>
+            var infoXml = new ImporterInfo
             {
-                "XML",
-                "JSON"
+                Name = "XML",
+                Parameters = new XMLParameters()
+            };
+            var infoJSON = new ImporterInfo
+            {
+                Name = "Json",
+                Parameters = new JsonParameter()
+            };
+
+            var allImporters = new List<ImporterInfo>
+            {
+                infoXml,
+                infoJSON
             };
 
             var mockImportLogic = new Mock<IImporterLogic>(MockBehavior.Strict);

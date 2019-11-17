@@ -6,6 +6,5 @@ namespace TwoDrive.Importer.Interface
 {
     public abstract class ImportingParameters
     {
-        public IImporter ParentImporter;
     }
 }

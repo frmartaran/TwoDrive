@@ -8,11 +8,7 @@ namespace TwoDrive.Importer.Parameters
 {
     public class XMLParameters : ImportingParameters
     {
-        public XMLParameters()
-        {
-            ParentImporter = new XMLImporter();
-        }
-
         public string Path { get; set; }
+
     }
 }

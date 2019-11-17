@@ -7,13 +7,6 @@ namespace TwoDrive.Importer.Parameters
 {
     public class JsonParameter : ImportingParameters
     {
-        public JsonParameter()
-        {
-            ParentImporter = new JsonImporter();
-        }
-
         public string Path { get; set; }
-
-
     }
 }

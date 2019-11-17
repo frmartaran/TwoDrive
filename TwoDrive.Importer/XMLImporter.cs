@@ -25,8 +25,15 @@ namespace TwoDrive.Importers
             }
         }
 
+        public Type ParameterType
+        {
+            get
+            {
+                return typeof(XMLParameters);
+            }
+        }
 
-        public T Import<T>(ImportingParameters parameters) where T: class
+        public T Import<T>(ImportingParameters parameters) where T : class
         {
             var param = parameters as XMLParameters;
             var document = Load<XmlDocument>(param);
