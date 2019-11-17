@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
+using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using TwoDrive.Importer.Interface;
 using TwoDrive.Importer.Interface.IFileManagement;
 
@@ -14,6 +15,6 @@ namespace TwoDrive.BusinessLogic.Interfaces
 
         void Import();
 
-        List<string> GetAllImporters();
+        List<ImporterInfo> GetAllImporters();
     }
 }

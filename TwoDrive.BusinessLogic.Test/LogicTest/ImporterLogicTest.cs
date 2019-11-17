@@ -586,11 +586,20 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 mockWriterLogic, mockModificationLogic);
 
             var importerLogic = new ImporterLogic(dependencies);
-            var importerNames = importerLogic.GetAllImporters();
+            var importersInfo = importerLogic.GetAllImporters();
+            var names = importersInfo.Select(ii => ii.Name).ToList();
+            var jsonParam = importersInfo.Select(ii => ii.Parameters)
+                .OfType<JsonParameter>()
+                .FirstOrDefault();
+            var xmlParam = importersInfo.Select(ii => ii.Parameters)
+                .OfType<XMLParameters>()
+                .FirstOrDefault();
+            Assert.IsNotNull(importersInfo);
+            Assert.IsTrue(names.Contains("XML"));
+            Assert.IsTrue(names.Contains("JSON"));
+            Assert.IsNotNull(jsonParam);
+            Assert.IsNotNull(xmlParam);
 
-            Assert.IsNotNull(importerNames);
-            Assert.IsTrue(importerNames.Contains("XML"));
-            Assert.IsTrue(importerNames.Contains("JSON"));
 
         }
     }

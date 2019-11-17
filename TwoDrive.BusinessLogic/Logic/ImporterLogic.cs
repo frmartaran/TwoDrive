@@ -8,6 +8,7 @@ using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.BusinessLogic.Helpers;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using TwoDrive.BusinessLogic.Resources;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
@@ -143,14 +144,18 @@ namespace TwoDrive.BusinessLogic.Logic
             ModificationLogic.Create(modification);
         }
 
-        public List<string> GetAllImporters()
+        public List<ImporterInfo> GetAllImporters()
         {
             var assemblyInfo = Assembly.LoadFrom(DllToImport);
-            return assemblyInfo.ExportedTypes
+            var allImporters = assemblyInfo.ExportedTypes
                 .Where(t => (typeof(IImporter).IsAssignableFrom(t)))
+                .ToList();
+            
+            var names = allImporters
                 .Select(t => t.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static)
                         .GetRawConstantValue() as string)
                 .ToList();
+            return new List<ImporterInfo>();
         }
     }
 }
