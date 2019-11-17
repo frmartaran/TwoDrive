@@ -5,6 +5,7 @@ using TwoDrive.Importer.Interface.IFileManagement;
 using TwoDrive.Importer.Domain;
 using TwoDrive.Importers;
 using TwoDrive.Importer.Interface.Exceptions;
+using TwoDrive.Importer.Parameters;
 
 namespace TwoDrive.Importer.Test
 {
@@ -16,9 +17,12 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SuccessfullyLoadFile()
         {
-            string path = $@"{examplesRoot}\\Single Folder.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\Single Folder.xml"
+            };
             var formatter = new XMLImporter();
-            var document = formatter.Load<XmlDocument>(path);
+            var document = formatter.Load<XmlDocument>(parameters);
             Assert.IsNotNull(document);
         }
 
@@ -26,26 +30,37 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void FileNotFound()
         {
-            var path = "path";
+            var parameters = new XMLParameters
+            {
+                Path = "path"
+            };
+            string path = $@"{examplesRoot}\\Single Folder.xml";
             var formatter = new XMLImporter();
-            var document = formatter.Load<XmlDocument>(path);
+            var document = formatter.Load<XmlDocument>(parameters);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ImporterException))]
         public void WrongXMLFile()
         {
-            var path = $@"{examplesRoot}\\Wrong File.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\Wrong File.xml"
+            };
+
             var formatter = new XMLImporter();
-            var document = formatter.Load<XmlDocument>(path);
+            var document = formatter.Load<XmlDocument>(parameters);
         }
 
         [TestMethod]
         public void SaveRoot()
         {
-            var path = $@"{examplesRoot}\\Single Folder.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\Single Folder.xml"
+            };
             var formatter = new XMLImporter();
-            var root = formatter.Import(path);
+            var root = formatter.Import<IFolder>(parameters);
             Assert.IsNotNull(root);
             Assert.AreEqual(root.Name, ImporterConstants.Root);
             Assert.AreEqual(1, root.FolderChildren.Count);
@@ -56,26 +71,35 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void WithoutCreationDate()
         {
-            var path = $@"{examplesRoot}\\WithoutCreationDate.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\WithoutCreationDate.xml"
+            };
             var formatter = new XMLImporter();
-            var tree = formatter.Import(path);
+            var root = formatter.Import<IFolder>(parameters);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ImporterException))]
         public void WithoutDateModified()
         {
-            var path = $@"{examplesRoot}\\WithoutDateModified.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\WithoutDateModified.xml"
+            };
             var formatter = new XMLImporter();
-            var tree = formatter.Import(path);
+            var tree = formatter.Import<IFolder>(parameters);
         }
 
         [TestMethod]
         public void SaveTwoFolders()
         {
-            var path = $@"{examplesRoot}\\Single Folder.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\Single Folder.xml"
+            };
             var formatter = new XMLImporter();
-            var root = formatter.Import(path);
+            var root = formatter.Import<IFolder>(parameters);
 
             Assert.IsNotNull(root);
             Assert.AreEqual(1, root.FolderChildren.Count);
@@ -85,26 +109,35 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void InvalidCreationDate()
         {
-            var path = $@"{examplesRoot}\\InvalidCreationDate.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\InvalidCreationDate.xml"
+            };
             var formatter = new XMLImporter();
-            var tree = formatter.Import(path);
+            var tree = formatter.Import<IFolder>(parameters);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ImporterException))]
         public void InvalidDateModified()
         {
-            var path = $@"{examplesRoot}\\InvalidDateModified.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\InvalidDateModified.xml"
+            };
             var formatter = new XMLImporter();
-            var tree = formatter.Import(path);
+            var tree = formatter.Import<IFolder>(parameters);
         }
 
         [TestMethod]
         public void SaveTwoLevelOfFolders()
         {
-            var path = $@"{examplesRoot}\\Two Level Tree.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\Two Level Tree.xml"
+            };
             var formatter = new XMLImporter();
-            var root = formatter.Import(path);
+            var root = formatter.Import<IFolder>(parameters);
 
             var middleFolder = root.FolderChildren
                 .FirstOrDefault() as IFolder;
@@ -118,9 +151,12 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SaveTwoLevelOfFoldersWithFile()
         {
-            var path = $@"{examplesRoot}\\Two Level Tree With File.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\Two Level Tree With File.xml"
+            };
             var formatter = new XMLImporter();
-            var root = formatter.Import(path);
+            var root = formatter.Import<IFolder>(parameters);
 
             var middleFolder = root.FolderChildren
                 .FirstOrDefault() as IFolder;
@@ -139,17 +175,23 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void FolderWithNoName()
         {
-            var path = $@"{examplesRoot}\\NoName.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\NoName.xml"
+            };
             var formatter = new XMLImporter();
-            var tree = formatter.Import(path);
+            var tree = formatter.Import<IFolder>(parameters);
         }
 
         [TestMethod]
         public void SaveSimpleTreeWithFile()
         {
-            var path = $@"{examplesRoot}\\Simple Tree With File.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\Simple Tree With File.xml"
+            };
             var formatter = new XMLImporter();
-            var root = formatter.Import(path);
+            var root = formatter.Import<IFolder>(parameters);
 
             var filesCount = root.FolderChildren
                 .Where(e => e is File)
@@ -163,9 +205,12 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SaveSimpleTreeWithTwoTypeOfFile()
         {
-            var path = $@"{examplesRoot}\\Two Types Of Files.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\Two Types Of Files.xml"
+            };
             var formatter = new XMLImporter();
-            var root = formatter.Import(path);
+            var root = formatter.Import<IFolder>(parameters);
 
             var files = root.FolderChildren
                 .OfType<File>()
@@ -182,53 +227,71 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void FileWtihNoName()
         {
-            var path = $@"{examplesRoot}\\File with no name.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\File with no name.xml"
+            };
             var formatter = new XMLImporter();
-            var tree = formatter.Import(path);
+            var tree = formatter.Import<IFolder>(parameters);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ImporterException))]
         public void FileWtihNoType()
         {
-            var path = $@"{examplesRoot}\\File with no type.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\File with no type.xml"
+            };
             var formatter = new XMLImporter();
-            var tree = formatter.Import(path);
+            var tree = formatter.Import<IFolder>(parameters);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ImporterException))]
         public void FileWtihNoContent()
         {
-            var path = $@"{examplesRoot}\\File with no content.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\File with no content.xml"
+            };
             var formatter = new XMLImporter();
-            var tree = formatter.Import(path);
+            var tree = formatter.Import<IFolder>(parameters);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ImporterException))]
         public void FileWtihNoCreationDate()
         {
-            var path = $@"{examplesRoot}\\File with no creation date.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\File with no creation date.xml"
+            };
             var formatter = new XMLImporter();
-            var tree = formatter.Import(path);
+            var tree = formatter.Import<IFolder>(parameters);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ImporterException))]
         public void FileWtihNoDateModified()
         {
-            var path = $@"{examplesRoot}\\File with no date modified.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\File with no date modified.xml"
+            };
             var formatter = new XMLImporter();
-            var tree = formatter.Import(path);
+            var tree = formatter.Import<IFolder>(parameters);
         }
 
         [TestMethod]
         public void FileWtihNoRenderDefined()
         {
-            var path = $@"{examplesRoot}\\File with no render.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\File with no render.xml"
+            };
             var formatter = new XMLImporter();
-            var root = formatter.Import(path);
+            var root = formatter.Import<IFolder>(parameters);
             var file = root.FolderChildren
                 .OfType<File>()
                 .FirstOrDefault();
@@ -238,9 +301,12 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void FolderChildHasFile()
         {
-            var path = $@"{examplesRoot}\\Child has file.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\Child has file.xml"
+            };
             var formatter = new XMLImporter();
-            var root = formatter.Import(path);
+            var root = formatter.Import<IFolder>(parameters);
             var child = root.FolderChildren
                 .OfType<Folder>()
                 .FirstOrDefault();
@@ -256,9 +322,12 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void NoRoot()
         {
-            var path = $@"{examplesRoot}\\No root.xml";
+            var parameters = new XMLParameters
+            {
+                Path = $@"{examplesRoot}\\No root.xml"
+            };
             var formatter = new XMLImporter();
-            var tree = formatter.Import(path);
+            var tree = formatter.Import<IFolder>(parameters);
         }
 
 

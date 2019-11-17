@@ -39,13 +39,13 @@ namespace TwoDrive.BusinessLogic.Logic
             ModificationLogic = dependencies.ModificationLogic;
         }
 
-        public IImporter<IFolder> GetImporter()
+        public IImporter GetImporter()
         {
             try
             {
                 var assemblyInfo = Assembly.LoadFrom(DllToImport);
                 var applicablesTypes = assemblyInfo.ExportedTypes
-                    .Where(t => (typeof(IImporter<IFolder>).IsAssignableFrom(t)))
+                    .Where(t => (typeof(IImporter).IsAssignableFrom(t)))
                     .ToList();
 
                 var importerType = applicablesTypes
@@ -55,7 +55,7 @@ namespace TwoDrive.BusinessLogic.Logic
                     .SingleOrDefault();
 
                 var instance = Activator.CreateInstance(importerType);
-                return instance as IImporter<IFolder>;
+                return instance as IImporter;
             }
             catch (ArgumentNullException exception)
             {
@@ -70,7 +70,7 @@ namespace TwoDrive.BusinessLogic.Logic
                 throw new LogicException(BusinessResource.MissingOwner);
 
             var importer = GetImporter();
-            var parentFolder = importer.Import(Options.FilePath);
+            var parentFolder = importer.Import<IFolder>(Options.Parameters);
             var mapper = MapperHelper.GetFileManagementMapper();
 
             Folder domainFolder;
@@ -147,7 +147,7 @@ namespace TwoDrive.BusinessLogic.Logic
         {
             var assemblyInfo = Assembly.LoadFrom(DllToImport);
             return assemblyInfo.ExportedTypes
-                .Where(t => (typeof(IImporter<IFolder>).IsAssignableFrom(t)))
+                .Where(t => (typeof(IImporter).IsAssignableFrom(t)))
                 .Select(t => t.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static)
                         .GetRawConstantValue() as string)
                 .ToList();

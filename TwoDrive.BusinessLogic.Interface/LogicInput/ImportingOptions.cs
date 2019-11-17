@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TwoDrive.Domain;
+using TwoDrive.Importer.Interface;
 
 namespace TwoDrive.BusinessLogic.Helpers.LogicInput
 {
@@ -12,5 +13,7 @@ namespace TwoDrive.BusinessLogic.Helpers.LogicInput
         public string FileType { get; set; }
 
         public string FilePath { get; set; }
+
+        public ImportingParameters Parameters { get; set; }
     }
 }

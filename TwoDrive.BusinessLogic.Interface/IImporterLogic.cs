@@ -10,7 +10,7 @@ namespace TwoDrive.BusinessLogic.Interfaces
     public interface IImporterLogic
     {
         ImportingOptions Options { get; set; }
-        IImporter<IFolder> GetImporter();
+        IImporter GetImporter();
 
         void Import();
 
