@@ -17,7 +17,7 @@ export class WriterService {
 
   constructor(private http: HttpClient) { }
 
-  public CreateWriter(writer: any) {
+  public CreateWriter(writer: Writer) {
     var writerToken = localStorage.getItem('token');
     let headers = new HttpHeaders();
     headers = headers
@@ -25,6 +25,19 @@ export class WriterService {
     .set('Authorization', writerToken);
 
     return this.http.post(this.endpoint, writer, {
+      headers: headers,
+      responseType: 'text'
+    });
+  }
+
+  public UpdateWriter(writer: any) {
+    var writerToken = localStorage.getItem('token');
+    let headers = new HttpHeaders();
+    headers = headers
+    .set('Content-Type', 'application/json')
+    .set('Authorization', writerToken);
+
+    return this.http.put(this.endpoint + '/' + writer.id + '/', writer, {
       headers: headers,
       responseType: 'text'
     });
@@ -109,6 +122,19 @@ export class WriterService {
     .set('Authorization', writerToken);
 
     return this.http.delete(this.endpoint + '/Unfriend/' + id, {
+      headers: headers,
+      responseType: 'text'
+    });
+  }
+
+  public DeleteWriter(id: number){
+    var writerToken = localStorage.getItem('token');
+    let headers = new HttpHeaders();
+    headers = headers
+    .set('Content-Type', 'application/json')
+    .set('Authorization', writerToken);
+
+    return this.http.delete(this.endpoint + '/' + id, {
       headers: headers,
       responseType: 'text'
     });

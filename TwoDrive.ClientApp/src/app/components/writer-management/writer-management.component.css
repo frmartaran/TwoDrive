@@ -29,3 +29,19 @@ table {
 #action-def{
   text-align: right;
 }
+
+mat-card-title{
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-top: 20px;
+  padding-bottom: 0px;
+}
+
+#friendFilter{
+  text-align: end;
+  padding-right: 48px;
+}

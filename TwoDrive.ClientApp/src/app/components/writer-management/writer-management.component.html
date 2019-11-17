@@ -4,8 +4,8 @@
         <input id="search-input" matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
     </mat-form-field>
     <div class="mat-elevation-z8">
+        <mat-card-title class="writer-title">Manage Writers</mat-card-title>
         <table mat-table [dataSource]="dataSource">
-
             <ng-container matColumnDef="username">
             <th mat-header-cell *matHeaderCellDef>Username </th>
             <td mat-cell *matCellDef="let element"> 
@@ -20,20 +20,28 @@
             </td>
             </ng-container>
 
-                <!-- Action Column -->
             <ng-container matColumnDef="action">
-                <th mat-header-cell *matHeaderCellDef id="action-def"> Action </th>
+                <th mat-header-cell *matHeaderCellDef id="action-def" id="action"> Edit/Delete </th>
                 <td mat-cell *matCellDef="let element" class="action-link" id="action">
-                    <a mat-button matTooltip="Edit Writer">
+                    <a mat-button matTooltip="Edit Writer" [routerLink]="['/edit-writer']" [state]="element">
                         <span class="mat-button-wrapper">                        
                             <mat-icon>edit</mat-icon>
                         </span>
                     </a>
-                    <a mat-button matTooltip="Delete Writer">
+                    <a mat-button matTooltip="Delete Writer" (click)="deleteWriter(element)">
                         <span class="mat-button-wrapper">
                             <mat-icon>delete</mat-icon>
                         </span>
                     </a>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="friendFilter">
+                <th mat-header-cell *matHeaderCellDef id="friendFilter">
+                    <mat-checkbox matTooltip="Show Friends" (change)="$event ? friendFilterManagement() : null">
+                    </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let element" class="action-link" id="action">
                     <a mat-button matTooltip="Add Friend" *ngIf="!element.isFriendsWithUserLoggedIn" (click)="addFriend(element)">
                         <span class="mat-button-wrapper">
                             <mat-icon>person_add</mat-icon>
@@ -50,7 +58,6 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-
         <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>
     </div>
 </div>

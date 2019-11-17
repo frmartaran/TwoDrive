@@ -8,10 +8,9 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './components/app-component/app.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
 import { LoginComponent } from './components/login/login.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
-import { CreateWriterComponent } from './components/create-writer/create-writer.component';
+import { ModifyWriterComponent } from './components/modify-writer/modify-writer.component';
 import { WriterManagementComponent } from './components/writer-management/writer-management.component';
 
 import { UserNotLoggedIn } from './guards/UserNotLoggedIn.guard';
@@ -34,8 +33,11 @@ import {
   MatTableModule,
   MatPaginatorModule,
   MatTooltipModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatCheckboxModule
 } from '@angular/material';
+import { ElementReportComponent } from './components/element-report/element-report.component';
+import { TopWritersReportComponent } from './components/top-writers-report/top-writers-report.component';
 
 const MaterialModules = [
   MatCardModule,
@@ -53,7 +55,8 @@ const MaterialModules = [
   MatTableModule,
   MatPaginatorModule,
   MatTooltipModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatCheckboxModule
 ];
 
 @NgModule({
@@ -61,11 +64,12 @@ const MaterialModules = [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
     LoginComponent,
     ConfirmDialogComponent,
-    CreateWriterComponent,
-    WriterManagementComponent
+    ModifyWriterComponent,
+    WriterManagementComponent,
+    ElementReportComponent,
+    TopWritersReportComponent
   ],
   imports: [
     CommonModule,
@@ -77,9 +81,12 @@ const MaterialModules = [
       { path: 'login', component: LoginComponent, canActivate : [UserLoggedIn] },
       { path: '', redirectTo: 'login', pathMatch: 'full' },
       { path: 'home-page', component: HomeComponent, canActivate: [UserNotLoggedIn] },
-      { path: 'counter', component: CounterComponent, canActivate: [UserNotLoggedIn] },
-      { path: 'create-user', component: CreateWriterComponent, canActivate: [UserNotLoggedIn] },
-      { path: 'writer-management', component: WriterManagementComponent, canActivate: [UserNotLoggedIn] }
+      { path: 'create-writer', component: ModifyWriterComponent, canActivate: [UserNotLoggedIn], data :{ action:'Create'} },
+      { path: 'edit-writer', component: ModifyWriterComponent, canActivate: [UserNotLoggedIn], data :{ action:'Edit'}},
+      { path: 'writer-management', component: WriterManagementComponent, canActivate: [UserNotLoggedIn] },
+      { path: 'file-modification', component: ElementReportComponent, canActivate: [UserNotLoggedIn], data :{ elementType:'File'} },
+      { path: 'folder-modification', component: ElementReportComponent, canActivate: [UserNotLoggedIn], data :{ elementType:'Folder'} },
+      { path: 'top-writers', component: TopWritersReportComponent, canActivate: [UserNotLoggedIn] }
     ]),
     BrowserAnimationsModule,
     MaterialModules
