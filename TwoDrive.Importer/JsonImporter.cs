@@ -14,7 +14,7 @@ namespace TwoDrive.Importer
     {
         private const string Name = "JSON";
 
-        public string FileExtension
+        public string ImporterName
         {
             get
             {

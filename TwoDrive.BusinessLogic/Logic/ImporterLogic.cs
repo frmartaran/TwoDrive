@@ -51,7 +51,7 @@ namespace TwoDrive.BusinessLogic.Logic
                 var importerType = applicablesTypes
                     .Where(t => t.GetField(fieldName, BindingFlags.NonPublic
                                                       | BindingFlags.Static)
-                        .GetRawConstantValue() as string == Options.FileType)
+                        .GetRawConstantValue() as string == Options.ImporterName)
                     .SingleOrDefault();
 
                 var instance = Activator.CreateInstance(importerType);

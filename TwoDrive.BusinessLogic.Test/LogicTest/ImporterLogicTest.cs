@@ -52,7 +52,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var options = new ImportingOptions
             {
                 FilePath = "",
-                FileType = "XML",
+                ImporterName = "XML",
                 Owner = writer
             };
             var importerLogic = new ImporterLogic(dependencies);
@@ -74,7 +74,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var options = new ImportingOptions
             {
                 FilePath = "",
-                FileType = "JSON",
+                ImporterName = "JSON",
                 Owner = writer
             };
             var importerLogic = new ImporterLogic(dependencies);
@@ -99,7 +99,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var options = new ImportingOptions
             {
                 FilePath = "",
-                FileType = "txt",
+                ImporterName = "txt",
                 Owner = writer
             };
             var importerLogic = new ImporterLogic(dependencies);
@@ -125,7 +125,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var options = new ImportingOptions
             {
                 FilePath = $"{examplesRootForXML}\\One Folder.xml",
-                FileType = "XML",
+                ImporterName = "XML",
                 Owner = writer
             };
             var importerLogic = new ImporterLogic(dependencies);
@@ -160,7 +160,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var options = new ImportingOptions
             {
                 FilePath = $"{examplesRootForXML}\\One Folder.xml",
-                FileType = "XML",
+                ImporterName = "XML",
                 Owner = writer
             };
             writerRepository.Insert(writer);
@@ -202,7 +202,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var options = new ImportingOptions
             {
                 FilePath = $"{examplesRootForXML}\\Simple Tree With File.xml",
-                FileType = "XML",
+                ImporterName = "XML",
                 Owner = writer
             };
             writerRepository.Insert(writer);
@@ -247,7 +247,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var options = new ImportingOptions
             {
                 FilePath = $"{examplesRootForXML}\\Two Types Of Files.xml",
-                FileType = "XML",
+                ImporterName = "XML",
                 Owner = writer
             };
             writerRepository.Insert(writer);
@@ -297,7 +297,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var options = new ImportingOptions
             {
                 FilePath = $"{examplesRootForXML}\\Unsupported File Type.xml",
-                FileType = "XML",
+                ImporterName = "XML",
                 Owner = writer
             };
             writerRepository.Insert(writer);
@@ -332,7 +332,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var options = new ImportingOptions
             {
                 FilePath = $"{examplesRootForXML}\\Two Level Tree With File.xml",
-                FileType = "XML",
+                ImporterName = "XML",
                 Owner = writer
             };
             writerRepository.Insert(writer);
@@ -381,7 +381,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var options = new ImportingOptions
             {
                 FilePath = $"{examplesRootForXML}\\Two Level Tree With File.xml",
-                FileType = "XML",
+                ImporterName = "XML",
             };
             writerRepository.Insert(writer);
             writerRepository.Save();
@@ -417,7 +417,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var options = new ImportingOptions
             {
                 FilePath = $"{examplesRootForXML}\\Two Level Tree With File.xml",
-                FileType = "XML",
+                ImporterName = "XML",
                 Owner = writer
             };
             writerRepository.Insert(writer);
@@ -465,7 +465,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var options = new ImportingOptions
             {
                 FilePath = $"{examplesRootForXML}\\Validation Error.xml",
-                FileType = "XML",
+                ImporterName = "XML",
                 Owner = writer
             };
             writerRepository.Insert(writer);
@@ -500,7 +500,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var options = new ImportingOptions
             {
                 FilePath = $"{examplesRootForJson}\\baseCase.json",
-                FileType = "JSON",
+                ImporterName = "JSON",
                 Owner = writer
             };
             writerRepository.Insert(writer);

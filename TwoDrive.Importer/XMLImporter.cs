@@ -17,7 +17,7 @@ namespace TwoDrive.Importers
     {
 
         private const string Name = "XML";
-        public string FileExtension
+        public string ImporterName
         {
             get
             {

@@ -32,7 +32,7 @@ namespace TwoDrive.WebApi.Controllers
                 var options = new ImportingOptions
                 {
                     FilePath = path,
-                    FileType = importType,
+                    ImporterName = importType,
                     Owner = owner
                 };
                 ImporterLogic.Options = options;

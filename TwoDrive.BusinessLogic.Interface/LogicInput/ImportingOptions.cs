@@ -10,9 +10,7 @@ namespace TwoDrive.BusinessLogic.Helpers.LogicInput
     {
         public Writer Owner { get; set; }
 
-        public string FileType { get; set; }
-
-        public string FilePath { get; set; }
+        public string ImporterName { get; set; }
 
         public ImportingParameters Parameters { get; set; }
     }

@@ -5,11 +5,11 @@ namespace TwoDrive.Importer.Interface
 {
     public interface IImporter
     {
-        string FileExtension { get;}
+        string ImporterName { get; }
 
         T Load<T>(ImportingParameters paramenters) where T : class;
 
-        ImportType Import<ImportType>(ImportingParameters parameters) 
+        ImportType Import<ImportType>(ImportingParameters parameters)
             where ImportType : class;
     }
 }
