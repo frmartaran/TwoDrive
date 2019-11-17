@@ -21,7 +21,12 @@ namespace TwoDrive.BusinessLogic.Extensions
 
         public static bool IsFriendsWith(this Writer writer, Writer friend)
         {
-            return writer.Friends.Contains(friend);
+            return writer.Friends.Any(f => f.FriendId == friend.Id);
+        }
+
+        public static bool AreFriendAndWriterTheSameWriter(this Writer writer, Writer friend)
+        {
+            return friend.Id == writer.Id;
         }
 
         public static void AddRootClaims(this Writer writer, Folder root)

@@ -1,8 +1,7 @@
 using TwoDrive.Domain;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using System;
-using TwoDrive.DataAccess.Exceptions;
+using System.Collections.Generic;
 
 namespace TwoDrive.DataAccess
 {
@@ -25,8 +24,19 @@ namespace TwoDrive.DataAccess
             return table.Include(w => w.Claims)
                             .ThenInclude(c => c.Element)
                         .Include(w => w.Friends)
+                            .ThenInclude(wf => wf.Friend)
                         .Where(w => w.Id == Id)
                         .FirstOrDefault();
+        }
+
+        public override ICollection<Writer> GetAll()
+        {
+            return table
+                .Include(w => w.Claims)
+                    .ThenInclude(c => c.Element)
+                .Include(w => w.Friends)
+                    .ThenInclude(wf => wf.Friend)
+                .ToList();
         }
     }
 }

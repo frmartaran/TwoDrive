@@ -16,6 +16,7 @@ using TwoDrive.WebApi.Helpers;
 using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
+using Newtonsoft.Json;
 
 namespace TwoDrive.WebApi
 {
@@ -30,6 +31,22 @@ namespace TwoDrive.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    );
+            });
+
+            services.AddMvc().AddJsonOptions(opts =>
+            {
+                opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
+                opts.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDbContext<TwoDriveDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
@@ -63,6 +80,7 @@ namespace TwoDrive.WebApi
                 app.UseDeveloperExceptionPage();
             }
             app.UseMvc();
+            app.UseCors("CorsPolicy");
         }
     }
 }

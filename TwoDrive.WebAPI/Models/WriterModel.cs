@@ -7,7 +7,7 @@ using TwoDrive.WebApi.Interfaces;
 
 namespace TwoDrive.WebApi.Models
 {
-    public class WriterModel : IModel<Writer, WriterModel>
+    public class WriterModel
     {
         public int? Id { get; set; }
 
@@ -21,7 +21,7 @@ namespace TwoDrive.WebApi.Models
 
         public ICollection<ClaimModel> Claims { get; set; }
 
-        public WriterModel FromDomain(Writer entity)
+        public WriterModel FromDomain(Writer entity, bool isFirstLevel = true)
         {
             if (entity == null)
                 return null;
@@ -29,15 +29,14 @@ namespace TwoDrive.WebApi.Models
             Id = entity.Id;
             Role = entity.Role;
             UserName = entity.UserName;
-            Password = entity.Password;
 
-            if (Friends != null)
+            if (entity.Friends != null && isFirstLevel)
             {
                 Friends = entity.Friends
-                .Select(e => new WriterModel().FromDomain(e))
+                .Select(wf => new WriterModel().FromDomain(wf.Friend, false))
                 .ToList();
             }
-            if (Claims != null)
+            if (entity.Claims != null)
             {
                 Claims = entity.Claims
                 .Select(c => new ClaimModel().FromDomain(c))
@@ -58,7 +57,11 @@ namespace TwoDrive.WebApi.Models
             writer.UserName = this.UserName;
             writer.Password = this.Password;
             writer.Friends = this.Friends?
-                        .Select(f => f.ToDomain())
+                        .Select(f => new WriterFriend 
+                        {
+                            Writer = writer,
+                            Friend = f.ToDomain()
+                        })
                         .ToList() ?? null;
             writer.Claims = this.Claims?
                     .Select(c => c.ToDomain())
@@ -80,14 +83,17 @@ namespace TwoDrive.WebApi.Models
                 Role = this.Role,
                 UserName = this.UserName,
                 Password = this.Password,
-                Friends = this.Friends?
-                        .Select(f => f.ToDomain())
-                        .ToList() ?? null,
                 Claims = this.Claims?
                     .Select(c => c.ToDomain())
-                    .ToList() ?? null
+                    .ToList() ?? new List<CustomClaim>()
             };
-
+            writer.Friends = this.Friends?
+                        .Select(f => new WriterFriend
+                        {
+                            Writer = writer,
+                            Friend = f.ToDomain()
+                        })
+                        .ToList() ?? new List<WriterFriend>();
             if (Id.HasValue)
                 writer.Id = Id.Value;
 

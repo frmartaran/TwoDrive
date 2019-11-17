@@ -47,7 +47,7 @@ namespace TwoDrive.BusinessLogic.Test.ExtensionsTest
                 Id = 1,
                 UserName = "Writer",
                 Password = "A password",
-                Friends = new List<Writer>(),
+                Friends = new List<WriterFriend>(),
                 Claims = defaultClaims,
             };
             root.Owner = writer;
@@ -87,7 +87,12 @@ namespace TwoDrive.BusinessLogic.Test.ExtensionsTest
         public void IsFriendsWith()
         {
             var friend = new Writer();
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             var isAFriend = writer.IsFriendsWith(friend);
             Assert.IsTrue(isAFriend);
         }
@@ -99,6 +104,32 @@ namespace TwoDrive.BusinessLogic.Test.ExtensionsTest
             var friend = new Writer();
             var isAFriend = writer.IsFriendsWith(friend);
             Assert.IsFalse(isAFriend);
+        }
+
+        [TestMethod]
+        public void AreFriendAndWriterTheSameWriter()
+        {
+            var friend = new Writer 
+            {
+                Id = 1
+            };
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
+            var isSameWriter = writer.AreFriendAndWriterTheSameWriter(friend);
+            Assert.IsTrue(isSameWriter);
+        }
+
+
+        [TestMethod]
+        public void AreFriendAndWriterNotTheSameWriter()
+        {
+            var friend = new Writer();
+            var isSameWriter = writer.AreFriendAndWriterTheSameWriter(friend);
+            Assert.IsFalse(isSameWriter);
         }
 
         [TestMethod]
@@ -274,7 +305,12 @@ namespace TwoDrive.BusinessLogic.Test.ExtensionsTest
             {
                 Claims = new List<CustomClaim>()
             };
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             writer.AllowFriendTo(friend, root, ClaimType.Read);
             var canFriendRead = friend.Claims
                 .Where(c => c.Element == root)
@@ -302,7 +338,12 @@ namespace TwoDrive.BusinessLogic.Test.ExtensionsTest
             {
                 Claims = new List<CustomClaim>()
             };
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             writer.AllowFriendTo(friend, root, ClaimType.Read);
             writer.AllowFriendTo(friend, root, ClaimType.Read);
         }
@@ -314,7 +355,12 @@ namespace TwoDrive.BusinessLogic.Test.ExtensionsTest
             {
                 Claims = new List<CustomClaim>()
             };
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             writer.AllowFriendTo(friend, root, ClaimType.Read);
             writer.RevokeFriendFrom(friend, root, ClaimType.Read);
 
@@ -337,7 +383,12 @@ namespace TwoDrive.BusinessLogic.Test.ExtensionsTest
             };
             friend.Claims.Add(read);
             folder.Owner = friend;
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             writer.RevokeFriendFrom(friend, root, ClaimType.Read);
 
         }
@@ -350,7 +401,12 @@ namespace TwoDrive.BusinessLogic.Test.ExtensionsTest
             {
                 Claims = new List<CustomClaim>()
             };
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             writer.RevokeFriendFrom(friend, root, ClaimType.Read);
         }
     }

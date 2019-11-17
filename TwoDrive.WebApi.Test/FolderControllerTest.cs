@@ -274,7 +274,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var root = new Folder
             {
@@ -336,7 +336,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var root = new Folder
             {
@@ -403,7 +403,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var friend = new Writer()
             {
@@ -412,7 +412,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "1324",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var root = new Folder
             {
@@ -421,7 +421,12 @@ namespace TwoDrive.WebApi.Test
                 FolderChildren = new List<Element>(),
                 Owner = writer
             };
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
 
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
@@ -456,7 +461,6 @@ namespace TwoDrive.WebApi.Test
         [TestMethod]
         public void ShareNullWriter()
         {
-
             var mockFolderLogic = new Mock<IFolderLogic>();
 
             var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
@@ -489,7 +493,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
 
             var mockFolderLogic = new Mock<IFolderLogic>();
@@ -527,7 +531,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var friend = new Writer()
             {
@@ -536,9 +540,14 @@ namespace TwoDrive.WebApi.Test
                 Password = "1324",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
 
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
@@ -578,7 +587,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var friend = new Writer()
             {
@@ -587,7 +596,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "1324",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var root = new Folder
             {
@@ -635,7 +644,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var friend = new Writer()
             {
@@ -644,7 +653,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "1324",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var root = new Folder
             {
@@ -653,7 +662,12 @@ namespace TwoDrive.WebApi.Test
                 FolderChildren = new List<Element>(),
                 Owner = writer
             };
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             writer.AllowFriendTo(friend, root, ClaimType.Read);
 
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
@@ -694,7 +708,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var friend = new Writer()
             {
@@ -703,7 +717,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "1324",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var root = new Folder
             {
@@ -712,7 +726,12 @@ namespace TwoDrive.WebApi.Test
                 FolderChildren = new List<Element>(),
                 Owner = writer
             };
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             writer.AllowFriendTo(friend, root, ClaimType.Read);
 
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
@@ -781,7 +800,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var mockFolderLogic = new Mock<IFolderLogic>();
 
@@ -818,7 +837,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var friend = new Writer()
             {
@@ -827,7 +846,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "1324",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
 
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
@@ -869,7 +888,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var friend = new Writer()
             {
@@ -878,7 +897,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "1324",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var root = new Folder
             {
@@ -926,7 +945,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var friend = new Writer()
             {
@@ -935,7 +954,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "1324",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var root = new Folder
             {
@@ -945,8 +964,13 @@ namespace TwoDrive.WebApi.Test
                 Owner = writer
             };
 
-            writer.Friends.Add(friend);
-            
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
+
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
                 .Returns(root);

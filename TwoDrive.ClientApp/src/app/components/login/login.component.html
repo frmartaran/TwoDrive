@@ -1,0 +1,24 @@
+<div class="main-div">
+    <mat-card>
+        <div class="login-container">
+            <mat-card-title class="login-title">Log In</mat-card-title>
+                
+            <form #loginForm="ngForm" (ngSubmit)="Login(loginForm)">
+                <mat-card-content>
+                    <mat-form-field>
+                        <input matInput id="username" name="username" placeholder="Username" [(ngModel)]="credentials.username">
+                    </mat-form-field>
+                
+                    <mat-form-field>
+                        <input type="password" matInput id="password" name="password" placeholder="Password" [(ngModel)]="credentials.password">
+                    </mat-form-field>
+    
+                    <div class="error">{{authenticationError}}</div>
+                </mat-card-content>
+                <mat-card-footer>
+                    <button mat-raised-button type="submit">Login</button>
+                </mat-card-footer>
+            </form>
+        </div>
+    </mat-card>
+</div>

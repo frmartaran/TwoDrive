@@ -31,7 +31,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "132",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
 
             secondWriter = new Writer()
@@ -41,7 +41,7 @@ namespace TwoDrive.WebApi.Test
                 Password = "1325",
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
         }
         [TestMethod]

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TwoDrive.BusinessLogic.Exceptions;
@@ -21,6 +22,7 @@ using TwoDrive.WebApi.Resource;
 namespace TwoDrive.WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("CorsPolicy")]
     public class FileController : ControllerBase
     {
         private ICurrent inSession;

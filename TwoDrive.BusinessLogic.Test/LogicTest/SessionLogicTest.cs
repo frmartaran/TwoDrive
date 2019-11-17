@@ -24,7 +24,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 Id = 1,
                 UserName = "Username",
                 Password = "Password",
-                Friends = new List<Writer>(),
+                Friends = new List<WriterFriend>(),
             };
             var mockRepository = new Mock<IRepository<Session>>(MockBehavior.Strict);
             mockRepository.Setup(m => m.Insert(It.IsAny<Session>()));
@@ -53,7 +53,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 Id = 1,
                 UserName = "Username",
                 Password = "Password",
-                Friends = new List<Writer>(),
+                Friends = new List<WriterFriend>(),
             };
             writerRepository.Insert(writer);
             writerRepository.Save();
@@ -112,7 +112,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 Id = 1,
                 UserName = "Username",
                 Password = "Password",
-                Friends = new List<Writer>(),
+                Friends = new List<WriterFriend>(),
             };
             var token = Guid.NewGuid();
             var session = new Session
@@ -151,7 +151,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 UserName = "Username",
                 Password = "Password",
                 Role = Role.Administrator,
-                Friends = new List<Writer>(),
+                Friends = new List<WriterFriend>(),
             };
             var token = Guid.NewGuid();
             var session = new Session
@@ -179,7 +179,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 UserName = "Username",
                 Password = "Password",
                 Role = Role.Writer,
-                Friends = new List<Writer>(),
+                Friends = new List<WriterFriend>(),
             };
             var token = Guid.NewGuid();
             var session = new Session

@@ -57,7 +57,7 @@ namespace TwoDrive.BusinessLogic.Test.ValidatorsTest
                 Id = 1,
                 UserName = "Writer",
                 Password = "A password",
-                Friends = new List<Writer>(),
+                Friends = new List<WriterFriend>(),
                 Claims = defaultClaims,
             };
 
@@ -77,7 +77,7 @@ namespace TwoDrive.BusinessLogic.Test.ValidatorsTest
                 Id = 1,
                 UserName = "",
                 Password = "A password",
-                Friends = new List<Writer>(),
+                Friends = new List<WriterFriend>(),
                 Claims = defaultClaims,
             };
 
@@ -96,7 +96,7 @@ namespace TwoDrive.BusinessLogic.Test.ValidatorsTest
                 Id = 1,
                 UserName = "Writer",
                 Password = "",
-                Friends = new List<Writer>(),
+                Friends = new List<WriterFriend>(),
                 Claims = defaultClaims,
             };
 
@@ -113,7 +113,7 @@ namespace TwoDrive.BusinessLogic.Test.ValidatorsTest
                 Id = 1,
                 UserName = "Writer",
                 Password = "A password",
-                Friends = new List<Writer>(),
+                Friends = new List<WriterFriend>(),
                 Claims = defaultClaims,
             };
 
@@ -122,12 +122,17 @@ namespace TwoDrive.BusinessLogic.Test.ValidatorsTest
                 Id = 1,
                 UserName = "Frined",
                 Password = "A password",
-                Friends = new List<Writer>(),
+                Friends = new List<WriterFriend>(),
                 Claims = new List<CustomClaim>(),
             };
 
             root.Owner = writer;
-            writer.Friends.Add(friend);
+            var writerFriend = new WriterFriend
+            {
+                Writer = writer,
+                Friend = friend
+            };
+            writer.Friends.Add(writerFriend);
             var validator = new WriterValidator(repository);
             bool isValid = validator.IsValid(writer);
 
@@ -148,7 +153,7 @@ namespace TwoDrive.BusinessLogic.Test.ValidatorsTest
                 Id = 1,
                 UserName = name,
                 Password = "A password",
-                Friends = new List<Writer>(),
+                Friends = new List<WriterFriend>(),
                 Claims = defaultClaims,
             };
             repository.Insert(writer);
@@ -159,7 +164,7 @@ namespace TwoDrive.BusinessLogic.Test.ValidatorsTest
                 Id = 2,
                 UserName = name,
                 Password = "Holus",
-                Friends = new List<Writer>(),
+                Friends = new List<WriterFriend>(),
             };
             folder.Owner = anotherWriter;
             var claims = defaultClaims;

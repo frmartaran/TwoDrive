@@ -20,7 +20,7 @@ namespace TwoDrive.DataAccess.Tests
                 UserName = "WRiter",
                 Password = "Pass",
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
 
             var repository = new WriterRepository(memoryDb);
@@ -41,7 +41,7 @@ namespace TwoDrive.DataAccess.Tests
                 UserName = "WRiter",
                 Password = "Pass",
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
 
             var repository = new WriterRepository(memoryDb);
@@ -62,7 +62,7 @@ namespace TwoDrive.DataAccess.Tests
                 UserName = "WRiter",
                 Password = "Pass",
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var repository = new WriterRepository(memoryDb);
             repository.Insert(writer);
@@ -89,7 +89,7 @@ namespace TwoDrive.DataAccess.Tests
                 UserName = "WRiter",
                 Password = "Pass",
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var repository = new WriterRepository(memoryDb);
             repository.Insert(writer);
@@ -115,7 +115,7 @@ namespace TwoDrive.DataAccess.Tests
                 UserName = "WRiter",
                 Password = "Pass",
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var anotherWriter = new Writer
             {
@@ -123,7 +123,7 @@ namespace TwoDrive.DataAccess.Tests
                 UserName = "WRiter",
                 Password = "Pass",
                 Claims = new List<CustomClaim>(),
-                Friends = new List<Writer>()
+                Friends = new List<WriterFriend>()
             };
             var repository = new WriterRepository(memoryDb);
             repository.Insert(writer);

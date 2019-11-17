@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Extensions;
@@ -15,6 +16,7 @@ using TwoDrive.WebApi.Resource;
 namespace TwoDrive.WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("CorsPolicy")]
     public class FolderController : ControllerBase
     {
         private IFolderLogic FolderLogic { get; set; }

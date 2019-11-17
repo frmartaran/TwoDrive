@@ -1,0 +1,29 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+}
+  
+.login-container > * {
+    width: 100%;
+}
+
+mat-card{
+    width: 300px;
+    height: 250px;
+    text-align: center;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.main-div{
+    height: 100vh;
+    display: flex;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+}
+
+.error{
+    color: red
+}

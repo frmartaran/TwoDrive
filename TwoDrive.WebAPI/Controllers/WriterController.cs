@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using TwoDrive.BusinessLogic;
 using TwoDrive.BusinessLogic.Exceptions;
@@ -17,6 +18,7 @@ using TwoDrive.WebApi.Resource;
 namespace TwoDrive.WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("CorsPolicy")]
     public class WriterController : ControllerBase
     {
         private ILogic<Writer> Logic { get; set; }
@@ -144,7 +146,17 @@ namespace TwoDrive.WebApi.Controllers
                 {
                     return BadRequest(string.Format(ApiResource.AlreadyFriends, friend.UserName));
                 };
-                writer.Friends.Add(friend);
+                if (writer.AreFriendAndWriterTheSameWriter(friend))
+                {
+                    return BadRequest(string.Format(ApiResource.FriendAndWriterAreTheSame, friend.UserName));
+                };
+
+                var writerFriendToAdd = new WriterFriend
+                {
+                    Friend = friend,
+                    Writer = writer,
+                };
+                writer.Friends.Add(writerFriendToAdd);
                 Logic.Update(writer);
                 return Ok(string.Format(ApiResource.NowFriends, friend.UserName));
             }
@@ -169,7 +181,8 @@ namespace TwoDrive.WebApi.Controllers
                 {
                     return BadRequest(ApiResource.CantRemove);
                 };
-                writer.Friends.Remove(friend);
+                writer.Friends = writer.Friends.Where(f => f.FriendId != id)
+                    .ToList();
                 Logic.Update(writer);
                 return Ok(string.Format(ApiResource.NowNotFriends, friend.UserName));
             }
@@ -192,7 +205,7 @@ namespace TwoDrive.WebApi.Controllers
                 else
                 {
                     var toModel = writer.Friends
-                        .Select(f => new WriterModel().FromDomain(f))
+                        .Select(f => new WriterModel().FromDomain(f.Friend))
                         .ToList();
                     return Ok(toModel);
                 }

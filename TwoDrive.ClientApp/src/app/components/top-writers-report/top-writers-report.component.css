@@ -1,0 +1,29 @@
+table {
+    width: 100%;
+}
+  
+.search-writers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.mat-elevation-z8{
+    width: 100%;
+}
+
+.padding{
+    margin-top: 60px;
+}
+
+mat-card-title{
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 20px;
+    padding-bottom: 0px;
+}

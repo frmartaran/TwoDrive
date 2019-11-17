@@ -24,7 +24,7 @@ namespace TwoDrive.WebApi.Models
             DateModified = entity.DateModified;
             Content = entity.Content;
             ParentFolder = new FolderModel().FromDomain(entity.ParentFolder);
-            Owner = new WriterModel().FromDomain(entity.Owner);
+            OwnerId = entity.Owner.Id;
             Id = entity.Id;
             return this;
 

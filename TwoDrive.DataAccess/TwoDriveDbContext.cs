@@ -28,8 +28,20 @@ namespace TwoDrive.DataAccess
         {
             modelBuilder.Entity<Element>()
                 .Property<bool>("IsDeleted");
+
             modelBuilder.Entity<Element>()
                 .HasQueryFilter(e => !e.IsDeleted);
+
+            modelBuilder.Entity<WriterFriend>()
+                .HasOne(wf => wf.Writer)
+                .WithMany(w => w.Friends)
+                .HasForeignKey(wf => wf.WriterId);
+
+            modelBuilder.Entity<WriterFriend>()
+                .HasOne(wf => wf.Friend)
+                .WithMany()
+                .HasForeignKey(wf => wf.FriendId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public override int SaveChanges()

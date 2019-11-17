@@ -16,7 +16,6 @@ namespace TwoDrive.WebApi.Models
 
             Id = entity.Id;
             Name = entity.Name;
-            Owner = new WriterModel().FromDomain(entity.Owner);
             OwnerId = entity.OwnerId;
             ParentFolder = new FolderModel().FromDomain(entity.ParentFolder);
             ParentFolderId = entity.ParentFolderId;

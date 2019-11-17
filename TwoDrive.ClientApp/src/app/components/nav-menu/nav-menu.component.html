@@ -1,0 +1,25 @@
+<mat-toolbar>
+  <mat-toolbar-row>
+    <h1>TwoDrive</h1>
+    <button mat-button [matMenuTriggerFor] = "writers">Writers</button>
+    <mat-menu #writers = "matMenu">
+        <button mat-menu-item *ngIf="isAdmin" [routerLink]="['/create-writer']">Create</button>
+        <button mat-menu-item [routerLink]="['/writer-management']">Manage Writers</button>
+    </mat-menu>
+    <button mat-button [matMenuTriggerFor] = "reports">Reports</button>
+    <mat-menu #reports = "matMenu">
+        <button mat-menu-item [routerLink]="['/file-modification']">File Modification Report</button>
+        <button mat-menu-item [routerLink]="['/folder-modification']">Folder Modification Report</button>
+        <button mat-menu-item [routerLink]="['/top-writers']">Top Writers Report</button>
+    </mat-menu>
+    <div class="flex-spacer"></div>
+    <a mat-button>
+        <span class="mat-button-wrapper" (click)="confirmDialog()">
+            <mat-icon>exit_to_app</mat-icon>Logout 
+        </span>
+    </a>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+
+

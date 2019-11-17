@@ -1,0 +1,31 @@
+<div class="main-div">
+    <mat-card>
+        <mat-card-title class="writer-title">{{action}} Writer</mat-card-title>
+        <form #writerForm="ngForm" (ngSubmit)="Submit(writerForm)">
+            <mat-card-content>
+                <mat-form-field>
+                    <input matInput name="userName" placeholder="Username" required [(ngModel)]="writer.userName">
+                </mat-form-field>
+            
+                <mat-form-field>
+                    <input matInput type="password" name="password" placeholder="Password" required [(ngModel)]="writer.password">
+                </mat-form-field>
+
+                <div class="roles-radio-group">
+                    <mat-label>Role: </mat-label>
+                    <mat-radio-group  layout="row">
+                        <mat-radio-button value="Administrator" (click)="setRole('Administrator')" [checked]="writer.role == 'Administrator'">Administrator</mat-radio-button>
+                        <mat-radio-button value="Writer" (click)="setRole('Writer')" [checked]="writer.role == 'Writer'">Writer</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+    
+                <div class="error">{{creationError}}</div>
+            </mat-card-content>
+            <mat-card-footer>
+                <button mat-raised-button type="submit">{{action}}</button>
+            </mat-card-footer>
+            <br>
+        </form>
+    </mat-card>
+</div>
+

@@ -51,7 +51,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 Id = 1,
                 UserName = "Writer",
                 Password = "A password",
-                Friends = new List<Writer>(),
+                Friends = new List<WriterFriend>(),
                 Claims = defaultClaims,
             };
             root.Owner = writer;

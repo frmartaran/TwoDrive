@@ -7,6 +7,9 @@ namespace TwoDrive.Domain
     {
         public int Id { get; set;}
         public Element Element { get; set; }
+        public int ElementId { get; set; }
+        public int WriterId { get; set; }
+        public Writer Writer { get; set; }
         public ClaimType Type { get; set; }
     }
 }
