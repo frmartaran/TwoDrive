@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using TwoDrive.BusinessLogic.Exceptions;
@@ -124,7 +125,7 @@ namespace TwoDrive.BusinessLogic.Logic
                 }
                 else
                 {
-                    FileLogic.Create(child as File);
+                    FileLogic.Create(child as Domain.FileManagement.File);
                 }
 
                 owner.AddCreatorClaimsTo(child);
@@ -147,6 +148,7 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public List<ImporterInfo> GetAllImporters()
         {
+            var dllFile = new FileInfo($@".\{DllToImport}");
             var assemblyInfo = Assembly.LoadFrom(DllToImport);
             var allImporters = assemblyInfo.ExportedTypes
                 .Where(t => (typeof(IImporter).IsAssignableFrom(t)))

@@ -9,6 +9,7 @@ using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using TwoDrive.Domain;
+using TwoDrive.Importer.Interface;
 using TwoDrive.Importer.Parameters;
 using TwoDrive.WebApi.Controllers;
 
@@ -18,6 +19,9 @@ namespace TwoDrive.WebApi.Test
     public class ImportControllerTest
     {
         Writer writer;
+
+        ImportingParameters parameters;
+
         [TestInitialize]
         public void Setup()
         {
@@ -25,6 +29,11 @@ namespace TwoDrive.WebApi.Test
             {
                 Id = 1
             };
+            parameters = new XMLParameters
+            {
+                Path = ""
+            };
+
         }
 
         [TestMethod]
@@ -39,7 +48,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var controller = new ImportController(mockImportLogic.Object, mockWriterLogic.Object);
-            var result = controller.Import("", "XML", writer.Id);
+            var result = controller.Import(parameters, "XML", writer.Id);
 
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             mockImportLogic.VerifyAll();
@@ -57,7 +66,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns<Writer>(null);
 
             var controller = new ImportController(mockImportLogic.Object, mockWriterLogic.Object);
-            var result = controller.Import("", "XML", writer.Id);
+            var result = controller.Import(parameters, "XML", writer.Id);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
             mockImportLogic.VerifyAll();
@@ -78,7 +87,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var controller = new ImportController(mockImportLogic.Object, mockWriterLogic.Object);
-            var result = controller.Import("", "txt", writer.Id);
+            var result = controller.Import(parameters, "txt", writer.Id);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
             mockImportLogic.VerifyAll();
@@ -100,7 +109,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var controller = new ImportController(mockImportLogic.Object, mockWriterLogic.Object);
-            var result = controller.Import("", "txt", writer.Id);
+            var result = controller.Import(parameters, "txt", writer.Id);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
             mockImportLogic.VerifyAll();
