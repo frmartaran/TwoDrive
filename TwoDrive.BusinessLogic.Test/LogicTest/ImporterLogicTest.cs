@@ -26,6 +26,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
 
         private const string examplesRootForJson = "..\\..\\..\\Json Tree Examples";
         private const string examplesRootForXML = "..\\..\\..\\Xml Tree Examples";
+        private const string dllPath = Helpers.ImporterConstants.TestingPath;
         private XMLParameters xmlParameters;
 
 
@@ -65,7 +66,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             };
             var importerLogic = new ImporterLogic(dependencies);
             importerLogic.Options = options;
-            var importer = importerLogic.GetImporter();
+            var importer = importerLogic.GetImporter(dllPath);
 
             Assert.IsInstanceOfType(importer, typeof(XMLImporter));
         }
@@ -88,7 +89,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(dependencies);
             importerLogic.Options = options;
 
-            var importer = importerLogic.GetImporter();
+            var importer = importerLogic.GetImporter(dllPath);
 
             Assert.IsInstanceOfType(importer, typeof(JsonImporter));
         }
@@ -113,7 +114,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(dependencies);
             importerLogic.Options = options;
 
-            var importer = importerLogic.GetImporter();
+            var importer = importerLogic.GetImporter(dllPath);
 
         }
 
@@ -142,7 +143,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             };
             var importerLogic = new ImporterLogic(dependencies);
             importerLogic.Options = options;
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
 
             mockFolderLogic.VerifyAll();
             mockWriterLogic.VerifyAll();
@@ -184,7 +185,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
 
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
 
             var foldersInDb = folderLogic.GetAll();
             var claims = writer.Claims.Count;
@@ -231,7 +232,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
 
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
 
             var foldersInDb = folderLogic.GetAll();
             var claims = writer.Claims.Count;
@@ -280,7 +281,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
 
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
 
             var foldersInDb = folderLogic.GetAll();
             var claims = writer.Claims.Count;
@@ -334,7 +335,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
 
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
         }
 
         [TestMethod]
@@ -373,7 +374,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
 
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
 
             var foldersInDb = folderLogic.GetAll();
             var claims = writer.Claims.Count;
@@ -425,7 +426,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
 
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
 
         }
 
@@ -478,7 +479,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
 
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
         }
 
         [TestMethod]
@@ -518,7 +519,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
 
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
         }
 
         [TestMethod]
@@ -557,7 +558,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
 
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
 
             var foldersInDb = folderLogic.GetAll();
             var claims = writer.Claims.Count;
@@ -586,7 +587,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 mockWriterLogic, mockModificationLogic);
 
             var importerLogic = new ImporterLogic(dependencies);
-            var importersInfo = importerLogic.GetAllImporters();
+            var importersInfo = importerLogic.GetAllImporters(dllPath);
             var names = importersInfo.Select(ii => ii.Name).ToList();
             var jsonParam = importersInfo.Select(ii => ii.Parameters)
                 .OfType<JsonParameter>()

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using TwoDrive.BusinessLogic.Exceptions;
+using TwoDrive.BusinessLogic.Helpers;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
@@ -38,7 +39,7 @@ namespace TwoDrive.WebApi.Controllers
                     Parameters = parameters
                 };
                 ImporterLogic.Options = options;
-                ImporterLogic.Import();
+                ImporterLogic.Import(ImporterConstants.DllPath);
                 return Ok(ApiResource.Import_Success);
 
             }
@@ -55,7 +56,7 @@ namespace TwoDrive.WebApi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var allImporters = ImporterLogic.GetAllImporters();
+            var allImporters = ImporterLogic.GetAllImporters(ImporterConstants.DllPath);
             var serializedList = JsonConvert.SerializeObject(allImporters);
             return Ok(serializedList);
         }

@@ -11,10 +11,10 @@ namespace TwoDrive.BusinessLogic.Interfaces
     public interface IImporterLogic
     {
         ImportingOptions Options { get; set; }
-        IImporter GetImporter();
+        IImporter GetImporter(string path);
 
-        void Import();
+        void Import(string path);
 
-        List<ImporterInfo> GetAllImporters();
+        List<ImporterInfo> GetAllImporters(string path);
     }
 }

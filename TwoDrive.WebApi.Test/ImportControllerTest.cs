@@ -40,7 +40,7 @@ namespace TwoDrive.WebApi.Test
         public void SuccessfullImport()
         {
             var mockImportLogic = new Mock<IImporterLogic>(MockBehavior.Strict);
-            mockImportLogic.Setup(m => m.Import());
+            mockImportLogic.Setup(m => m.Import(""));
             mockImportLogic.SetupSet(m => m.Options = It.IsAny<ImportingOptions>());
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
@@ -77,7 +77,7 @@ namespace TwoDrive.WebApi.Test
         public void ImporterNotFound()
         {
             var mockImportLogic = new Mock<IImporterLogic>(MockBehavior.Strict);
-            mockImportLogic.Setup(m => m.Import())
+            mockImportLogic.Setup(m => m.Import(""))
                 .Throws(new ImporterNotFoundException(""));
 
             mockImportLogic.SetupSet(m => m.Options = It.IsAny<ImportingOptions>());
@@ -99,7 +99,7 @@ namespace TwoDrive.WebApi.Test
         public void ImportingError()
         {
             var mockImportLogic = new Mock<IImporterLogic>(MockBehavior.Strict);
-            mockImportLogic.Setup(m => m.Import())
+            mockImportLogic.Setup(m => m.Import(""))
                 .Throws(new LogicException(""));
 
             mockImportLogic.SetupSet(m => m.Options = It.IsAny<ImportingOptions>());
@@ -138,7 +138,7 @@ namespace TwoDrive.WebApi.Test
             };
 
             var mockImportLogic = new Mock<IImporterLogic>(MockBehavior.Strict);
-            mockImportLogic.Setup(m => m.GetAllImporters())
+            mockImportLogic.Setup(m => m.GetAllImporters(""))
                 .Returns(allImporters);
             var mockWriterLogic = new Mock<ILogic<Writer>>().Object;
 

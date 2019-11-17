@@ -20,8 +20,6 @@ namespace TwoDrive.BusinessLogic.Logic
 {
     public class ImporterLogic : IImporterLogic
     {
-        private const string DllToImport = "TwoDrive.Importer.dll";
-
         private const string fieldName = "Name";
 
         private IFolderLogic FolderLogic { get; set; }
@@ -42,11 +40,11 @@ namespace TwoDrive.BusinessLogic.Logic
             ModificationLogic = dependencies.ModificationLogic;
         }
 
-        public IImporter GetImporter()
+        public IImporter GetImporter(string path)
         {
             try
             {
-                var assemblyInfo = Assembly.LoadFrom(DllToImport);
+                var assemblyInfo = Assembly.LoadFrom(path);
                 var applicablesTypes = assemblyInfo.ExportedTypes
                     .Where(t => (typeof(IImporter).IsAssignableFrom(t)))
                     .ToList();
@@ -67,12 +65,12 @@ namespace TwoDrive.BusinessLogic.Logic
 
         }
 
-        public void Import()
+        public void Import(string path)
         {
             if (Options.Owner == null)
                 throw new LogicException(BusinessResource.MissingOwner);
 
-            var importer = GetImporter();
+            var importer = GetImporter(path);
             var parentFolder = importer.Import<IFolder>(Options.Parameters);
             var mapper = MapperHelper.GetFileManagementMapper();
 
@@ -146,11 +144,10 @@ namespace TwoDrive.BusinessLogic.Logic
             ModificationLogic.Create(modification);
         }
 
-        public List<ImporterInfo> GetAllImporters()
+        public List<ImporterInfo> GetAllImporters(string path)
         {
-            var dllFile = new FileInfo($@".\{DllToImport}");
-            var assemblyInfo = Assembly.LoadFrom(DllToImport);
-            var allImporters = assemblyInfo.ExportedTypes
+            var assemblyInfo = Assembly.LoadFrom(path);
+            var allImporters = assemblyInfo.GetTypes()
                 .Where(t => (typeof(IImporter).IsAssignableFrom(t)))
                 .ToList();
             var importersInfo = new List<ImporterInfo>();

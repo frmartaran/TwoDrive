@@ -9,8 +9,6 @@ namespace TwoDrive.Domain
         public Role Role { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
-        public int? FriendId { get; set; }
-        public Writer Friend { get; set; }
         public ICollection<Writer> Friends { get; set; }
         public ICollection<CustomClaim> Claims { get; set; }
 
