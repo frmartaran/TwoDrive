@@ -30,6 +30,7 @@ export class LoginService {
     localStorage.setItem("token", this.session.token);
     localStorage.setItem("writerId", this.session.userId);
     localStorage.setItem("isAdmin", this.session.isAdmin);
+    localStorage.setItem("username", this.session.username);
     this.isAuthenticated.next(true);
   }
 

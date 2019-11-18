@@ -14,5 +14,7 @@ namespace TwoDrive.WebApi.Models
         public Guid Token { get; set; }
 
         public bool IsAdmin { get; set; }
+
+        public string Username { get; set; }
     }
 }

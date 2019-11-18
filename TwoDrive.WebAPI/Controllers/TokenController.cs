@@ -42,7 +42,8 @@ namespace TwoDrive.WebApi.Controllers
             {
                 UserId = session.Writer.Id,
                 Token = session.Token,
-                IsAdmin = session.Writer.Role == Domain.Role.Administrator
+                IsAdmin = session.Writer.Role == Domain.Role.Administrator,
+                Username = session.Writer.UserName
             };
             return Ok(sessionModel);
         }

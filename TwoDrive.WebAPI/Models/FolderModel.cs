@@ -9,6 +9,8 @@ namespace TwoDrive.WebApi.Models
 {
     public class FolderModel : ElementModel, IModel<Folder, FolderModel>
     {
+        public ICollection<ElementModel> FolderChildren { get; set; }
+
         public FolderModel FromDomain(Folder entity)
         {
             if (entity == null)
@@ -17,10 +19,11 @@ namespace TwoDrive.WebApi.Models
             Id = entity.Id;
             Name = entity.Name;
             OwnerId = entity.OwnerId;
-            ParentFolder = new FolderModel().FromDomain(entity.ParentFolder);
             ParentFolderId = entity.ParentFolderId;
             CreationDate = entity.CreationDate;
             DateModified = entity.DateModified;
+            FolderChildren = FolderModelFactory.GetModelForAllChildren(entity);
+            IsFolder = true;
             return this;
         }
 

@@ -8,17 +8,25 @@ using TwoDrive.WebApi.Interfaces;
 
 namespace TwoDrive.WebApi.Models
 {
-    public class ClaimModel : IModel<CustomClaim, ClaimModel>
+    public class ClaimModel
     {
-        public ClaimType Type { get; set; }
+        public ICollection<ClaimType> Types { get; set; }
         public ElementModel Element { get; set; }
-        public CustomClaim ToDomain()
+        public ICollection<CustomClaim> ToDomain()
         {
-            return new CustomClaim
+            var claims = new List<CustomClaim>();
+            if(Types != null)
             {
-                Type = this.Type,
-                Element = GetElementDomain(this.Element)
-            };
+                foreach (var type in Types)
+                {
+                    claims.Add(new CustomClaim
+                    {
+                        Type = type,
+                        Element = GetElementDomain(this.Element)
+                    });
+                }
+            }
+            return claims;
         }
 
         private Element GetElementDomain(ElementModel element)
@@ -35,10 +43,21 @@ namespace TwoDrive.WebApi.Models
             return modelToReturn;
         }
 
-        public ClaimModel FromDomain(CustomClaim entity)
+        public ClaimModel FromDomain(IGrouping<int,CustomClaim> claims)
         {
-            Type = entity.Type;
-            Element = GetElementModel(entity.Element);
+            if (claims != null)
+            {
+                var claimsByElement = claims
+                    .Select(c => c)
+                    .FirstOrDefault();
+                if(claimsByElement != null)
+                {
+                    Element = GetElementModel(claimsByElement.Element);
+                    Types = claims
+                        .Select(c => c.Type)
+                        .ToList();
+                }                
+            }            
             return this;
         }
 

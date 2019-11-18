@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Writer } from 'src/app/components/interfaces/interfaces.model';
+import { Writer, Element } from 'src/app/components/interfaces/interfaces.model';
 
 @Injectable({
   providedIn: 'root'
@@ -138,5 +138,9 @@ export class WriterService {
       headers: headers,
       responseType: 'text'
     });
+  }
+
+  public GetElementsFromWriter(writer: Writer){
+    return writer.claims.map(a => a.element)
   }
 }

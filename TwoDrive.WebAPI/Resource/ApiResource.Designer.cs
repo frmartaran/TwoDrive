@@ -403,6 +403,15 @@ namespace TwoDrive.WebApi.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unsupported type of element, can&apos;t get model.
+        /// </summary>
+        public static string UnsupportedElementType {
+            get {
+                return ResourceManager.GetString("UnsupportedElementType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unsupported type of file, can&apos;t get model.
         /// </summary>
         public static string UnsupportedFileType {

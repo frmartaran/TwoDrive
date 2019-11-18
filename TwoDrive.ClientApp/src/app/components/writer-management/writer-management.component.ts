@@ -1,6 +1,7 @@
 import { WriterService } from 'src/app/services/writer.service';
 import { Component, OnInit, ViewChild, ChangeDetectorRef} from '@angular/core';
-import { MatTableDataSource, MatPaginator, MatSnackBar, MatCheckbox} from '@angular/material';
+import { Router } from '@angular/router';
+import { MatTableDataSource, MatPaginator, MatSnackBar} from '@angular/material';
 import { Writer } from 'src/app/components/interfaces/interfaces.model';
 
 @Component({
@@ -9,12 +10,14 @@ import { Writer } from 'src/app/components/interfaces/interfaces.model';
   styleUrls: ['./writer-management.component.css']
 })
 export class WriterManagementComponent implements OnInit {
-  displayedColumns: string[] = ['username', 'role', 'action', 'friendFilter'];
+  displayedColumns: string[];
   dataSource: MatTableDataSource<Writer>;
   writers: Writer[];
   isFriendFilterActivated = false;
+  isAdmin = false;
 
   constructor(private writerService : WriterService,
+    private router: Router,
     private _snackBar: MatSnackBar,
     private changeDetectorRefs: ChangeDetectorRef){}
 
@@ -27,6 +30,10 @@ export class WriterManagementComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isAdmin = (localStorage.getItem('isAdmin') == 'true');
+    this.displayedColumns = this.isAdmin
+      ? ['username', 'role', 'action', 'friendFilter']
+      : ['username', 'role', 'friendFilter']
     this.writerService.GetLoggedInWriter()
     .subscribe(
       (response) => {
@@ -123,6 +130,11 @@ export class WriterManagementComponent implements OnInit {
         this.openSnackBar(error.message, 'Error!');
       }
     )
+  }
+
+  public editWriter(writer: Writer){
+    this.router.navigateByUrl('/', {skipLocationChange: true})
+    .then(()=> this.router.navigate(['/edit-writer'], {state: writer}));
   }
 
 }

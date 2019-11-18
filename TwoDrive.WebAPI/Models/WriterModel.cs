@@ -38,14 +38,27 @@ namespace TwoDrive.WebApi.Models
             }
             if (entity.Claims != null)
             {
-                Claims = entity.Claims
-                .Select(c => new ClaimModel().FromDomain(c))
+                Claims = new List<ClaimModel>();
+                var claimsByElements = entity.Claims
+                .GroupBy(c => c.ElementId)
                 .ToList();
+                foreach (var claimGrouping in claimsByElements)
+                {
+                    if (ElementIsFromOwnerAndIsRootFolder(claimGrouping) || ElementIsntFromOwner(claimGrouping))
+                    {
+                        Claims.Add(new ClaimModel().FromDomain(claimGrouping));
+                    }                    
+                }
             }
 
             return this;
         }
 
+        /// <summary>
+        /// This method merges information coming from the frontend and backend. Doesn't update claims or friends.
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <returns></returns>
         public Writer ToDomain(Writer writer)
         {
             if (this == null)
@@ -56,16 +69,6 @@ namespace TwoDrive.WebApi.Models
             writer.Role = this.Role;
             writer.UserName = this.UserName;
             writer.Password = this.Password;
-            writer.Friends = this.Friends?
-                        .Select(f => new WriterFriend 
-                        {
-                            Writer = writer,
-                            Friend = f.ToDomain()
-                        })
-                        .ToList() ?? null;
-            writer.Claims = this.Claims?
-                    .Select(c => c.ToDomain())
-                    .ToList() ?? null;
 
             if (Id.HasValue)
                 writer.Id = Id.Value;
@@ -83,9 +86,7 @@ namespace TwoDrive.WebApi.Models
                 Role = this.Role,
                 UserName = this.UserName,
                 Password = this.Password,
-                Claims = this.Claims?
-                    .Select(c => c.ToDomain())
-                    .ToList() ?? new List<CustomClaim>()
+                Claims = GetModelClaims()
             };
             writer.Friends = this.Friends?
                         .Select(f => new WriterFriend
@@ -98,6 +99,38 @@ namespace TwoDrive.WebApi.Models
                 writer.Id = Id.Value;
 
             return writer;
+        }
+
+        public ICollection<CustomClaim> GetModelClaims()
+        {
+            var result = new List<CustomClaim>();
+            if (Claims != null)
+            {
+                foreach (var claim in Claims)
+                {
+                    result.AddRange(claim.ToDomain());
+                }
+            }
+            return result;
+        }
+
+        private bool ElementIsFromOwnerAndIsRootFolder(IGrouping<int, CustomClaim> claimGrouping)
+        {
+            var element = claimGrouping
+                .Select(c => c)
+                .FirstOrDefault()
+                .Element;
+            return element.OwnerId == Id.Value && !element.ParentFolderId.HasValue;
+                
+        }
+
+        private bool ElementIsntFromOwner(IGrouping<int, CustomClaim> claimGrouping)
+        {
+            var element = claimGrouping
+                .Select(c => c)
+                .FirstOrDefault()
+                .Element;
+            return element.OwnerId != Id.Value;
         }
     }
 }

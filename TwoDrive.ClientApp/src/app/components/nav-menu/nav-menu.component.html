@@ -1,22 +1,33 @@
 <mat-toolbar>
   <mat-toolbar-row>
-    <h1>TwoDrive</h1>
+    <button mat-button matTooltip="To Home Page">
+        <h1 (click)="homePage()">TwoDrive</h1>
+    </button>    
     <button mat-button [matMenuTriggerFor] = "writers">Writers</button>
     <mat-menu #writers = "matMenu">
-        <button mat-menu-item *ngIf="isAdmin" [routerLink]="['/create-writer']">Create</button>
+        <button mat-menu-item *ngIf="isAdmin" (click)="createWriter()">Create</button>
         <button mat-menu-item [routerLink]="['/writer-management']">Manage Writers</button>
     </mat-menu>
-    <button mat-button [matMenuTriggerFor] = "reports">Reports</button>
+    <button mat-button [matMenuTriggerFor] = "reports" *ngIf="isAdmin">Reports</button>
     <mat-menu #reports = "matMenu">
         <button mat-menu-item [routerLink]="['/file-modification']">File Modification Report</button>
         <button mat-menu-item [routerLink]="['/folder-modification']">Folder Modification Report</button>
         <button mat-menu-item [routerLink]="['/top-writers']">Top Writers Report</button>
     </mat-menu>
     <div class="flex-spacer"></div>
-    <a mat-button>
-        <span class="mat-button-wrapper" (click)="confirmDialog()">
-            <mat-icon>exit_to_app</mat-icon>Logout 
-        </span>
+    <a mat-button [matMenuTriggerFor] = "loggedInUser" matTooltip="{{username}}">
+        <svg class="avatar original-poster-avatar" viewBox="2 2 20 20">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm6.36 14.83c-1.43-1.74-4.9-2.33-6.36-2.33s-4.93.59-6.36 2.33C4.62 15.49 4 13.82 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 1.82-.62 3.49-1.64 4.83zM12 6c-1.94 0-3.5 1.56-3.5 3.5S10.06 13 12 13s3.5-1.56 3.5-3.5S13.94 6 12 6z"></path><path d="M0 0h24v24H0V0z" fill="none">
+          </path>
+        </svg>
+        <mat-menu #loggedInUser = "matMenu">
+            <button mat-menu-item *ngIf="isAdmin" (click)="editLoggedInWriter()">Edit {{username}}</button>
+            <button mat-menu-item>
+              <div class="logout" (click)="confirmDialog()">
+                <mat-icon>exit_to_app</mat-icon>Logout 
+              </div>
+            </button>
+        </mat-menu>
     </a>
   </mat-toolbar-row>
 </mat-toolbar>

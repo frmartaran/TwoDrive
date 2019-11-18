@@ -80,7 +80,6 @@ namespace TwoDrive.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        [AuthorizeFilter(Role.Administrator)]
         public IActionResult Get(int id)
         {
             var writer = Logic.Get(id);
@@ -93,7 +92,6 @@ namespace TwoDrive.WebApi.Controllers
         }
 
         [HttpGet]
-        [AuthorizeFilter(Role.Administrator)]
         public IActionResult Get()
         {
             var writers = Logic.GetAll()

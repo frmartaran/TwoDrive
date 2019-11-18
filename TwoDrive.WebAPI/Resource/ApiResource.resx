@@ -243,4 +243,7 @@
   <data name="FriendAndWriterAreTheSame" xml:space="preserve">
     <value>A writer can't be his own friend</value>
   </data>
+  <data name="UnsupportedElementType" xml:space="preserve">
+    <value>Unsupported type of element, can't get model</value>
+  </data>
 </root>
