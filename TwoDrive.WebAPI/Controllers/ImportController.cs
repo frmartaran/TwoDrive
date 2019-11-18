@@ -3,11 +3,13 @@ using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
+using TwoDrive.WebApi.Filters;
 using TwoDrive.WebApi.Resource;
 
 namespace TwoDrive.WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [AuthorizeFilter(Role.Administrator)]
     [ApiController]
     public class ImportController : ControllerBase
     {

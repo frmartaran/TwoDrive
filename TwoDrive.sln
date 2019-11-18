@@ -207,4 +207,7 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {128FA913-2A83-4175-8111-7EE57B9B2DFA}
 	EndGlobalSection
+	GlobalSection(NDepend) = preSolution
+		Project = ".\TwoDrive.ndproj"
+	EndGlobalSection
 EndGlobal
