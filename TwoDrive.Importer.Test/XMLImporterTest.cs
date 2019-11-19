@@ -5,7 +5,7 @@ using TwoDrive.Importer.Interface.IFileManagement;
 using TwoDrive.Importer.Domain;
 using TwoDrive.Importers;
 using TwoDrive.Importer.Interface.Exceptions;
-using TwoDrive.Importer.Parameters;
+using TwoDrive.Importer.Interface;
 
 namespace TwoDrive.Importer.Test
 {
@@ -13,11 +13,18 @@ namespace TwoDrive.Importer.Test
     public class XMLImporterTest
     {
         private const string examplesRoot = "..\\..\\..\\Xml Tree Examples";
+        [TestMethod]
+        public void SetAndGetExtraParameters()
+        {
+            var importer = new XMLImporter();
+            var parameters = importer.ExtraParameters;
+            Assert.IsNotNull(parameters);
+        }
 
         [TestMethod]
         public void SuccessfullyLoadFile()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\Single Folder.xml"
             };
@@ -30,7 +37,7 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void FileNotFound()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = "path"
             };
@@ -43,7 +50,7 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void WrongXMLFile()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\Wrong File.xml"
             };
@@ -55,7 +62,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SaveRoot()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\Single Folder.xml"
             };
@@ -71,7 +78,7 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void WithoutCreationDate()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\WithoutCreationDate.xml"
             };
@@ -83,7 +90,7 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void WithoutDateModified()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\WithoutDateModified.xml"
             };
@@ -94,7 +101,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SaveTwoFolders()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\Single Folder.xml"
             };
@@ -109,7 +116,7 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void InvalidCreationDate()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\InvalidCreationDate.xml"
             };
@@ -121,7 +128,7 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void InvalidDateModified()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\InvalidDateModified.xml"
             };
@@ -132,7 +139,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SaveTwoLevelOfFolders()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\Two Level Tree.xml"
             };
@@ -151,7 +158,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SaveTwoLevelOfFoldersWithFile()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\Two Level Tree With File.xml"
             };
@@ -175,7 +182,7 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void FolderWithNoName()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\NoName.xml"
             };
@@ -186,7 +193,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SaveSimpleTreeWithFile()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\Simple Tree With File.xml"
             };
@@ -205,7 +212,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SaveSimpleTreeWithTwoTypeOfFile()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\Two Types Of Files.xml"
             };
@@ -227,7 +234,7 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void FileWtihNoName()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\File with no name.xml"
             };
@@ -239,7 +246,7 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void FileWtihNoType()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\File with no type.xml"
             };
@@ -251,7 +258,7 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void FileWtihNoContent()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\File with no content.xml"
             };
@@ -263,7 +270,7 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void FileWtihNoCreationDate()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\File with no creation date.xml"
             };
@@ -275,7 +282,7 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void FileWtihNoDateModified()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\File with no date modified.xml"
             };
@@ -286,7 +293,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void FileWtihNoRenderDefined()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\File with no render.xml"
             };
@@ -301,7 +308,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void FolderChildHasFile()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\Child has file.xml"
             };
@@ -322,7 +329,7 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void NoRoot()
         {
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $@"{examplesRoot}\\No root.xml"
             };

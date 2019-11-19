@@ -6,7 +6,6 @@ using TwoDrive.Importer.Interface;
 using TwoDrive.Importer.Interface.IFileManagement;
 using TwoDrive.Importer.Domain;
 using TwoDrive.Importer.Interface.Exceptions;
-using TwoDrive.Importer.Parameters;
 
 namespace TwoDrive.Importer
 {
@@ -30,17 +29,8 @@ namespace TwoDrive.Importer
 
         }
 
-        public Type ParameterType
-        {
-            get
-            {
-                return typeof(JsonParameter);
-            }
-        }
-
         public T Import<T>(ImportingParameters parameters) where T : class
         {
-            var param = parameters as JsonParameter;
             var binder = new KnownTypesBinder
             {
                 KnownTypes = new List<Type>
@@ -60,7 +50,7 @@ namespace TwoDrive.Importer
             };
             try
             {
-                var jsonString = Load<string>(param);
+                var jsonString = Load<string>(parameters);
                 var folder = JsonConvert.DeserializeObject<Folder>(jsonString, settings);
                 return folder as T;
             }
@@ -78,8 +68,7 @@ namespace TwoDrive.Importer
         {
             try
             {
-                var param = parameters as JsonParameter;
-                using (var reader = new StreamReader(param.Path))
+                using (var reader = new StreamReader(parameters.Path))
                 {
                     return reader.ReadToEnd() as T;
                 }

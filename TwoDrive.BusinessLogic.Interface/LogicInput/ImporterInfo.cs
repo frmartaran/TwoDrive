@@ -9,6 +9,6 @@ namespace TwoDrive.BusinessLogic.Interfaces.LogicInput
     {
         public string Name { get; set; }
 
-        public ImportingParameters Parameters { get; set; }
+        public ParameterDictionary Parameters { get; set; }
     }
 }

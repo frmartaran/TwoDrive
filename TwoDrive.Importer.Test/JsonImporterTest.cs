@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using TwoDrive.Importer.Interface;
 using TwoDrive.Importer.Interface.Exceptions;
 using TwoDrive.Importer.Interface.IFileManagement;
-using TwoDrive.Importer.Parameters;
 
 namespace TwoDrive.Importer.Test
 {
@@ -22,7 +22,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SuccessfullyLoadJsonFile()
         {
-            var parameters = new JsonParameter
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRoot}\\baseCase.json"
             };
@@ -36,7 +36,7 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void FileNotFound()
         {
-            var parameters = new JsonParameter
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRoot}\\doc.json"
             };
@@ -47,7 +47,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SaveAFolder()
         {
-            var parameters = new JsonParameter
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRoot}\\baseCase.json"
             };
@@ -61,7 +61,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SaveAChild()
         {
-            var parameters = new JsonParameter
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRoot}\\baseCase.json"
             };
@@ -77,7 +77,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SaveAChildFolder()
         {
-            var parameters = new JsonParameter
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRoot}\\baseCase.json"
             };
@@ -93,7 +93,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SaveATwoFilesAndOneFolder()
         {
-            var parameters = new JsonParameter
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRoot}\\baseCase.json"
             };
@@ -111,7 +111,7 @@ namespace TwoDrive.Importer.Test
         [TestMethod]
         public void SaveThreeLevelTree()
         {
-            var parameters = new JsonParameter
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRoot}\\Level3Tree.json"
             };
@@ -131,7 +131,7 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void MissingTypeInJson()
         {
-            var parameters = new JsonParameter
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRoot}\\MissingType.json"
             };
@@ -144,7 +144,7 @@ namespace TwoDrive.Importer.Test
         public void WrongTypeInJson()
         {
             var path = $"{examplesRoot}\\WrongType.json";
-            var parameters = new JsonParameter
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRoot}\\WrongType.json"
             };
@@ -157,7 +157,7 @@ namespace TwoDrive.Importer.Test
         public void WrongDateFormatInJson()
         {
             var path = $"{examplesRoot}\\WrongDateFormat.json";
-            var parameters = new JsonParameter
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRoot}\\WrongDateFormat.json"
             };
@@ -169,7 +169,7 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void WrongJson()
         {
-            var parameters = new JsonParameter
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRoot}\\WrongJson.json"
             };
@@ -181,7 +181,7 @@ namespace TwoDrive.Importer.Test
         [ExpectedException(typeof(ImporterException))]
         public void WrongTypeForThatElement()
         {
-            var parameters = new JsonParameter
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRoot}\\WrongTypeForThatElement.json"
             };

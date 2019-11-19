@@ -9,7 +9,6 @@ using TwoDrive.Importer;
 using TwoDrive.Importer.Interface.IFileManagement;
 using TwoDrive.Importer.Domain;
 using TwoDrive.Importer.Interface.Exceptions;
-using TwoDrive.Importer.Parameters;
 
 namespace TwoDrive.Importers
 {
@@ -34,8 +33,7 @@ namespace TwoDrive.Importers
 
         public T Import<T>(ImportingParameters parameters) where T : class
         {
-            var param = parameters as XMLParameters;
-            var document = Load<XmlDocument>(param);
+            var document = Load<XmlDocument>(parameters);
             var rootNode = document.DocumentElement;
             ValidateRootTag(rootNode);
             var root = CreateFolder(rootNode, ImporterConstants.Root);
@@ -177,9 +175,8 @@ namespace TwoDrive.Importers
         {
             try
             {
-                var param = parameters as XMLParameters;
                 var document = new XmlDocument();
-                document.Load(param.Path);
+                document.Load(parameters.Path);
                 return document as T;
             }
             catch (FileNotFoundException exception)
