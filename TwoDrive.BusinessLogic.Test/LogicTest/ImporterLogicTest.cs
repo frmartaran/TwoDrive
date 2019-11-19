@@ -600,7 +600,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
 
         [TestMethod]
         [ExpectedException(typeof(LogicException))]
-        public void GetAllImportersDllNotFound()
+        public void GetAllImportersPathEmpty()
         {
             var mockFolderLogic = new Mock<IFolderLogic>().Object;
             var mockFileLogic = new Mock<IFileLogic>().Object;
@@ -612,6 +612,24 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
 
             var importerLogic = new ImporterLogic(dependencies);
             var importersInfo = importerLogic.GetAllImporters("");
+            var names = importersInfo.Select(ii => ii.Name).ToList();
+            var parameters = importersInfo.Select(ii => ii.Parameters).ToList();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void GetAllImportersWrongPath()
+        {
+            var mockFolderLogic = new Mock<IFolderLogic>().Object;
+            var mockFileLogic = new Mock<IFileLogic>().Object;
+            var mockWriterLogic = new Mock<ILogic<Writer>>().Object;
+            var mockModificationLogic = new Mock<IModificationLogic>().Object;
+
+            var dependencies = new ImporterDependencies(mockFolderLogic, mockFileLogic,
+                mockWriterLogic, mockModificationLogic);
+
+            var importerLogic = new ImporterLogic(dependencies);
+            var importersInfo = importerLogic.GetAllImporters("dll");
             var names = importersInfo.Select(ii => ii.Name).ToList();
             var parameters = importersInfo.Select(ii => ii.Parameters).ToList();
         }
