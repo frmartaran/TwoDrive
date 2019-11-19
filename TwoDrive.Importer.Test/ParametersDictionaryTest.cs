@@ -28,11 +28,8 @@ namespace TwoDrive.Importer.Test
         public void TheresNoValueInDictionary ()
         {
             var key = "Paramenter";
-            var value = "Value";
             var dictionary = new ParameterDictionary();
             var parameter = dictionary.GetParameterValue<string>(key);
-
-            Assert.AreEqual(value, parameter);
         }
     }
 }

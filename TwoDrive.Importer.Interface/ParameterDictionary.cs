@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TwoDrive.Importer.Interface.Exceptions;
 
 namespace TwoDrive.Importer.Interface
 {
@@ -19,7 +20,8 @@ namespace TwoDrive.Importer.Interface
 
         public T GetParameterValue<T>(string key) where T : class
         {
-            _dictionary.TryGetValue(key, out object value);
+            if(!_dictionary.TryGetValue(key, out object value))
+                throw new ParameterException("Value not found for that key");
             return value as T;
         }
     }
