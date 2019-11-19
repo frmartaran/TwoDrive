@@ -48,6 +48,18 @@ namespace TwoDrive.Importer.Test
 
         [TestMethod]
         [ExpectedException(typeof(ImporterException))]
+        public void EmptyPath()
+        {
+            var parameters = new ImportingParameters
+            {
+                Path = ""
+            };
+            var formatter = new XMLImporter();
+            var document = formatter.Load<XmlDocument>(parameters);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ImporterException))]
         public void WrongXMLFile()
         {
             var parameters = new ImportingParameters
