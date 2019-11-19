@@ -178,6 +178,10 @@ namespace TwoDrive.BusinessLogic.Logic
             {
                 throw new LogicException(BusinessResource.NeedsRedeployment, exception);
             }
+            catch (ArgumentException exception)
+            {
+                throw new LogicException(BusinessResource.DllNotFound, exception);
+            }
             
         }
     }

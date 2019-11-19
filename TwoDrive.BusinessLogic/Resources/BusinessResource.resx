@@ -135,6 +135,9 @@
   <data name="DestinationNotInRoot_FolderValidator" xml:space="preserve">
     <value>Destination must be my root's child</value>
   </data>
+  <data name="DllNotFound" xml:space="preserve">
+    <value>The dll was not found. Please contact support at: support@twodrive.com</value>
+  </data>
   <data name="EndBeforeStart" xml:space="preserve">
     <value>End date cannot be earlier than start date</value>
   </data>

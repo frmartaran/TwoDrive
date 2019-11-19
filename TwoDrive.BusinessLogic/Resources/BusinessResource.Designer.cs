@@ -115,6 +115,15 @@ namespace TwoDrive.BusinessLogic.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The dll was not found. Please contact support at: support@twodrive.com.
+        /// </summary>
+        public static string DllNotFound {
+            get {
+                return ResourceManager.GetString("DllNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to End date cannot be earlier than start date.
         /// </summary>
         public static string EndBeforeStart {
