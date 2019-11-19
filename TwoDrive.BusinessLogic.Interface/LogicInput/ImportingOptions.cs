@@ -4,7 +4,7 @@ using System.Text;
 using TwoDrive.Domain;
 using TwoDrive.Importer.Interface;
 
-namespace TwoDrive.BusinessLogic.Helpers.LogicInput
+namespace TwoDrive.BusinessLogic.Interfaces.LogicInput
 {
     public class ImportingOptions
     {
