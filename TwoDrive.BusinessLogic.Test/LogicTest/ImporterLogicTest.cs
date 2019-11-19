@@ -93,6 +93,28 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
         }
 
         [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void GetImporterWrongPath()
+        {
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockFileLogic = new Mock<IFileLogic>();
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockModificationLogic = new Mock<IModificationLogic>().Object;
+            var dependencies = new ImporterDependencies(mockFolderLogic.Object,
+                mockFileLogic.Object, mockWriterLogic.Object, mockModificationLogic);
+
+            var options = new ImportingOptions
+            {
+                ImporterName = "XML",
+                Owner = writer,
+                Parameters = ImportingParameters
+            };
+            var importerLogic = new ImporterLogic(dependencies);
+            importerLogic.Options = options;
+            var importer = importerLogic.GetImporter("dll");
+        }
+
+        [TestMethod]
         public void GetJsonImporter()
         {
             var mockFolderLogic = new Mock<IFolderLogic>();
