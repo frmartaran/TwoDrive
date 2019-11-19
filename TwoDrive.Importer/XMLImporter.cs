@@ -187,6 +187,10 @@ namespace TwoDrive.Importers
             {
                 throw new ImporterException(exception.Message, exception);
             }
+            catch (ArgumentException exception)
+            {
+                throw new ImporterException(ImporterResource.EmptyPath, exception);
+            }
         }
     }
 }
