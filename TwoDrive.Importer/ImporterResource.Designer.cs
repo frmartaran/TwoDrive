@@ -61,6 +61,15 @@ namespace TwoDrive.Importer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Path file is necessary in this importer, so it must not be empty .
+        /// </summary>
+        internal static string EmptyPath {
+            get {
+                return ResourceManager.GetString("EmptyPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File Not Found.
         /// </summary>
         internal static string FileNotFound_Exception {
