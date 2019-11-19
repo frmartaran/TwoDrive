@@ -78,6 +78,10 @@ namespace TwoDrive.Importer
             {
                 throw new ImporterException(ImporterResource.FileNotFound_Exception, exception);
             }
+            catch (ArgumentException exception)
+            {
+                throw new ImporterException(ImporterResource.EmptyPath, exception);
+            }
 
         }
 

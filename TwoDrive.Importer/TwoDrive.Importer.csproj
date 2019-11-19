@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <EmbeddedResource Update="ImporterResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ImporterResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
