@@ -7,9 +7,7 @@ namespace TwoDrive.Importer.Interface
     public interface IImporter
     {
         string ImporterName { get; }
-
-        void SetExtraParameters();
-        ParameterDictionary GetExtraParameters();
+        ParameterDictionary ExtraParameters { get; set; }
         T Load<T>(ImportingParameters paramenters) where T : class;
 
         ImportType Import<ImportType>(ImportingParameters parameters)

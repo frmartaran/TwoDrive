@@ -15,7 +15,7 @@ namespace TwoDrive.Importer.Test
         public void SetAndGetExtraParameters()
         {
             var importer = new JsonImporter();
-            var parameters = importer.GetExtraParameters();
+            var parameters = importer.ExtraParameters;
             Assert.IsNotNull(parameters);
         }
 

@@ -14,6 +14,13 @@ namespace TwoDrive.Importer
     {
         private const string Name = "JSON";
 
+        public ParameterDictionary ExtraParameters { get; set; }
+
+        public JsonImporter()
+        {
+            ExtraParameters = new ParameterDictionary();
+        }
+
         public string ImporterName
         {
             get
@@ -29,11 +36,6 @@ namespace TwoDrive.Importer
             {
                 return typeof(JsonParameter);
             }
-        }
-
-        public ParameterDictionary GetExtraParameters()
-        {
-            throw new NotImplementedException();
         }
 
         public T Import<T>(ImportingParameters parameters) where T : class
@@ -89,9 +91,5 @@ namespace TwoDrive.Importer
 
         }
 
-        public void SetExtraParameters()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

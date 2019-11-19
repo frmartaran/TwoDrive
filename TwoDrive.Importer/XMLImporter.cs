@@ -25,12 +25,11 @@ namespace TwoDrive.Importers
             }
         }
 
-        public Type ParameterType
+        public ParameterDictionary ExtraParameters { get; set; }
+
+        public XMLImporter()
         {
-            get
-            {
-                return typeof(XMLParameters);
-            }
+            ExtraParameters = new ParameterDictionary();
         }
 
         public T Import<T>(ImportingParameters parameters) where T : class
@@ -191,16 +190,6 @@ namespace TwoDrive.Importers
             {
                 throw new ImporterException(exception.Message, exception);
             }
-        }
-
-        public void SetExtraParameters()
-        {
-            throw new NotImplementedException();
-        }
-
-        public ParameterDictionary GetExtraParameters()
-        {
-            throw new NotImplementedException();
         }
     }
 }
