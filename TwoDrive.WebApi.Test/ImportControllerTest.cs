@@ -5,12 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TwoDrive.BusinessLogic.Exceptions;
+using TwoDrive.BusinessLogic.Helpers;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using TwoDrive.Domain;
 using TwoDrive.Importer.Interface;
-using TwoDrive.Importer.Parameters;
 using TwoDrive.WebApi.Controllers;
 
 namespace TwoDrive.WebApi.Test
@@ -29,7 +29,7 @@ namespace TwoDrive.WebApi.Test
             {
                 Id = 1
             };
-            parameters = new XMLParameters
+            parameters = new ImportingParameters
             {
                 Path = ""
             };
@@ -40,7 +40,7 @@ namespace TwoDrive.WebApi.Test
         public void SuccessfullImport()
         {
             var mockImportLogic = new Mock<IImporterLogic>(MockBehavior.Strict);
-            mockImportLogic.Setup(m => m.Import(""));
+            mockImportLogic.Setup(m => m.Import(ImporterConstants.DllPath));
             mockImportLogic.SetupSet(m => m.Options = It.IsAny<ImportingOptions>());
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
@@ -77,7 +77,7 @@ namespace TwoDrive.WebApi.Test
         public void ImporterNotFound()
         {
             var mockImportLogic = new Mock<IImporterLogic>(MockBehavior.Strict);
-            mockImportLogic.Setup(m => m.Import(""))
+            mockImportLogic.Setup(m => m.Import(ImporterConstants.DllPath))
                 .Throws(new ImporterNotFoundException(""));
 
             mockImportLogic.SetupSet(m => m.Options = It.IsAny<ImportingOptions>());
@@ -99,7 +99,7 @@ namespace TwoDrive.WebApi.Test
         public void ImportingError()
         {
             var mockImportLogic = new Mock<IImporterLogic>(MockBehavior.Strict);
-            mockImportLogic.Setup(m => m.Import(""))
+            mockImportLogic.Setup(m => m.Import(ImporterConstants.DllPath))
                 .Throws(new LogicException(""));
 
             mockImportLogic.SetupSet(m => m.Options = It.IsAny<ImportingOptions>());
@@ -123,12 +123,12 @@ namespace TwoDrive.WebApi.Test
             var infoXml = new ImporterInfo
             {
                 Name = "XML",
-                Parameters = new XMLParameters()
+                Parameters = new ParameterDictionary()
             };
             var infoJSON = new ImporterInfo
             {
                 Name = "Json",
-                Parameters = new JsonParameter()
+                Parameters = new ParameterDictionary()
             };
 
             var allImporters = new List<ImporterInfo>
@@ -138,7 +138,7 @@ namespace TwoDrive.WebApi.Test
             };
 
             var mockImportLogic = new Mock<IImporterLogic>(MockBehavior.Strict);
-            mockImportLogic.Setup(m => m.GetAllImporters(""))
+            mockImportLogic.Setup(m => m.GetAllImporters(ImporterConstants.DllPath))
                 .Returns(allImporters);
             var mockWriterLogic = new Mock<ILogic<Writer>>().Object;
 

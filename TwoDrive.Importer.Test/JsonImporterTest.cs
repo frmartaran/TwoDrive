@@ -45,6 +45,18 @@ namespace TwoDrive.Importer.Test
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ImporterException))]
+        public void EmptyPath()
+        {
+            var parameters = new ImportingParameters
+            {
+                Path = ""
+            };
+            var importer = new JsonImporter();
+            var jsonFile = importer.Load<string>(parameters);
+        }
+
+        [TestMethod]
         public void SaveAFolder()
         {
             var parameters = new ImportingParameters

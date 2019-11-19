@@ -7,7 +7,7 @@ namespace TwoDrive.Importer.Interface
 {
     public class ParameterDictionary : IParameterDictionary
     {
-        private IDictionary<string, object> _dictionary;
+        public IDictionary<string, object> _dictionary;
 
         public ParameterDictionary()
         {

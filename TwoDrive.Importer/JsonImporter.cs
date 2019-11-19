@@ -18,6 +18,7 @@ namespace TwoDrive.Importer
         public JsonImporter()
         {
             ExtraParameters = new ParameterDictionary();
+            ExtraParameters.AddParameter<string>("Test","Test value");
         }
 
         public string ImporterName
