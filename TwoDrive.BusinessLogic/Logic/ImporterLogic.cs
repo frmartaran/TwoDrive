@@ -153,19 +153,15 @@ namespace TwoDrive.BusinessLogic.Logic
             var importersInfo = new List<ImporterInfo>();
             foreach (var importer in allImporters)
             {
-                var importerInstance = Activator.CreateInstance(importer);
+                var importerInstance = Activator.CreateInstance(importer) as IImporter;
 
                 var name = importer.GetProperty("ImporterName").GetValue(importerInstance)
                     as string;
-                var parameter = importer.GetProperty("ParameterType").GetValue(importerInstance)
-                    as Type;
-
-                var parameterInstance = Activator.CreateInstance(parameter) as ImportingParameters;
 
                 var info = new ImporterInfo
                 {
                     Name = name,
-                    Parameters = parameterInstance
+                    Parameters = importerInstance.ExtraParameters
                 };
                 importersInfo.Add(info);
 
