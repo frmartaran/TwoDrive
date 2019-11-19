@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using TwoDrive.BusinessLogic.Exceptions;
+using TwoDrive.BusinessLogic.Helpers;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
 using TwoDrive.Domain;
 using TwoDrive.WebApi.Filters;
+using TwoDrive.Importer.Interface;
 using TwoDrive.WebApi.Resource;
 
 namespace TwoDrive.WebApi.Controllers
@@ -24,7 +27,7 @@ namespace TwoDrive.WebApi.Controllers
         }
 
         [HttpPost("{importType}/{ownerId}")]
-        public IActionResult Import([FromBody] string path, string importType, int ownerId)
+        public IActionResult Import([FromBody] ImportingParameters parameters, string importType, int ownerId)
         {
             var owner = WriterLogic.Get(ownerId);
             if (owner == null)
@@ -33,12 +36,12 @@ namespace TwoDrive.WebApi.Controllers
             {
                 var options = new ImportingOptions
                 {
-                    FilePath = path,
-                    FileType = importType,
-                    Owner = owner
+                    ImporterName = importType,
+                    Owner = owner,
+                    Parameters = parameters
                 };
                 ImporterLogic.Options = options;
-                ImporterLogic.Import();
+                ImporterLogic.Import(ImporterConstants.DllPath);
                 return Ok(ApiResource.Import_Success);
 
             }
@@ -55,8 +58,9 @@ namespace TwoDrive.WebApi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var allImporters = ImporterLogic.GetAllImporters();
-            return Ok(allImporters);
+            var allImporters = ImporterLogic.GetAllImporters(ImporterConstants.DllPath);
+            var serializedList = JsonConvert.SerializeObject(allImporters);
+            return Ok(serializedList);
         }
     }
 }

@@ -5,9 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TwoDrive.BusinessLogic.Exceptions;
+using TwoDrive.BusinessLogic.Helpers;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using TwoDrive.Domain;
+using TwoDrive.Importer.Interface;
 using TwoDrive.WebApi.Controllers;
 
 namespace TwoDrive.WebApi.Test
@@ -16,6 +19,9 @@ namespace TwoDrive.WebApi.Test
     public class ImportControllerTest
     {
         Writer writer;
+
+        ImportingParameters parameters;
+
         [TestInitialize]
         public void Setup()
         {
@@ -23,13 +29,18 @@ namespace TwoDrive.WebApi.Test
             {
                 Id = 1
             };
+            parameters = new ImportingParameters
+            {
+                Path = ""
+            };
+
         }
 
         [TestMethod]
         public void SuccessfullImport()
         {
             var mockImportLogic = new Mock<IImporterLogic>(MockBehavior.Strict);
-            mockImportLogic.Setup(m => m.Import());
+            mockImportLogic.Setup(m => m.Import(ImporterConstants.DllPath));
             mockImportLogic.SetupSet(m => m.Options = It.IsAny<ImportingOptions>());
 
             var mockWriterLogic = new Mock<ILogic<Writer>>();
@@ -37,7 +48,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var controller = new ImportController(mockImportLogic.Object, mockWriterLogic.Object);
-            var result = controller.Import("", "XML", writer.Id);
+            var result = controller.Import(parameters, "XML", writer.Id);
 
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             mockImportLogic.VerifyAll();
@@ -55,7 +66,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns<Writer>(null);
 
             var controller = new ImportController(mockImportLogic.Object, mockWriterLogic.Object);
-            var result = controller.Import("", "XML", writer.Id);
+            var result = controller.Import(parameters, "XML", writer.Id);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
             mockImportLogic.VerifyAll();
@@ -66,7 +77,7 @@ namespace TwoDrive.WebApi.Test
         public void ImporterNotFound()
         {
             var mockImportLogic = new Mock<IImporterLogic>(MockBehavior.Strict);
-            mockImportLogic.Setup(m => m.Import())
+            mockImportLogic.Setup(m => m.Import(ImporterConstants.DllPath))
                 .Throws(new ImporterNotFoundException(""));
 
             mockImportLogic.SetupSet(m => m.Options = It.IsAny<ImportingOptions>());
@@ -76,7 +87,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var controller = new ImportController(mockImportLogic.Object, mockWriterLogic.Object);
-            var result = controller.Import("", "txt", writer.Id);
+            var result = controller.Import(parameters, "txt", writer.Id);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
             mockImportLogic.VerifyAll();
@@ -88,7 +99,7 @@ namespace TwoDrive.WebApi.Test
         public void ImportingError()
         {
             var mockImportLogic = new Mock<IImporterLogic>(MockBehavior.Strict);
-            mockImportLogic.Setup(m => m.Import())
+            mockImportLogic.Setup(m => m.Import(ImporterConstants.DllPath))
                 .Throws(new LogicException(""));
 
             mockImportLogic.SetupSet(m => m.Options = It.IsAny<ImportingOptions>());
@@ -98,7 +109,7 @@ namespace TwoDrive.WebApi.Test
                 .Returns(writer);
 
             var controller = new ImportController(mockImportLogic.Object, mockWriterLogic.Object);
-            var result = controller.Import("", "txt", writer.Id);
+            var result = controller.Import(parameters, "txt", writer.Id);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
             mockImportLogic.VerifyAll();
@@ -109,14 +120,25 @@ namespace TwoDrive.WebApi.Test
         [TestMethod]
         public void GetAllImporters()
         {
-            var allImporters = new List<string>
+            var infoXml = new ImporterInfo
             {
-                "XML",
-                "JSON"
+                Name = "XML",
+                Parameters = new ParameterDictionary()
+            };
+            var infoJSON = new ImporterInfo
+            {
+                Name = "Json",
+                Parameters = new ParameterDictionary()
+            };
+
+            var allImporters = new List<ImporterInfo>
+            {
+                infoXml,
+                infoJSON
             };
 
             var mockImportLogic = new Mock<IImporterLogic>(MockBehavior.Strict);
-            mockImportLogic.Setup(m => m.GetAllImporters())
+            mockImportLogic.Setup(m => m.GetAllImporters(ImporterConstants.DllPath))
                 .Returns(allImporters);
             var mockWriterLogic = new Mock<ILogic<Writer>>().Object;
 

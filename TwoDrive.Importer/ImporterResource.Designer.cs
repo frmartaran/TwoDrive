@@ -22,7 +22,7 @@ namespace TwoDrive.Importer {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ImporterResource {
+    public class ImporterResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace TwoDrive.Importer {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TwoDrive.Importer.ImporterResource", typeof(ImporterResource).Assembly);
@@ -51,7 +51,7 @@ namespace TwoDrive.Importer {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace TwoDrive.Importer {
         /// <summary>
         ///   Looks up a localized string similar to Path file is necessary in this importer, so it must not be empty .
         /// </summary>
-        internal static string EmptyPath {
+        public static string EmptyPath {
             get {
                 return ResourceManager.GetString("EmptyPath", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace TwoDrive.Importer {
         /// <summary>
         ///   Looks up a localized string similar to File Not Found.
         /// </summary>
-        internal static string FileNotFound_Exception {
+        public static string FileNotFound_Exception {
             get {
                 return ResourceManager.GetString("FileNotFound_Exception", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace TwoDrive.Importer {
         /// <summary>
         ///   Looks up a localized string similar to Wrong Json Format.
         /// </summary>
-        internal static string Json_Format_Exception {
+        public static string Json_Format_Exception {
             get {
                 return ResourceManager.GetString("Json_Format_Exception", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace TwoDrive.Importer {
         /// <summary>
         ///   Looks up a localized string similar to Missing or Wrong type especification on json. Supported types: &quot;File&quot; or &quot;Folder&quot;.
         /// </summary>
-        internal static string Json_Type_Exception {
+        public static string Json_Type_Exception {
             get {
                 return ResourceManager.GetString("Json_Type_Exception", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace TwoDrive.Importer {
         /// <summary>
         ///   Looks up a localized string similar to Missing Content Tag.
         /// </summary>
-        internal static string NoContent_Exception {
+        public static string NoContent_Exception {
             get {
                 return ResourceManager.GetString("NoContent_Exception", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace TwoDrive.Importer {
         /// <summary>
         ///   Looks up a localized string similar to Each folder tag must have the name attribute.
         /// </summary>
-        internal static string NoName_Exception {
+        public static string NoName_Exception {
             get {
                 return ResourceManager.GetString("NoName_Exception", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace TwoDrive.Importer {
         /// <summary>
         ///   Looks up a localized string similar to This importer only imports trees that start from the root folder. Use another importer or add a new one..
         /// </summary>
-        internal static string NoRoot_Exception {
+        public static string NoRoot_Exception {
             get {
                 return ResourceManager.GetString("NoRoot_Exception", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace TwoDrive.Importer {
         /// <summary>
         ///   Looks up a localized string similar to Missing Type Attribute. .
         /// </summary>
-        internal static string NoType_Exception {
+        public static string NoType_Exception {
             get {
                 return ResourceManager.GetString("NoType_Exception", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace TwoDrive.Importer {
         /// <summary>
         ///   Looks up a localized string similar to Unsupported file type. Must be &apos;txt&apos; or &apos;html&apos;.
         /// </summary>
-        internal static string Unsupported {
+        public static string Unsupported {
             get {
                 return ResourceManager.GetString("Unsupported", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace TwoDrive.Importer {
         /// <summary>
         ///   Looks up a localized string similar to Invalid date format. Please try: yyyy-mm-dd.
         /// </summary>
-        internal static string WrongFormat_Exception {
+        public static string WrongFormat_Exception {
             get {
                 return ResourceManager.GetString("WrongFormat_Exception", resourceCulture);
             }

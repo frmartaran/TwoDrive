@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -12,7 +12,7 @@
     <ProjectReference Include="..\TwoDrive.Importer.Interface\TwoDrive.Importer.Interface.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+    <ItemGroup>
     <Compile Update="ImporterResource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <EmbeddedResource Update="ImporterResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ImporterResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

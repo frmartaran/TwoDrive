@@ -9,11 +9,18 @@ using TwoDrive.Importer.Interface.Exceptions;
 
 namespace TwoDrive.Importer
 {
-    public class JsonImporter : IImporter<IFolder>
+    public class JsonImporter : IImporter
     {
         private const string Name = "JSON";
 
-        public string FileExtension
+        public ParameterDictionary ExtraParameters { get; set; }
+
+        public JsonImporter()
+        {
+            ExtraParameters = new ParameterDictionary();
+        }
+
+        public string ImporterName
         {
             get
             {
@@ -22,7 +29,7 @@ namespace TwoDrive.Importer
 
         }
 
-        public IFolder Import(string path)
+        public T Import<T>(ImportingParameters parameters) where T : class
         {
             var binder = new KnownTypesBinder
             {
@@ -43,9 +50,9 @@ namespace TwoDrive.Importer
             };
             try
             {
-                var jsonString = Load<string>(path);
+                var jsonString = Load<string>(parameters);
                 var folder = JsonConvert.DeserializeObject<Folder>(jsonString, settings);
-                return folder;
+                return folder as T;
             }
             catch (JsonSerializationException exception)
             {
@@ -57,11 +64,11 @@ namespace TwoDrive.Importer
             }
         }
 
-        public T Load<T>(string path) where T : class
+        public T Load<T>(ImportingParameters parameters) where T : class
         {
             try
             {
-                using (var reader = new StreamReader(path))
+                using (var reader = new StreamReader(parameters.Path))
                 {
                     return reader.ReadToEnd() as T;
                 }
@@ -70,7 +77,12 @@ namespace TwoDrive.Importer
             {
                 throw new ImporterException(ImporterResource.FileNotFound_Exception, exception);
             }
+            catch (ArgumentException exception)
+            {
+                throw new ImporterException(ImporterResource.EmptyPath, exception);
+            }
 
         }
+
     }
 }
