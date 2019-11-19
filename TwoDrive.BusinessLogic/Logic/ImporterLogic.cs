@@ -62,6 +62,10 @@ namespace TwoDrive.BusinessLogic.Logic
             {
                 throw new ImporterNotFoundException(BusinessResource.ImporterNotFound_ImporterLogic, exception);
             }
+            catch (TypeLoadException exception)
+            {
+                throw new LogicException(BusinessResource.NeedsRedeployment, exception);
+            }
 
         }
 
@@ -146,27 +150,35 @@ namespace TwoDrive.BusinessLogic.Logic
 
         public List<ImporterInfo> GetAllImporters(string path)
         {
-            var assemblyInfo = Assembly.LoadFrom(path);
-            var allImporters = assemblyInfo.GetTypes()
-                .Where(t => (typeof(IImporter).IsAssignableFrom(t)))
-                .ToList();
-            var importersInfo = new List<ImporterInfo>();
-            foreach (var importer in allImporters)
+            try
             {
-                var importerInstance = Activator.CreateInstance(importer) as IImporter;
-
-                var name = importer.GetProperty("ImporterName").GetValue(importerInstance)
-                    as string;
-
-                var info = new ImporterInfo
+                var assemblyInfo = Assembly.LoadFrom(path);
+                var allImporters = assemblyInfo.GetTypes()
+                    .Where(t => (typeof(IImporter).IsAssignableFrom(t)))
+                    .ToList();
+                var importersInfo = new List<ImporterInfo>();
+                foreach (var importer in allImporters)
                 {
-                    Name = name,
-                    Parameters = importerInstance.ExtraParameters
-                };
-                importersInfo.Add(info);
+                    var importerInstance = Activator.CreateInstance(importer) as IImporter;
 
+                    var name = importer.GetProperty("ImporterName").GetValue(importerInstance)
+                        as string;
+
+                    var info = new ImporterInfo
+                    {
+                        Name = name,
+                        Parameters = importerInstance.ExtraParameters
+                    };
+                    importersInfo.Add(info);
+
+                }
+                return importersInfo;
             }
-            return importersInfo;
+            catch (TypeLoadException exception)
+            {
+                throw new LogicException(BusinessResource.NeedsRedeployment, exception);
+            }
+            
         }
     }
 }

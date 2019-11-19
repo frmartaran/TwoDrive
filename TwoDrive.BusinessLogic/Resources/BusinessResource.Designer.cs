@@ -232,6 +232,15 @@ namespace TwoDrive.BusinessLogic.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Need to update dll version. Please contact support at: support@twodrive.com.
+        /// </summary>
+        public static string NeedsRedeployment {
+            get {
+                return ResourceManager.GetString("NeedsRedeployment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No claims to remove.
         /// </summary>
         public static string NoClaims {
