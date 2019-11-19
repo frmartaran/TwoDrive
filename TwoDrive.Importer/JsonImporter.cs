@@ -31,6 +31,11 @@ namespace TwoDrive.Importer
             }
         }
 
+        public ParameterDictionary GetExtraParameters()
+        {
+            throw new NotImplementedException();
+        }
+
         public T Import<T>(ImportingParameters parameters) where T : class
         {
             var param = parameters as JsonParameter;
@@ -82,6 +87,11 @@ namespace TwoDrive.Importer
                 throw new ImporterException(ImporterResource.FileNotFound_Exception, exception);
             }
 
+        }
+
+        public void SetExtraParameters()
+        {
+            throw new NotImplementedException();
         }
     }
 }

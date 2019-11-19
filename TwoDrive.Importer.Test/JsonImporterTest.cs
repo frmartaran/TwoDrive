@@ -12,6 +12,14 @@ namespace TwoDrive.Importer.Test
         private const string examplesRoot = "..\\..\\..\\Json Tree Examples";
 
         [TestMethod]
+        public void SetAndGetExtraParameters()
+        {
+            var importer = new JsonImporter();
+            var parameters = importer.GetExtraParameters();
+            Assert.IsNotNull(parameters);
+        }
+
+        [TestMethod]
         public void SuccessfullyLoadJsonFile()
         {
             var parameters = new JsonParameter

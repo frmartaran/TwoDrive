@@ -192,5 +192,15 @@ namespace TwoDrive.Importers
                 throw new ImporterException(exception.Message, exception);
             }
         }
+
+        public void SetExtraParameters()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ParameterDictionary GetExtraParameters()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

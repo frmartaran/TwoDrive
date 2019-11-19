@@ -8,5 +8,7 @@ namespace TwoDrive.Importer.Interface
     {
         public string Path { get; set; }
 
+        public ParameterDictionary ExtraParameters { get; set; }
+
     }
 }
