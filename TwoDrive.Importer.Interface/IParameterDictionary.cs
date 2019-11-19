@@ -6,8 +6,8 @@ namespace TwoDrive.Importer.Interface
 {
     public interface IParameterDictionary
     {
-        void AddParameter<T>(T key, T value);
+        void AddParameter<T>(string key, T value) where T : class;
 
-        T GetParameterValue<T>(T key);
+        T GetParameterValue<T>(string key) where T : class;
     }
 }

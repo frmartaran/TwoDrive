@@ -8,6 +8,5 @@ namespace TwoDrive.Importer.Interface
     {
         public string Path { get; set; }
 
-            
     }
 }

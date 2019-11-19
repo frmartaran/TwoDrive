@@ -12,14 +12,15 @@ namespace TwoDrive.Importer.Interface
         {
             _dictionary = new Dictionary<string, object>();
         }
-        public void AddParameter<T>(T key, T value)
+        public void AddParameter<T>(string key, T value) where T : class
         {
-            throw new NotImplementedException();
+            _dictionary.Add(key, value);
         }
 
-        public T GetParameterValue<T>(T key)
+        public T GetParameterValue<T>(string key) where T : class
         {
-            throw new NotImplementedException();
+            _dictionary.TryGetValue(key, out object value);
+            return value as T;
         }
     }
 }

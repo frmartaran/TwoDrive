@@ -17,7 +17,7 @@ namespace TwoDrive.Importer.Test
             var value = "Value";
             var dictionary = new ParameterDictionary();
             dictionary.AddParameter(key, value);
-            var parameter = dictionary.GetValue(key);
+            var parameter = dictionary.GetParameterValue<string>(key);
 
             Assert.AreEqual(value, parameter);
         }
