@@ -10,11 +10,10 @@ using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.DataAccess;
-using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.Importer;
-using TwoDrive.Importer.Parameters;
+using TwoDrive.Importer.Interface;
 using TwoDrive.Importers;
 
 namespace TwoDrive.BusinessLogic.Test.LogicTest
@@ -27,7 +26,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
         private const string examplesRootForJson = "..\\..\\..\\Json Tree Examples";
         private const string examplesRootForXML = "..\\..\\..\\Xml Tree Examples";
         private const string dllPath = Helpers.ImporterConstants.TestingPath;
-        private XMLParameters xmlParameters;
+        private ImportingParameters ImportingParameters;
 
 
         [TestInitialize]
@@ -41,7 +40,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>()
             };
-            xmlParameters = new XMLParameters
+            ImportingParameters = new ImportingParameters
             {
                 Path = ""
             };
@@ -62,7 +61,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             {
                 ImporterName = "XML",
                 Owner = writer,
-                Parameters = xmlParameters
+                Parameters = ImportingParameters
             };
             var importerLogic = new ImporterLogic(dependencies);
             importerLogic.Options = options;
@@ -84,7 +83,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             {
                 ImporterName = "JSON",
                 Owner = writer,
-                Parameters = xmlParameters
+                Parameters = ImportingParameters
             };
             var importerLogic = new ImporterLogic(dependencies);
             importerLogic.Options = options;
@@ -109,7 +108,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             {
                 ImporterName = "txt",
                 Owner = writer,
-                Parameters = xmlParameters
+                Parameters = ImportingParameters
             };
             var importerLogic = new ImporterLogic(dependencies);
             importerLogic.Options = options;
@@ -131,7 +130,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
 
             var dependencies = new ImporterDependencies(mockFolderLogic.Object,
                 mockFileLogic.Object, mockWriterLogic.Object, mockModificationLogic.Object);
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRootForXML}\\One Folder.xml"
             };
@@ -170,7 +169,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
             var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRootForXML}\\One Folder.xml"
             };
@@ -216,7 +215,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
             var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRootForXML}\\Simple Tree With File.xml"
             };
@@ -265,7 +264,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
             var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRootForXML}\\Two Types Of Files.xml"
             };
@@ -319,7 +318,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
             var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRootForXML}\\Unsupported File Type.xml"
             };
@@ -358,7 +357,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
             var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRootForXML}\\Two Level Tree With File.xml"
             };
@@ -411,7 +410,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
             var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRootForXML}\\Two Level Tree With File.xml"
             };
@@ -451,7 +450,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
             var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRootForXML}\\Two Level Tree With File.xml"
             };
@@ -503,7 +502,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
             var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
-            var parameters = new XMLParameters
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRootForXML}\\Validation Error.xml"
             };
@@ -542,7 +541,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
             var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
-            var parameters = new JsonParameter
+            var parameters = new ImportingParameters
             {
                 Path = $"{examplesRootForJson}\\baseCase.json"
             };
@@ -589,17 +588,12 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(dependencies);
             var importersInfo = importerLogic.GetAllImporters(dllPath);
             var names = importersInfo.Select(ii => ii.Name).ToList();
-            var jsonParam = importersInfo.Select(ii => ii.Parameters)
-                .OfType<JsonParameter>()
-                .FirstOrDefault();
-            var xmlParam = importersInfo.Select(ii => ii.Parameters)
-                .OfType<XMLParameters>()
-                .FirstOrDefault();
+            var parameters = importersInfo.Select(ii => ii.Parameters).ToList();
+
             Assert.IsNotNull(importersInfo);
             Assert.IsTrue(names.Contains("XML"));
             Assert.IsTrue(names.Contains("JSON"));
-            Assert.IsNotNull(jsonParam);
-            Assert.IsNotNull(xmlParam);
+            Assert.IsTrue(parameters.All(p => p != null));
 
 
         }
