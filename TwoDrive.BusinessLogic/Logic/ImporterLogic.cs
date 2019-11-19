@@ -182,7 +182,11 @@ namespace TwoDrive.BusinessLogic.Logic
             {
                 throw new LogicException(BusinessResource.DllNotFound, exception);
             }
-            
+            catch (FileNotFoundException exception)
+            {
+                throw new LogicException(BusinessResource.DllNotFound, exception);
+            }
+
         }
     }
 }
