@@ -48,9 +48,9 @@ namespace TwoDrive.WebApi.Models
                     .Select(c => c)
                     .FirstOrDefault()
                     .Element;
-                    if (FolderLogicExtension.ElementIsFromOwnerAndIsRootFolder(claimElement, Id.Value) 
-                        || FolderLogicExtension.ElementIsntFromOwner(claimElement, Id.Value) 
-                        || FolderLogicExtension.WriterHasClaimsForParent(entity.Claims, claimElement, claimElement.Id))
+                    if ((FolderLogicExtension.ElementIsFromOwnerAndIsRootFolder(claimElement, Id.Value) 
+                        || FolderLogicExtension.ElementIsntFromOwner(claimElement, Id.Value)) 
+                        && !FolderLogicExtension.WriterHasClaimsForParent(entity.Claims, claimElement, claimElement.Id))
                     {
                         Claims.Add(new ClaimModel().FromDomain(claimGrouping));
                     }                    
