@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TwoDrive.Importer.Interface.IFileManagement;
 
 namespace TwoDrive.Importer.Interface
 {
-    public interface IImporter<ImportType>
-        where ImportType : class
+    public interface IImporter
     {
-        string FileExtension { get;}
+        string ImporterName { get; }
+        ParameterDictionary ExtraParameters { get; set; }
+        T Load<T>(ImportingParameters paramenters) where T : class;
 
-        T Load<T>(string path) where T : class;
-
-        ImportType Import(string path);
+        ImportType Import<ImportType>(ImportingParameters parameters)
+            where ImportType : class;
     }
 }

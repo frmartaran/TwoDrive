@@ -10,10 +10,10 @@ using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using TwoDrive.BusinessLogic.Logic;
 using TwoDrive.BusinessLogic.Validators;
 using TwoDrive.DataAccess;
-using TwoDrive.DataAccess.Interface;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
 using TwoDrive.Importer;
+using TwoDrive.Importer.Interface;
 using TwoDrive.Importers;
 
 namespace TwoDrive.BusinessLogic.Test.LogicTest
@@ -25,6 +25,8 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
 
         private const string examplesRootForJson = "..\\..\\..\\Json Tree Examples";
         private const string examplesRootForXML = "..\\..\\..\\Xml Tree Examples";
+        private const string dllPath = Helpers.ImporterConstants.TestingPath;
+        private ImportingParameters ImportingParameters;
 
 
         [TestInitialize]
@@ -38,6 +40,11 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>()
             };
+            ImportingParameters = new ImportingParameters
+            {
+                Path = ""
+            };
+            
         }
 
         [TestMethod]
@@ -49,17 +56,62 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var mockModificationLogic = new Mock<IModificationLogic>().Object;
             var dependencies = new ImporterDependencies(mockFolderLogic.Object,
                 mockFileLogic.Object, mockWriterLogic.Object, mockModificationLogic);
+           
             var options = new ImportingOptions
             {
-                FilePath = "",
-                FileType = "XML",
-                Owner = writer
+                ImporterName = "XML",
+                Owner = writer,
+                Parameters = ImportingParameters
             };
             var importerLogic = new ImporterLogic(dependencies);
             importerLogic.Options = options;
-            var importer = importerLogic.GetImporter();
+            var importer = importerLogic.GetImporter(dllPath);
 
             Assert.IsInstanceOfType(importer, typeof(XMLImporter));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void GetImporterEmptyPath()
+        {
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockFileLogic = new Mock<IFileLogic>();
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockModificationLogic = new Mock<IModificationLogic>().Object;
+            var dependencies = new ImporterDependencies(mockFolderLogic.Object,
+                mockFileLogic.Object, mockWriterLogic.Object, mockModificationLogic);
+
+            var options = new ImportingOptions
+            {
+                ImporterName = "XML",
+                Owner = writer,
+                Parameters = ImportingParameters
+            };
+            var importerLogic = new ImporterLogic(dependencies);
+            importerLogic.Options = options;
+            var importer = importerLogic.GetImporter("");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void GetImporterWrongPath()
+        {
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockFileLogic = new Mock<IFileLogic>();
+            var mockWriterLogic = new Mock<ILogic<Writer>>();
+            var mockModificationLogic = new Mock<IModificationLogic>().Object;
+            var dependencies = new ImporterDependencies(mockFolderLogic.Object,
+                mockFileLogic.Object, mockWriterLogic.Object, mockModificationLogic);
+
+            var options = new ImportingOptions
+            {
+                ImporterName = "XML",
+                Owner = writer,
+                Parameters = ImportingParameters
+            };
+            var importerLogic = new ImporterLogic(dependencies);
+            importerLogic.Options = options;
+            var importer = importerLogic.GetImporter("dll");
         }
 
         [TestMethod]
@@ -73,14 +125,14 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 mockFileLogic.Object, mockWriterLogic.Object, mockModificationLogic);
             var options = new ImportingOptions
             {
-                FilePath = "",
-                FileType = "JSON",
-                Owner = writer
+                ImporterName = "JSON",
+                Owner = writer,
+                Parameters = ImportingParameters
             };
             var importerLogic = new ImporterLogic(dependencies);
             importerLogic.Options = options;
 
-            var importer = importerLogic.GetImporter();
+            var importer = importerLogic.GetImporter(dllPath);
 
             Assert.IsInstanceOfType(importer, typeof(JsonImporter));
         }
@@ -98,14 +150,14 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 mockFileLogic.Object, mockWriterLogic.Object, mockModificationLogic);
             var options = new ImportingOptions
             {
-                FilePath = "",
-                FileType = "txt",
-                Owner = writer
+                ImporterName = "txt",
+                Owner = writer,
+                Parameters = ImportingParameters
             };
             var importerLogic = new ImporterLogic(dependencies);
             importerLogic.Options = options;
 
-            var importer = importerLogic.GetImporter();
+            var importer = importerLogic.GetImporter(dllPath);
 
         }
 
@@ -122,15 +174,19 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
 
             var dependencies = new ImporterDependencies(mockFolderLogic.Object,
                 mockFileLogic.Object, mockWriterLogic.Object, mockModificationLogic.Object);
+            var parameters = new ImportingParameters
+            {
+                Path = $"{examplesRootForXML}\\One Folder.xml"
+            };
             var options = new ImportingOptions
             {
-                FilePath = $"{examplesRootForXML}\\One Folder.xml",
-                FileType = "XML",
-                Owner = writer
+                ImporterName = "XML",
+                Owner = writer,
+                Parameters = parameters
             };
             var importerLogic = new ImporterLogic(dependencies);
             importerLogic.Options = options;
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
 
             mockFolderLogic.VerifyAll();
             mockWriterLogic.VerifyAll();
@@ -157,18 +213,22 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
             var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
+            var parameters = new ImportingParameters
+            {
+                Path = $"{examplesRootForXML}\\One Folder.xml"
+            };
             var options = new ImportingOptions
             {
-                FilePath = $"{examplesRootForXML}\\One Folder.xml",
-                FileType = "XML",
-                Owner = writer
+                ImporterName = "XML",
+                Owner = writer,
+                Parameters = parameters
             };
             writerRepository.Insert(writer);
             writerRepository.Save();
 
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
 
             var foldersInDb = folderLogic.GetAll();
             var claims = writer.Claims.Count;
@@ -199,11 +259,15 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
             var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
+            var parameters = new ImportingParameters
+            {
+                Path = $"{examplesRootForXML}\\Simple Tree With File.xml"
+            };
             var options = new ImportingOptions
             {
-                FilePath = $"{examplesRootForXML}\\Simple Tree With File.xml",
-                FileType = "XML",
-                Owner = writer
+                ImporterName = "XML",
+                Owner = writer,
+                Parameters = parameters
             };
             writerRepository.Insert(writer);
             writerRepository.Save();
@@ -211,7 +275,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
 
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
 
             var foldersInDb = folderLogic.GetAll();
             var claims = writer.Claims.Count;
@@ -244,11 +308,15 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
             var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
+            var parameters = new ImportingParameters
+            {
+                Path = $"{examplesRootForXML}\\Two Types Of Files.xml"
+            };
             var options = new ImportingOptions
             {
-                FilePath = $"{examplesRootForXML}\\Two Types Of Files.xml",
-                FileType = "XML",
-                Owner = writer
+                ImporterName = "XML",
+                Owner = writer,
+                Parameters = parameters
             };
             writerRepository.Insert(writer);
             writerRepository.Save();
@@ -256,7 +324,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
 
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
 
             var foldersInDb = folderLogic.GetAll();
             var claims = writer.Claims.Count;
@@ -294,11 +362,15 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
             var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
+            var parameters = new ImportingParameters
+            {
+                Path = $"{examplesRootForXML}\\Unsupported File Type.xml"
+            };
             var options = new ImportingOptions
             {
-                FilePath = $"{examplesRootForXML}\\Unsupported File Type.xml",
-                FileType = "XML",
-                Owner = writer
+                ImporterName = "XML",
+                Owner = writer,
+                Parameters = parameters
             };
             writerRepository.Insert(writer);
             writerRepository.Save();
@@ -306,7 +378,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
 
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
         }
 
         [TestMethod]
@@ -329,11 +401,15 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
             var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
+            var parameters = new ImportingParameters
+            {
+                Path = $"{examplesRootForXML}\\Two Level Tree With File.xml"
+            };
             var options = new ImportingOptions
             {
-                FilePath = $"{examplesRootForXML}\\Two Level Tree With File.xml",
-                FileType = "XML",
-                Owner = writer
+                ImporterName = "XML",
+                Owner = writer,
+                Parameters = parameters
             };
             writerRepository.Insert(writer);
             writerRepository.Save();
@@ -341,7 +417,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
 
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
 
             var foldersInDb = folderLogic.GetAll();
             var claims = writer.Claims.Count;
@@ -378,10 +454,14 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
             var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
+            var parameters = new ImportingParameters
+            {
+                Path = $"{examplesRootForXML}\\Two Level Tree With File.xml"
+            };
             var options = new ImportingOptions
             {
-                FilePath = $"{examplesRootForXML}\\Two Level Tree With File.xml",
-                FileType = "XML",
+                ImporterName = "XML",
+                Parameters = parameters
             };
             writerRepository.Insert(writer);
             writerRepository.Save();
@@ -389,7 +469,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
 
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
 
         }
 
@@ -414,11 +494,15 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
             var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
+            var parameters = new ImportingParameters
+            {
+                Path = $"{examplesRootForXML}\\Two Level Tree With File.xml"
+            };
             var options = new ImportingOptions
             {
-                FilePath = $"{examplesRootForXML}\\Two Level Tree With File.xml",
-                FileType = "XML",
-                Owner = writer
+                ImporterName = "XML",
+                Owner = writer,
+                Parameters = parameters
             };
             writerRepository.Insert(writer);
             writerRepository.Save();
@@ -438,7 +522,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
 
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
         }
 
         [TestMethod]
@@ -462,11 +546,15 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
             var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
+            var parameters = new ImportingParameters
+            {
+                Path = $"{examplesRootForXML}\\Validation Error.xml"
+            };
             var options = new ImportingOptions
             {
-                FilePath = $"{examplesRootForXML}\\Validation Error.xml",
-                FileType = "XML",
-                Owner = writer
+                ImporterName = "XML",
+                Owner = writer,
+                Parameters = parameters
             };
             writerRepository.Insert(writer);
             writerRepository.Save();
@@ -474,7 +562,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
 
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
         }
 
         [TestMethod]
@@ -497,11 +585,15 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var writerLogic = new WriterLogic(writerRepository, writerValidator);
             var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
                 modificationsLogic);
+            var parameters = new ImportingParameters
+            {
+                Path = $"{examplesRootForJson}\\baseCase.json"
+            };
             var options = new ImportingOptions
             {
-                FilePath = $"{examplesRootForJson}\\baseCase.json",
-                FileType = "JSON",
-                Owner = writer
+                ImporterName = "JSON",
+                Owner = writer,
+                Parameters = parameters
             };
             writerRepository.Insert(writer);
             writerRepository.Save();
@@ -509,7 +601,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
 
-            importerLogic.Import();
+            importerLogic.Import(dllPath);
 
             var foldersInDb = folderLogic.GetAll();
             var claims = writer.Claims.Count;
@@ -538,12 +630,52 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 mockWriterLogic, mockModificationLogic);
 
             var importerLogic = new ImporterLogic(dependencies);
-            var importerNames = importerLogic.GetAllImporters();
+            var importersInfo = importerLogic.GetAllImporters(dllPath);
+            var names = importersInfo.Select(ii => ii.Name).ToList();
+            var parameters = importersInfo.Select(ii => ii.Parameters).ToList();
 
-            Assert.IsNotNull(importerNames);
-            Assert.IsTrue(importerNames.Contains("XML"));
-            Assert.IsTrue(importerNames.Contains("JSON"));
+            Assert.IsNotNull(importersInfo);
+            Assert.IsTrue(names.Contains("XML"));
+            Assert.IsTrue(names.Contains("JSON"));
+            Assert.IsTrue(parameters.All(p => p != null));
 
+
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void GetAllImportersPathEmpty()
+        {
+            var mockFolderLogic = new Mock<IFolderLogic>().Object;
+            var mockFileLogic = new Mock<IFileLogic>().Object;
+            var mockWriterLogic = new Mock<ILogic<Writer>>().Object;
+            var mockModificationLogic = new Mock<IModificationLogic>().Object;
+
+            var dependencies = new ImporterDependencies(mockFolderLogic, mockFileLogic,
+                mockWriterLogic, mockModificationLogic);
+
+            var importerLogic = new ImporterLogic(dependencies);
+            var importersInfo = importerLogic.GetAllImporters("");
+            var names = importersInfo.Select(ii => ii.Name).ToList();
+            var parameters = importersInfo.Select(ii => ii.Parameters).ToList();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void GetAllImportersWrongPath()
+        {
+            var mockFolderLogic = new Mock<IFolderLogic>().Object;
+            var mockFileLogic = new Mock<IFileLogic>().Object;
+            var mockWriterLogic = new Mock<ILogic<Writer>>().Object;
+            var mockModificationLogic = new Mock<IModificationLogic>().Object;
+
+            var dependencies = new ImporterDependencies(mockFolderLogic, mockFileLogic,
+                mockWriterLogic, mockModificationLogic);
+
+            var importerLogic = new ImporterLogic(dependencies);
+            var importersInfo = importerLogic.GetAllImporters("dll");
+            var names = importersInfo.Select(ii => ii.Name).ToList();
+            var parameters = importersInfo.Select(ii => ii.Parameters).ToList();
         }
     }
 }

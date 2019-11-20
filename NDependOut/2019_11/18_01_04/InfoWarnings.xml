@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<InfoWarnings>
+  <Info>Begin full analysis with NDepend v2019.3.0</Info>
+  <Info>Visual Studio solution file resolved to absolute file path: from    {.\TwoDrive.sln}    to    {C:\Users\Usuario\Desktop\Obligatorio\TwoDrive.sln}</Info>
+  <Info>Output directory resolved to absolute directory path: C:\Users\Usuario\Desktop\Obligatorio\NDependOut</Info>
+  <Warning>Input directory not found {C:\Program Files\dotnet\store\x64\netcoreapp2.2}</Warning>
+  <Info>Compare with analysis result obtained on 2019 November - 17 Sunday 20:14  (which is the analysis result with date closest to 30 days ago)</Info>
+  <Info>.NET Assemblies resolved from the Visual Studio solution file {C:\Users\Usuario\Desktop\Obligatorio\TwoDrive.sln}
+   C:\Users\Usuario\Desktop\Obligatorio\TwoDrive.Domain\bin\debug\netstandard2.0\TwoDrive.Domain.dll
+   C:\Users\Usuario\Desktop\Obligatorio\TwoDrive.DataAccess.Interface\bin\debug\netstandard2.0\TwoDrive.DataAccess.Interface.dll
+   C:\Users\Usuario\Desktop\Obligatorio\TwoDrive.DataAccess\bin\debug\netstandard2.0\TwoDrive.DataAccess.dll
+   C:\Users\Usuario\Desktop\Obligatorio\TwoDrive.BusinessLogic.Interface\bin\debug\netstandard2.0\TwoDrive.BusinessLogic.Interfaces.dll
+   C:\Users\Usuario\Desktop\Obligatorio\TwoDrive.BusinessLogic\bin\debug\netstandard2.0\TwoDrive.BusinessLogic.dll
+   C:\Users\Usuario\Desktop\Obligatorio\TwoDrive.WebApi\bin\debug\netcoreapp2.2\TwoDrive.WebApi.dll
+   C:\Users\Usuario\Desktop\Obligatorio\TwoDrive.Domain.Interface\bin\debug\netstandard2.0\TwoDrive.Domain.Interface.dll
+   C:\Users\Usuario\Desktop\Obligatorio\TwoDrive.Importer.Interface\bin\debug\netstandard2.0\TwoDrive.Importer.Interface.dll
+   C:\Users\Usuario\Desktop\Obligatorio\TwoDrive.Importer\bin\debug\netstandard2.0\TwoDrive.Importer.dll</Info>
+  <Info>.NET Assemblies filtered out from the Visual Studio solution file {C:\Users\Usuario\Desktop\Obligatorio\TwoDrive.sln}
+   TwoDrive.BusinessLogic.Test
+   TwoDrive.DataAccess.Tests
+   TwoDrive.WebApi.Test
+   TwoDrive.Importer.Test</Info>
+  <Info>Concurrent mode</Info>
+  <Info>.NET Assemblies loaded from {C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.2.6} 
+   mscorlib.dll   v4.0.0.0
+   System.Web.HttpUtility.dll   v4.0.1.0
+   System.Runtime.Extensions.dll   v4.2.1.0
+   System.ComponentModel.dll   v4.0.3.0
+   System.Linq.dll   v4.2.1.0
+   System.Collections.dll   v4.1.1.0
+   System.Resources.ResourceManager.dll   v4.1.1.0
+   System.Diagnostics.Tools.dll   v4.1.1.0
+   System.Diagnostics.Debug.dll   v4.1.1.0
+   System.Runtime.dll   v4.2.1.0
+   netstandard.dll   v2.0.0.0</Info>
+  <Info>.NET Assemblies loaded from {C:\Program Files\dotnet\sdk\NuGetFallbackFolder} 
+   .\Microsoft.AspNetCore.Routing.Abstractions\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Routing.Abstractions.dll   v2.2.0.0
+   .\Microsoft.AspNetCore.Http.Features\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.Features.dll   v2.2.0.0
+   .\Microsoft.AspNetCore.Diagnostics\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Diagnostics.dll   v2.2.0.0
+   .\Microsoft.AspNetCore.Mvc\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.dll   v2.2.0.0
+   .\Microsoft.AspNetCore\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.dll   v2.2.0.0
+   .\Microsoft.AspNetCore.Mvc.Abstractions\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Abstractions.dll   v2.2.0.0
+   .\Microsoft.Extensions.Primitives\2.2.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll   v2.2.0.0
+   .\Microsoft.AspNetCore.Mvc.Formatters.Json\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Formatters.Json.dll   v2.2.0.0
+   .\Microsoft.AspNetCore.Cors\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Cors.dll   v2.2.0.0
+   .\Microsoft.AspNetCore.Http.Abstractions\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.Abstractions.dll   v2.2.0.0
+   .\Microsoft.Extensions.DependencyInjection.Abstractions\2.2.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll   v2.2.0.0
+   .\Microsoft.Extensions.Configuration.Abstractions\2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll   v2.2.0.0
+   .\Microsoft.AspNetCore.Hosting.Abstractions\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Hosting.Abstractions.dll   v2.2.0.0
+   .\Microsoft.AspNetCore.Razor.Runtime\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Razor.Runtime.dll   v2.2.0.0</Info>
+  <Info>.NET Assemblies loaded from {C:\Users\Usuario\.nuget\packages} 
+   .\Microsoft.AspNetCore.Hosting\2.2.7\lib\netstandard2.0\Microsoft.AspNetCore.Hosting.dll   v2.2.7.0
+   .\Newtonsoft.Json\12.0.3\lib\net20\Newtonsoft.Json.dll   v12.0.0.0
+   .\Microsoft.AspNetCore.Mvc.Core\2.2.5\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Core.dll   v2.2.5.0
+   .\AutoMapper\9.0.0\lib\net461\AutoMapper.dll   v9.0.0.0
+   .\Microsoft.EntityFrameworkCore.SqlServer\2.2.6\lib\netstandard2.0\Microsoft.EntityFrameworkCore.SqlServer.dll   v2.2.6.0
+   .\Microsoft.EntityFrameworkCore.InMemory\2.2.6\lib\netstandard2.0\Microsoft.EntityFrameworkCore.InMemory.dll   v2.2.6.0
+   .\Microsoft.EntityFrameworkCore.Relational\2.2.6\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Relational.dll   v2.2.6.0
+   .\Microsoft.EntityFrameworkCore\3.0.0\lib\netstandard2.1\Microsoft.EntityFrameworkCore.dll   v3.0.0.0</Info>
+  <Info>90 source files parsed ; all source files found ; all source files in-sync with PDB</Info>
+  <Info>0 code rule has been extracted from code.</Info>
+  <Info>No dependency cycle detected in assemblies referencement graph.</Info>
+  <Info>Do merge code generated by compiler into application code.</Info>
+  <Info>Analyse dependencies of your application.</Info>
+  <Info>No SuppressMessageAttribute found in the analyzed code base. Since NDepend v2018.2 SuppressMessageAttribute can be used to suppress NDepend issues. Don't forget to set in your projects the compilation symbol CODE_ANALYSIS to use this attribute to suppress NDepend issues.</Info>
+  <Info>Log trend metrics values.</Info>
+  <Info>Execute queries and rules.</Info>
+  <Warning>2 quality gates warn:
+  - 'New Debt since Baseline' value 0.66 man-days greater than warn threshold 0 man-days
+  - 'New Annual Interest since Baseline' value 1.32 man-days greater than warn threshold 0 man-days</Warning>
+  <Error>3 quality gates fail:
+  - 'New Blocker / Critical / High Issues' value 29 issues greater than fail threshold 0 issues
+  - 'Critical Rules Violated' value 7 rules greater than fail threshold 0 rules
+  - 'Debt Rating per Namespace' value 4 namespaces greater than fail threshold 0 namespaces</Error>
+  <Info>Building the report (standard).</Info>
+</InfoWarnings>

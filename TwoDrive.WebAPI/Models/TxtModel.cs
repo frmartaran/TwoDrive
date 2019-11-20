@@ -9,6 +9,10 @@ namespace TwoDrive.WebApi.Models
 {
     public class TxtModel : FileModel
     {
+        public override FileModel FromDomain(File entity)
+        {
+            return base.FromDomain(entity) as TxtModel;
+        }
         public override File ToDomain()
         {
             if (this == null)

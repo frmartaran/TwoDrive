@@ -124,6 +124,103 @@ namespace TwoDrive.WebApi.Test
         }
 
         [TestMethod]
+        public void MoveParentToChildFolder()
+        {
+            var writer = new Writer
+            {
+                Id = 3
+            };
+            var folderToMove = new Folder
+            {
+                Id = 1,
+                Owner = writer,
+                OwnerId = writer.Id
+            };
+            var folderDestination = new Folder
+            {
+                Id = 2,
+                ParentFolder = folderToMove,
+                ParentFolderId = folderToMove.Id,
+                Owner = writer,
+                OwnerId = writer.Id
+            };
+
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
+            var mockElementRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
+            var mockElementValidator = new Mock<IFolderValidator>(MockBehavior.Strict);
+            var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            var mockModificationLogic = new Mock<IModificationLogic>();
+
+            mockSessionLogic.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+            .Returns(writer);
+            mockFolderLogic.Setup(m => m.Get(It.Is<int>(id => id == 1)))
+            .Returns(folderToMove);
+            mockFolderLogic.Setup(m => m.Get(It.Is<int>(id => id == 2)))
+            .Returns(folderDestination);
+            mockFolderLogic.Setup(m => m.MoveElement(It.IsAny<Element>(), It.IsAny<Folder>(),
+                It.IsAny<MoveElementDependencies>()))
+                .Throws(new LogicException(""));
+
+            var controller = new FolderController(mockFolderLogic.Object, mockSessionLogic.Object,
+                mockElementRepository.Object, mockElementValidator.Object, mockLogicWriter.Object,
+                mockModificationLogic.Object);
+            var result = controller.MoveFolder(folderToMove.Id, folderDestination.Id);
+
+            mockFolderLogic.VerifyAll();
+            mockSessionLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        }
+
+        [TestMethod]
+        public void MoveFolderNotOwner()
+        {
+            var writer = new Writer
+            {
+                Id = 3
+            };
+            var OtherWriter = new Writer
+            {
+                Id = 6
+            };
+            var folderToMove = new Folder
+            {
+                Id = 1,
+                Owner = writer,
+                OwnerId = writer.Id
+            };
+            var folderDestination = new Folder
+            {
+                Id = 2,
+                Owner = OtherWriter,
+                OwnerId = OtherWriter.Id
+            };
+
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
+            var mockElementRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
+            var mockElementValidator = new Mock<IFolderValidator>(MockBehavior.Strict);
+            var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            var mockModificationLogic = new Mock<IModificationLogic>();
+
+            mockSessionLogic.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+            .Returns(writer);
+            mockFolderLogic.Setup(m => m.Get(It.Is<int>(id => id == 1)))
+            .Returns(folderToMove);
+            mockFolderLogic.Setup(m => m.Get(It.Is<int>(id => id == 2)))
+            .Returns(folderDestination);
+
+            var controller = new FolderController(mockFolderLogic.Object, mockSessionLogic.Object,
+                mockElementRepository.Object, mockElementValidator.Object, mockLogicWriter.Object,
+                mockModificationLogic.Object);
+            var result = controller.MoveFolder(folderToMove.Id, folderDestination.Id);
+
+            mockFolderLogic.VerifyAll();
+            mockSessionLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        }
+
+        [TestMethod]
         public void UpdateFolder()
         {
             var writer = new Writer();
@@ -327,6 +424,163 @@ namespace TwoDrive.WebApi.Test
         }
 
         [TestMethod]
+        public void CreateFolderNotOwner()
+        {
+
+            var writer = new Writer()
+            {
+                Id = 2,
+                UserName = "Writer",
+                Password = "132",
+                Role = Role.Writer,
+                Claims = new List<CustomClaim>(),
+                Friends = new List<WriterFriend>()
+            };
+            var root = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChildren = new List<Element>(),
+                Owner = new Writer(),
+                OwnerId = 6
+            };
+            var folderChild = new Folder
+            {
+                Id = 1,
+                Name = "folder Child",
+                FolderChildren = new List<Element>(),
+                Owner = writer,
+                ParentFolder = root,
+                ParentFolderId = root.Id
+            };
+
+            var folderAsModel = new FolderModel().FromDomain(folderChild);
+
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
+            var mockElementRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
+            var mockElementValidator = new Mock<IFolderValidator>(MockBehavior.Strict);
+            var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            var mockModificationLogic = new Mock<IModificationLogic>();
+
+            mockSessionLogic.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns(writer);
+            mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(root);
+            var controller = new FolderController(mockFolderLogic.Object, mockSessionLogic.Object,
+                mockElementRepository.Object, mockElementValidator.Object, mockLogicWriter.Object,
+                mockModificationLogic.Object);
+
+            var result = controller.Create(1, folderAsModel);
+            var okResult = result as OkObjectResult;
+
+            mockFolderLogic.VerifyAll();
+            mockLogicWriter.VerifyAll();
+            mockSessionLogic.VerifyAll();
+            mockModificationLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        }
+
+        [TestMethod]
+        public void CreateFolderNullWriter()
+        {
+
+            var root = new Folder
+            {
+                Id = 3,
+                Name = "Root",
+                FolderChildren = new List<Element>(),
+                Owner = null
+            };
+            var folderChild = new Folder
+            {
+                Id = 1,
+                Name = "folder Child",
+                FolderChildren = new List<Element>(),
+                Owner = null,
+                ParentFolder = root,
+                ParentFolderId = root.Id
+            };
+
+            var folderAsModel = new FolderModel().FromDomain(folderChild);
+
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
+            var mockElementRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
+            var mockElementValidator = new Mock<IFolderValidator>(MockBehavior.Strict);
+            var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            var mockModificationLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
+
+            mockSessionLogic.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns<Writer>(null);
+            mockFolderLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(folderChild);
+
+            var controller = new FolderController(mockFolderLogic.Object, mockSessionLogic.Object,
+                mockElementRepository.Object, mockElementValidator.Object, mockLogicWriter.Object,
+                mockModificationLogic.Object);
+
+            var result = controller.Create(1, folderAsModel);
+            var okResult = result as OkObjectResult;
+
+            mockFolderLogic.VerifyAll();
+            mockLogicWriter.VerifyAll();
+            mockSessionLogic.VerifyAll();
+            mockModificationLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        }
+
+
+        [TestMethod]
+        public void CreateFolderParentFolderNull()
+        {
+
+            var writer = new Writer()
+            {
+                Id = 2,
+                UserName = "Writer",
+                Password = "132",
+                Role = Role.Writer,
+                Claims = new List<CustomClaim>(),
+                Friends = new List<WriterFriend>()
+            };
+            var folderChild = new Folder
+            {
+                Id = 1,
+                Name = "folder Child",
+                FolderChildren = new List<Element>(),
+                Owner = writer,
+            };
+
+            var folderAsModel = new FolderModel().FromDomain(folderChild);
+
+            var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
+            var mockSessionLogic = new Mock<ICurrent>(MockBehavior.Strict);
+            var mockElementRepository = new Mock<IRepository<Element>>(MockBehavior.Strict);
+            var mockElementValidator = new Mock<IFolderValidator>(MockBehavior.Strict);
+            var mockLogicWriter = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            var mockModificationLogic = new Mock<IModificationLogic>(MockBehavior.Strict);
+
+            mockSessionLogic.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns(writer);
+            mockFolderLogic.Setup(m => m.Get(It.Is<int>(id => id == 1)))
+                .Returns<Folder>(null);
+
+            var controller = new FolderController(mockFolderLogic.Object, mockSessionLogic.Object,
+                mockElementRepository.Object, mockElementValidator.Object, mockLogicWriter.Object,
+                mockModificationLogic.Object);
+
+            var result = controller.Create(1, folderAsModel);
+            var okResult = result as OkObjectResult;
+
+            mockFolderLogic.VerifyAll();
+            mockLogicWriter.VerifyAll();
+            mockSessionLogic.VerifyAll();
+            mockModificationLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        }
+
+        [TestMethod]
         public void ShowTree()
         {
             var writer = new Writer()
@@ -423,6 +677,8 @@ namespace TwoDrive.WebApi.Test
             };
             var writerFriend = new WriterFriend
             {
+                WriterId = writer.Id,
+                FriendId = friend.Id,
                 Writer = writer,
                 Friend = friend
             };
@@ -664,6 +920,8 @@ namespace TwoDrive.WebApi.Test
             };
             var writerFriend = new WriterFriend
             {
+                WriterId = writer.Id,
+                FriendId = friend.Id,
                 Writer = writer,
                 Friend = friend
             };
@@ -728,6 +986,8 @@ namespace TwoDrive.WebApi.Test
             };
             var writerFriend = new WriterFriend
             {
+                WriterId = writer.Id,
+                FriendId = friend.Id,
                 Writer = writer,
                 Friend = friend
             };

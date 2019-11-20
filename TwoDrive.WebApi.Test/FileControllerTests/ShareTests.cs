@@ -60,6 +60,8 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             };
             var writerFriend = new WriterFriend
             {
+                WriterId = writer.Id,
+                FriendId = friend.Id,
                 Writer = writer,
                 Friend = friend
             };
@@ -279,6 +281,8 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             };
             var writerFriend = new WriterFriend
             {
+                WriterId = writer.Id,
+                FriendId = friend.Id,
                 Writer = writer,
                 Friend = friend
             };
@@ -564,6 +568,8 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
             };
             var writerFriend = new WriterFriend
             {
+                WriterId = writer.Id,
+                FriendId = friend.Id,
                 Writer = writer,
                 Friend = friend
             };

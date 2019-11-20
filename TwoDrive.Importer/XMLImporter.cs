@@ -12,11 +12,11 @@ using TwoDrive.Importer.Interface.Exceptions;
 
 namespace TwoDrive.Importers
 {
-    public class XMLImporter : IImporter<IFolder>
+    public class XMLImporter : IImporter
     {
 
         private const string Name = "XML";
-        public string FileExtension
+        public string ImporterName
         {
             get
             {
@@ -24,10 +24,16 @@ namespace TwoDrive.Importers
             }
         }
 
+        public ParameterDictionary ExtraParameters { get; set; }
 
-        public IFolder Import(string path)
+        public XMLImporter()
         {
-            var document = Load<XmlDocument>(path);
+            ExtraParameters = new ParameterDictionary();
+        }
+
+        public T Import<T>(ImportingParameters parameters) where T : class
+        {
+            var document = Load<XmlDocument>(parameters);
             var rootNode = document.DocumentElement;
             ValidateRootTag(rootNode);
             var root = CreateFolder(rootNode, ImporterConstants.Root);
@@ -36,7 +42,7 @@ namespace TwoDrive.Importers
 
             AddFiles(root, correctFileNodes);
             AddChildFolders(rootNode, root);
-            return root;
+            return root as T;
 
         }
 
@@ -165,12 +171,12 @@ namespace TwoDrive.Importers
         }
 
 
-        public T Load<T>(string path) where T : class
+        public T Load<T>(ImportingParameters parameters) where T : class
         {
             try
             {
                 var document = new XmlDocument();
-                document.Load(path);
+                document.Load(parameters.Path);
                 return document as T;
             }
             catch (FileNotFoundException exception)
@@ -180,6 +186,10 @@ namespace TwoDrive.Importers
             catch (XmlException exception)
             {
                 throw new ImporterException(exception.Message, exception);
+            }
+            catch (ArgumentException exception)
+            {
+                throw new ImporterException(ImporterResource.EmptyPath, exception);
             }
         }
     }

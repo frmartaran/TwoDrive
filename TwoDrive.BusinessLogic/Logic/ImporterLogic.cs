@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using TwoDrive.BusinessLogic.Exceptions;
@@ -8,6 +9,7 @@ using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.BusinessLogic.Helpers;
 using TwoDrive.BusinessLogic.Helpers.LogicInput;
 using TwoDrive.BusinessLogic.Interfaces;
+using TwoDrive.BusinessLogic.Interfaces.LogicInput;
 using TwoDrive.BusinessLogic.Resources;
 using TwoDrive.Domain;
 using TwoDrive.Domain.FileManagement;
@@ -18,9 +20,8 @@ namespace TwoDrive.BusinessLogic.Logic
 {
     public class ImporterLogic : IImporterLogic
     {
-        private const string DllToImport = "TwoDrive.Importer.dll";
-
         private const string fieldName = "Name";
+
         private IFolderLogic FolderLogic { get; set; }
 
         private IFileLogic FileLogic { get; set; }
@@ -39,38 +40,50 @@ namespace TwoDrive.BusinessLogic.Logic
             ModificationLogic = dependencies.ModificationLogic;
         }
 
-        public IImporter<IFolder> GetImporter()
+        public IImporter GetImporter(string path)
         {
             try
             {
-                var assemblyInfo = Assembly.LoadFrom(DllToImport);
+                var assemblyInfo = Assembly.LoadFrom(path);
                 var applicablesTypes = assemblyInfo.ExportedTypes
-                    .Where(t => (typeof(IImporter<IFolder>).IsAssignableFrom(t)))
+                    .Where(t => (typeof(IImporter).IsAssignableFrom(t)))
                     .ToList();
 
                 var importerType = applicablesTypes
                     .Where(t => t.GetField(fieldName, BindingFlags.NonPublic
                                                       | BindingFlags.Static)
-                        .GetRawConstantValue() as string == Options.FileType)
+                        .GetRawConstantValue() as string == Options.ImporterName)
                     .SingleOrDefault();
 
                 var instance = Activator.CreateInstance(importerType);
-                return instance as IImporter<IFolder>;
+                return instance as IImporter;
             }
             catch (ArgumentNullException exception)
             {
                 throw new ImporterNotFoundException(BusinessResource.ImporterNotFound_ImporterLogic, exception);
             }
+            catch (TypeLoadException exception)
+            {
+                throw new LogicException(BusinessResource.NeedsRedeployment, exception);
+            }
+            catch (ArgumentException exception)
+            {
+                throw new LogicException(BusinessResource.DllNotFound, exception);
+            }
+            catch(FileNotFoundException exception)
+            {
+                throw new LogicException(BusinessResource.DllNotFound, exception);
+            }
 
         }
 
-        public void Import()
+        public void Import(string path)
         {
             if (Options.Owner == null)
                 throw new LogicException(BusinessResource.MissingOwner);
 
-            var importer = GetImporter();
-            var parentFolder = importer.Import(Options.FilePath);
+            var importer = GetImporter(path);
+            var parentFolder = importer.Import<IFolder>(Options.Parameters);
             var mapper = MapperHelper.GetFileManagementMapper();
 
             Folder domainFolder;
@@ -122,7 +135,7 @@ namespace TwoDrive.BusinessLogic.Logic
                 }
                 else
                 {
-                    FileLogic.Create(child as File);
+                    FileLogic.Create(child as Domain.FileManagement.File);
                 }
 
                 owner.AddCreatorClaimsTo(child);
@@ -143,14 +156,45 @@ namespace TwoDrive.BusinessLogic.Logic
             ModificationLogic.Create(modification);
         }
 
-        public List<string> GetAllImporters()
+        public List<ImporterInfo> GetAllImporters(string path)
         {
-            var assemblyInfo = Assembly.LoadFrom(DllToImport);
-            return assemblyInfo.ExportedTypes
-                .Where(t => (typeof(IImporter<IFolder>).IsAssignableFrom(t)))
-                .Select(t => t.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static)
-                        .GetRawConstantValue() as string)
-                .ToList();
+            try
+            {
+                var assemblyInfo = Assembly.LoadFrom(path);
+                var allImporters = assemblyInfo.GetTypes()
+                    .Where(t => (typeof(IImporter).IsAssignableFrom(t)))
+                    .ToList();
+                var importersInfo = new List<ImporterInfo>();
+                foreach (var importer in allImporters)
+                {
+                    var importerInstance = Activator.CreateInstance(importer) as IImporter;
+
+                    var name = importer.GetProperty("ImporterName").GetValue(importerInstance)
+                        as string;
+
+                    var info = new ImporterInfo
+                    {
+                        Name = name,
+                        Parameters = importerInstance.ExtraParameters
+                    };
+                    importersInfo.Add(info);
+
+                }
+                return importersInfo;
+            }
+            catch (TypeLoadException exception)
+            {
+                throw new LogicException(BusinessResource.NeedsRedeployment, exception);
+            }
+            catch (ArgumentException exception)
+            {
+                throw new LogicException(BusinessResource.DllNotFound, exception);
+            }
+            catch (FileNotFoundException exception)
+            {
+                throw new LogicException(BusinessResource.DllNotFound, exception);
+            }
+
         }
     }
 }

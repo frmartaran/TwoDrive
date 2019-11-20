@@ -145,7 +145,7 @@ namespace TwoDrive.WebApi.Controllers
                 var parentFolder = FolderLogic.Get(id);
 
                 if (loggedWriter == null)
-                    return BadRequest(ApiResource.MustLogIn);
+                    return NotFound(ApiResource.MustLogIn);
                 if (parentFolder == null)
                     return NotFound(ApiResource.ParentFolderNotFound);
                 if (loggedWriter != parentFolder.Owner)

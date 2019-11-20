@@ -1,0 +1,51 @@
+  {
+    "Name": "Root",
+    "ParentFolder": null,
+    "CreationDate": "2019-09-03",
+    "DateModified": "2019-09-03",
+    "FolderChildren" : [
+	        {
+	          "$type" : "File",
+            "Name": "File 1",
+            "ParentFolder": null,
+            "CreationDate": "1.00:00:00",
+            "DateModified": "2012-04-23T18:25:43.511Z",
+            "Content": "This is a file"
+          },
+	        {
+	          "$type": "File",
+            "Name": "File 2",
+            "ParentFolder": null,
+            "CreationDate": "2012-04-23T18:25:43.511Z",
+            "DateModified": "2012-04-23T18:25:43.511Z",
+            "Content": "This is a file",
+            "ShouldRender": "true"
+          },
+	        {
+	          "$type" : "Folder",
+            "Name": "Root",
+            "ParentFolder": null,
+            "CreationDate": "2012-04-23T18:25:43.511Z",
+            "DateModified": "2012-04-23T18:25:43.511Z",
+            "FolderChildren": [
+                {
+      	          "$type" : "Folder",
+                  "Name": "Root",
+                  "ParentFolder": null,
+                  "CreationDate": "2012-04-23T18:25:43.511Z",
+                  "DateModified": "2012-04-23T18:25:43.511Z",
+                  "FolderChildren": []
+                },
+                {
+      	          "$type": "File",
+                  "Name": "File 2",
+                  "ParentFolder": null,
+                  "CreationDate": "2012-04-23T18:25:43.511Z",
+                  "DateModified": "2012-04-23T18:25:43.511Z",
+                  "Content": "This is a file",
+                  "ShouldRender": "true"
+                }
+              ]
+          }
+      ]
+}

@@ -50,11 +50,11 @@ namespace TwoDrive.WebApi.Test.FileControllerTests
                 Id = 1,
                 Name = "New file",
                 Content = "Content",
-                ParentFolder = null,
+                ParentFolder = folder,
                 ParentFolderId = 1,
             };
 
-            var fileAsModel = new TxtModel().FromDomain(file) as TxtModel;
+            var fileAsModel = new TxtModel().FromDomain(file);
             var mockSession = new Mock<ICurrent>(MockBehavior.Strict);
             mockSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
                 .Returns(writer);

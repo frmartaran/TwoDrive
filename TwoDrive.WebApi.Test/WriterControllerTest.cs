@@ -48,6 +48,22 @@ namespace TwoDrive.WebApi.Test
         }
 
         [TestMethod]
+        public void CreateNullModel()
+        {
+            var mockLogic = new Mock<ILogic<Writer>>();
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockCurrentSession = new Mock<ICurrent>();
+
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
+                mockCurrentSession.Object);
+            var result = controller.Create(null);
+
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        }
+
+
+
+        [TestMethod]
         public void InvalidUser()
         {
 
@@ -270,6 +286,23 @@ namespace TwoDrive.WebApi.Test
         }
 
         [TestMethod]
+        public void UpdateNullModel()
+        {
+            
+            var mockLogic = new Mock<ILogic<Writer>>();
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockCurrentSession = new Mock<ICurrent>();
+
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
+                mockCurrentSession.Object);
+            var result = controller.Update(1, null);
+
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+
+        }
+
+
+        [TestMethod]
         public void UpdateNullWriter()
         {
             var model = new WriterModel
@@ -373,6 +406,23 @@ namespace TwoDrive.WebApi.Test
         }
 
         [TestMethod]
+        public void ShowFriendsWriterNotFound()
+        {
+            var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns<Writer>(null);
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+            var mockCurrentSession = new Mock<ICurrent>();
+
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
+                mockCurrentSession.Object);
+            var result = controller.ShowFriends(1);
+            mockLogic.VerifyAll();
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        }
+
+        [TestMethod]
         public void AddFriend()
         {
             var writer = new Writer
@@ -411,6 +461,47 @@ namespace TwoDrive.WebApi.Test
 
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             Assert.AreEqual($"You are now friends with {friend.UserName}", okResult.Value);
+
+        }
+
+        [TestMethod]
+        public void AddFriendException()
+        {
+            var writer = new Writer
+            {
+                Id = 1,
+                Role = Role.Writer,
+                UserName = "Valid Writer",
+                Password = "1234",
+                Friends = new List<WriterFriend>(),
+                Claims = new List<CustomClaim>()
+            };
+            var friend = new Writer
+            {
+                Id = 2,
+                Role = Role.Administrator,
+                UserName = "Writer",
+                Password = "1234",
+                Friends = new List<WriterFriend>(),
+                Claims = new List<CustomClaim>()
+            };
+            var mockCurrentSession = new Mock<ICurrent>(MockBehavior.Strict);
+            mockCurrentSession.Setup(m => m.GetCurrentUser(It.IsAny<HttpContext>()))
+                .Returns(writer);
+
+            var mockLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
+            mockLogic.Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(friend);
+            mockLogic.Setup(m => m.Update(It.IsAny<Writer>()))
+                .Throws(new ValidationException(""));
+
+            var mockFolderLogic = new Mock<IFolderLogic>();
+
+            var controller = new WriterController(mockLogic.Object, mockFolderLogic.Object,
+                mockCurrentSession.Object);
+            var result = controller.AddFriend(1);
+
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
 
         }
 
