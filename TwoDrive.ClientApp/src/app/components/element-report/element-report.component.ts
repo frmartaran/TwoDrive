@@ -3,6 +3,7 @@ import { ReportService } from 'src/app/services/report.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSnackBar} from '@angular/material';
 import { ModificationReport } from 'src/app/components/interfaces/interfaces.model';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-element-report',
@@ -34,4 +35,10 @@ export class ElementReportComponent implements OnInit {
     this.dataSource =  new MatTableDataSource<ModificationReport>([]);
     this.dataSource.paginator = this.paginator;  
   }
+
+  public RefreshTable(DatePickersForm: NgForm){
+  
+  }
 }
+
+
