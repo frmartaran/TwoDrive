@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
+using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.Domain;
-using TwoDrive.WebApi.Interfaces;
+using TwoDrive.Domain.FileManagement;
 
 namespace TwoDrive.WebApi.Models
 {
@@ -44,7 +44,13 @@ namespace TwoDrive.WebApi.Models
                 .ToList();
                 foreach (var claimGrouping in claimsByElements)
                 {
-                    if (ElementIsFromOwnerAndIsRootFolder(claimGrouping) || ElementIsntFromOwner(claimGrouping))
+                    var claimElement = claimGrouping
+                    .Select(c => c)
+                    .FirstOrDefault()
+                    .Element;
+                    if (FolderLogicExtension.ElementIsFromOwnerAndIsRootFolder(claimElement, Id.Value) 
+                        || FolderLogicExtension.ElementIsntFromOwner(claimElement, Id.Value) 
+                        || FolderLogicExtension.WriterHasClaimsForParent(entity.Claims, claimElement, claimElement.Id))
                     {
                         Claims.Add(new ClaimModel().FromDomain(claimGrouping));
                     }                    
@@ -112,25 +118,6 @@ namespace TwoDrive.WebApi.Models
                 }
             }
             return result;
-        }
-
-        private bool ElementIsFromOwnerAndIsRootFolder(IGrouping<int, CustomClaim> claimGrouping)
-        {
-            var element = claimGrouping
-                .Select(c => c)
-                .FirstOrDefault()
-                .Element;
-            return element.OwnerId == Id.Value && !element.ParentFolderId.HasValue;
-                
-        }
-
-        private bool ElementIsntFromOwner(IGrouping<int, CustomClaim> claimGrouping)
-        {
-            var element = claimGrouping
-                .Select(c => c)
-                .FirstOrDefault()
-                .Element;
-            return element.OwnerId != Id.Value;
         }
     }
 }

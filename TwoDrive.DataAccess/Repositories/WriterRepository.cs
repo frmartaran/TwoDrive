@@ -23,6 +23,7 @@ namespace TwoDrive.DataAccess
         {
             return table.Include(w => w.Claims)
                             .ThenInclude(c => c.Element)
+                                .ThenInclude(e => e.Owner)
                         .Include(w => w.Friends)
                             .ThenInclude(wf => wf.Friend)
                         .Where(w => w.Id == Id)
