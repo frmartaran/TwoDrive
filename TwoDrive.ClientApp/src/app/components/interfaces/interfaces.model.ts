@@ -16,7 +16,8 @@ export interface Element{
   ownerId: number,
   creationDate: Date,
   dateModified: Date,
-  isFolder: boolean
+  isFolder: boolean,
+  ownerName: string
 }
 
 export interface ModificationReport{
@@ -38,4 +39,6 @@ export interface ElementFlatNode {
   expandable: boolean;
   name: string;
   level: number;
+  id: number
+  hasChildrenLoaded: boolean;
 }

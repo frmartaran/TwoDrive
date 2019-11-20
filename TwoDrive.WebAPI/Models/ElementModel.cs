@@ -17,6 +17,8 @@ namespace TwoDrive.WebApi.Models
 
         public int? OwnerId { get; set; }
 
+        public string OwnerName { get; set; }
+
         public WriterModel Owner { get; set; }
 
         public DateTime CreationDate { get; set; }
