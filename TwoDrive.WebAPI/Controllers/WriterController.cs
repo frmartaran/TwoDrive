@@ -195,26 +195,25 @@ namespace TwoDrive.WebApi.Controllers
         [HttpGet("Friends/{id}")]
         public IActionResult ShowFriends(int id)
         {
-            try
-            {
-                var writer = Logic.Get(id);
-                if (writer.Friends.Count == 0)
-                {
-                    return Ok(ApiResource.NoFriends);
-                }
-                else
-                {
-                    var toModel = writer.Friends
-                        .Select(f => new WriterModel().FromDomain(f.Friend))
-                        .ToList();
-                    return Ok(toModel);
-                }
-            }
-            catch (NullReferenceException)
-            {
-                return BadRequest(ApiResource.WriterNotFound);
-            }
 
+            var writer = Logic.Get(id);
+            if (writer == null)
+                return BadRequest(ApiResource.WriterNotFound);
+
+            if (writer.Friends.Count == 0)
+            {
+                return Ok(ApiResource.NoFriends);
+            }
+            else
+            {
+                var toModel = writer.Friends
+                    .Select(f => new WriterModel().FromDomain(f.Friend))
+                    .ToList();
+                return Ok(toModel);
+            }
         }
+
+
     }
 }
+

@@ -24,10 +24,13 @@ namespace TwoDrive.WebApi.Models
             DateModified = entity.DateModified;
             Content = entity.Content;
             ParentFolder = new FolderModel().FromDomain(entity.ParentFolder);
-            OwnerId = entity.Owner.Id;
+
+            if(entity.Owner != null)
+            {
+                OwnerId = entity.Owner.Id;
+            }
             Id = entity.Id;
             return this;
-
         }
 
         public virtual File ToDomain()
