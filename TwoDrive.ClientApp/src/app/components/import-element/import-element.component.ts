@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { ImportService } from 'src/app/services/import.service';
 import { NgForm } from '@angular/forms';
 
@@ -18,10 +18,17 @@ export class ImportElementComponent implements OnInit {
   successMessage: string = '';
 
   constructor(public dialogRef: MatDialogRef<ImportElementComponent>,
+    private _snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private importService: ImportService) {
     this.writerId = data.id;
     this.writerName = data.userName;
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 5000,
+    });
   }
 
   ngOnInit() {
@@ -44,9 +51,11 @@ export class ImportElementComponent implements OnInit {
     this.importService.import(id, importer, path)
       .subscribe((res) => {
           this.successMessage = JSON.parse(res);
+          this.openSnackBar('Element imported sucessfully!', 'Error!');
       },
         (error) => {
           this.errorMessage = error.message;
+          this.openSnackBar(error, 'Error!');
         }
       );
   }
