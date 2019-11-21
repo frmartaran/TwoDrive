@@ -39,7 +39,7 @@ import {
   MatCheckboxModule,
   MatTreeModule,
   MatDatepickerModule,
-  MatNativeDateModule
+  MatNativeDateModule,
 } from '@angular/material';
 import { CreateFolderComponent } from './components/create-folder/create-folder.component';
 
