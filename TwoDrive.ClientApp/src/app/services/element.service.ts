@@ -15,56 +15,70 @@ export class ElementService {
 
   constructor(private http: HttpClient) { }
 
-  public GetFolder(id: number){
+  public GetFolder(id: number) {
     var writerToken = localStorage.getItem('token');
     let headers = new HttpHeaders();
     headers = headers
-    .set('Content-Type', 'application/json')
-    .set('Authorization', writerToken);
+      .set('Content-Type', 'application/json')
+      .set('Authorization', writerToken);
 
     return this.http.get(this.folderEndpoint + '/' + id, {
-        headers: headers,
-        responseType: 'text'
-      });
+      headers: headers,
+      responseType: 'text'
+    });
   }
 
-  public GetAllFiles(){
+  public GetAllFiles() {
     var writerToken = localStorage.getItem('token');
     let headers = new HttpHeaders();
     headers = headers
-    .set('Content-Type', 'application/json')
-    .set('Authorization', writerToken);
+      .set('Content-Type', 'application/json')
+      .set('Authorization', writerToken);
 
     return this.http.get(this.fileEndpoint, {
-        headers: headers,
-      });
+      headers: headers,
+    });
   }
 
-  public MoveFolder(folderToMoveId: number, folderDestinationId: number){
+  public MoveFolder(folderToMoveId: number, folderDestinationId: number) {
     var writerToken = localStorage.getItem('token');
     let headers = new HttpHeaders();
     headers = headers
-    .set('Content-Type', 'application/json')
-    .set('Authorization', writerToken);
+      .set('Content-Type', 'application/json')
+      .set('Authorization', writerToken);
 
-    var moveFolderBody : any = {
+    var moveFolderBody: any = {
       folderToMoveId: folderToMoveId,
       folderDestinationId: folderDestinationId
     }
 
     return this.http.post(this.fileEndpoint, moveFolderBody, {
-        headers: headers,
-        responseType: 'text'
-      });
+      headers: headers,
+      responseType: 'text'
+    });
   }
 
-  public GetElementFromPath(path: string, element: Element){
-    if(element.path === path){
+  public GetElementFromPath(path: string, element: Element) {
+    if (element.path === path) {
       return element
-    }else{
+    } else {
       element.folderChildren.forEach(c => {
         return this.GetElementFromPath(path, c)
       })
     }
+  }
+
+  public DeleteFile(id: number) {
+    var writerToken = localStorage.getItem('token');
+    let headers = new HttpHeaders();
+    headers = headers
+      .set('Content-Type', 'application/json')
+      .set('Authorization', writerToken);
+
+    var endpoint = this.fileEndpoint + "/" + id;
+    return this.http.delete(endpoint, {
+      headers: headers,
+      responseType: 'text'
+    });
   }
 }
