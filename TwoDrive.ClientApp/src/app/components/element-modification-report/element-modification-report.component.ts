@@ -5,11 +5,11 @@ import { MatTableDataSource, MatPaginator, MatSnackBar} from '@angular/material'
 import { ModificationReport } from 'src/app/components/interfaces/interfaces.model';
 
 @Component({
-  selector: 'app-element-report',
-  templateUrl: './element-report.component.html',
-  styleUrls: ['./element-report.component.css']
+  selector: 'app-element-modification-report',
+  templateUrl: './element-modification-report.component.html',
+  styleUrls: ['./element-modification-report.component.css']
 })
-export class ElementReportComponent implements OnInit {
+export class ElementModificationReportComponent implements OnInit {
 
   displayedColumns: string[] = ['owner', 'amount'];
   dataSource: MatTableDataSource<ModificationReport>;

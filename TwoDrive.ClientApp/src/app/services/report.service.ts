@@ -14,19 +14,6 @@ export class ReportService {
 
   constructor(private http: HttpClient) { }
 
-  private CreateWriter(writer: Writer) {
-    var writerToken = localStorage.getItem('token');
-    let headers = new HttpHeaders();
-    headers = headers
-    .set('Content-Type', 'application/json')
-    .set('Authorization', writerToken);
-
-    return this.http.post(this.endpoint, writer, {
-      headers: headers,
-      responseType: 'text'
-    });
-  }
-
   public GetTopWriters(){
     var writerToken = localStorage.getItem('token');
     let headers = new HttpHeaders();

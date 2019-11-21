@@ -141,6 +141,28 @@ export class WriterService {
   }
 
   public GetElementsFromWriter(writer: Writer){
-    return writer.claims.map(a => a.element)
+    var elements = writer.claims.map(a => a.element);
+    elements = this.SetElementsPath(elements, writer.id);
+    return elements;
+  }
+
+  private SetElementsPath(elements: Element[], id: number){
+    var index = 0;
+    var elementsToReturn = elements;
+    elements.forEach(e =>{
+      if(e.ownerId == id){
+        elementsToReturn[index] = this.SetElementPath(e,'');
+      }
+      index++;
+    })
+    return elementsToReturn;
+  }
+
+  private SetElementPath(element: Element, path : string){
+    element.path = path.concat('/' + element.name);
+    if(element.isFolder){
+      element.folderChildren.forEach(c => this.SetElementPath(c, element.path));
+    }
+    return element;
   }
 }

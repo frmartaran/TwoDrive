@@ -17,7 +17,8 @@ export interface Element{
   creationDate: Date,
   dateModified: Date,
   isFolder: boolean,
-  ownerName: string
+  ownerName: string,
+  path: string
 }
 
 export interface ModificationReport{
@@ -41,4 +42,12 @@ export interface ElementFlatNode {
   level: number;
   id: number
   hasChildrenLoaded: boolean;
+  isChildFromLoggedInWriter: boolean;
+}
+
+export interface AllFilesReport{
+  name: string,
+  creationDate: Date,
+  dateModified: Date,
+  ownerName: string
 }

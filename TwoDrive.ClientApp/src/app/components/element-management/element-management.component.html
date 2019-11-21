@@ -4,9 +4,10 @@
     <!-- This is the tree node template for leaf nodes -->
     <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
         <button mat-icon-button disabled></button>
-        <button mat-icon-button>
+        <span [matMenuTriggerFor]="rootMenu" #menuTrigger="matMenuTrigger"></span>
+        <button mat-icon-button (contextmenu)="openMenu($event,node,menuTrigger)">
             <div class="element">
-                <mat-icon>insert_drive_file</mat-icon>  {{node.name}}
+                <mat-icon>insert_drive_file</mat-icon> {{node.name}}
             </div>
         </button>
     </mat-tree-node>
@@ -18,11 +19,33 @@
             {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
         </mat-icon>
         </button>
-        <button mat-icon-button>
+        <span [matMenuTriggerFor]="rootMenu" #menuTrigger="matMenuTrigger"></span>
+        <button mat-icon-button (contextmenu)="openMenu($event,node,menuTrigger)">
             <div class="element">
                 <mat-icon>folder</mat-icon> {{node.name}}
             </div>
         </button>
     </mat-tree-node>
     </mat-tree>
+
+    <mat-menu #rootMenu="matMenu" [overlapTrigger]="false">
+        <ng-template matMenuContent>
+          <button mat-menu-item (click)="openMoveFolderDialog()" *ngIf="matMenuData.isChildFromLoggedInWriter">
+            <mat-icon>open_with</mat-icon>
+            <span>Move To</span>
+          </button>
+          <button mat-menu-item *ngIf="matMenuData.isChildFromLoggedInWriter">
+            <mat-icon>edit</mat-icon>
+            <span>Rename</span>
+          </button>
+          <button mat-menu-item *ngIf="matMenuData.isChildFromLoggedInWriter">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+          <button mat-menu-item *ngIf="!matMenuData.expandable">
+            <mat-icon>visibility</mat-icon>
+            <span>Show Content</span>
+          </button>
+        </ng-template>
+    </mat-menu>
 </mat-card>

@@ -1,10 +1,10 @@
 import { WriterService } from 'src/app/services/writer.service';
 import { FlatTreeControl} from '@angular/cdk/tree';
 import { Component } from '@angular/core';
-import { MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
+import { MatTreeFlatDataSource, MatTreeFlattener, MatSnackBar, MatMenuTrigger, MatDialog} from '@angular/material';
 import { Writer, Element, ElementFlatNode } from 'src/app/components/interfaces/interfaces.model';
 import { ElementService } from 'src/app/services/element.service';
-import { Observable } from 'rxjs';
+import { MoveFolderDialogComponent } from 'src/app/components/move-folder-dialog/move-folder-dialog.component';
 
 @Component({
   selector: 'element-management',
@@ -14,18 +14,25 @@ import { Observable } from 'rxjs';
 export class ElementManagementComponent{
   writer: Writer;
   elements: Element[];
-  isLazyLoaded$: Observable<boolean>; 
-
+  matMenuData: ElementFlatNode;
+  
   private _transformer = (node: Element, level: number) => {
     return {
       expandable: node.isFolder,
-      name: node.id != this.writer.id && level == 0
+      name: node.ownerId != this.writer.id && level == 0
         ? node.ownerName + '/' + node.name
         : node.name,
       level: level,
       id: node.id,
-      hasChildrenLoaded: this.FolderHasChildrenLoaded(node)
+      hasChildrenLoaded: this.FolderHasChildrenLoaded(node),
+      isChildFromLoggedInWriter: this.writer.id == node.ownerId
     };
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 5000,
+    });
   }
 
   treeControl = new FlatTreeControl<ElementFlatNode>(
@@ -37,7 +44,9 @@ export class ElementManagementComponent{
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
   constructor(private writerService : WriterService,
-    private elementService: ElementService) {
+    private elementService: ElementService,
+    private _snackBar: MatSnackBar,
+    public dialog: MatDialog) {
     this.writerService.GetLoggedInWriter()
     .subscribe(
       (response) => {
@@ -45,6 +54,9 @@ export class ElementManagementComponent{
         this.writer = JSON.parse(responseString);
         this.elements = this.writerService.GetElementsFromWriter(this.writer);
         this.dataSource.data = this.elements;
+      },
+      (error) => {
+        this.openSnackBar(error.error, 'Error!');
       }
     )
   }
@@ -64,12 +76,52 @@ export class ElementManagementComponent{
           this.dataSource.data = this.elements;
           var nodeToExpand = this.treeControl.dataNodes.find(n => n.id == node.id);
           this.treeControl.expand(nodeToExpand);
-       }
+        },
+        (error) => {
+          this.openSnackBar(error.error, 'Error!');
+        }
       )
     }
   }
 
   private FolderHasChildrenLoaded(element: Element){
     return element.isFolder && element.folderChildren != null && element.folderChildren.length > 0   
+  }
+
+  openMenu(event: MouseEvent, node: ElementFlatNode, viewChild: MatMenuTrigger) {
+    if(node.isChildFromLoggedInWriter || !node.expandable){
+      event.preventDefault();
+      this.matMenuData = node;
+      viewChild.openMenu();
+    }
+  }
+
+  openMoveFolderDialog() {
+    let dialogRef = this.dialog.open(MoveFolderDialogComponent);
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        var elementToMove = this.elements.find(e => e.id == this.matMenuData.id);
+        var elementDestinationIndex = this.elements.findIndex(e => e.path === res);
+        var elementDestination = this.elements[elementDestinationIndex];
+        if(elementDestination == null){
+          this.openSnackBar('Folder not found, please enter a correct path', 'Error!');
+        }
+        else{
+          this.elementService.MoveFolder(this.matMenuData.id, elementDestination.id)
+          .subscribe(
+            (response) => {
+              var oldParentIndex = this.elements.findIndex(e => e.id == elementToMove.parentFolderId);
+              this.elements[oldParentIndex].folderChildren = this.elements[oldParentIndex].folderChildren.filter(c => c.id == elementToMove.id);
+              this.elements[elementDestinationIndex].folderChildren.push(elementToMove);
+              this.dataSource.data = this.elements;
+              this.openSnackBar(response, 'Success!');
+            },
+            (error) => {
+              this.openSnackBar(error, 'Error!');
+            }
+          )
+        }
+      }
+    });
   }
 }
