@@ -33,23 +33,6 @@
                     {{element.ownerName}} 
                 </td>
             </ng-container>
-
-            <ng-container matColumnDef="action" *ngIf="isAdmin">
-                <th mat-header-cell *matHeaderCellDef id="action-def" id="action"> Edit/Delete </th>
-                <td mat-cell *matCellDef="let element" class="action-link" id="action">
-                    <a mat-button matTooltip="Edit Writer" [routerLink]="['/edit-writer']" (click)="editWriter(element)">
-                        <span class="mat-button-wrapper">                        
-                            <mat-icon>edit</mat-icon>
-                        </span>
-                    </a>
-                    <a mat-button matTooltip="Delete Writer" (click)="deleteWriter(element)">
-                        <span class="mat-button-wrapper">
-                            <mat-icon>delete</mat-icon>
-                        </span>
-                    </a>
-                </td>
-            </ng-container>
-
             <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef id="action-def" id="action"> Edit/Delete </th>
                 <td mat-cell *matCellDef="let element" class="action-link" id="action">
@@ -58,7 +41,7 @@
                             <mat-icon>edit</mat-icon>
                         </span>
                     </a>
-                    <a mat-button matTooltip="Delete File">
+                    <a mat-button matTooltip="Delete File" (click)="delete(element)">
                         <span class="mat-button-wrapper">
                             <mat-icon>delete</mat-icon>
                         </span>

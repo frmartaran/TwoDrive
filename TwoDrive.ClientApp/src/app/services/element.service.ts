@@ -16,37 +16,37 @@ export class ElementService {
 
   constructor(private http: HttpClient) { }
 
-  public GetFolder(id: number){
+  public GetFolder(id: number) {
     var writerToken = localStorage.getItem('token');
     let headers = new HttpHeaders();
     headers = headers
-    .set('Content-Type', 'application/json')
-    .set('Authorization', writerToken);
+      .set('Content-Type', 'application/json')
+      .set('Authorization', writerToken);
 
     return this.http.get(this.folderEndpoint + '/' + id, {
-        headers: headers,
-        responseType: 'text'
-      });
+      headers: headers,
+      responseType: 'text'
+    });
   }
 
-  public GetAllFiles(){
+  public GetAllFiles() {
     var writerToken = localStorage.getItem('token');
     let headers = new HttpHeaders();
     headers = headers
-    .set('Content-Type', 'application/json')
-    .set('Authorization', writerToken);
+      .set('Content-Type', 'application/json')
+      .set('Authorization', writerToken);
 
     return this.http.get(this.fileEndpoint, {
-        headers: headers,
-      });
+      headers: headers,
+    });
   }
 
-  public MoveFolder(folderToMoveId: number, folderDestinationId: number){
+  public MoveFolder(folderToMoveId: number, folderDestinationId: number) {
     var writerToken = localStorage.getItem('token');
     let headers = new HttpHeaders();
     headers = headers
-    .set('Content-Type', 'application/json')
-    .set('Authorization', writerToken);
+      .set('Content-Type', 'application/json')
+      .set('Authorization', writerToken);
 
     return this.http.post(this.folderEndpoint + '/' + folderToMoveId + '/' + folderDestinationId, {} , {
         headers: headers,
@@ -143,5 +143,21 @@ export class ElementService {
         headers: headers,
         responseType: 'text'
       });
+  }
+
+  public Delete(id: number, isFolder: boolean) {
+    var writerToken = localStorage.getItem('token');
+    let headers = new HttpHeaders();
+    headers = headers
+      .set('Content-Type', 'application/json')
+      .set('Authorization', writerToken);
+
+    var endpoint = this.fileEndpoint + "/" + id;
+    if (isFolder)
+      endpoint = this.folderEndpoint + "/" + id;
+    return this.http.delete(endpoint, {
+      headers: headers,
+      responseType: 'text'
+    });
   }
 }

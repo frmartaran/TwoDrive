@@ -43,6 +43,10 @@
             <span>Move To</span>
           </button>
           <button mat-menu-item *ngIf="matMenuData.isChildFromLoggedInWriter">
+            <mat-icon>edit</mat-icon>
+            <span>Rename</span>
+          </button>
+          <button mat-menu-item (click)="delete()" *ngIf="matMenuData.isChildFromLoggedInWriter">
             <mat-icon>delete</mat-icon>
             <span>Delete</span>
           </button>

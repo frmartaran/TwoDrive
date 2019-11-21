@@ -1,8 +1,8 @@
 import { CreateFolderDialogComponent } from './../create-folder-dialog/create-folder-dialog.component';
 import { WriterService } from 'src/app/services/writer.service';
-import { FlatTreeControl} from '@angular/cdk/tree';
+import { FlatTreeControl } from '@angular/cdk/tree';
 import { Component } from '@angular/core';
-import { MatTreeFlatDataSource, MatTreeFlattener, MatSnackBar, MatMenuTrigger, MatDialog} from '@angular/material';
+import { MatTreeFlatDataSource, MatTreeFlattener, MatSnackBar, MatMenuTrigger, MatDialog } from '@angular/material';
 import { Writer, Element, ElementFlatNode } from 'src/app/components/interfaces/interfaces.model';
 import { ElementService } from 'src/app/services/element.service';
 import { MoveFolderDialogComponent } from 'src/app/components/move-folder-dialog/move-folder-dialog.component';
@@ -14,11 +14,11 @@ import { Router } from '@angular/router';
   templateUrl: './element-management.component.html',
   styleUrls: ['./element-management.component.css']
 })
-export class ElementManagementComponent{
+export class ElementManagementComponent {
   writer: Writer;
   elements: Element[];
   matMenuData: ElementFlatNode;
-  
+
   private _transformer = (node: Element, level: number) => {
     return {
       expandable: node.isFolder,
@@ -44,10 +44,10 @@ export class ElementManagementComponent{
   }
 
   treeControl = new FlatTreeControl<ElementFlatNode>(
-      node => node.level, node => node.expandable);
+    node => node.level, node => node.expandable);
 
   treeFlattener = new MatTreeFlattener(
-      this._transformer, node => node.level, node => node.expandable, node => node.folderChildren);
+    this._transformer, node => node.level, node => node.expandable, node => node.folderChildren);
 
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
@@ -57,22 +57,22 @@ export class ElementManagementComponent{
     private _snackBar: MatSnackBar,
     public dialog: MatDialog) {
     this.writerService.GetLoggedInWriter()
-    .subscribe(
-      (response) => {
-        this.writer = JSON.parse(response);
-        this.elements = this.writerService.GetElementsFromWriter(this.writer);
-        this.dataSource.data = this.elements;
-      },
-      (error) => {
-        this.openSnackBar(error.error, 'Error!');
-      }
-    )
+      .subscribe(
+        (response) => {
+          this.writer = JSON.parse(response);
+          this.elements = this.writerService.GetElementsFromWriter(this.writer);
+          this.dataSource.data = this.elements;
+        },
+        (error) => {
+          this.openSnackBar(error.error, 'Error!');
+        }
+      )
   }
 
   hasChild = (_: number, node: ElementFlatNode) => node.expandable;
 
-  getAllChildren(node: ElementFlatNode){
-    if(!node.hasChildrenLoaded){
+  getAllChildren(node: ElementFlatNode) {
+    if (!node.hasChildrenLoaded) {
       var index = this.elements.findIndex(e => e.id == node.id);
       var elementToUpdate = this.elements[index];
       this.elementService.GetFolder(elementToUpdate.id)
@@ -91,12 +91,12 @@ export class ElementManagementComponent{
     }
   }
 
-  private FolderHasChildrenLoaded(element: Element){
-    return element.isFolder && element.folderChildren != null && element.folderChildren.length > 0   
+  private FolderHasChildrenLoaded(element: Element) {
+    return element.isFolder && element.folderChildren != null && element.folderChildren.length > 0
   }
 
   openMenu(event: MouseEvent, node: ElementFlatNode, viewChild: MatMenuTrigger) {
-    if(node.isChildFromLoggedInWriter || !node.expandable){
+    if (node.isChildFromLoggedInWriter || !node.expandable) {
       event.preventDefault();
       this.matMenuData = node;
       viewChild.openMenu();
@@ -117,7 +117,7 @@ export class ElementManagementComponent{
       if (res) {
         var writerRoot = this.elements.find(e => e.ownerId == this.writer.id);
         var elementDestination = this.elementService.GetElementFromPath(res, writerRoot);
-        if(elementDestination == null){
+        if (elementDestination == null) {
           this.openSnackBar('Folder not found, please enter a correct path', 'Error!');
         }
         else if(elementDestination.folderChildren.find(e => e.id == this.matMenuData.id) != null){
@@ -190,5 +190,19 @@ export class ElementManagementComponent{
       node: this.matMenuData
     }
     this.router.navigate(['/share'], {state: shareData})
+  }
+
+  delete() {
+    var id = this.matMenuData.id;
+    var explandable = this.matMenuData.expandable;
+    this.elementService.Delete(id, explandable)
+      .subscribe((res) => {
+        this.elements = this.elements.filter(f => f.id != id);
+        this.dataSource.data = this.elements;
+      },
+        (error) => {
+          this.openSnackBar(error.message, 'Error!');
+        }
+      );
   }
 }

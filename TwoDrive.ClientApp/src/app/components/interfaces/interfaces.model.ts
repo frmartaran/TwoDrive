@@ -52,6 +52,7 @@ export interface ElementFlatNode {
 }
 
 export interface AllFilesReport{
+  id: number,
   name: string,
   creationDate: Date,
   dateModified: Date,
