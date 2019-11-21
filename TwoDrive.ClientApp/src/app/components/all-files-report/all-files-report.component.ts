@@ -48,7 +48,7 @@ export class AllFilesReportComponent implements OnInit {
 
   public delete(element: Element) {
     var id = Number.parseInt(element.id);
-    this.elementService.DeleteFile(id)
+    this.elementService.Delete(id, false)
       .subscribe( (res) => {
         var id = Number.parseInt(element.id);
         this.dataSource.data = this.dataSource.data.filter(f => f.id != id);

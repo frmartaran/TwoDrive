@@ -68,7 +68,7 @@ export class ElementService {
     }
   }
 
-  public DeleteFile(id: number) {
+  public Delete(id: number, isFolder: boolean) {
     var writerToken = localStorage.getItem('token');
     let headers = new HttpHeaders();
     headers = headers
@@ -76,6 +76,8 @@ export class ElementService {
       .set('Authorization', writerToken);
 
     var endpoint = this.fileEndpoint + "/" + id;
+    if (isFolder)
+      endpoint = this.folderEndpoint + "/" + id;
     return this.http.delete(endpoint, {
       headers: headers,
       responseType: 'text'
