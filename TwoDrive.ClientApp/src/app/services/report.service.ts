@@ -48,11 +48,12 @@ export class ReportService {
 
     var endpoint = this.endpoint + "/" + ReportType + "/Modifications";
     return this.http.post(endpoint, {
-        StartDate,
-        EndDate
+      StartDate,
+      EndDate
     },
       {
         headers: headers,
+        responseType: 'text'
       });
   }
 }

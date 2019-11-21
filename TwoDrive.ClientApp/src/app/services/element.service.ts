@@ -22,6 +22,7 @@ export class ElementService {
 
     return this.http.get(this.endpoint + '/' + id, {
         headers: headers,
+        responseType: 'text'
       });
   }
 }

@@ -35,9 +35,8 @@ namespace TwoDrive.WebApi.Controllers
             {
                 var groups = modificationLogic.GetAllFromDateRange(range.StartDate, range.EndDate);
                 if (groups.Count == 0)
-                {
-                    return Ok(ApiResource.NoModificationsYet_ReportController);
-                }
+                    return BadRequest(ApiResource.NoModificationsYet_ReportController);
+
                 var report = groups
                     .Where(g => g.Key.GetType().IsSubclassOf(typeof(File)))
                     .Select(r => new
@@ -66,7 +65,9 @@ namespace TwoDrive.WebApi.Controllers
         [HttpPost("Folder/Modifications")]
         public IActionResult GetFolderModificationReport([FromBody] DateRangeModel range)
         {
-            var folders = modificationLogic.GetAllFromDateRange(range.StartDate, range.EndDate)
+            try
+            {
+                var folders = modificationLogic.GetAllFromDateRange(range.StartDate, range.EndDate)
                 .Where(g => g.Key is Folder)
                 .Select(r => new
                 {
@@ -75,16 +76,25 @@ namespace TwoDrive.WebApi.Controllers
 
                 }).ToList();
 
-            var byOwner = folders
-                .GroupBy(g => g.Element.Owner)
-                .Select(r => new ModificationReportModel
-                {
-                    Owner = r.Key.UserName,
-                    Amount = r.Sum(ig => ig.Amount)
-                })
-                .ToList();
+                if (folders.Count == 0)
+                    return BadRequest(ApiResource.NoModificationsYet_ReportController);
 
-            return Ok(byOwner);
+                var byOwner = folders
+                    .GroupBy(g => g.Element.Owner)
+                    .Select(r => new ModificationReportModel
+                    {
+                        Owner = r.Key.UserName,
+                        Amount = r.Sum(ig => ig.Amount)
+                    })
+                    .ToList();
+
+                return Ok(byOwner);
+            }
+            catch (LogicException exception)
+            {
+                return BadRequest(exception.Message);
+            }
+            
         }
 
         [HttpGet]
