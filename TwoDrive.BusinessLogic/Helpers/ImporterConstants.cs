@@ -8,7 +8,7 @@ namespace TwoDrive.BusinessLogic.Helpers
     {
         #region Importer Paths
         public const string DllPath =
-            "..\\TwoDrive.Importer\\bin\\Debug\\netstandard2.0\\TwoDrive.Importer.dll";
+            @"..\\TwoDrive.Importer\\bin\\Debug\\netstandard2.0\\TwoDrive.Importer.dll";
 
         public const string TestingPath = "TwoDrive.Importer.dll";
         #endregion

@@ -54,6 +54,7 @@ export class AllFilesReportComponent implements OnInit {
         this.dataSource.data = this.dataSource.data.filter(f => f.id != id);
         this.allFiles.filter(f => f.id != id);
         this.dataSource._updateChangeSubscription();
+        this.openSnackBar('Element has been deleted!', 'Success!');
       }, 
       (error) => {
         this.openSnackBar(error.message, 'Error!');

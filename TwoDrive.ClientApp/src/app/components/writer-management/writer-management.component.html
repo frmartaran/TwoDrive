@@ -54,6 +54,16 @@
                     </a>
                 </td>
             </ng-container>
+            <ng-container matColumnDef="import" *ngIf="isAdmin">
+                    <th mat-header-cell *matHeaderCellDef id="importer"> Import Tree </th>
+                    <td mat-cell *matCellDef="let element" class="action-link" id="action">
+                        <a mat-button matTooltip="importTree" (click)="openImportDialog(element)">
+                            <span class="mat-button-wrapper">                        
+                                <mat-icon>cloud_upload</mat-icon>
+                            </span>
+                        </a>
+                    </td>
+                </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

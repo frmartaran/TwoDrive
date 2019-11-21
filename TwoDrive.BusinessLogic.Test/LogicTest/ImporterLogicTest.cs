@@ -22,6 +22,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
     public class ImporterLogicTest
     {
         private Writer writer;
+        private Folder root;
 
         private const string examplesRootForJson = "..\\..\\..\\Json Tree Examples";
         private const string examplesRootForXML = "..\\..\\..\\Xml Tree Examples";
@@ -40,11 +41,20 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 Role = Role.Writer,
                 Claims = new List<CustomClaim>()
             };
+            root = new Folder
+            {
+                Id = 2,
+                Owner = writer,
+                ParentFolder = null,
+                OwnerId = writer.Id,
+                FolderChildren = new List<Element>()
+            };
+
             ImportingParameters = new ImportingParameters
             {
                 Path = ""
             };
-            
+
         }
 
         [TestMethod]
@@ -56,7 +66,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var mockModificationLogic = new Mock<IModificationLogic>().Object;
             var dependencies = new ImporterDependencies(mockFolderLogic.Object,
                 mockFileLogic.Object, mockWriterLogic.Object, mockModificationLogic);
-           
+
             var options = new ImportingOptions
             {
                 ImporterName = "XML",
@@ -166,6 +176,9 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
         {
             var mockFolderLogic = new Mock<IFolderLogic>(MockBehavior.Strict);
             mockFolderLogic.Setup(m => m.Create(It.IsAny<Folder>()));
+            mockFolderLogic.Setup(m => m.GetRootFolder(It.IsAny<Writer>()))
+                .Returns(root);
+            mockFolderLogic.Setup(m => m.Delete(It.IsAny<int>()));
             var mockFileLogic = new Mock<IFileLogic>();
             var mockWriterLogic = new Mock<ILogic<Writer>>(MockBehavior.Strict);
             mockWriterLogic.Setup(m => m.Update(It.IsAny<Writer>()));
@@ -184,6 +197,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 Owner = writer,
                 Parameters = parameters
             };
+
             var importerLogic = new ImporterLogic(dependencies);
             importerLogic.Options = options;
             importerLogic.Import(dllPath);
@@ -226,16 +240,21 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             writerRepository.Insert(writer);
             writerRepository.Save();
 
+            root.Id = 5;
+            folderRepository.Insert(root);
+            folderRepository.Save();
+
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
             importerLogic.Import(dllPath);
 
-            var foldersInDb = folderLogic.GetAll();
+            var foldersInDb = folderLogic.GetAll().Where(f =>
+            !f.IsDeleted).ToList();
             var claims = writer.Claims.Count;
             var modificationsCount = context.Modifications.ToList().Count;
             Assert.AreEqual(1, foldersInDb.Count);
             Assert.AreEqual(3, claims);
-            Assert.AreEqual(1, modificationsCount);
+            Assert.AreEqual(2, modificationsCount);
 
         }
 
@@ -269,6 +288,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 Owner = writer,
                 Parameters = parameters
             };
+            folderRepository.Insert(root);
             writerRepository.Insert(writer);
             writerRepository.Save();
 
@@ -284,7 +304,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             Assert.AreEqual(2, foldersInDb.Count);
             Assert.AreEqual(1, filesCount);
             Assert.AreEqual(11, claims);
-            Assert.AreEqual(5, modificationsCount);
+            Assert.AreEqual(6, modificationsCount);
 
         }
 
@@ -318,6 +338,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 Owner = writer,
                 Parameters = parameters
             };
+            folderRepository.Insert(root);
             writerRepository.Insert(writer);
             writerRepository.Save();
 
@@ -337,7 +358,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             Assert.AreEqual(1, txtFileCount);
             Assert.AreEqual(1, htmlFileCount);
             Assert.AreEqual(15, claims);
-            Assert.AreEqual(7, modificationsCount);
+            Assert.AreEqual(8, modificationsCount);
 
         }
 
@@ -372,6 +393,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 Owner = writer,
                 Parameters = parameters
             };
+            folderRepository.Insert(root);
             writerRepository.Insert(writer);
             writerRepository.Save();
 
@@ -411,6 +433,8 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 Owner = writer,
                 Parameters = parameters
             };
+
+            folderRepository.Insert(root);
             writerRepository.Insert(writer);
             writerRepository.Save();
 
@@ -429,7 +453,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             Assert.AreEqual(1, filesCount);
             Assert.AreEqual(1, htmlFileCount);
             Assert.AreEqual(15, claims);
-            Assert.AreEqual(10, modificationsCount);
+            Assert.AreEqual(11, modificationsCount);
 
         }
 
@@ -463,6 +487,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
                 ImporterName = "XML",
                 Parameters = parameters
             };
+            folderRepository.Insert(root);
             writerRepository.Insert(writer);
             writerRepository.Save();
 
@@ -471,58 +496,6 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
 
             importerLogic.Import(dllPath);
 
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(LogicException))]
-        public void ImportWhenRootAlreadyExists()
-        {
-            var context = ContextFactory.GetMemoryContext("Import when root already exists");
-            var folderRepository = new FolderRepository(context);
-            var fileRepository = new FileRepository(context);
-            var fileValidator = new Mock<IValidator<Element>>().Object;
-            var validator = new FolderValidator(folderRepository);
-            var modificationRepository = new ModificationRepository(context);
-            var modificationsLogic = new ModificationLogic(modificationRepository);
-            var folderDependecies = new ElementLogicDependencies(folderRepository, fileRepository,
-                validator, modificationRepository);
-            var writerRepository = new WriterRepository(context);
-            var writerValidator = new Mock<IValidator<Writer>>().Object;
-
-            var folderLogic = new FolderLogic(folderDependecies);
-            var fileLogic = new FileLogic(fileRepository, fileValidator);
-            var writerLogic = new WriterLogic(writerRepository, writerValidator);
-            var importerDependecies = new ImporterDependencies(folderLogic, fileLogic, writerLogic,
-                modificationsLogic);
-            var parameters = new ImportingParameters
-            {
-                Path = $"{examplesRootForXML}\\Two Level Tree With File.xml"
-            };
-            var options = new ImportingOptions
-            {
-                ImporterName = "XML",
-                Owner = writer,
-                Parameters = parameters
-            };
-            writerRepository.Insert(writer);
-            writerRepository.Save();
-
-            var root = new Folder
-            {
-                CreationDate = new DateTime(2019, 3, 15),
-                DateModified = new DateTime(2019, 3, 15),
-                FolderChildren = new List<Element>(),
-                Owner = writer,
-                Name = "Root",
-                ParentFolder = null,
-            };
-
-            folderLogic.Create(root);
-
-            var importerLogic = new ImporterLogic(importerDependecies);
-            importerLogic.Options = options;
-
-            importerLogic.Import(dllPath);
         }
 
         [TestMethod]
@@ -558,6 +531,9 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             };
             writerRepository.Insert(writer);
             writerRepository.Save();
+
+            folderRepository.Insert(root);
+            folderRepository.Save();
 
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
@@ -597,6 +573,8 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             };
             writerRepository.Insert(writer);
             writerRepository.Save();
+            folderRepository.Insert(root);
+            folderRepository.Save();
 
             var importerLogic = new ImporterLogic(importerDependecies);
             importerLogic.Options = options;
@@ -614,7 +592,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             Assert.AreEqual(1, txtFileCount);
             Assert.AreEqual(1, htmlFileCount);
             Assert.AreEqual(15, claims);
-            Assert.AreEqual(7, modificationsCount);
+            Assert.AreEqual(8, modificationsCount);
 
         }
 
@@ -626,7 +604,7 @@ namespace TwoDrive.BusinessLogic.Test.LogicTest
             var mockWriterLogic = new Mock<ILogic<Writer>>().Object;
             var mockModificationLogic = new Mock<IModificationLogic>().Object;
 
-            var dependencies = new ImporterDependencies(mockFolderLogic, mockFileLogic, 
+            var dependencies = new ImporterDependencies(mockFolderLogic, mockFileLogic,
                 mockWriterLogic, mockModificationLogic);
 
             var importerLogic = new ImporterLogic(dependencies);

@@ -95,6 +95,8 @@ namespace TwoDrive.BusinessLogic.Logic
                 var childrenList = domainFolder.FolderChildren;
                 domainFolder.FolderChildren = new List<Element>();
 
+                var currentRoot = FolderLogic.GetRootFolder(Options.Owner);
+                FolderLogic.Delete(currentRoot.Id);
                 FolderLogic.Create(domainFolder);
                 ImportChildren(domainFolder, childrenList);
             }

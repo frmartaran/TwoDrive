@@ -41,9 +41,11 @@ import {
   MatTreeModule,
   MatDatepickerModule,
   MatNativeDateModule,
+  MatSelectModule,
 } from '@angular/material';
 import { AllFilesReportComponent } from './components/all-files-report/all-files-report.component';
 import { MoveFolderDialogComponent } from './components/move-folder-dialog/move-folder-dialog.component';
+import { ImportElementComponent } from './components/import-element/import-element.component';
 import { ShowContentComponent } from './components/show-content/show-content.component';
 import { CreateFolderDialogComponent } from './components/create-folder-dialog/create-folder-dialog.component';
 import { ShareElementsComponent } from './components/share-elements/share-elements.component';
@@ -69,7 +71,9 @@ const MaterialModules = [
   MatDatepickerModule,
   MatNativeDateModule,
   MatTreeModule,
-  MatSortModule
+  MatSortModule,
+  MatSelectModule,
+
 ];
 
 @NgModule({
@@ -84,10 +88,11 @@ const MaterialModules = [
     ElementModificationReportComponent,
     TopWritersReportComponent,
     AllFilesReportComponent,
-    MoveFolderDialogComponent,
     ShowContentComponent,
     CreateFolderDialogComponent,
-    ShareElementsComponent
+    ShareElementsComponent,
+    MoveFolderDialogComponent,
+    ImportElementComponent
   ],
   imports: [
     CommonModule,
@@ -118,6 +123,7 @@ const MaterialModules = [
     ],
   entryComponents: [
     ConfirmDialogComponent,
+    ImportElementComponent,
     MoveFolderDialogComponent,
     ShowContentComponent,
     CreateFolderDialogComponent
