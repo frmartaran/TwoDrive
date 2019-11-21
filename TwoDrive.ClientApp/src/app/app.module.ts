@@ -41,10 +41,13 @@ import {
   MatTreeModule,
   MatDatepickerModule,
   MatNativeDateModule,
+  MatSelectModule,
+  MatButtonToggleModule,
 } from '@angular/material';
 import { CreateFolderComponent } from './components/create-folder/create-folder.component';
 import { AllFilesReportComponent } from './components/all-files-report/all-files-report.component';
 import { MoveFolderDialogComponent } from './components/move-folder-dialog/move-folder-dialog.component';
+import { FileEditorComponent } from './components/file-editor/file-editor.component';
 
 const MaterialModules = [
   MatCardModule,
@@ -67,7 +70,9 @@ const MaterialModules = [
   MatDatepickerModule,
   MatNativeDateModule,
   MatTreeModule,
-  MatSortModule
+  MatSortModule,
+  MatSelectModule,
+  MatButtonToggleModule,
 ];
 
 @NgModule({
@@ -83,7 +88,8 @@ const MaterialModules = [
     TopWritersReportComponent,
     CreateFolderComponent,
     AllFilesReportComponent,
-    MoveFolderDialogComponent
+    MoveFolderDialogComponent,
+    FileEditorComponent
   ],
   imports: [
     CommonModule,
@@ -102,6 +108,7 @@ const MaterialModules = [
       { path: 'folder-modification', component: ElementModificationReportComponent, canActivate: [UserNotLoggedIn], data :{ elementType:'Folder'} },
       { path: 'top-writers', component: TopWritersReportComponent, canActivate: [UserNotLoggedIn] },
       { path: 'all-files-report', component: AllFilesReportComponent, canActivate: [UserNotLoggedIn] }
+
     ]),
     BrowserAnimationsModule,
     MaterialModules
@@ -113,7 +120,8 @@ const MaterialModules = [
     ],
   entryComponents: [
     ConfirmDialogComponent,
-    MoveFolderDialogComponent
+    MoveFolderDialogComponent,
+    FileEditorComponent
   ],
   bootstrap: [AppComponent]
 })

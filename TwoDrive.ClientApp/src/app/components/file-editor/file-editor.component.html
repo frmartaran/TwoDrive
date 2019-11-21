@@ -1,0 +1,25 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>Edit File</mat-card-title>
+    </mat-card-header>
+    <form #dataForm="ngForm" (ngSubmit)="saveElement(dataForm)">
+        <mat-card-content>
+            <mat-form-field>
+                <textarea matInput name="content" placeholder="Content"></textarea>
+            </mat-form-field>
+            <ng-container *ngIf="isHTML()">
+                <mat-form-field>
+                    <mat-label>Enable Rendering:</mat-label>
+                    <mat-button-toggle-group name="render" aria-label="Font Style">
+                        <mat-button-toggle value="true">Yes</mat-button-toggle>
+                        <mat-button-toggle value="false">No</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </mat-form-field>
+            </ng-container>
+        </mat-card-content>
+    </form>
+    <mat-card-footer>
+        <button mat-raised-button color="primary" type="submit">Save</button>
+        <button mat-raised-button color="accent" (click)="OnDismiss()">Cancel</button>
+    </mat-card-footer>
+</mat-card>
