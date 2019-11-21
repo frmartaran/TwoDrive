@@ -32,3 +32,8 @@ mat-card-title{
     display: inline-block;
     padding-right: 10%;
 }
+
+.error{
+    color: red;
+    float: right;
+}

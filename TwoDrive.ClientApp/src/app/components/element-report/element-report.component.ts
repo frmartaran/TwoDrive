@@ -17,6 +17,7 @@ export class ElementReportComponent implements OnInit {
   modficationReport: ModificationReport[];
   startDate: Date;
   endDate: Date;
+  public errorMessage: string = "";
 
   constructor(private reportService: ReportService,
     private activatedroute: ActivatedRoute,
@@ -53,7 +54,7 @@ export class ElementReportComponent implements OnInit {
           this.dataSource.paginator = this.paginator;
         },
           (error) => {
-            this.openSnackBar(error.error, 'Error!');
+            this.errorMessage = error.error
           });
   }
 

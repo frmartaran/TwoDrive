@@ -5,21 +5,22 @@
             <mat-card-header>
                 <mat-card-title class="writer-title">{{elementType}} Report</mat-card-title>
             </mat-card-header>
-                <div class="container">
-                    <mat-form-field>
-                        <input matInput [matDatepicker]="start" placeholder="Choose a start date"
+            <div class="error">{{errorMessage}}</div>
+            <div class="container">
+                <mat-form-field>
+                    <input matInput [matDatepicker]="start" placeholder="Choose a start date"
                         (dateChange)="LoadTable('start', $event)">
-                        <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
-                        <mat-datepicker #start></mat-datepicker>
-                    </mat-form-field>
-                    
-                    <mat-form-field>
-                        <input matInput [matDatepicker]="end" placeholder="Choose an end date"
+                    <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+                    <mat-datepicker #start></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput [matDatepicker]="end" placeholder="Choose an end date"
                         (dateChange)="LoadTable('end', $event)">
-                        <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
-                        <mat-datepicker #end></mat-datepicker>
-                    </mat-form-field>
-                </div>
+                    <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+                    <mat-datepicker #end></mat-datepicker>
+                </mat-form-field>
+            </div>
             <mat-card-content>
                 <table mat-table [dataSource]="dataSource">
                     <ng-container matColumnDef="owner">
