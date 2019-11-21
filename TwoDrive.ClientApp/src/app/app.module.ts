@@ -16,7 +16,7 @@ import { WriterManagementComponent } from './components/writer-management/writer
 import { UserNotLoggedIn } from './guards/UserNotLoggedIn.guard';
 import { UserLoggedIn } from './guards/UserLogggedIn.guard';
 
-import { ElementReportComponent } from './components/element-report/element-report.component';
+import { ElementModificationReportComponent } from './components/element-modification-report/element-modification-report.component';
 import { TopWritersReportComponent } from './components/top-writers-report/top-writers-report.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -38,9 +38,12 @@ import {
   MatTooltipModule,
   MatSnackBarModule,
   MatCheckboxModule,
-  MatTreeModule
+  MatTreeModule,
+  MatSortModule
 } from '@angular/material';
 import { CreateFolderComponent } from './components/create-folder/create-folder.component';
+import { AllFilesReportComponent } from './components/all-files-report/all-files-report.component';
+import { MoveFolderDialogComponent } from './components/move-folder-dialog/move-folder-dialog.component';
 
 const MaterialModules = [
   MatCardModule,
@@ -60,7 +63,8 @@ const MaterialModules = [
   MatTooltipModule,
   MatSnackBarModule,
   MatCheckboxModule,
-  MatTreeModule
+  MatTreeModule,
+  MatSortModule
 ];
 
 @NgModule({
@@ -72,9 +76,11 @@ const MaterialModules = [
     ConfirmDialogComponent,
     ModifyWriterComponent,
     WriterManagementComponent,
-    ElementReportComponent,
+    ElementModificationReportComponent,
     TopWritersReportComponent,
-    CreateFolderComponent
+    CreateFolderComponent,
+    AllFilesReportComponent,
+    MoveFolderDialogComponent
   ],
   imports: [
     CommonModule,
@@ -89,9 +95,10 @@ const MaterialModules = [
       { path: 'create-writer', component: ModifyWriterComponent, canActivate: [UserNotLoggedIn], data :{ action:'Create'} },
       { path: 'edit-writer', component: ModifyWriterComponent, canActivate: [UserNotLoggedIn], data :{ action:'Edit'}},
       { path: 'writer-management', component: WriterManagementComponent, canActivate: [UserNotLoggedIn] },
-      { path: 'file-modification', component: ElementReportComponent, canActivate: [UserNotLoggedIn], data :{ elementType:'File'} },
-      { path: 'folder-modification', component: ElementReportComponent, canActivate: [UserNotLoggedIn], data :{ elementType:'Folder'} },
-      { path: 'top-writers', component: TopWritersReportComponent, canActivate: [UserNotLoggedIn] }
+      { path: 'file-modification', component: ElementModificationReportComponent, canActivate: [UserNotLoggedIn], data :{ elementType:'File'} },
+      { path: 'folder-modification', component: ElementModificationReportComponent, canActivate: [UserNotLoggedIn], data :{ elementType:'Folder'} },
+      { path: 'top-writers', component: TopWritersReportComponent, canActivate: [UserNotLoggedIn] },
+      { path: 'all-files-report', component: AllFilesReportComponent, canActivate: [UserNotLoggedIn] }
     ]),
     BrowserAnimationsModule,
     MaterialModules
@@ -102,7 +109,8 @@ const MaterialModules = [
     UserNotLoggedIn,
   ],
   entryComponents: [
-    ConfirmDialogComponent    
+    ConfirmDialogComponent,
+    MoveFolderDialogComponent
   ],
   bootstrap: [AppComponent]
 })
