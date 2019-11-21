@@ -69,7 +69,7 @@ export class ElementManagementComponent{
       this.elementService.GetFolder(elementToUpdate.id)
       .subscribe(
         (response) => {
-        var elementUpdated = JSON.parse(response);
+          var elementUpdated = JSON.parse(response);
           this.elements[index] = elementUpdated;
           this.dataSource.data = this.elements;
           var nodeToExpand = this.treeControl.dataNodes.find(n => n.id == node.id);
@@ -103,17 +103,37 @@ export class ElementManagementComponent{
         if(elementDestination == null){
           this.openSnackBar('Folder not found, please enter a correct path', 'Error!');
         }
+        else if(elementDestination.folderChildren.find(e => e.id == this.matMenuData.id) != null){
+          this.openSnackBar('Can\'t move child to current destination.', 'Error!');
+        }
         else{
-          this.elementService.MoveFolder(this.matMenuData.id, elementDestination.id)
-          .subscribe(
-            (response) => {
-              this.dataSource.data = this.elements;
-              this.openSnackBar(response, 'Success!');
-            },
-            (error) => {
-              this.openSnackBar(error, 'Error!');
-            }
-          )
+          if(this.matMenuData.expandable){
+            this.elementService.MoveFolder(this.matMenuData.id, elementDestination.id)
+            .subscribe(
+              (response) => {
+                var rootUpdated = JSON.parse(response);
+                this.elements = this.writerService.GetElementsFromWriter(rootUpdated);
+                this.dataSource.data = this.elements;
+                this.openSnackBar("Folder has been moved!", 'Success!');
+              },
+              (error) => {
+                this.openSnackBar(error, 'Error!');
+              }
+            )
+          }else{
+            this.elementService.MoveFile(this.matMenuData.id, elementDestination.id)
+            .subscribe(
+              (response) => {
+                var rootUpdated = JSON.parse(response);
+                this.elements = this.writerService.GetElementsFromWriter(rootUpdated);
+                this.dataSource.data = this.elements;
+                this.openSnackBar("File has been moved!", 'Success!');
+              },
+              (error) => {
+                this.openSnackBar(error, 'Error!');
+              }
+            )
+          }
         }
       }
     });

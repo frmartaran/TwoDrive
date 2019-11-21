@@ -82,7 +82,8 @@ namespace TwoDrive.WebApi.Controllers
                 }
                 FolderLogic.CreateModificationsForTree(folderToMove, ModificationType.Changed);
                 FolderLogic.CreateModificationsForTree(folderDestination, ModificationType.Changed);
-                return Ok(string.Format(ApiResource.Moved_FolderController, folderToMove.Name, folderDestination.Name));
+                var writerWithClaimsUpdated = new WriterModel().FromDomain(Session.GetCurrentUser(HttpContext));
+                return Ok(writerWithClaimsUpdated);
             }
             catch (LogicException exception)
             {

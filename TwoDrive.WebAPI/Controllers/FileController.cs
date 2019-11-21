@@ -282,7 +282,8 @@ namespace TwoDrive.WebApi.Controllers
             CreateModification(folder, ModificationType.Changed);
             folderLogic.CreateModificationsForTree(folder, ModificationType.Changed);
             folderLogic.CreateModificationsForTree(file, ModificationType.Changed);
-            return Ok(string.Format(ApiResource.Moved_FileController, file.Name, folder.Name));
+            var writerWithClaimsUpdated = new WriterModel().FromDomain(inSession.GetCurrentUser(HttpContext));
+            return Ok(writerWithClaimsUpdated);
         }
 
         private void CreateModification(Element file, ModificationType action)

@@ -12,6 +12,7 @@ export class ElementService {
 
   private readonly folderEndpoint = this.url + '/api/Folder';
   private readonly fileEndpoint = this.url + '/api/File';
+  private elementFound: Element;
 
   constructor(private http: HttpClient) { }
 
@@ -47,24 +48,50 @@ export class ElementService {
     .set('Content-Type', 'application/json')
     .set('Authorization', writerToken);
 
-    var moveFolderBody : any = {
-      folderToMoveId: folderToMoveId,
-      folderDestinationId: folderDestinationId
-    }
+    return this.http.post(this.folderEndpoint + '/' + folderToMoveId + '/' + folderDestinationId, {} , {
+        headers: headers,
+        responseType: 'text'
+      });
+  }
 
-    return this.http.post(this.fileEndpoint, moveFolderBody, {
+  public MoveFile(fileToMove: number, folderDestinationId: number){
+    var writerToken = localStorage.getItem('token');
+    let headers = new HttpHeaders();
+    headers = headers
+    .set('Content-Type', 'application/json')
+    .set('Authorization', writerToken);
+
+    return this.http.post(this.fileEndpoint + '/' + fileToMove + '/' + folderDestinationId, {} , {
         headers: headers,
         responseType: 'text'
       });
   }
 
   public GetElementFromPath(path: string, element: Element){
-    if(element.path === path){
-      return element
+    this.elementFound = null;
+    this.GetElementFromPathRecursive(path, element);
+    if(this.elementFound != null && this.elementFound.isFolder){
+      return this.elementFound;
     }else{
-      element.folderChildren.forEach(c => {
-        return this.GetElementFromPath(path, c)
-      })
+      return null
+    }    
+  }
+
+  private GetElementFromPathRecursive(path: string, element: Element){
+    if(element == null){
+      return null;
     }
+    if(element.path === path) {
+      this.elementFound = element;
+      return element;
+    }
+    if(element.isFolder){
+      element.folderChildren.forEach(c => {
+        return this.GetElementFromPathRecursive(path, c)  
+      });
+    }else{
+      return element
+    }
+
   }
 }
