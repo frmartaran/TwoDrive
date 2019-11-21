@@ -143,7 +143,7 @@ namespace TwoDrive.WebApi.Test
             var result = controller.GetFileModificationReport(range);
 
             mockLogic.VerifyAll();
-            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
         }
 
         [TestMethod]
