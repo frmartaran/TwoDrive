@@ -37,8 +37,7 @@ export class WriterManagementComponent implements OnInit {
     this.writerService.GetLoggedInWriter()
     .subscribe(
       (response) => {
-        var responseString = JSON.stringify(response);
-        var writer = JSON.parse(responseString);
+        var writer = JSON.parse(response);
         this.writerService.SetLoggedInWriter(writer);     
         this.getAllWriters();  
       },
@@ -106,8 +105,7 @@ export class WriterManagementComponent implements OnInit {
     this.writerService.GetAllWriters()
     .subscribe(
       (response) => {
-        var responseString = JSON.stringify(response);
-        var responseParsed = this.writerService.ParseGetAllWritersResponse(responseString);
+        var responseParsed = this.writerService.ParseGetAllWritersResponse(response);
         this.writers = responseParsed
         this.dataSource =  new MatTableDataSource<Writer>(this.writers);
         this.dataSource.paginator = this.paginator;        

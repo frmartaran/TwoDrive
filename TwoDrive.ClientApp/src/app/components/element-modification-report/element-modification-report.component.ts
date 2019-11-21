@@ -48,8 +48,7 @@ export class ElementModificationReportComponent implements OnInit {
     if (this.startDate != null && this.endDate != null)
       this.reportService.GetModificationsReport(this.elementType, this.startDate, this.endDate)
         .subscribe((response) => {
-          var responseString = JSON.stringify(response);
-          this.modficationReport = JSON.parse(responseString);
+          this.modficationReport = JSON.parse(response);
           this.dataSource = new MatTableDataSource<ModificationReport>(this.modficationReport);
           this.dataSource.paginator = this.paginator;
         },
