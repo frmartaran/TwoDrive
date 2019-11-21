@@ -27,3 +27,13 @@ mat-card-title{
     padding-top: 20px;
     padding-bottom: 0px;
 }
+
+.container mat-form-field{
+    display: inline-block;
+    padding-right: 10%;
+}
+
+.error{
+    color: red;
+    float: right;
+}

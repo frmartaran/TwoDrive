@@ -51,7 +51,8 @@ export class WriterService {
     .set('Authorization', writerToken);
 
     return this.http.get(this.endpoint, {
-      headers: headers
+      headers: headers,
+      responseType: 'text'
     });
   }
 
@@ -71,7 +72,8 @@ export class WriterService {
     .set('Authorization', writerToken);
 
     return this.http.get(this.endpoint + '/' + writerId, {
-      headers: headers
+      headers: headers,
+      responseType: 'text'
     });
   }
 

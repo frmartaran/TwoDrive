@@ -23,6 +23,7 @@ export class ElementService {
 
     return this.http.get(this.folderEndpoint + '/' + id, {
         headers: headers,
+        responseType: 'text'
       });
   }
 

@@ -18,11 +18,29 @@ export class ReportService {
     var writerToken = localStorage.getItem('token');
     let headers = new HttpHeaders();
     headers = headers
-    .set('Content-Type', 'application/json')
-    .set('Authorization', writerToken);
+      .set('Content-Type', 'application/json')
+      .set('Authorization', writerToken);
 
     return this.http.get(this.endpoint, {
-        headers: headers
+      headers: headers
     });
+  }
+
+  public GetModificationsReport(ReportType: string, StartDate: Date, EndDate: Date) {
+    var writerToken = localStorage.getItem('token');
+    let headers = new HttpHeaders();
+    headers = headers
+      .set('Content-Type', 'application/json')
+      .set('Authorization', writerToken);
+
+    var endpoint = this.endpoint + "/" + ReportType + "/Modifications";
+    return this.http.post(endpoint, {
+      StartDate,
+      EndDate
+    },
+      {
+        headers: headers,
+        responseType: 'text'
+      });
   }
 }

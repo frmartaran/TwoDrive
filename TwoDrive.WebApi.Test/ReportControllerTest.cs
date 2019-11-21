@@ -47,7 +47,7 @@ namespace TwoDrive.WebApi.Test
         [TestMethod]
         public void GetFileModificationReport()
         {
-            
+
             var file = new TxtFile
             {
                 Id = 1,
@@ -89,7 +89,12 @@ namespace TwoDrive.WebApi.Test
             var controller = new ReportController(mockLogic.Object, mockFileLogic.Object);
             var start = new DateTime(2019, 3, 23);
             var end = new DateTime(2019, 5, 10);
-            var result = controller.GetFileModificationReport(start, end);
+            var range = new DateRangeModel
+            {
+                StartDate = start,
+                EndDate = end
+            };
+            var result = controller.GetFileModificationReport(range);
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
@@ -105,7 +110,12 @@ namespace TwoDrive.WebApi.Test
             var controller = new ReportController(mockLogic.Object, mockFileLogic.Object);
             var start = new DateTime(2019, 3, 23);
             var end = new DateTime(2019, 5, 10);
-            var result = controller.GetFileModificationReport(end, start);
+            var range = new DateRangeModel
+            {
+                StartDate = start,
+                EndDate = end
+            };
+            var result = controller.GetFileModificationReport(range);
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
@@ -125,7 +135,12 @@ namespace TwoDrive.WebApi.Test
             var controller = new ReportController(mockLogic.Object, mockFileLogic.Object);
             var start = new DateTime(2019, 3, 23);
             var end = new DateTime(2019, 5, 10);
-            var result = controller.GetFileModificationReport(start, end);
+            var range = new DateRangeModel
+            {
+                StartDate = start,
+                EndDate = end
+            };
+            var result = controller.GetFileModificationReport(range);
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
@@ -243,7 +258,12 @@ namespace TwoDrive.WebApi.Test
             var controller = new ReportController(mockLogic.Object, mockFileLogic.Object);
             var start = new DateTime(2019, 3, 23);
             var end = new DateTime(2019, 5, 10);
-            var result = controller.GetFolderModificationReport(start, end);
+            var range = new DateRangeModel
+            {
+                StartDate = start,
+                EndDate = end
+            };
+            var result = controller.GetFolderModificationReport(range);
 
             mockLogic.VerifyAll();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
