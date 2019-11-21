@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Writer, Element } from 'src/app/components/interfaces/interfaces.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,5 +56,15 @@ export class ElementService {
         headers: headers,
         responseType: 'text'
       });
+  }
+
+  public GetElementFromPath(path: string, element: Element){
+    if(element.path === path){
+      return element
+    }else{
+      element.folderChildren.forEach(c => {
+        return this.GetElementFromPath(path, c)
+      })
+    }
   }
 }

@@ -50,8 +50,7 @@ export class ElementManagementComponent{
     this.writerService.GetLoggedInWriter()
     .subscribe(
       (response) => {
-        var responseString = JSON.stringify(response);
-        this.writer = JSON.parse(responseString);
+        this.writer = JSON.parse(response);
         this.elements = this.writerService.GetElementsFromWriter(this.writer);
         this.dataSource.data = this.elements;
       },
@@ -70,8 +69,7 @@ export class ElementManagementComponent{
       this.elementService.GetFolder(elementToUpdate.id)
       .subscribe(
         (response) => {
-          var responseString = JSON.stringify(response);
-          var elementUpdated = JSON.parse(responseString);
+        var elementUpdated = JSON.parse(response);
           this.elements[index] = elementUpdated;
           this.dataSource.data = this.elements;
           var nodeToExpand = this.treeControl.dataNodes.find(n => n.id == node.id);
@@ -100,9 +98,8 @@ export class ElementManagementComponent{
     let dialogRef = this.dialog.open(MoveFolderDialogComponent);
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
-        var elementToMove = this.elements.find(e => e.id == this.matMenuData.id);
-        var elementDestinationIndex = this.elements.findIndex(e => e.path === res);
-        var elementDestination = this.elements[elementDestinationIndex];
+        var writerRoot = this.elements.find(e => e.ownerId == this.writer.id);
+        var elementDestination = this.elementService.GetElementFromPath(res, writerRoot);
         if(elementDestination == null){
           this.openSnackBar('Folder not found, please enter a correct path', 'Error!');
         }
@@ -110,9 +107,6 @@ export class ElementManagementComponent{
           this.elementService.MoveFolder(this.matMenuData.id, elementDestination.id)
           .subscribe(
             (response) => {
-              var oldParentIndex = this.elements.findIndex(e => e.id == elementToMove.parentFolderId);
-              this.elements[oldParentIndex].folderChildren = this.elements[oldParentIndex].folderChildren.filter(c => c.id == elementToMove.id);
-              this.elements[elementDestinationIndex].folderChildren.push(elementToMove);
               this.dataSource.data = this.elements;
               this.openSnackBar(response, 'Success!');
             },
