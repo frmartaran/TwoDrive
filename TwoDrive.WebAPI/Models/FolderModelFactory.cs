@@ -11,7 +11,7 @@ namespace TwoDrive.WebApi.Models
         {
             if (entity is File file)
             {
-                return new FileModel().FromDomain(file);
+                return FileModelFactory.GetModel(file);
             }
             else if(entity is Folder folder)
             {

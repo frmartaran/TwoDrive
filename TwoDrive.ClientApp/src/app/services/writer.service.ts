@@ -12,6 +12,7 @@ export class WriterService {
   public LoggedInWriterId = +localStorage.getItem('writerId');
   private LoggedInWriter: Writer;
   private writers: Writer[];
+  private hasElementInClaims = false;
 
   private readonly endpoint = this.url + '/api/Writer';
 
@@ -84,6 +85,22 @@ export class WriterService {
     this.writers.forEach(writer => {
       writer.role = this.GetWriterRole(writer);
       writer.isFriendsWithUserLoggedIn = this.GetIfWriterIsFriendsWithUserLoggedIn(writer);
+    });
+    return this.writers
+  }
+
+  public ParseGetAllWritersResponseForSharePage(responseString : string, elementId: number){
+
+    var responseParsed = JSON.parse(responseString);
+    this.writers = responseParsed.filter(w => w.id !== this.LoggedInWriterId);
+    this.writers.forEach(writer => {
+      this.hasElementInClaims = false;
+      writer.role = this.GetWriterRole(writer);
+      if(writer.claims != null && writer.claims.length > 0){
+        var writerRootFolder = writer.claims.find(c => c.element.parentFolderId == null).element;
+        this.GetIfWriterHasElementInClaims(writerRootFolder, elementId);
+        writer.hasClaimsForElement = this.hasElementInClaims;
+      }
     });
     return this.writers
   }
@@ -166,5 +183,22 @@ export class WriterService {
       element.folderChildren.forEach(c => this.SetElementPath(c, element.path));
     }
     return element;
+  }
+
+  private GetIfWriterHasElementInClaims(element: Element, elementId: number){
+    if(element == null){
+      return null;
+    }
+    if(element.id === elementId) {
+      this.hasElementInClaims = true;
+      return element;
+    }
+    if(element.isFolder){
+      element.folderChildren.forEach(c => {
+        return this.GetIfWriterHasElementInClaims(c, elementId)  
+      });
+    }else{
+      return element
+    }
   }
 }

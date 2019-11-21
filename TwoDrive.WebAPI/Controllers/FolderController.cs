@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using TwoDrive.BusinessLogic.Exceptions;
 using TwoDrive.BusinessLogic.Extensions;
 using TwoDrive.BusinessLogic.Interfaces;
@@ -162,7 +163,8 @@ namespace TwoDrive.WebApi.Controllers
                 WriterLogic.Update(loggedWriter);
                 CreateModification(folder, ModificationType.Added);
                 FolderLogic.CreateModificationsForTree(parentFolder, ModificationType.Changed);
-                return Ok(new FolderModel().FromDomain(folder));
+                var writerAfterUpdate = Session.GetCurrentUser(HttpContext);
+                return Ok(new WriterModel().FromDomain(writerAfterUpdate));
             }
             catch (LogicException exception)
             {

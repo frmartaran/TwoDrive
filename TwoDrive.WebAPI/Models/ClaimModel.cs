@@ -70,7 +70,7 @@ namespace TwoDrive.WebApi.Models
             }
             else if (element is File file)
             {
-                modelToReturn = new FileModel().FromDomain(file);
+                modelToReturn = FileModelFactory.GetModel(file);
             }
             return modelToReturn;
         }
