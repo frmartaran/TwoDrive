@@ -96,8 +96,8 @@ namespace TwoDrive.WebApi.Controllers
                 fileLogic.Delete(id);
                 CreateModification(file, ModificationType.Deleted);
                 folderLogic.CreateModificationsForTree(file, ModificationType.Deleted);
-
-                return Ok(string.Format(ApiResource.Delete_FileController, file.Name));
+                var writerWithoutFile = new WriterModel().FromDomain(inSession.GetCurrentUser(HttpContext));
+                return Ok(writerWithoutFile);
             }
             catch (LogicException exception)
             {

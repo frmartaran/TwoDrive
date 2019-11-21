@@ -21,12 +21,13 @@ export class LoginService {
 
   public Login(credentials : any)
   {
-    return this.http.post(this.loginEndpoint, credentials);
+    return this.http.post(this.loginEndpoint, credentials, {
+      responseType: 'text'
+    });
   }
 
-  authenticateUser(response : Object){
-    var responseInJson = JSON.stringify(response);
-    this.session = JSON.parse(responseInJson);
+  authenticateUser(response : string){
+    this.session = JSON.parse(response);
     localStorage.setItem("token", this.session.token);
     localStorage.setItem("writerId", this.session.userId);
     localStorage.setItem("isAdmin", this.session.isAdmin);

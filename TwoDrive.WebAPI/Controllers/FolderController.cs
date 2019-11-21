@@ -52,7 +52,8 @@ namespace TwoDrive.WebApi.Controllers
             {
                 var folder = FolderLogic.Get(id);
                 FolderLogic.Delete(id);
-                return Ok(string.Format(ApiResource.Deleted_FolderController, folder.Name));
+                var writerWithoutFolder = new WriterModel().FromDomain(Session.GetCurrentUser(HttpContext));
+                return Ok(writerWithoutFolder);
             }
             catch (LogicException exception)
             {

@@ -79,7 +79,8 @@ export class WriterManagementComponent implements OnInit {
       (response) => {
         this.dataSource.data.find(w => w.id == writer.id).isFriendsWithUserLoggedIn = true;
         this.writers.find(w => w.id == writer.id).isFriendsWithUserLoggedIn = true;
-        this.changeDetectorRefs.detectChanges();  
+        this.changeDetectorRefs.detectChanges();
+        this.openSnackBar('Friend has been added!', 'Error!');
       },
       (error) => {
         this.openSnackBar(error.message, 'Error!');
@@ -94,6 +95,7 @@ export class WriterManagementComponent implements OnInit {
         this.dataSource.data.find(w => w.id == writer.id).isFriendsWithUserLoggedIn = false;
         this.writers.find(w => w.id == writer.id).isFriendsWithUserLoggedIn = false;
         this.changeDetectorRefs.detectChanges();  
+        this.openSnackBar('Friend has been removed!', 'Error!');
       },
       (error) => {
         this.openSnackBar(error.message, 'Error!');
@@ -122,7 +124,8 @@ export class WriterManagementComponent implements OnInit {
       (response) => {
         this.dataSource.data = this.dataSource.data.filter(w => w.id !== writer.id);
         this.writers = this.writers.filter(w => w.id !== writer.id);
-        this.dataSource._updateChangeSubscription(); 
+        this.dataSource._updateChangeSubscription();
+        this.openSnackBar('Writer has been deleted!', 'Error!');
       },
       (error) => {
         this.openSnackBar(error.message, 'Error!');

@@ -57,9 +57,8 @@ export class AllFilesReportComponent implements OnInit {
       }, 
       (error) => {
         this.openSnackBar(error.message, 'Error!');
-
       }
-      );
+    );
   }
 
 }

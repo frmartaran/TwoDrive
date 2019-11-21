@@ -197,12 +197,14 @@ export class ElementManagementComponent {
     var explandable = this.matMenuData.expandable;
     this.elementService.Delete(id, explandable)
       .subscribe((res) => {
-        this.elements = this.elements.filter(f => f.id != id);
-        this.dataSource.data = this.elements;
+        var rootUpdated = JSON.parse(res);
+        this.elements = this.writerService.GetElementsFromWriter(rootUpdated);
+        this.dataSource.data = this.elements
+        this.openSnackBar('Element has been deleted!', 'Success!');
       },
-        (error) => {
-          this.openSnackBar(error.message, 'Error!');
-        }
+      (error) => {
+        this.openSnackBar(error.message, 'Error!');
+      }
       );
   }
 }

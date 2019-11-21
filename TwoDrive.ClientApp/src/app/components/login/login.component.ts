@@ -35,7 +35,9 @@ export class LoginComponent implements OnInit {
         this.loginService.authenticateUser(response);
       },
       (error) => {
-        this.authenticationError = error.error;
+        this.authenticationError = error.error != null && error.error instanceof String
+          ? error.error 
+          : error.message;
       },
       () => {
         this.router.navigate(['/home-page']);

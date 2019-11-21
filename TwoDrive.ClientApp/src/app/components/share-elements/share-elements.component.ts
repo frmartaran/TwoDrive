@@ -61,7 +61,8 @@ export class ShareElementsComponent implements OnInit {
       (response) => {
         this.dataSource.data.find(w => w.id == element.id).hasClaimsForElement = true;
         this.writers.find(w => w.id == element.id).hasClaimsForElement = true;
-        this.changeDetectorRefs.detectChanges();  
+        this.changeDetectorRefs.detectChanges();
+        this.openSnackBar('Element has been shared!', 'Success!');
       },
       (error) => {
         this.openSnackBar(error.message, 'Error!');
@@ -75,7 +76,8 @@ export class ShareElementsComponent implements OnInit {
       (response) => {
         this.dataSource.data.find(w => w.id == element.id).hasClaimsForElement = false;
         this.writers.find(w => w.id == element.id).hasClaimsForElement = false;
-        this.changeDetectorRefs.detectChanges();  
+        this.changeDetectorRefs.detectChanges();
+        this.openSnackBar('Element has been unshared!', 'Success!');
       },
       (error) => {
         this.openSnackBar(error.message, 'Error!');

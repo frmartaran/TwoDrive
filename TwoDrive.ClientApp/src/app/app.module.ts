@@ -42,7 +42,6 @@ import {
   MatDatepickerModule,
   MatNativeDateModule,
 } from '@angular/material';
-import { CreateFolderComponent } from './components/create-folder/create-folder.component';
 import { AllFilesReportComponent } from './components/all-files-report/all-files-report.component';
 import { MoveFolderDialogComponent } from './components/move-folder-dialog/move-folder-dialog.component';
 import { ShowContentComponent } from './components/show-content/show-content.component';
@@ -84,7 +83,6 @@ const MaterialModules = [
     WriterManagementComponent,
     ElementModificationReportComponent,
     TopWritersReportComponent,
-    CreateFolderComponent,
     AllFilesReportComponent,
     MoveFolderDialogComponent,
     ShowContentComponent,
