@@ -23,7 +23,7 @@ namespace TwoDrive.WebApi.Models
             CreationDate = entity.CreationDate;
             DateModified = entity.DateModified;
             FolderChildren = FolderModelFactory.GetModelForAllChildren(entity);
-            if (Owner != null)
+            if (entity.Owner != null)
                 OwnerName = entity.Owner.UserName;
             IsFolder = true;
             return this;
