@@ -1,8 +1,9 @@
 import { WriterService } from 'src/app/services/writer.service';
-import { Component, OnInit, ViewChild, ChangeDetectorRef} from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatTableDataSource, MatPaginator, MatSnackBar} from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatSnackBar, MatDialog } from '@angular/material';
 import { Writer } from 'src/app/components/interfaces/interfaces.model';
+import { ImportElementComponent } from '../import-element/import-element.component';
 
 @Component({
   selector: 'app-writer-management',
@@ -16,44 +17,44 @@ export class WriterManagementComponent implements OnInit {
   isFriendFilterActivated = false;
   isAdmin = false;
 
-  constructor(private writerService : WriterService,
+  constructor(private writerService: WriterService,
     private router: Router,
     private _snackBar: MatSnackBar,
-    private changeDetectorRefs: ChangeDetectorRef){}
+    private changeDetectorRefs: ChangeDetectorRef,
+    public dialog: MatDialog) { }
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 5000,
-    });
+    })
   }
 
   ngOnInit() {
     this.isAdmin = (localStorage.getItem('isAdmin') == 'true');
     this.displayedColumns = this.isAdmin
-      ? ['username', 'role', 'action', 'friendFilter']
+      ? ['username', 'role', 'action', 'friendFilter', 'import']
       : ['username', 'role', 'friendFilter']
     this.writerService.GetLoggedInWriter()
-    .subscribe(
-      (response) => {
-        var writer = JSON.parse(response);
-        this.writerService.SetLoggedInWriter(writer);     
-        this.getAllWriters();  
-      },
-      (error) => {
-        this.openSnackBar(error.error, 'Error!');
-      }
-    )
+      .subscribe(
+        (response) => {
+          var writer = JSON.parse(response);
+          this.writerService.SetLoggedInWriter(writer);
+          this.getAllWriters();
+        },
+        (error) => {
+          this.openSnackBar(error.error, 'Error!');
+        }
+      )
   }
 
-  friendFilterManagement(){
-    if(!this.isFriendFilterActivated){
+  friendFilterManagement() {
+    if (!this.isFriendFilterActivated) {
       this.applyFriendFilter();
       this.isFriendFilterActivated = true;
     }
-    else
-    {
+    else {
       this.removeFriendFilter();
       this.isFriendFilterActivated = false;
     }
@@ -73,66 +74,75 @@ export class WriterManagementComponent implements OnInit {
     this.dataSource._updateChangeSubscription();
   }
 
-  public addFriend(writer: Writer){
+  public addFriend(writer: Writer) {
     this.writerService.AddFriend(writer.id)
-    .subscribe(
-      (response) => {
-        this.dataSource.data.find(w => w.id == writer.id).isFriendsWithUserLoggedIn = true;
-        this.writers.find(w => w.id == writer.id).isFriendsWithUserLoggedIn = true;
-        this.changeDetectorRefs.detectChanges();  
-      },
-      (error) => {
-        this.openSnackBar(error.message, 'Error!');
-      }
-    )
+      .subscribe(
+        (response) => {
+          this.dataSource.data.find(w => w.id == writer.id).isFriendsWithUserLoggedIn = true;
+          this.writers.find(w => w.id == writer.id).isFriendsWithUserLoggedIn = true;
+          this.changeDetectorRefs.detectChanges();
+        },
+        (error) => {
+          this.openSnackBar(error.message, 'Error!');
+        }
+      )
   }
 
-  public removeFriend(writer: Writer){
+  public removeFriend(writer: Writer) {
     this.writerService.RemoveFriend(writer.id)
-    .subscribe(
-      (response) => {
-        this.dataSource.data.find(w => w.id == writer.id).isFriendsWithUserLoggedIn = false;
-        this.writers.find(w => w.id == writer.id).isFriendsWithUserLoggedIn = false;
-        this.changeDetectorRefs.detectChanges();  
-      },
-      (error) => {
-        this.openSnackBar(error.message, 'Error!');
-      }
-    )
+      .subscribe(
+        (response) => {
+          this.dataSource.data.find(w => w.id == writer.id).isFriendsWithUserLoggedIn = false;
+          this.writers.find(w => w.id == writer.id).isFriendsWithUserLoggedIn = false;
+          this.changeDetectorRefs.detectChanges();
+        },
+        (error) => {
+          this.openSnackBar(error.message, 'Error!');
+        }
+      )
   }
 
-  private getAllWriters(){
+  private getAllWriters() {
     this.writerService.GetAllWriters()
-    .subscribe(
-      (response) => {
-        var responseParsed = this.writerService.ParseGetAllWritersResponse(response);
-        this.writers = responseParsed
-        this.dataSource =  new MatTableDataSource<Writer>(this.writers);
-        this.dataSource.paginator = this.paginator;        
-      },
-      (error) => {
-        this.openSnackBar(error.message, 'Error!');
-      }
-    )
+      .subscribe(
+        (response) => {
+          var responseParsed = this.writerService.ParseGetAllWritersResponse(response);
+          this.writers = responseParsed
+          this.dataSource = new MatTableDataSource<Writer>(this.writers);
+          this.dataSource.paginator = this.paginator;
+        },
+        (error) => {
+          this.openSnackBar(error.message, 'Error!');
+        }
+      )
   }
 
-  public deleteWriter(writer: Writer){
+  public deleteWriter(writer: Writer) {
     this.writerService.DeleteWriter(writer.id)
-    .subscribe(
-      (response) => {
-        this.dataSource.data = this.dataSource.data.filter(w => w.id !== writer.id);
-        this.writers = this.writers.filter(w => w.id !== writer.id);
-        this.dataSource._updateChangeSubscription(); 
-      },
-      (error) => {
-        this.openSnackBar(error.message, 'Error!');
-      }
-    )
+      .subscribe(
+        (response) => {
+          this.dataSource.data = this.dataSource.data.filter(w => w.id !== writer.id);
+          this.writers = this.writers.filter(w => w.id !== writer.id);
+          this.dataSource._updateChangeSubscription();
+        },
+        (error) => {
+          this.openSnackBar(error.message, 'Error!');
+        }
+      )
   }
 
-  public editWriter(writer: Writer){
-    this.router.navigateByUrl('/', {skipLocationChange: true})
-    .then(()=> this.router.navigate(['/edit-writer'], {state: writer}));
+  public editWriter(writer: Writer) {
+    this.router.navigateByUrl('/', { skipLocationChange: true })
+      .then(() => this.router.navigate(['/edit-writer'], { state: writer }));
+  }
+
+  public openImportDialog(writer: Writer) {
+    let dialogRef = this.dialog.open(ImportElementComponent, { data: writer });
+    dialogRef.afterClosed().subscribe((res) => {
+
+    }
+    );
+
   }
 
 }

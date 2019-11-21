@@ -1,0 +1,30 @@
+<div>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Import Elements</mat-card-title>
+            <mat-card-subtitle>Importing for writer: {{writerName}}</mat-card-subtitle>
+        </mat-card-header>
+        <form #importForm="ngForm" (ngSubmit)="Import(importForm)">
+            <mat-card-content>
+                <div class="container">
+                    <mat-form-field>
+                        <mat-label>Select an Importer</mat-label>
+                        <mat-select [(ngModel)]="selectedValue" name="importer">
+                            <mat-option *ngFor="let importer of importers" [value]="importer">
+                                {{importer}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput placeholder= "Path" name="path" [(ngModel)]="value">
+                    </mat-form-field>
+                </div>
+            </mat-card-content>
+            <mat-card-footer>
+                <div class="error">{{errorMessage}}</div>
+                <div class="success">{{successMessage}}</div>
+                <button mat-button type="submit">Import</button>
+            </mat-card-footer>
+        </form>
+    </mat-card>
+</div>

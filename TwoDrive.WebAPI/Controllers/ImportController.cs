@@ -9,11 +9,13 @@ using TwoDrive.WebApi.Filters;
 using TwoDrive.Importer.Interface;
 using TwoDrive.WebApi.Resource;
 using TwoDrive.BusinessLogic.Interfaces.LogicInput;
+using Microsoft.AspNetCore.Cors;
 
 namespace TwoDrive.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [AuthorizeFilter(Role.Administrator)]
+    [EnableCors("CorsPolicy")]
     [ApiController]
     public class ImportController : ControllerBase
     {

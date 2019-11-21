@@ -41,10 +41,12 @@ import {
   MatTreeModule,
   MatDatepickerModule,
   MatNativeDateModule,
+  MatSelectModule,
 } from '@angular/material';
 import { CreateFolderComponent } from './components/create-folder/create-folder.component';
 import { AllFilesReportComponent } from './components/all-files-report/all-files-report.component';
 import { MoveFolderDialogComponent } from './components/move-folder-dialog/move-folder-dialog.component';
+import { ImportElementComponent } from './components/import-element/import-element.component';
 
 const MaterialModules = [
   MatCardModule,
@@ -67,7 +69,9 @@ const MaterialModules = [
   MatDatepickerModule,
   MatNativeDateModule,
   MatTreeModule,
-  MatSortModule
+  MatSortModule,
+  MatSelectModule,
+
 ];
 
 @NgModule({
@@ -83,7 +87,8 @@ const MaterialModules = [
     TopWritersReportComponent,
     CreateFolderComponent,
     AllFilesReportComponent,
-    MoveFolderDialogComponent
+    MoveFolderDialogComponent,
+    ImportElementComponent
   ],
   imports: [
     CommonModule,
@@ -113,7 +118,8 @@ const MaterialModules = [
     ],
   entryComponents: [
     ConfirmDialogComponent,
-    MoveFolderDialogComponent
+    MoveFolderDialogComponent,
+    ImportElementComponent
   ],
   bootstrap: [AppComponent]
 })

@@ -8,7 +8,7 @@ export interface Writer {
   isFriendsWithUserLoggedIn: Boolean;
 }
 
-export interface Element{
+export interface Element {
   folderChildren: Element[],
   id: number,
   name: string,
@@ -21,17 +21,17 @@ export interface Element{
   path: string
 }
 
-export interface ModificationReport{
+export interface ModificationReport {
   owner: string;
   amount: number;
 }
 
-export interface Claims{
+export interface Claims {
   types: [],
   element: Element
 }
 
-export interface TopWritersReport{
+export interface TopWritersReport {
   username: string;
   fileCount: number;
 }
@@ -45,10 +45,16 @@ export interface ElementFlatNode {
   isChildFromLoggedInWriter: boolean;
 }
 
-export interface AllFilesReport{
+export interface AllFilesReport {
   id: number,
   name: string,
   creationDate: Date,
   dateModified: Date,
   ownerName: string
 }
+
+export interface importer {
+  name: string
+}
+
+

@@ -43,5 +43,10 @@ mat-card-title{
 
 #friendFilter{
   text-align: end;
+  padding-right: 50px;
+}
+
+#import{
+  text-align: end;
   padding-right: 48px;
 }
