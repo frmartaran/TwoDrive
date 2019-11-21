@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from './../../environments/environment.prod';
 
 @Injectable({
     providedIn: 'root'
@@ -8,9 +9,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 export class ImportService {
 
-    public url: string = "http://localhost:3682";
+    public url: string = environment.apiUrl;
 
-    private readonly endpoint = this.url + '/api/Import';
+    private readonly endpoint = this.url + 'api/Import';
 
     constructor(private http: HttpClient) { }
 

@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment.prod';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -8,10 +9,10 @@ import { Writer, Element } from 'src/app/components/interfaces/interfaces.model'
 })
 export class ElementService {
 
-  public url: string = "http://localhost:3682";
+  public url: string = environment.apiUrl;
 
-  private readonly folderEndpoint = this.url + '/api/Folder';
-  private readonly fileEndpoint = this.url + '/api/File';
+  private readonly folderEndpoint = this.url + 'api/Folder';
+  private readonly fileEndpoint = this.url + 'api/File';
   private elementFound: Element;
 
   constructor(private http: HttpClient) { }

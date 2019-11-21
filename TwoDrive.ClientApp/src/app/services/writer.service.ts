@@ -2,19 +2,20 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Writer, Element } from 'src/app/components/interfaces/interfaces.model';
+import { environment } from './../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WriterService {
 
-  public url: string = "http://localhost:3682";
+  public url: string = environment.apiUrl;
   public LoggedInWriterId = +localStorage.getItem('writerId');
   private LoggedInWriter: Writer;
   private writers: Writer[];
   private hasElementInClaims = false;
 
-  private readonly endpoint = this.url + '/api/Writer';
+  private readonly endpoint = this.url + 'api/Writer';
 
   constructor(private http: HttpClient) { }
 

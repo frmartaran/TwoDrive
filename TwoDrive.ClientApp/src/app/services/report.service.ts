@@ -2,15 +2,16 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Writer } from 'src/app/components/interfaces/interfaces.model';
+import { environment } from './../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReportService {
 
-  public url: string = "http://localhost:3682";
+  public url: string = environment.apiUrl;
 
-  private readonly endpoint = this.url + '/api/Report';
+  private readonly endpoint = this.url + 'api/Report';
 
   constructor(private http: HttpClient) { }
 

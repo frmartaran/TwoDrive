@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from './../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +10,8 @@ import { BehaviorSubject } from 'rxjs';
 export class LoginService {
 
   private isAuthenticated = new BehaviorSubject<boolean>(false);
-  public url: string = "http://localhost:3682";
-  private readonly loginEndpoint = this.url +'/api/Token';
+  public url: string = environment.apiUrl;
+  private readonly loginEndpoint = this.url +'api/Token';
   private session: any = {
     userId: '',
     token: '',

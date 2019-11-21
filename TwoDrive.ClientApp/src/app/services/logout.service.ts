@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from './../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LogoutService {
 
-  public url: string = "http://localhost:3682";
-  private readonly logoutEndpoint = this.url +'/api/Token';
+  public url: string = environment.apiUrl;
+  private readonly logoutEndpoint = this.url +'api/Token';
 
   constructor(private http: HttpClient) { }
 
