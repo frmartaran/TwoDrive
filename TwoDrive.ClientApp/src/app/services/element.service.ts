@@ -92,6 +92,56 @@ export class ElementService {
     }else{
       return element
     }
+  }
 
+  public AddFolder(ownerId: number, parentFolderId: number, name: string){
+    var writerToken = localStorage.getItem('token');
+    let headers = new HttpHeaders();
+    headers = headers
+    .set('Content-Type', 'application/json')
+    .set('Authorization', writerToken);
+    var folderToAdd: any = {
+      name: name,
+      ownerId: ownerId
+    }
+
+    return this.http.post(this.folderEndpoint + '/' + parentFolderId, folderToAdd , {
+        headers: headers,
+        responseType: 'text'
+      });
+  }
+
+  public ShareElement(elementId: number, friendId: number, isFolder: boolean){
+    var writerToken = localStorage.getItem('token');
+    let headers = new HttpHeaders();
+    headers = headers
+    .set('Content-Type', 'application/json')
+    .set('Authorization', writerToken);
+
+    var endpointToSend = isFolder
+      ? this.folderEndpoint
+      : this.fileEndpoint;
+
+    return this.http.put(endpointToSend + '/' + elementId + '/' + friendId, {} , {
+        headers: headers,
+        responseType: 'text'
+      });
+  }
+
+  public StopShareElement(elementId: number, friendId: number, isFolder: boolean){
+    var writerToken = localStorage.getItem('token');
+    let headers = new HttpHeaders();
+    headers = headers
+    .set('Content-Type', 'application/json')
+    .set('Authorization', writerToken);
+
+    var endpointToSend = isFolder
+      ? this.folderEndpoint
+      : this.fileEndpoint;
+
+    return this.http.delete(endpointToSend + '/' + elementId + '/' + friendId, {
+        headers: headers,
+        responseType: 'text'
+      });
   }
 }

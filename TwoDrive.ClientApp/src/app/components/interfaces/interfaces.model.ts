@@ -6,6 +6,7 @@ export interface Writer {
   friends: Writer[];
   claims: Claims[];
   isFriendsWithUserLoggedIn: Boolean;
+  hasClaimsForElement: Boolean
 }
 
 export interface Element{
@@ -18,7 +19,9 @@ export interface Element{
   dateModified: Date,
   isFolder: boolean,
   ownerName: string,
-  path: string
+  path: string,
+  shouldRender: boolean,
+  content: string
 }
 
 export interface ModificationReport{
@@ -40,9 +43,12 @@ export interface ElementFlatNode {
   expandable: boolean;
   name: string;
   level: number;
-  id: number
+  id: number,
+  ownerId: number,
   hasChildrenLoaded: boolean;
   isChildFromLoggedInWriter: boolean;
+  content: string,
+  shouldRender: boolean
 }
 
 export interface AllFilesReport{

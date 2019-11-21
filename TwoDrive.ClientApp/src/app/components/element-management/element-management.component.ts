@@ -1,3 +1,4 @@
+import { CreateFolderDialogComponent } from './../create-folder-dialog/create-folder-dialog.component';
 import { WriterService } from 'src/app/services/writer.service';
 import { FlatTreeControl} from '@angular/cdk/tree';
 import { Component } from '@angular/core';
@@ -5,6 +6,8 @@ import { MatTreeFlatDataSource, MatTreeFlattener, MatSnackBar, MatMenuTrigger, M
 import { Writer, Element, ElementFlatNode } from 'src/app/components/interfaces/interfaces.model';
 import { ElementService } from 'src/app/services/element.service';
 import { MoveFolderDialogComponent } from 'src/app/components/move-folder-dialog/move-folder-dialog.component';
+import { ShowContentComponent } from 'src/app/components//show-content/show-content.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'element-management',
@@ -25,7 +28,12 @@ export class ElementManagementComponent{
       level: level,
       id: node.id,
       hasChildrenLoaded: this.FolderHasChildrenLoaded(node),
-      isChildFromLoggedInWriter: this.writer.id == node.ownerId
+      isChildFromLoggedInWriter: this.writer.id == node.ownerId,
+      ownerId: node.ownerId,
+      content: node.content,
+      shouldRender: node.shouldRender != null
+        ? node.shouldRender
+        : false
     };
   }
 
@@ -44,6 +52,7 @@ export class ElementManagementComponent{
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
   constructor(private writerService : WriterService,
+    private router: Router,
     private elementService: ElementService,
     private _snackBar: MatSnackBar,
     public dialog: MatDialog) {
@@ -94,6 +103,14 @@ export class ElementManagementComponent{
     }
   }
 
+  openShowContentPopup(){
+    let dialogRef = this.dialog.open(ShowContentComponent, {
+      data: {
+        node: this.matMenuData
+      }
+    });
+  }
+
   openMoveFolderDialog() {
     let dialogRef = this.dialog.open(MoveFolderDialogComponent);
     dialogRef.afterClosed().subscribe(res => {
@@ -108,34 +125,70 @@ export class ElementManagementComponent{
         }
         else{
           if(this.matMenuData.expandable){
-            this.elementService.MoveFolder(this.matMenuData.id, elementDestination.id)
-            .subscribe(
-              (response) => {
-                var rootUpdated = JSON.parse(response);
-                this.elements = this.writerService.GetElementsFromWriter(rootUpdated);
-                this.dataSource.data = this.elements;
-                this.openSnackBar("Folder has been moved!", 'Success!');
-              },
-              (error) => {
-                this.openSnackBar(error, 'Error!');
-              }
-            )
+            this.MoveFolder(this.matMenuData.id, elementDestination.id);
           }else{
-            this.elementService.MoveFile(this.matMenuData.id, elementDestination.id)
-            .subscribe(
-              (response) => {
-                var rootUpdated = JSON.parse(response);
-                this.elements = this.writerService.GetElementsFromWriter(rootUpdated);
-                this.dataSource.data = this.elements;
-                this.openSnackBar("File has been moved!", 'Success!');
-              },
-              (error) => {
-                this.openSnackBar(error, 'Error!');
-              }
-            )
+            this.MoveFile(this.matMenuData.id, elementDestination.id);
           }
         }
       }
     });
+  }
+
+  addFolder(){
+    let dialogRef = this.dialog.open(CreateFolderDialogComponent);
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        this.elementService.AddFolder(this.matMenuData.ownerId, this.matMenuData.id, res)
+        .subscribe(
+          (response) => {
+            var rootUpdated = JSON.parse(response);
+            this.elements = this.writerService.GetElementsFromWriter(rootUpdated);
+            this.dataSource.data = this.elements;
+            this.openSnackBar("Folder has been created!", 'Success!');
+          },
+          (error) => {
+            this.openSnackBar(error, 'Error!');
+          }
+        )
+      }
+    });
+  }
+
+  private MoveFolder(elementToMoveId: number, elementDestinationId: number){
+    this.elementService.MoveFolder(elementToMoveId, elementDestinationId)
+    .subscribe(
+      (response) => {
+        var rootUpdated = JSON.parse(response);
+        this.elements = this.writerService.GetElementsFromWriter(rootUpdated);
+        this.dataSource.data = this.elements;
+        this.openSnackBar("Folder has been moved!", 'Success!');
+      },
+      (error) => {
+        this.openSnackBar(error, 'Error!');
+      }
+    )
+  }
+
+  private MoveFile(elementToMoveId: number, elementDestinationId: number){
+    this.elementService.MoveFile(elementToMoveId, elementDestinationId)
+    .subscribe(
+      (response) => {
+        var rootUpdated = JSON.parse(response);
+        this.elements = this.writerService.GetElementsFromWriter(rootUpdated);
+        this.dataSource.data = this.elements;
+        this.openSnackBar("File has been moved!", 'Success!');
+      },
+      (error) => {
+        this.openSnackBar(error, 'Error!');
+      }
+    )
+  }
+
+  public shareElement(){
+    var shareData: any = {
+      loggedInWriter: this.writer,
+      node: this.matMenuData
+    }
+    this.router.navigate(['/share'], {state: shareData})
   }
 }

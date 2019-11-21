@@ -30,21 +30,29 @@
 
     <mat-menu #rootMenu="matMenu" [overlapTrigger]="false">
         <ng-template matMenuContent>
+          <button mat-menu-item *ngIf="matMenuData.expandable">
+            <mat-icon>post_add</mat-icon>
+            <span>Add File</span>
+          </button>
+          <button mat-menu-item *ngIf="matMenuData.expandable" (click)="addFolder()">
+            <mat-icon>create_new_folder</mat-icon>
+            <span>Add Folder</span>
+          </button>
           <button mat-menu-item (click)="openMoveFolderDialog()" *ngIf="matMenuData.isChildFromLoggedInWriter">
             <mat-icon>open_with</mat-icon>
             <span>Move To</span>
           </button>
           <button mat-menu-item *ngIf="matMenuData.isChildFromLoggedInWriter">
-            <mat-icon>edit</mat-icon>
-            <span>Rename</span>
-          </button>
-          <button mat-menu-item *ngIf="matMenuData.isChildFromLoggedInWriter">
             <mat-icon>delete</mat-icon>
             <span>Delete</span>
           </button>
-          <button mat-menu-item *ngIf="!matMenuData.expandable">
+          <button mat-menu-item *ngIf="!matMenuData.expandable" (click)="openShowContentPopup()">
             <mat-icon>visibility</mat-icon>
             <span>Show Content</span>
+          </button>
+          <button mat-menu-item *ngIf="matMenuData.isChildFromLoggedInWriter" (click)="shareElement()">
+            <mat-icon>share</mat-icon>
+            <span>Share..</span>
           </button>
         </ng-template>
     </mat-menu>

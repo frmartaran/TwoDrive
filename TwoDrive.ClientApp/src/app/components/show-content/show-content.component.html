@@ -1,0 +1,4 @@
+<mat-dialog-content>
+    <div [innerHTML]="node.content" *ngIf="node.shouldRender"></div>
+    <div *ngIf="!node.shouldRender">{{node.content}}</div>
+</mat-dialog-content>

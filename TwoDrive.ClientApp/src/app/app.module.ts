@@ -45,6 +45,9 @@ import {
 import { CreateFolderComponent } from './components/create-folder/create-folder.component';
 import { AllFilesReportComponent } from './components/all-files-report/all-files-report.component';
 import { MoveFolderDialogComponent } from './components/move-folder-dialog/move-folder-dialog.component';
+import { ShowContentComponent } from './components/show-content/show-content.component';
+import { CreateFolderDialogComponent } from './components/create-folder-dialog/create-folder-dialog.component';
+import { ShareElementsComponent } from './components/share-elements/share-elements.component';
 
 const MaterialModules = [
   MatCardModule,
@@ -83,7 +86,10 @@ const MaterialModules = [
     TopWritersReportComponent,
     CreateFolderComponent,
     AllFilesReportComponent,
-    MoveFolderDialogComponent
+    MoveFolderDialogComponent,
+    ShowContentComponent,
+    CreateFolderDialogComponent,
+    ShareElementsComponent
   ],
   imports: [
     CommonModule,
@@ -101,7 +107,8 @@ const MaterialModules = [
       { path: 'file-modification', component: ElementModificationReportComponent, canActivate: [UserNotLoggedIn], data :{ elementType:'File'} },
       { path: 'folder-modification', component: ElementModificationReportComponent, canActivate: [UserNotLoggedIn], data :{ elementType:'Folder'} },
       { path: 'top-writers', component: TopWritersReportComponent, canActivate: [UserNotLoggedIn] },
-      { path: 'all-files-report', component: AllFilesReportComponent, canActivate: [UserNotLoggedIn] }
+      { path: 'all-files-report', component: AllFilesReportComponent, canActivate: [UserNotLoggedIn] },
+      { path: 'share', component: ShareElementsComponent, canActivate: [UserNotLoggedIn] }
     ]),
     BrowserAnimationsModule,
     MaterialModules
@@ -113,7 +120,9 @@ const MaterialModules = [
     ],
   entryComponents: [
     ConfirmDialogComponent,
-    MoveFolderDialogComponent
+    MoveFolderDialogComponent,
+    ShowContentComponent,
+    CreateFolderDialogComponent
   ],
   bootstrap: [AppComponent]
 })

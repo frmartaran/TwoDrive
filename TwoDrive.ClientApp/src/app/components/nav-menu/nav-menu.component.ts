@@ -21,7 +21,8 @@ export class NavMenuComponent {
     password: '',
     friends: null,
     claims: null,
-    isFriendsWithUserLoggedIn: false
+    isFriendsWithUserLoggedIn: false,
+    hasClaimsForElement: false
   };
 
   constructor(private logoutService: LogoutService,

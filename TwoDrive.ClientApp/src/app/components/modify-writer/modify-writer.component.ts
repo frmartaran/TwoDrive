@@ -18,7 +18,8 @@ export class ModifyWriterComponent implements OnInit {
     password: '',
     friends: null,
     claims: null,
-    isFriendsWithUserLoggedIn: false
+    isFriendsWithUserLoggedIn: false,
+    hasClaimsForElement: false
   };
 
   public action : string; 

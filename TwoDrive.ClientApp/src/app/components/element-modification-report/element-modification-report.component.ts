@@ -54,7 +54,7 @@ export class ElementModificationReportComponent implements OnInit {
         },
           (error) => {
             this.errorMessage = error.error
-          });
+        });
   }
 
 }
